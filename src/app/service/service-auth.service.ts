@@ -20,8 +20,8 @@ export class ServiceAuthService {
   drivercreateUrl: string = 'https://compliance-backend-debcf19b5689.herokuapp.com/api/driverList/driver/create'; // Add create API URL
   driverapplicationapiUrl: string = 'https://compliance-backend-debcf19b5689.herokuapp.com/api/driverApplication/driverapplication';
   driverapplicationcreateUrl: string = 'https://compliance-backend-debcf19b5689.herokuapp.com/api/driverApplivation/driverapplication/create'; // Add create API URL
-  fileapiUrl: string = 'https://compliance-backend-debcf19b5689.herokuapp.com/api/customerdata';
-  filecreateUrl: string = 'https://compliance-backend-debcf19b5689.herokuapp.com/api/customerdata/create';
+  fileapiUrl: string = 'https://compliance-backend-debcf19b5689.herokuapp.com/api/filemanager';
+  filecreateUrl: string = 'https://compliance-backend-debcf19b5689.herokuapp.com/api/filemanager/create';
   getUsersapiUrl: string = 'https://compliance-backend-debcf19b5689.herokuapp.com/api/getAll';
   passwordUpdateUrl: string = 'https://compliance-backend-debcf19b5689.herokuapp.com/api/change-password';
   updateURL = 'https://compliance-backend-debcf19b5689.herokuapp.com'
@@ -32,7 +32,8 @@ export class ServiceAuthService {
   deleteTrailerUrl: string = 'https://compliance-backend-debcf19b5689.herokuapp.com/api/trailerList/trailer/delete'; // Delete API URL
   updateDriverUrl: string = 'https://compliance-backend-debcf19b5689.herokuapp.com/api/driverList/driver/update'; // Update API URL
   deleteDriverUrl: string = 'https://compliance-backend-debcf19b5689.herokuapp.com/api/driverList/driver/delete'; // Delete API URL
-
+  updateFileUrl: string = 'https://compliance-backend-debcf19b5689.herokuapp.com/api/filemanager/update'; // Update API URL
+  deleteFileUrl: string = 'https://compliance-backend-debcf19b5689.herokuapp.com/api/filemanager/delete'; // Delete API URL
 
 
   dashboardcreateUrl: string = 'https://compliance-backend-debcf19b5689.herokuapp.com/api/company/create';
@@ -41,23 +42,28 @@ export class ServiceAuthService {
 
 
 
+  dotApi: string = "https://compliance-backend-debcf19b5689.herokuapp.com/api/dotdata"
+  getDotData: string = "https://compliance-backend-debcf19b5689.herokuapp.com/api/dotdata"
+  
+  updateCompanyProfileUrl:string="https://compliance-backend-debcf19b5689.herokuapp.com/api/company/update"
 
   constructor(private http: HttpClient) { }
 
-  login(email: string, password: string, rememberMe: boolean) {
-    const body = { email, password, rememberMe };
+  login(email: string, password: string, rememberMe: boolean, name: string) {
+    const body = { email, password, rememberMe ,name};
     return this.http.post<any>(this.loginUrl, body).pipe(
       tap(response => {
         if (response && response.token) {
           localStorage.setItem('token', response.token);
-          localStorage.setItem('role', response.role)
-          localStorage.setItem('companyId', response.companyId)
-
+          localStorage.setItem('role', response.role);
+          localStorage.setItem('companyId', response.companyId[0]); // Assuming companyId is an array
+          localStorage.setItem('name', response.name); // Store user's name in local storage
         }
       })
     );
   }
-
+  
+  
   logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('role');
@@ -398,5 +404,62 @@ deleteUser(id: string) {
     return this.http.get<any>(url, { headers });
   }
 
+//Create dot
+createDotCompany(companyData: any) {
+  const token = this.getToken();
+  if (!token) {
+    throw new Error('No token stored');
+  }
+  const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+  return this.http.post(this.dotApi, companyData, { headers });
+  }
+
+
+//Get dots Api
+//Get Dot NumberBydata
+getByDotnumber(dot: string) {
+  const token = this.getToken();
+  if (!token) {
+    throw new Error('No token stored');
+  }
+  const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+  const url = `${this.getDotData}/${dot}`;
+  console.log('Fetching Dot by ID with URL:', url); // Log the URL being called
+  return this.http.get<any>(url, { headers });
+  }
+
+
+updateCompanyProfile(id: string , companyData: any){
+  const token = this. getToken();
+  if (!token) {
+    throw new Error('No toekn stored')
+  }
+  const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`)
+
+  return this.http.put(`${this.updateCompanyProfileUrl}/${id}`,companyData ,{headers});
+}
+
+ // Update File
+ updateFile(id: string, fileData: any) {
+  const token = this.getToken();
+  if (!token) {
+    throw new Error('No token stored');
+  }
+  const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+  return this.http.put(`${this.updateFileUrl}/${id}`, fileData, { headers });
+}
+
+// Delete File
+deleteFile(id: string) {
+  const token = this.getToken();
+  if (!token) {
+    throw new Error('No token stored');
+  }
+  const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+  return this.http.delete(`${this.deleteFileUrl}/${id}`, { headers });
+}
 
 }

@@ -3,7 +3,10 @@ import { ServiceAuthService } from '../../service/service-auth.service';
 import { ChangeDetectorRef } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { NgForm } from '@angular/forms';
-import * as bootstrap from 'bootstrap'; // Import Bootstrap for Offcanvas
+ import * as bootstrap from 'bootstrap'; 
+import { HttpHeaders } from '@angular/common/http';
+import { ActivatedRoute } from '@angular/router'; 
+
 
 @Component({
   selector: 'app-dashboard-list',
@@ -56,17 +59,30 @@ export class DashboardComponent implements OnInit {
     }
   };
   showAddUserForm: boolean = false;
+  selectedCompany: any = {};
+  private dotTimeout: any = null; 
+
+
 
   constructor(
     private serviceAuthService: ServiceAuthService,
     private cdr: ChangeDetectorRef,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private route: ActivatedRoute 
+
   ) {}
 
   ngOnInit(): void {
     this.loadCompanyId();
     this.loadCompany();
     this.loadUsers();
+    this.route.params.subscribe(params => {
+      const companyId = params['id'];
+      if (companyId) {
+        this.getCompanyById(companyId); 
+      }
+    });
+
   }
 
   loadCompanyId(): void {
@@ -90,6 +106,7 @@ export class DashboardComponent implements OnInit {
       this.toastr.error('Failed to load companies.');
     });
   }
+  
 
   loadUsers() {
     this.serviceAuthService.getUsersFromAPI().subscribe((data: any) => {
@@ -98,34 +115,6 @@ export class DashboardComponent implements OnInit {
     }, (error: any) => {
       console.error('Error loading users:', error);
       this.toastr.error('Failed to load users.');
-    });
-  }
-
-  openAddUserOffcanvas() {
-    const offcanvasElement = document.getElementById('addUserOffcanvas');
-    if (offcanvasElement) { // Check if the element is not null
-      const offcanvas = new bootstrap.Offcanvas(offcanvasElement);
-      offcanvas.show();
-    } else {
-      console.error('Offcanvas element not found');
-    }
-  }
-  registerNewUser() {
-    if (!this.newUser.name || !this.newUser.email || !this.newUser.password || !this.newUser.companyId) {
-      this.toastr.error('Please fill all required fields.');
-      return;
-    }
-
-    this.serviceAuthService.registerUser(this.newUser).subscribe((response: any) => {
-      console.log('User registered successfully:', response);
-      this.toastr.success('User registered successfully!');
-      this.loadUsers();
-      this.resetNewUser();
-      this.showAddUserForm = false;
-      this.closeAddUserOffcanvas(); // Close offcanvas after registration
-    }, (error: any) => {
-      console.error('Error registering user:', error);
-      this.toastr.error('Error registering user.');
     });
   }
 
@@ -171,18 +160,7 @@ export class DashboardComponent implements OnInit {
     };
   }
 
-  closeAddUserOffcanvas() {
-    const offcanvasElement = document.getElementById('addUserOffcanvas');
-    if (offcanvasElement) { // Check if the element is not null
-      const offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
-      if (offcanvas) {
-        offcanvas.hide();
-      }
-    } else {
-      console.error('Offcanvas element not found');
-    }
-  }
-  
+
 
   editUser(user: any) {
     console.log('Editing user:', user);
@@ -206,6 +184,8 @@ export class DashboardComponent implements OnInit {
     }
   }
 
+
+
   submitForm(form: NgForm) {
     if (form.invalid) {
       Object.keys(form.controls).forEach(field => {
@@ -218,6 +198,7 @@ export class DashboardComponent implements OnInit {
       this.toastr.error('Please correct the highlighted fields before submitting.', 'Form Submission Error');
       return;
     }
+
     const formData = new FormData();
     Object.keys(this.newCompany).forEach(key => {
       formData.append(key, this.newCompany[key]);
@@ -232,5 +213,97 @@ export class DashboardComponent implements OnInit {
       console.error('Error creating company:', error);
       this.toastr.error('Error creating company.');
     });
+
+    if (this.newCompany.dot) {
+      clearTimeout(this.dotTimeout);
+      this.dotTimeout = setTimeout(() => {
+        this.createDotCompany({ dot: this.newCompany.dot });
+      }, 5000); // 10 seconds delay for DOT creation
+    }
   }
+  onDotChange(dot: string) {
+    // Prevent the DOT field from accepting a dot character
+    if (dot.includes('.')) {
+      this.newCompany.dot = dot.replace(/\./g, '');
+      return;
+    }
+
+    if (dot) {
+      clearTimeout(this.dotTimeout);
+
+      this.dotTimeout = setTimeout(() => {
+        this.createDotCompany({ dot });
+      }, 5000); // 5 seconds delay
+    }
+  }
+
+   // Create DOT company and auto-populate fields from API response
+   createDotCompany(companyData: any) {
+    const token = this.serviceAuthService.getToken();
+    if (!token) {
+      throw new Error('No token stored');
+    }
+  
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    this.serviceAuthService.createDotCompany(companyData).subscribe((response: any) => {
+      // console.log('DOT company created successfully:', response);
+  
+      // Check if the response structure is valid
+      if (response && response.dot && response.dot.data && response.dot.data.record) {
+        const carrier = response.dot.data.record.content.carrier;
+  
+        // Check if the carrier data exists
+        if (carrier) {
+          this.populateCompanyFields(carrier);
+          this.toastr.success('DOT company created and fields populated successfully!');
+        } else {
+          this.toastr.error('Carrier data is not available in the response.');
+        }
+      } else {
+        this.toastr.error('Invalid response structure from the DOT API.');
+      }
+    }, (error: any) => {
+      console.error('Error creating DOT company:', error);
+      this.toastr.error('Error creating DOT company.');
+    });
+  }
+  // Populate form fields with carrier data from DOT API response
+  populateCompanyFields(carrier: any) {
+    if (carrier) {
+      this.newCompany.legalName = carrier.legalName || '';
+      this.newCompany.dotNumber = carrier.dotNumber || '';
+      this.newCompany.ein = carrier.ein || '';
+      this.newCompany.totalDrivers = carrier.totalDrivers || '';
+      this.newCompany.totalPowerUnits = carrier.totalPowerUnits || '';
+      this.newCompany.address = `${carrier.phyStreet || ''}, ${carrier.phyCity || ''}, ${carrier.phyState || ''}, ${carrier.phyZipcode || ''}`;
+      this.newCompany.allowedToOperate = carrier.allowedToOperate || '';
+      this.newCompany.bipdInsuranceOnFile = carrier.bipdInsuranceOnFile || '';
+      this.newCompany.safetyRating = carrier.safetyRating || 'N/A';
+      this.newCompany.brokerAuthorityStatus = carrier.brokerAuthorityStatus || 'N';
+      this.newCompany.companyName = this.newCompany.legalName;
+      this.cdr.detectChanges();
+    } else {
+      this.toastr.error('Carrier data is not available.');
+    }
+  }
+
+
+
+getCompanyById(id: string) {
+  this.serviceAuthService.getCompanyById(id).subscribe((data: any) => {
+    this.selectedCompany = data; 
+    this.toastr.success('Company details loaded!');
+  }, error => {
+    console.error('Error loading company by ID:', error);
+    this.toastr.error('Failed to load company details.');
+  });
 }
+
+}
+
+
+
+  
+
+
+  

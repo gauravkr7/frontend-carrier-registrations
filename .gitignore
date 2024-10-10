@@ -10,6 +10,10 @@
 npm-debug.log
 yarn-error.log
 /package-lock.json
+/carrier.postman_collections.json
+/Driver.postman_collection.json
+/trailer.postman_collection.json
+/trucks.postman_collection.json
 
 # IDEs and editors
 .idea/
@@ -40,3 +44,5 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+

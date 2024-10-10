@@ -45,15 +45,14 @@
     </li>
   </ul>
 </nav>  
-
 <main id="main" class="main mt-0 p-0">
   <!-- ======= Header ======= -->
   <header id="header" class="header d-flex align-items-center justify-content-between">
-    <div class="d-flex align-items-center justify-content-between">
-      <a routerLink="/dashboard" class="logo d-flex align-items-center">
+    <div class="d-flex align-items-center justify-content-between w-100" >
+      <a routerLink="/dashboard" class="logo d-flex align-items-center" >
         <img src="assets/img/3pltek-logo.png" alt="3pltek-logo">
       </a>
-      <div class="row">
+      <div class="row w-100">
         <nav class="navbar navbar-expand-lg navbar-light">
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-h2="Toggle navigation">
@@ -61,15 +60,44 @@
           </button>
           <div class="collapse navbar-collapse ms-5" id="navbarNav">
             <ul class="navbar-nav">
-              <li class="nav-item">
+              <!-- <li class="nav-item">
                 <a class="nav-link" routerLink="/company-profile">Dashboard</a>
-              </li>
+              </li> -->
+              <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link" routerLink="/Company-Profile">Dashboard</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" routerLink="/truck-list">Truck List</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" routerLink="/trailer-list">Trailer List</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" routerLink="/driver-list">Driver List</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" routerLink="/driver-application">Driver Application</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" routerLink="/file-manager">File Manager</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" routerLink="/users">Users</a>
+                  </li>
+                </ul>
+              </div>
             </ul>
           </div>
         </nav>
       </div>
     </div>
-  </header>
+  </header>
+
+
+
+
 
   <div id="kt_app_content" class="app-content flex-column-fluid">
     <div class="container-fluid px-5">
@@ -100,8 +128,7 @@
                 <i class="fa fa-plus me-2" aria-hidden="true"></i>Add Company
               </button>
               <!-- Add button for Users tab -->
-              <button *ngIf="activeTab === 'users'" type="button" class="btn btn-success rounded-pill font-14 ms-2" 
-                (click)="openAddUserOffcanvas()">
+              <button *ngIf="activeTab === 'users'" type="button" class="btn btn-success rounded-pill font-14 ms-2" data-bs-toggle="offcanvas"  data-bs-target="#adduserLocation">
                 <i class="fa fa-plus me-2" aria-hidden="true"></i>Add Users
               </button>
             </div>
@@ -169,7 +196,7 @@
             <td>Update Permission</td>
             <td>Active</td>
             <td class="text-capitalize text-center">
-              <div class="dropdown filter-dropdown">
+              <div class="dropdown filter-dropdown" style="position: fixed;">
                 <span class="dropdown-toggle font-16 px-3" type="button" id="dropdownMenuButton23" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></span>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton23">
                   <a class="dropdown-item dispatch font-13" href="javascript:;" data-bs-toggle="modal" data-bs-target="#ExtralargeModalEdit">Edit</a>
@@ -182,7 +209,7 @@
       </table>
     </div>
   </div>
-      </div>
+ </div>
       
 
       <!-- Pagination -->
@@ -229,14 +256,15 @@
 
 
 
-    <div class="offcanvas offcanvas-end" tabindex="-1" id="addUserOffcanvas" 
-     aria-labelledby="addUserOffcanvasLabel" style="width: 80%;" data-bs-backdrop="static">
-  <div class="offcanvas-header" style="padding: 15px; border-bottom: 1px solid #ccc;">
-    <h5 class="offcanvas-title" id="addUserOffcanvasLabel">ADD USER</h5>
+    <div class="offcanvas offcanvas-end" id="adduserLocation" aria-labelledby="offcanvasRightLabel"  style="width: 80%;" data-bs-backdrop="static" data-bs-keyboard="false" >
+      
+      <div class="modal-header" style="padding: 15px; border-bottom: 1px solid #ccc;">
+    <h5 class="modal-title" >ADD USER</h5>
     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
   </div>
   <div class="offcanvas-body">
-    <form class="row g-3" (ngSubmit)="registerNewUser()">
+    <!-- <form class="row g-3" (ngSubmit)="registerNewUser()"> -->
+      <form class="row g-3" >
       <div class="col-md-6">
         <label for="name" class="form-label">Name</label>
         <input type="text" class="form-control" id="name" [(ngModel)]="newUser.name" name="name"
@@ -277,7 +305,7 @@
                 #company="ngModel" required
                 [ngClass]="{'is-invalid': company.invalid && (company.dirty || company.touched)}">
           <option value="" disabled>Select a company</option>
-          <option *ngFor="let company of companies" [value]="company._id">{{ company.companyName }}</option>
+          <option *ngFor="let company of companies" [routerLink]="['/company-profile', company._id]">{{ company.companyName }}</option>
         </select>
         <div *ngIf="company.invalid && (company.dirty || company.touched)" class="invalid-feedback">
           Company selection is required.
@@ -397,11 +425,12 @@
       <div class="col-md-4">
         <h5 class="font-14 font-weight-700">DOT</h5>
         <input type="text" class="form-control" id="dot" placeholder="DOT" [(ngModel)]="newCompany.dot" name="DOT"
-          #dot="ngModel" required [ngClass]="{'is-invalid': dot.invalid && (dot.dirty || dot.touched)}">
+          #dot="ngModel" required [ngClass]="{'is-invalid': dot.invalid && (dot.dirty || dot.touched)}"
+          (ngModelChange)="onDotChange($event)">
         <div *ngIf="dot.invalid && (dot.dirty || dot.touched)" class="invalid-feedback">
           DOT is required.
         </div>
-      </div>
+      </div>
 
       <!-- MC -->
       <div class="col-md-4">

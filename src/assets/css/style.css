@@ -95,33 +95,7 @@
   padding-left: 60px;
   background-position: center;
 }
-/*.account .bg-img:before{
-  content: "";
-  position: absolute;
-  right: -70%;
-  top: 0;
-  -webkit-transform: translate(-50%, 0);
-  background-color: rgb(0 71 189);
-  width: 83rem;
-  height: 100vh;
-  border-radius: 50%;
-  -webkit-transition: all 0.3s ease;
-  transform: rotate(90deg);
-}
-.account .bg-img:after{
-  content: "";
-  position: absolute;
-  right: -78%;
-  top: 0;
-  -webkit-transform: translate(-50%, 0);
-  background-color: rgb(0 71 189 / 13%);
-  width: 88rem;
-  height: 100vh;
-  border-radius: 50%;
-  -webkit-transition: all 0.3s ease;
-  transform: rotate(90deg);
-    z-index: -1;
-}*/
+
 .account .left-panel{
   display: flex;
   /* gap: 115px; */
@@ -1623,19 +1597,6 @@ input[type = text], .form-select, input[type = number], .select2-selection, .for
 .has-search .form-control {
     padding-left: 2.375rem;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 .count-title {
   font-size: 18px;
