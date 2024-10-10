@@ -1,4 +1,5 @@
 <!-- <router-outlet></router-outlet> -->
+<app-navbar></app-navbar>
 
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -6,22 +7,28 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
 
 
-<app-navbar></app-navbar>
-
-
 
 <section class="bg-color pb-5">
   <div class="container-fluid px-5">
     <div class="row">
       <div class="col-xl-12">
-        <div class="my-4">
-          <a *ngIf="showBackToDashboard" routerLink="/dashboard" class="btn btn-outline-secondary rounded-pill font-14">
+        <div class="my-4 ms-3 d-flex justify-content-between">
+          <!-- Back to Dashboard Button -->
+          <a *ngIf="showBackToDashboard" routerLink="/dashboard" class="btn btn-success rounded-pill font-14 active me-2">
             Back to Dashboard
+          </a>
+          
+          <!-- Edit Button -->
+          <a href="javascript:;" class="btn btn-success rounded-pill font-14 ms-auto" (click)="editcompany(companyData)"
+            type="button" data-bs-toggle="offcanvas" data-bs-target="#addLocation" aria-controls="offcanvasRight">
+            <i class="fa fa-pencil me-1" aria-hidden="true"></i> Edit
           </a>
         </div>
       </div>
-    </div>
-    <div class="row border rounded px-3 py-5">
+      
+          
+    </div>
+    <div class="row border rounded px-3 py-5" *ngIf="dotData">
       <div class="col-xl-5">
         <div class="mb-1 d-flex">
           <h3 class="text-dark font-weight-700 mb-0" style="color: #3253dd !important;">{{companyData.companyName}}</h3>
@@ -47,7 +54,7 @@
             <a href="#" class="d-flex align-items-center text-dark font-weight-500 me-5 mb-2">
               <span class="svg-icon svg-icon-4 me-1"><i class="bx bxs-user-circle"></i>
               </span>
-              John Vector
+              {{ dotData.data.data.record.content.carrier.legalName}}
             </a>
 
           </div>
@@ -55,19 +62,23 @@
 
             <a href="#" class="d-flex align-items-center text-dark font-weight-500 mb-2">
               <span class="svg-icon svg-icon-4 me-1"><i class="bx bx-mobile"></i></span>
-              +1-905-456-8865
+              {{companyData.ownerPhone}}
             </a>
           </div>
           <div class="col-md-4">
             <a href="#" class="d-flex align-items-center text-dark font-weight-500 me-5 mb-2">
               <span class="svg-icon svg-icon-4 me-1"><i class="bx bxs-envelope"></i></span>
-              emailgmail.com
+              {{companyData.ownerEmail}}
             </a>
           </div>
           <div class="col-md-12">
             <a href="#" class="d-flex align-items-center text-dark font-weight-500 me-5 mb-2">
               <span class="svg-icon svg-icon-4 me-1"><i class="bx bxl-periscope"></i></span>
-              Wallmart Supercenter, Colton, California - USA 96162
+              {{ dotData.data.data.record.content.carrier.phyStreet }},
+              {{ dotData.data.data.record.content.carrier.phyCity }},
+              {{ dotData.data.data.record.content.carrier.phyState }} -
+              {{ dotData.data.data.record.content.carrier.phyZipcode }},
+              {{ dotData.data.data.record.content.carrier.phyCountry }}
             </a>
           </div>
         </div>
@@ -75,7 +86,7 @@
         <div class="row mt-2">
           <div class="col-md-4">
             <p class="font-weight-600 mb-2">Company DBA</p>
-            <h2 class="font-14 mb-1">Company DBA</h2>
+            <h2 class="font-14 mb-1">{{ dotData.data.data.record.content.carrier.dbaName }}</h2>
           </div>
           <div class="col-md-4">
             <p class="font-weight-600 mb-2">SCAC</p>
@@ -83,7 +94,8 @@
           </div>
           <div class="col-md-4">
             <p class="font-weight-600 mb-2">TAX ID / EIN</p>
-            <h2 class="font-14 mb-1">TX24350</h2>
+            <h2 class="font-14 mb-1">{{ dotData.data.data.record.content.carrier.ein
+              }}</h2>
           </div>
 
         </div>
@@ -97,7 +109,8 @@
               <p class="font-weight-600 mb-1 ">Common</p>
               <p class="border rounded align-items-center px-3 py-1 text-black text-center mb-0 font-12 d-flex justify-content-between"
                 style="border: 1px solid #28c76f !important;">
-                <span class="font-weight-600">Active</span>
+                <span class="font-weight-600">{{ dotData.data.data.record.content.carrier.commonAuthorityStatus
+                  }}</span>
                 <i class="fa fa-check text-success" aria-hidden="true"></i>
               </p>
             </div>
@@ -107,7 +120,8 @@
               <p class="font-weight-600 mb-1">Contract</p>
               <p
                 class="bg-light rounded align-items-center px-3 py-1 text-black text-center mb-0 font-12 d-flex justify-content-between">
-                <span class="font-weight-600">None</span>
+                <span class="font-weight-600">{{ dotData.data.data.record.content.carrier.contractAuthorityStatus
+                  }}</span>
               </p>
             </div>
           </div>
@@ -116,7 +130,8 @@
               <p class="font-weight-600 mb-1">Broker</p>
               <p
                 class="bg-light rounded align-items-center px-3 py-1 text-black text-center mb-0 font-12 d-flex justify-content-between">
-                <span class="font-weight-600">In-Active</span>
+                <span class="font-weight-600">{{ dotData.data.data.record.content.carrier.brokerAuthorityStatus
+                  }}</span>
               </p>
             </div>
           </div>
@@ -137,7 +152,7 @@
               <p class="font-weight-600 mb-1">DOT Status</p>
               <p class="border rounded align-items-center px-3 py-1 text-black text-center mb-0 font-12 d-flex justify-content-between"
                 style="border: 1px solid #28c76f !important;">
-                <span class="font-weight-600">Active</span>
+                <span class="font-weight-600">{{ dotData.data.data.record.content.carrier.statusCode }}</span>
                 <i class="fa fa-check text-success" aria-hidden="true"></i>
               </p>
             </div>
@@ -170,175 +185,165 @@
               </p>
             </div>
           </div>
+          <br> <br> <br>
+          <div class="col-md-3">
+            <div class="activeDiv ">
+              <p class="font-weight-600 mb-1 ">Allow to operator</p>
+              <p class="border rounded align-items-center px-3 py-1 text-black text-center mb-0 font-12 d-flex justify-content-between"
+                style="border: 1px solid #28c76f !important;">
+                <span class="font-weight-600">{{ dotData.data.data.record.content.carrier.allowedToOperate
+                  }}</span>
+                <i class="fa fa-check text-success" aria-hidden="true"></i>
+              </p>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="activeDiv ">
+              <p class="font-weight-600 mb-1 ">Bip insurance</p>
+              <p class="border rounded align-items-center px-3 py-1 text-black text-center mb-0 font-12 d-flex justify-content-between"
+                style="border: 1px solid #28c76f !important;">
+                <span class="font-weight-600">{{ dotData.data.data.record.content.carrier.bipdInsuranceRequired
+                  }}</span>
+                <i class="fa fa-check text-success" aria-hidden="true"></i>
+              </p>
+            </div>
+          </div>
         </div>
-
-
-
       </div>
-      <div class="col-xl-7">    
+
+
+      <div class="col-xl-7">
         <div class="row text-light">
           <div class="col-lg-3">
             <a routerLink="/truck-list">
-              <div class="counter mb-2 bg-label-info">
+              <div class="counter mb-3 bg-label-info same-size">
                 <h2 class="timer count-title count-number" data-to="350" data-speed="1500">{{ totalTrucks }}</h2>
                 <p class="count-text">Total Trucks</p>
               </div>
             </a>
             <a routerLink="/trailer-list">
-              <div class="counter mb-2 bg-label-info">
+              <div class="counter mb-3 bg-label-info same-size">
                 <h2 class="timer count-title count-number" data-to="250" data-speed="1500">{{ totalTrailers }}</h2>
-                <p class="count-text ">Total Trailers</p>
+                <p class="count-text">Total Trailers</p>
               </div>
             </a>
             <a routerLink="/driver-list">
-              <div class="counter bg-label-info">
+              <div class="counter bg-label-info same-size">
                 <h2 class="timer count-title count-number" data-to="100" data-speed="1500">{{ totalDrivers }}</h2>
-                <p class="count-text ">Total Drivers</p>
+                <p class="count-text">Total Drivers</p>
               </div>
             </a>
           </div>
           <div class="col-lg-3">
             <a>
-              <div class="counter mb-2 bg-label-danger">
+              <div class="counter mb-3 bg-label-danger same-size">
                 <h2 class="timer count-title count-number" data-to="270" data-speed="1500">{{ nonCompliantTrucks }}</h2>
-                <p class="count-text ">Non-Compliant Trucks</p>
+                <p class="count-text">Non-Compliant Trucks</p>
               </div>
             </a>
             <a>
-              <div class="counter mb-2 bg-label-danger">
-                <h2 class="timer count-title count-number" data-to="180" data-speed="1500">{{nonCompliantTrailers}}</h2>
-                <p class="count-text ">Non-Compliant Trailers</p>
+              <div class="counter mb-3 bg-label-danger same-size">
+                <h2 class="timer count-title count-number" data-to="180" data-speed="1500">{{ nonCompliantTrailers }}</h2>
+                <p class="count-text">Non-Compliant Trailers</p>
               </div>
             </a>
             <a>
-              <div class="counter bg-label-danger">
-                <h2 class="timer count-title count-number" data-to="120" data-speed="1500">{{nonCompliantDrivers}}</h2>
-                <p class="count-text ">Non-Compliant Drivers</p>
-              </div>
-            </a>
-          </div>
-          <div class="col-lg-3">
-            <a>
-              <div class="counter mb-2 bg-label-success">
-                <h2 class="timer count-title count-number" data-to="320" data-speed="1500">{{compliantTrucks}}</h2>
-                <p class="count-text ">Compliant Trucks</p>
-              </div>
-            </a>
-            <a>
-              <div class="counter mb-2 bg-label-success">
-                <h2 class="timer count-title count-number" data-to="200" data-speed="1500">{{compliantTrailers}}</h2>
-                <p class="count-text ">Compliant Trailers</p>
-              </div>
-            </a>
-            <a>
-              <div class="counter bg-label-success">
-                <h2 class="timer count-title count-number" data-to="90" data-speed="1500">{{compliantDrivers}}</h2>
-                <p class="count-text ">Compliant Drivers</p>
+              <div class="counter bg-label-danger same-size">
+                <h2 class="timer count-title count-number" data-to="120" data-speed="1500">{{ nonCompliantDrivers }}</h2>
+                <p class="count-text">Non-Compliant Drivers</p>
               </div>
             </a>
           </div>
           <div class="col-lg-3">
             <a>
-              <div class="counter mb-2 bg-label-warning">
-                <h2 class="timer count-title count-number" data-to="210" data-speed="1500">{{expiringTrucks}}</h2>
-                <p class="count-text ">Expiring Trucks</p>
+              <div class="counter mb-3 bg-label-success same-size">
+                <h2 class="timer count-title count-number" data-to="320" data-speed="1500">{{ compliantTrucks }}</h2>
+                <p class="count-text">Compliant Trucks</p>
               </div>
             </a>
             <a>
-              <div class="counter mb-2 bg-label-warning">
-                <h2 class="timer count-title count-number" data-to="160" data-speed="1500">{{expiringTrailers}}</h2>
-                <p class="count-text ">Expiring Trailers</p>
+              <div class="counter mb-3 bg-label-success same-size">
+                <h2 class="timer count-title count-number" data-to="200" data-speed="1500">{{ compliantTrailers }}</h2>
+                <p class="count-text">Compliant Trailers</p>
               </div>
             </a>
             <a>
-              <div class="counter bg-label-warning">
-                <h2 class="timer count-title count-number" data-to="80" data-speed="1500">{{expiringDrivers}}</h2>
-                <p class="count-text ">Expiring Drivers</p>
+              <div class="counter bg-label-success same-size">
+                <h2 class="timer count-title count-number" data-to="90" data-speed="1500">{{ compliantDrivers }}</h2>
+                <p class="count-text">Compliant Drivers</p>
+              </div>
+            </a>
+          </div>
+          <div class="col-lg-3">
+            <a>
+              <div class="counter mb-3 bg-label-warning same-size">
+                <h2 class="timer count-title count-number" data-to="210" data-speed="1500">{{ expiringTrucks }}</h2>
+                <p class="count-text">Expiring Trucks</p>
+              </div>
+            </a>
+            <a>
+              <div class="counter mb-3 bg-label-warning same-size">
+                <h2 class="timer count-title count-number" data-to="160" data-speed="1500">{{ expiringTrailers }}</h2>
+                <p class="count-text">Expiring Trailers</p>
+              </div>
+            </a>
+            <a>
+              <div class="counter bg-label-warning same-size">
+                <h2 class="timer count-title count-number" data-to="80" data-speed="1500">{{ expiringDrivers }}</h2>
+                <p class="count-text">Expiring Drivers</p>
               </div>
             </a>
           </div>
         </div>
+        
+        <!-- Adding some space between the counter section and the table -->
+        <div class="custom-margin ">
+          <div class="col-lg-12 mb-3">
+            <h5 class="font-14 font-weight-500"> <b>Safety Rating & OOS Rates</b></h5>
+          </div>
+          <div class="table-responsive">
+            <table class="table table-bordered no-top-border">
+              <thead>
+               
+                <tr>
+                  <th scope="col">Type</th>
+                  <th scope="col">OOS %</th>
+                  <th scope="col">National Avg %</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Vehicle</td>
+                  <td>  </td>
+                  <td>{{ dotData?.data?.data?.record?.content?.carrier?.vehicleOosRateNationalAverage }}</td>
+                </tr>
+                <tr>
+                  <td>Driver</td>
+                  <td>  </td>
+                  <td>{{ dotData?.data?.data?.record?.content?.carrier?.driverOosRateNationalAverage }}</td>
+                </tr>
+                <tr>
+                  <td>Hazmat</td>
+                  <td>  </td>
+                  <td>{{ dotData?.data?.data?.record?.content?.carrier?.hazmatOosRateNationalAverage }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        
+        
       </div>
     </div>
   </div>
 </section>
-<!-- 
-<nav id="sidebar" class="sidebar">
-  <div class="sidebar-header">
-    <div class="pro-sidebar-logo" style="display: flex; align-items: center; gap: 13px;">
-      <div class="icon" style="width: 35px; height: 35px; display: flex; align-items: center; justify-content: center;">
-        <img src="assets/img/mobile-logo.png" class="img-fluid" style="max-width: 80%;">
-      </div>
-      <div class="icon-text">
-        <img src="assets/img/logo-text.png" class="img-fluid" style="max-width: 80%;">
-      </div>
-    </div>
-  </div>
-  
-  <ul class="list-unstyled sidebar-nav">
-    <li class="nav-item pb-3">
-      <a href="company-profile-view.html" class="nav-link">
-        <i class="fa fa-users" aria-hidden="true"></i>
-        <span class="ms-2">Company Profile</span>
-      </a>
-    </li>
-    <li class="nav-item pb-3">
-      <a href="truck-list.html" class="nav-link">
-        <i class="fa fa-list-alt" aria-hidden="true"></i>
-        <span class="ms-2">Truck List</span>
-      </a>
-    </li>
-    <li class="nav-item pb-3">
-      <a href="trailer-list.html" class="nav-link">
-        <i class="fa fa-list-alt" aria-hidden="true"></i>
-        <span class="ms-2">Trailer List</span>
-      </a>
-    </li>
-    <li class="nav-item pb-3">
-      <a href="driver-list.html" class="nav-link">
-        <i class="fa fa-list-alt" aria-hidden="true"></i>
-        <span class="ms-2">Driver List</span>
-      </a>
-    </li>
-    <li class="nav-item pb-3">
-      <a href="pre-screening-list.html" class="nav-link">
-        <i class="fa fa-search" aria-hidden="true"></i>
-        <span class="ms-2">Pre Screening</span>
-      </a>
-    </li>
-    <li class="nav-item pb-3">
-      <a href="driver-app-list.html" class="nav-link">
-        <i class="fa fa-file" aria-hidden="true"></i>
-        <span class="ms-2">Driver Application</span>
-      </a>
-    </li>
-    <li class="nav-item pb-3">
-      <a href="file-manager.html" class="nav-link">
-        <i class="fa fa-folder" aria-hidden="true"></i>
-        <span class="ms-2">File Manager</span>
-      </a>
-    </li>
-    <li class="nav-item pb-3">
-      <a href="password-manager.html" class="nav-link">
-        <i class="fa fa-lock" aria-hidden="true"></i>
-        <span class="ms-2">Password Manager</span>
-      </a>
-    </li>
-    <li class="nav-item pb-3">
-      <a href="users.html" class="nav-link">
-        <i class="fa fa-user" aria-hidden="true"></i>
-        <span class="ms-2">Users</span>
-      </a>
-    </li>
-  </ul>
-</nav> -->
 
 
 <main id="main" class="main mt-0 p-0">
   <div id="kt_app_content" class="app-content  flex-column-fluid">
     <div class="container-fluid px-5">
 
-      <div class="row bg-white p-3 mt-3 rounded">
+      <!-- <div class="row bg-white p-3 mt-3 rounded">
         <div class="col-md-12">
           <div class="d-flex justify-content-between">
             <div>
@@ -350,11 +355,13 @@
               </a>
             </div>
             <div class="btn-group" role="group" aria-label="Basic example">
-              <a href="javascript:;" class="btn btn-success rounded-pill font-14" type="button" data-bs-toggle="offcanvas" data-bs-target="#addLocation" aria-controls="offcanvasRight"><i class="fa fa-pencil me-1" aria-hidden="true"></i> Edit</a>
+              <a href="javascript:;" class="btn btn-success rounded-pill font-14" (click)="editcompany(companyData)"
+                type="button" data-bs-toggle="offcanvas" data-bs-target="#addLocation" aria-controls="offcanvasRight"><i
+                  class="fa fa-pencil me-1" aria-hidden="true"></i> Edit</a>
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
 
       <div class="row bg-white px-3 py-4 mt-3 rounded">
         <div class="col-md-12">
@@ -368,30 +375,32 @@
                         <div class="bg-light p-2 rounded-lg mb-4">
                           <ul class="mb-0" style="padding-left: 0px !important;">
                             <li class="d-flex flex-wrap align-items-center justify-content-between mb-2">
-                              <span class="text-capitalize font-12 font-weight-600 mb-2"> Company Name  </span>
+                              <span class="text-capitalize font-12 font-weight-600 mb-2"> Company Name </span>
                               <span class="edit-text font-14 font-weight-500 mb-2">{{companyData.companyName}}</span>
                             </li>
                             <li class="d-flex flex-wrap align-items-center justify-content-between mb-2">
                               <span class="text-capitalize font-12 font-weight-600 mb-2">Corporation</span>
                               <span class="edit-text font-14 font-weight-500 mb-2">{{companyData.corporation}}</span>
-                            
+
                             </li>
                             <li class="d-flex flex-wrap align-items-center justify-content-between mb-2">
                               <span class="text-capitalize font-12 font-weight-600 mb-2"> DOT </span>
                               <span class="edit-text font-14 font-weight-500 mb-2">{{companyData.dot}}</span>
-                             
+
                             </li>
                             <li class="d-flex flex-wrap align-items-center justify-content-between mb-2">
                               <span class="text-capitalize font-12 font-weight-600 mb-2"> MC </span>
                               <span class="edit-text font-14 font-weight-500 mb-2">{{companyData.mc}}</span>
-                             
+
                             </li>
                             <li class="d-flex flex-wrap align-items-center justify-content-between mb-2">
                               <span class="text-capitalize font-12 font-weight-600 mb-2"> Upload Document </span>
-                              <span class="edit-text font-14 font-weight-500 mb-2"><a [href]="companyData.uploadDocument"target="_blank">  
-                                {{ companyData.uploadDocument | slice:(companyData.uploadDocument.lastIndexOf('/')+1) }}
+                              <span class="edit-text font-14 font-weight-500 mb-2"><a
+                                  [href]="companyData.uploadDocument" target="_blank">
+                                  {{ companyData.uploadDocument | slice:(companyData.uploadDocument.lastIndexOf('/')+1)
+                                  }}
 
-                              </a></span>
+                                </a></span>
                             </li>
                             <li class="d-flex flex-wrap align-items-center justify-content-between mb-2">
                               <span class="text-capitalize font-12 font-weight-600 mb-2"> KYU </span>
@@ -400,10 +409,12 @@
                             </li>
                             <li class="d-flex flex-wrap align-items-center justify-content-between mb-2">
                               <span class="text-capitalize font-12 font-weight-600 mb-2"> Upload Document </span>
-                              <span class="edit-text font-14 font-weight-500 mb-2"><a [href]="companyData.kyuUploadDocument"target="_blank">  
-                                {{ companyData.kyuUploadDocument | slice:(companyData.kyuUploadDocument.lastIndexOf('/')+1) }}
+                              <span class="edit-text font-14 font-weight-500 mb-2"><a
+                                  [href]="companyData.kyuUploadDocument" target="_blank">
+                                  {{ companyData.kyuUploadDocument |
+                                  slice:(companyData.kyuUploadDocument.lastIndexOf('/')+1) }}
 
-                              </a></span>
+                                </a></span>
                             </li>
                             <li class="d-flex flex-wrap align-items-center justify-content-between mb-2">
                               <span class="text-capitalize font-12 font-weight-600 mb-2"> KYU Expiration </span>
@@ -416,12 +427,14 @@
 
                             </li>
                             <li class="d-flex flex-wrap align-items-center justify-content-between mb-2">
-                            <span class="text-capitalize font-12 font-weight-600 mb-2"> Upload Document </span>
-                            <span class="edit-text font-14 font-weight-500 mb-2"><a [href]="companyData.nyUploadDocument"target="_blank">  
-                              {{ companyData.nyUploadDocument | slice:(companyData.nyUploadDocument.lastIndexOf('/')+1) }}
+                              <span class="text-capitalize font-12 font-weight-600 mb-2"> Upload Document </span>
+                              <span class="edit-text font-14 font-weight-500 mb-2"><a
+                                  [href]="companyData.nyUploadDocument" target="_blank">
+                                  {{ companyData.nyUploadDocument |
+                                  slice:(companyData.nyUploadDocument.lastIndexOf('/')+1) }}
 
-                            </a></span>
-                          </li>
+                                </a></span>
+                            </li>
                             <li class="d-flex flex-wrap align-items-center justify-content-between mb-2">
                               <span class="text-capitalize font-12 font-weight-600 mb-2"> NY Expiration </span>
                               <span class="edit-text font-14 font-weight-500 mb-2">{{companyData.nyExpiration}}</span>
@@ -444,10 +457,12 @@
                             </li>
                             <li class="d-flex flex-wrap align-items-center justify-content-between mb-2">
                               <span class="text-capitalize font-12 font-weight-600 mb-2"> Upload Document </span>
-                              <span class="edit-text font-14 font-weight-500 mb-2"><a [href]="companyData.w9UploadDocument"target="_blank">  
-                                {{ companyData.w9UploadDocument | slice:(companyData.w9UploadDocument.lastIndexOf('/')+1) }}
-  
-                              </a></span>
+                              <span class="edit-text font-14 font-weight-500 mb-2"><a
+                                  [href]="companyData.w9UploadDocument" target="_blank">
+                                  {{ companyData.w9UploadDocument |
+                                  slice:(companyData.w9UploadDocument.lastIndexOf('/')+1) }}
+
+                                </a></span>
                             </li>
 
                           </ul>
@@ -484,10 +499,12 @@
                       </li>
                       <li class="d-flex flex-wrap align-items-center justify-content-between mb-2">
                         <span class="text-capitalize font-12 font-weight-600 mb-2"> Insurance Documnet </span>
-                        <span class="edit-text font-14 font-weight-500 mb-2"><a [href]="companyData.insuranceDocument"target="_blank">  
-                          {{ companyData.insuranceDocument | slice:(companyData.insuranceDocument.lastIndexOf('/')+1) }}
+                        <span class="edit-text font-14 font-weight-500 mb-2"><a [href]="companyData.insuranceDocument"
+                            target="_blank">
+                            {{ companyData.insuranceDocument | slice:(companyData.insuranceDocument.lastIndexOf('/')+1)
+                            }}
 
-                        </a></span>
+                          </a></span>
                       </li>
 
                       <li class="d-flex flex-wrap align-items-center justify-content-between mb-2">
@@ -517,10 +534,12 @@
                       </li>
                       <li class="d-flex flex-wrap align-items-center justify-content-between mb-2">
                         <span class="text-capitalize font-12 font-weight-600 mb-2"> Upload Document </span>
-                        <span class="edit-text font-14 font-weight-500 mb-2"><a [href]="companyData.registrationUploadDocument"target="_blank">  
-                          {{ companyData.registrationUploadDocument | slice:(companyData.registrationUploadDocument.lastIndexOf('/')+1) }}
+                        <span class="edit-text font-14 font-weight-500 mb-2"><a
+                            [href]="companyData.registrationUploadDocument" target="_blank">
+                            {{ companyData.registrationUploadDocument |
+                            slice:(companyData.registrationUploadDocument.lastIndexOf('/')+1) }}
 
-                        </a></span>
+                          </a></span>
                       </li>
 
 
@@ -565,22 +584,27 @@
                       </li>
                       <li class="d-flex flex-wrap align-items-center justify-content-between mb-2">
                         <span class="text-capitalize font-12 font-weight-600 mb-2"> Upload Document </span>
-                        <span class="edit-text font-14 font-weight-500 mb-2"><a [href]="companyData.trailerUploadDocument"target="_blank">  
-                          {{ companyData.trailerUploadDocument | slice:(companyData.trailerUploadDocument.lastIndexOf('/')+1) }}
+                        <span class="edit-text font-14 font-weight-500 mb-2"><a
+                            [href]="companyData.trailerUploadDocument" target="_blank">
+                            {{ companyData.trailerUploadDocument |
+                            slice:(companyData.trailerUploadDocument.lastIndexOf('/')+1) }}
 
-                        </a></span>
+                          </a></span>
                       </li>
                       <li class="d-flex flex-wrap align-items-center justify-content-between mb-2">
                         <span class="text-capitalize font-12 font-weight-600 mb-2"> Randon DT Enrollment Cert </span>
-                        <span class="edit-text font-14 font-weight-500 mb-2">{{companyData.randomDtEnrollmentCert}}</span>
+                        <span
+                          class="edit-text font-14 font-weight-500 mb-2">{{companyData.randomDtEnrollmentCert}}</span>
 
                       </li>
                       <li class="d-flex flex-wrap align-items-center justify-content-between mb-2">
                         <span class="text-capitalize font-12 font-weight-600 mb-2"> Upload Document </span>
-                        <span class="edit-text font-14 font-weight-500 mb-2"><a [href]="companyData.randomDtUploadDocument"target="_blank">  
-                          {{ companyData.randomDtUploadDocument | slice:(companyData.randomDtUploadDocument.lastIndexOf('/')+1) }}
+                        <span class="edit-text font-14 font-weight-500 mb-2"><a
+                            [href]="companyData.randomDtUploadDocument" target="_blank">
+                            {{ companyData.randomDtUploadDocument |
+                            slice:(companyData.randomDtUploadDocument.lastIndexOf('/')+1) }}
 
-                        </a></span>
+                          </a></span>
                       </li>
                     </ul>
                   </div>
@@ -608,176 +632,196 @@
 <!-- End Footer -->
 
 <a href="#" class="back-to-top d-flex align-items-center justify-content-center btn-success"><i
-  class="bi bi-arrow-up-short"></i></a>
+    class="bi bi-arrow-up-short"></i></a>
 
-
-
-
-
-      
-      <div class="offcanvas offcanvas-end" tabindex="-1" id="addLocation" aria-labelledby="offcanvasRightLabel" style="width: 80%;" data-bs-backdrop="static" data-bs-keyboard="false">
-        <div class="modal-header" style="padding: 15px; border-bottom: 1px solid #ccc;">
-          <h5 class="modal-title">Edit Company Profile</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-h2="Close"></button>
-        </div>
-        <div class="offcanvas-body view-load position-relative">
-          <form class="row g-3">
-            <div class="col-md-4">
-              <h2 class="font-14 font-weight-700"> Company Name DBA</h2>
-              <input type="text" class="form-control" id="validationDefault01" value=" Company Name DBA " required="">
-            </div>
-            <div class="col-md-4">
-              <h2 class="font-14 font-weight-700">Corporation</h2>
-              <input type="text" class="form-control" id="validationDefault02" value="Corporation" required="">
-            </div>
-            <div class="col-md-4">
-              <h2 class="font-14 font-weight-700">DOT</h2>
-              <input type="text" class="form-control" id="validationDefault02" value="DOT" required="">
-            </div>
-            <div class="col-md-4">
-              <h2 class="font-14 font-weight-700">MC</h2>
-              <input type="text" class="form-control" id="validationDefault02" value="MC" required="">
-            </div>
-            <div class="col-md-4">
-              <h2 class="font-14 font-weight-700">Upload Document</h2>
-              <input type="file" class="form-control" id="validationDefault02" value="MC" required="">
-            </div>
-            <hr class="hr">
-
-            <div class="col-md-4">
-              <h2 class="font-14 font-weight-700">KYU</h2>
-              <input type="text" class="form-control" id="validationDefault02" value="KYU" required="">
-            </div>
-            <div class="col-md-4">
-              <h2 class="font-14 font-weight-700">Upload Document</h2>
-              <input type="file" class="form-control" id="validationDefault02" value="MC" required="">
-            </div>
-            <div class="col-md-4">
-              <h2 class="font-14 font-weight-700">KYU Expiration</h2>
-              <input type="text" class="form-control" id="validationDefault02" value="dd/mm/yyyy" required="">
-            </div>
-
-            <div class="col-md-4">
-              <h2 class="font-14 font-weight-700">NY</h2>
-              <input type="text" class="form-control" id="validationDefault02" value="NY" required="">
-            </div>
-            <div class="col-md-4">
-              <h2 class="font-14 font-weight-700">Upload Document</h2>
-              <input type="file" class="form-control" id="validationDefault02" value="MC" required="">
-            </div>
-            <div class="col-md-4">
-              <h2 class="font-14 font-weight-700">NY Expiration</h2>
-              <input type="text" class="form-control" id="validationDefault02" value="dd/mm/yyyy" required="">
-            </div>
-
-            <div class="col-md-4">
-              <h2 class="font-14 font-weight-700">NM WDT</h2>
-              <input type="text" class="form-control" id="validationDefault02" value="NM WDT" required="">
-            </div>
-            <div class="col-md-4">
-              <h2 class="font-14 font-weight-700">Ein</h2>
-              <input type="text" class="form-control" id="validationDefault02" value="Ein" required="">
-            </div>
-            <div class="col-md-2">
-              <h2 class="font-14 font-weight-700">W9</h2>
-              <input type="text" class="form-control" id="validationDefault02" value="W9" required="">
-            </div>
-            <div class="col-md-2">
-              <h2 class="font-14 font-weight-700">Upload Document</h2>
-              <input type="file" class="form-control" id="validationDefault02" value="MC" required="">
-            </div>
-
-            <hr class="hr">
-
-            <div class="col-md-4">
-              <h2 class="font-14 font-weight-700">IFTA ACC</h2>
-              <input type="text" class="form-control" id="validationDefault02" value="IFTA ACC" required="">
-            </div>
-            <div class="col-md-4">
-              <h2 class="font-14 font-weight-700">Prepass</h2>
-              <input type="text" class="form-control" id="validationDefault02" value="Prepass" required="">
-            </div>
-            <div class="col-md-4">
-              <h2 class="font-14 font-weight-700">IRP ACC</h2>
-              <input type="text" class="form-control" id="validationDefault02" value="IRP ACC" required="">
-            </div>
-            <div class="col-md-4">
-              <h2 class="font-14 font-weight-700">IRP Renewal Date</h2>
-              <input type="text" class="form-control" id="validationDefault02" value="dd/mm/yyyy" required="">
-            </div>
-            <div class="col-md-4">
-              <h2 class="font-14 font-weight-700">Insurance Document</h2>
-              <input type="file" class="form-control" id="validationDefault02" value="MC" required="">
-            </div>
-
-            <hr class="hr">
-
-            <div class="col-md-4">
-              <h2 class="font-14 font-weight-700">Address</h2>
-              <input type="text" class="form-control" id="validationDefault02" value="Address" required="">
-            </div>
-            <div class="col-md-4">
-              <h2 class="font-14 font-weight-700">Phone</h2>
-              <input type="text" class="form-control" id="validationDefault02" value="Phone" required="">
-            </div>
-            <div class="col-md-4">
-              <h2 class="font-14 font-weight-700">Email Pull Noitce ACC</h2>
-              <input type="text" class="form-control" id="validationDefault02" value="Email Pull Noitce ACC" required="">
-            </div>
-            <div class="col-md-4">
-              <h2 class="font-14 font-weight-700">Truck</h2>
-              <input type="text" class="form-control" id="validationDefault02" value="Truck" required="">
-            </div>
-            <div class="col-md-4">
-              <h2 class="font-14 font-weight-700">Registration</h2>
-              <input type="text" class="form-control" id="validationDefault02" value="Registration" required="">
-            </div>
-            <div class="col-md-4">
-              <h2 class="font-14 font-weight-700">Upload Document</h2>
-              <input type="file" class="form-control" id="validationDefault02" value="MC" required="">
-            </div>
-            <div class="col-md-4">
-              <h2 class="font-14 font-weight-700">Owner Address</h2>
-              <input type="text" class="form-control" id="validationDefault02" value="Address" required="">
-            </div>
-            <div class="col-md-4">
-              <h2 class="font-14 font-weight-700">Phone</h2>
-              <input type="text" class="form-control" id="validationDefault02" value="Phone" required="">
-            </div>
-            <div class="col-md-4">
-              <h2 class="font-14 font-weight-700">Email</h2>
-              <input type="text" class="form-control" id="validationDefault02" value="Email" required="">
-            </div>
-            <div class="col-md-4">
-              <h2 class="font-14 font-weight-700">Number of Trailer</h2>
-              <input type="text" class="form-control" id="validationDefault02" value="Truck" required="">
-            </div>
-            <div class="col-md-4">
-              <h2 class="font-14 font-weight-700">Trailer Registration</h2>
-              <input type="text" class="form-control" id="validationDefault02" value="dd/mm/yyyy" required="">
-            </div>
-            <div class="col-md-4">
-              <h2 class="font-14 font-weight-700">Upload Document</h2>
-              <input type="file" class="form-control" id="validationDefault02" value="MC" required="">
-            </div>
-            <div class="col-md-4">
-              <h2 class="font-14 font-weight-700">Randon DT Enrollment Cert</h2>
-              <input type="text" class="form-control" id="validationDefault02" value="Randon DT Enrollment Cert" required="">
-            </div>
-            <div class="col-md-4">
-              <h2 class="font-14 font-weight-700">Upload Document</h2>
-              <input type="file" class="form-control" id="validationDefault02" value="MC" required="">
-            </div>
-
-          </form>
-            
-
-           
-            
-            
-            <div class="modal-footer justify-content-center" style="border-top: 1px solid #ccc; padding-top: 15px; margin-top: 15px; ">
-              <button type="button" class="btn btn-outline-secondary btn-sm text-uppercase rounded-pill" data-bs-dismiss="offcanvas" style="margin: 10px;">Close</button> 
-              <button type="submit" class="btn btn-success btn-sm text-uppercase rounded-pill">Save changes</button>
-            </div>
-        </div>
+<div class="offcanvas offcanvas-end" tabindex="-1" id="addLocation" aria-labelledby="offcanvasRightLabel"
+  style="width: 80%" data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-header" style="padding: 15px; border-bottom: 1px solid #ccc">
+    <h5 class="modal-title">Edit Company Profile</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-h2="Close"></button>
+  </div>
+  <div class="offcanvas-body view-load position-relative">
+    <form class="row g-3" (ngSubmit)="updateCompanyProfile()">
+      <div class="col-md-4">
+        <h2 class="font-14 font-weight-700">Company Name DBA</h2>
+        <input type="text" class="form-control" [(ngModel)]="companyToEdit.companyName" name=" companyName "
+          required="" />
       </div>
+      <div class="col-md-4">
+        <h2 class="font-14 font-weight-700">Corporation</h2>
+        <input type="text" class="form-control" [(ngModel)]="companyToEdit.corporation" name=" corporation "
+          required="" />
+      </div>
+      <div class="col-md-4">
+        <h2 class="font-14 font-weight-700">DOT</h2>
+        <input type="text" class="form-control" [(ngModel)]="companyToEdit.dot" name=" dot " required="" (focus)="onDotInputClick()" />
+      </div>
+      <div class="col-md-4">
+        <h2 class="font-14 font-weight-700">MC</h2>
+        <input type="text" class="form-control" [(ngModel)]="companyToEdit.mc" name="mc" required="" />
+      </div>
+      <div class="col-md-4">
+        <h2 class="font-14 font-weight-700">Upload Documents</h2>
+        <input type="file" class="form-control" (change)="companyEditFile($event, 'uploadDocument')"
+          name="uploadDocuments" required />
+      </div>
+      <hr class="hr" />
+
+      <div class="col-md-4">
+        <h2 class="font-14 font-weight-700">KYU</h2>
+        <input type="text" class="form-control" [(ngModel)]="companyToEdit.kyu" name="kyu" required="" />
+      </div>
+      <div class="col-md-4">
+        <h2 class="font-14 font-weight-700">Upload Documents</h2>
+        <input type="file" class="form-control" (change)="companyEditFile($event, 'kyuUploadDocument')"
+          name="kyuUploadDocument" required />
+      </div>
+      <div class="col-md-4">
+        <h2 class="font-14 font-weight-700">Expiration Date</h2>
+        <input type="date" class="form-control" id="kyuExpiration" placeholder="Expiration Date"
+          [(ngModel)]="companyToEdit.kyuExpiration" name="kyuExpiration" required="" />
+      </div>
+
+      <div class="col-md-4">
+        <h2 class="font-14 font-weight-700">NY</h2>
+        <input type="text" class="form-control" [(ngModel)]="companyToEdit.ny" name="ny" required="" />
+      </div>
+      <div class="col-md-4">
+        <h2 class="font-14 font-weight-700">Upload Documents</h2>
+        <input type="file" class="form-control" (change)="companyEditFile($event, 'nyUploadDocument')"
+          name="nyUploadDocument" required />
+      </div>
+      <div class="col-md-4">
+        <h2 class="font-14 font-weight-700">Expiration Date</h2>
+        <input type="date" class="form-control" id="nyExpiration" placeholder="Expiration Date"
+          [(ngModel)]="companyToEdit.nyExpiration" name="nyExpiration" required="" />
+      </div>
+
+      <div class="col-md-4">
+        <h2 class="font-14 font-weight-700">NM WDT</h2>
+        <input type="text" class="form-control" [(ngModel)]="companyToEdit.nmWdt" name="nmWdt" required="" />
+      </div>
+      <div class="col-md-4">
+        <h2 class="font-14 font-weight-700">Ein</h2>
+        <input type="text" class="form-control" [(ngModel)]="companyToEdit.ein" name="ein" required="" />
+      </div>
+      <div class="col-md-2">
+        <h2 class="font-14 font-weight-700">W9</h2>
+        <input type="text" class="form-control" [(ngModel)]="companyToEdit.w9" name="w9" required="" />
+      </div>
+      <div class="col-md-4">
+        <h2 class="font-14 font-weight-700">Upload Documents</h2>
+        <input type="file" class="form-control" (change)="companyEditFile($event, 'w9UploadDocument')"
+          name="w9UploadDocument" required />
+      </div>
+
+      <hr class="hr" />
+
+      <div class="col-md-4">
+        <h2 class="font-14 font-weight-700">IFTA ACC</h2>
+        <input type="text" class="form-control" [(ngModel)]="companyToEdit.iftaAcc" name="iftaAcc" required="" />
+      </div>
+      <div class="col-md-4">
+        <h2 class="font-14 font-weight-700">Prepass</h2>
+        <input type="text" class="form-control" [(ngModel)]="companyToEdit.prepass" name="prepass" required="" />
+      </div>
+      <div class="col-md-4">
+        <h2 class="font-14 font-weight-700">IRP ACC</h2>
+        <input type="text" class="form-control" [(ngModel)]="companyToEdit.irpAcc" name="irpAccw9" required="" />
+      </div>
+      <div class="col-md-4">
+        <h2 class="font-14 font-weight-700">Expiration Date</h2>
+        <input type="date" class="form-control" id="irpRenewalDate" placeholder="Expiration Date"
+          [(ngModel)]="companyToEdit.irpRenewalDate" name="irpRenewalDate" required="" />
+      </div>
+
+      <div class="col-md-4">
+        <h2 class="font-14 font-weight-700">Upload Documents</h2>
+        <input type="file" class="form-control" (change)="companyEditFile($event, 'insuranceDocument')"
+          name="insuranceDocument" required />
+      </div>
+
+      <hr class="hr" />
+
+      <div class="col-md-4">
+        <h2 class="font-14 font-weight-700">Address</h2>
+        <input type="text" class="form-control" [(ngModel)]="companyToEdit.address" name="address" required="" />
+      </div>
+      <div class="col-md-4">
+        <h2 class="font-14 font-weight-700">Phone</h2>
+        <input type="text" class="form-control" [(ngModel)]="companyToEdit.phone" name="phone" required="" />
+      </div>
+      <div class="col-md-4">
+        <h2 class="font-14 font-weight-700">Email Pull Noitce ACC</h2>
+        <input type="text" class="form-control" [(ngModel)]="companyToEdit.pullNoticeAcc" name="pullNoticeAcc"
+          required="" />
+      </div>
+      <div class="col-md-4">
+        <h2 class="font-14 font-weight-700">Truck</h2>
+        <input type="text" class="form-control" [(ngModel)]="companyToEdit.truck" name="truck" required="" />
+      </div>
+      <div class="col-md-4">
+        <h2 class="font-14 font-weight-700">Registration</h2>
+        <input type="text" class="form-control" [(ngModel)]="companyToEdit.registration" name="registration"
+          required="" />
+      </div>
+      <div class="col-md-4">
+        <h2 class="font-14 font-weight-700">Upload Documents</h2>
+        <input type="file" class="form-control" (change)="companyEditFile($event, 'registrationUploadDocument')"
+          name="registrationUploadDocument" required />
+      </div>
+
+      <div class="col-md-4">
+        <h2 class="font-14 font-weight-700">Owner Address</h2>
+        <input type="text" class="form-control" [(ngModel)]="companyToEdit.ownerAddress" name="ownerAddress"
+          required="" />
+      </div>
+      <div class="col-md-4">
+        <h2 class="font-14 font-weight-700">Phone</h2>
+        <input type="text" class="form-control" [(ngModel)]="companyToEdit.ownerPhone" name="ownerPhone" required="" />
+      </div>
+      <div class="col-md-4">
+        <h2 class="font-14 font-weight-700">Email</h2>
+        <input type="text" class="form-control" [(ngModel)]="companyToEdit.ownerEmail" name="ownerEmail" required="" />
+      </div>
+      <div class="col-md-4">
+        <h2 class="font-14 font-weight-700">Number of Trailer</h2>
+        <input type="text" class="form-control" [(ngModel)]="companyToEdit.numberOfTrailer" name="numberOfTrailer"
+          required="" />
+      </div>
+      <div class="col-md-4">
+        <h2 class="font-14 font-weight-700">Expiration Date</h2>
+        <input type="date" class="form-control" id="trailerRegistration" placeholder="Expiration Date"
+          [(ngModel)]="companyToEdit.trailerRegistration" name="trailerRegistration" required="" />
+      </div>
+      <div class="col-md-4">
+        <h2 class="font-14 font-weight-700">Upload Documents</h2>
+        <input type="file" class="form-control" (change)="companyEditFile($event, 'trailerUploadDocument')"
+          name="trailerUploadDocument" required />
+      </div>
+
+      <div class="col-md-4">
+        <h2 class="font-14 font-weight-700">Randon DT Enrollment Cert</h2>
+        <input type="text" class="form-control" [(ngModel)]="companyToEdit.randomDtEnrollmentCert"
+          name="randomDtEnrollmentCert" required="" />
+      </div>
+      <div class="col-md-4">
+        <h2 class="font-14 font-weight-700">Upload Documents</h2>
+        <input type="file" class="form-control" (change)="companyEditFile($event, 'randomDtUploadDocument')"
+          name="randomDtUploadDocument" required />
+      </div>
+
+      <div class="modal-footer justify-content-center"
+        style="border-top: 1px solid #ccc; padding-top: 15px; margin-top: 15px">
+        <button type="button" class="btn btn-outline-secondary btn-sm text-uppercase rounded-pill"
+          data-bs-dismiss="offcanvas" style="margin: 10px">
+          Close
+        </button>
+        <button type="submit" class="btn btn-success btn-sm text-uppercase rounded-pill" data-bs-dismiss="offcanvas">
+          Save changes
+        </button>
+      </div>
+    </form>
+      
+  </div>
+</div>

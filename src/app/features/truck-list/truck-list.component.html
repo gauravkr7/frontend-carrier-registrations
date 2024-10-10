@@ -90,7 +90,7 @@
                                 'bg-label-danger': truck.status === 'EXPIRING'}">{{ truck.status }}</span>
                             </td>
                             <td class="text-capitalize text-center">
-                              <div class="dropdown filter-dropdown">
+                              <div class="dropdown filter-dropdown" style="position: fixed;">
                                 <span class="dropdown-toggle font-16 px-3" type="button" id="dropdownMenuButton23"
                                   data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i>
                                 </span>
@@ -302,18 +302,7 @@
   <div class="modal-header" style="padding: 15px; border-bottom: 1px solid #ccc;">
     <h5 class="modal-title">Add Truck</h5>
     <div>
-      <!-- Optional: You can uncomment and use these links as needed -->
-      <!--
-      <a href="javascript:;" class="font-14 text-success text-uppercase font-weight-500 me-4">
-        <i class="ri-save-3-line"></i> Save
-      </a>
-      <a data-bs-dismiss="offcanvas" href="javascript:;" class="font-14 text-danger text-uppercase font-weight-500 me-4">
-        <i class="ri-delete-bin-6-line"></i> Delete
-      </a>
-      <a routerLink="/truck-list-view" class="font-14 text-uppercase font-weight-500 me-5" routerLinkActive="active">
-        View Profile
-      </a>
-      -->
+      
       <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
   </div>

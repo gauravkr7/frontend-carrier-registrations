@@ -9,11 +9,12 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
+  name : string ='';
   email: string = '';
   password: string = '';
   rememberMe: boolean = false;
   companyData: any;
-  companyId: string = ''; // Initialize with default value
+  companyId: string = '';
 
   constructor(
     private authService: ServiceAuthService,
@@ -48,29 +49,38 @@ export class LoginComponent {
   }
 
   login() {
-    this.authService.login(this.email, this.password, this.rememberMe)
+    this.authService.login(this.email, this.password, this.rememberMe , this.name)
       .subscribe(response => {
         console.log(response);
-
-        // Store company ID in local storage
+  
+        // Store company ID in local storage if it exists
         if (response.companyId) {
           localStorage.setItem('companyId', response.companyId);
         }
-
+  
         if (response.role === 'superadmin' || this.email === 'superadmin@example.com') {
           this.toastr.success('Super Admin Login successful!', 'Success');
           this.router.navigate(['/dashboard']); // Redirect to dashboard for superadmin
-        } else if (response.role === 'admin' || response.role === 'superadminuser') {
+        } else if (response.role === 'admin' || response.role === 'superadminuser' || response.role === 'adminuser') {
           this.toastr.success('Login successful!', 'Success');
+          
+          // Get the stored company ID from local storage
           const storedCompanyId = localStorage.getItem('companyId');
-          this.router.navigate(['/company-profile', storedCompanyId]); // Redirect to company profile for admin or users
+          
+          // Check if the company ID exists and navigate accordingly
+          if (storedCompanyId) {
+            this.router.navigate(['/company-profile', storedCompanyId]); // Navigate to company profile with ID
+          } else {
+            this.router.navigate(['/company-profile']); // Navigate to company profile without ID
+          }
         } else {
           this.toastr.error('Unauthorized role', 'Error');
         }
-
+  
       }, error => {
         console.error(error);
         this.toastr.error('Login failed. Please try again.', 'Error');
-      });
-  }
+      });
+  }
+  
 }

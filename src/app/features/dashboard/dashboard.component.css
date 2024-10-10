@@ -54,3 +54,42 @@
   .offcanvas-body.view-load .form-control {
     transition: all 0.3s ease;
   }
+  /* Make the header larger */
+.header {
+  height: 100px; /* Adjust to your preferred height */
+  padding: 5px;
+  background-color: #f8f9fa; /* Optional: change the background color */
+}
+
+/* Style the logo */
+.logo img {
+  height: 17px; /* Adjust the logo size */
+}
+
+/* Increase the font size of navigation links */
+.navbar-nav .nav-link {
+  font-size: 1.0 rem; /* Increase the font size */
+  font-weight: bold; /* Make the text bold */
+  padding: 10px 20px; /* Adjust the padding */
+  color: #333; /* Adjust the text color if necessary */
+}
+
+/* Optional: Increase the font size for the navbar toggler */
+.navbar-toggler {
+  font-size: 0.5rem;
+}
+
+/* Optional: Style for active links */
+.navbar-nav .nav-link.active {
+  color: #007bff;
+}
+
+.navbar-nav {
+  margin-bottom: auto; /* Push the navbar items to the right */
+}
+
+.navbar-nav {
+  margin-left: 110px; /* Push items to the right */
+  margin-top: 10px; /* Shift items slightly towards the bottom */
+  margin-right: 80px; /* Further shift to the right */
+}

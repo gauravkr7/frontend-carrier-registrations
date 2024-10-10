@@ -40,17 +40,7 @@
                   <div class="row">
                     <div class="col-md-12">
                       <div class="d-flex justify-content-between">
-                        <!-- <div class="form-group has-search mb-0">
-                          <span class="fa fa-search form-control-feedback"></span>
-                          <input style="height: 36px !important;" type="text" name="Search" class="form-control"
-                            placeholder="Search...">
-                        </div> -->
-                        <!-- <div class="d-flex justify-content-end gap-2">
-                          <button type="button" class="btn btn-success rounded-pill font-14" data-bs-toggle="modal"
-                            data-bs-target="#ExtralargeModal">
-                            <i class="fa fa-plus me-2" aria-hidden="true"></i>Add
-                          </button>
-                        </div> -->
+
                       </div>
                     </div>
                   </div>
@@ -77,7 +67,7 @@
                             <td>Update Permission</td>
                             <td>Active</td>
                             <td class="text-capitalize text-center">
-                              <div class="dropdown filter-dropdown">
+                              <div class="dropdown filter-dropdown" style="position: fixed;">
                                 <span class="dropdown-toggle font-16 px-3" type="button" id="dropdownMenuButton23"
                                   data-bs-toggle="dropdown" aria-expanded="false"><i
                                     class="fa fa-ellipsis-v"></i></span>
@@ -88,7 +78,7 @@
                                   <a class="dropdown-item assiened font-13" href="javascript:;" data-bs-toggle="modal"
                                     data-bs-target="#ExtralargeModalDelete"
                                     onclick="dropdownevent('dropdownMenuButton2', 'assigned')">Delete</a>
-                                  
+
                                 </div>
                               </div>
                             </td>
@@ -122,114 +112,6 @@
 
 
 
-
-
-
-
-            <!-- 
-
-            <div class="modal fade" id="ExtralargeModal" tabindex="-1" aria-hidden="true">
-              <div class="modal-dialog modal-xl">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title">Add</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                  </div>
-                  <div class="modal-body">
-                    <form class="row g-3" (ngSubmit)="submitForm()" #customerForm="ngForm">
-
-
-
-                      <div class="col-md-4">
-                        <h2 class="font-14 font-weight-700">User Type</h2>
-                        <input type="text" class="form-control" id="state" placeholder="Enter User Type" [(ngModel)]="newUsers.role"
-                          name="User Type" required>
-                      </div>
-                      
-                      <div class="col-md-4">
-                        <h2 class="font-14 font-weight-700">Select Branch</h2>
-                        <select class="form-control" [(ngModel)]="newUsers.selectBranch" name="SelectBranch" required>
-                          <option>Bakerfield</option>
-                          <option>California</option>
-                        </select>
-                      </div>
-                      <div class="col-md-4">
-                        <h2 class="font-14 font-weight-700">Name</h2>
-                        <input type="text" class="form-control" id="state" placeholder="Enter Name" [(ngModel)]="newUsers.name"
-                          name="Name" required>
-                      </div>
-                      <div class="col-md-4">
-                        <h2 class="font-14 font-weight-700">Email</h2>
-                        <input type="email" class="form-control" id="email" placeholder="Enter email" [(ngModel)]="newUsers.email"
-                          name="email" required>
-                      </div>
-                      <div class="col-md-4">
-                        <h2 class="font-14 font-weight-700">Phone Number</h2>
-                        <input type="text" class="form-control" id="state" placeholder="Phone Number"
-                          [(ngModel)]="newUsers.phoneNumber" name="PhoneNumber" required>
-                      </div>
-                      <div class="col-md-4">
-                        <h2 class="font-14 font-weight-700">Password</h2>
-                        <input type="text" class="form-control" id="password" placeholder="Enter Password"
-                          [(ngModel)]="newUsers.password" name="password" required>
-                      </div>
-                      <div class="col-md-4">
-                        <h2 class="font-14 font-weight-700">Confirm Password</h2>
-                        <input type="text" class="form-control" id="ConfirmPassword" placeholder="Enter Confirm Password"
-                          [(ngModel)]="newUsers.confirmPassword" name="ConfirmPassword" required>
-                      </div>
-                     
-                      <div class="col-md-4">
-                        <h2 class="font-14 font-weight-700">Choose Carrier</h2>
-                        <select class="form-control" [(ngModel)]="newUsers.chooseCarrier" name="ChooseCarrier" required>
-                          <option>3D Trucking</option>
-                          <option>3D Trucking</option>
-                        </select>
-                      </div> 
-                      
-
-
-                      <div class="modal-footer justify-content-center">
-                        <button type="button" class="btn btn-outline-secondary btn-sm text-uppercase rounded-pill"
-                          data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-success btn-sm text-uppercase rounded-pill">Save changes</button>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
-
--->
-
-
-
-
-            <!-- ActivityLogs-specific content -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             <!-- Profile Tab -->
             <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
               <!-- Profile tab here -->
@@ -242,12 +124,7 @@
                           <div class="form-group has-search mb-0">
 
                           </div>
-                          <!-- <div class="d-flex justify-content-end gap-2">
-                            <button type="button" class="btn btn-success rounded-pill font-14" data-bs-toggle="modal"
-                              data-bs-target="#ExtralargeModal">
-                              <i class="fa fa-plus me-2" aria-hidden="true"></i>Add
-                            </button>
-                          </div> -->
+
                         </div>
                       </div>
                     </div>
@@ -287,60 +164,7 @@
               </div>
 
 
-
-              <!-- <div class="modal fade" id="ExtralargeModal" tabindex="-1" aria-hidden="true">
-              <div class="modal-dialog modal-xl">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title">Add </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                  </div>
-                  <div class="modal-body">
-                    <form class="row g-3" (ngSubmit)="submitForm()" #customerForm="ngForm">
-
-                      
-                      <div class="col-md-4">
-                        <h2 class="font-14 font-weight-700">User Name</h2>
-                        <input type="text" class="form-control" id="User Name" placeholder="Enter User Name" [(ngModel)]="newUsers.userName"
-                          name="User Name" required>
-                      </div>
-                      <div class="col-md-4">
-                        <h2 class="font-14 font-weight-700">Email</h2>
-                        <input type="email" class="form-control" id="email" placeholder="Enter email" [(ngModel)]="newUsers.email"
-                          name="email" required>
-                      </div>
-                      
-                      <div class="col-md-4">
-                        <h2 class="font-14 font-weight-700">Password</h2>
-                        <input type="text" class="form-control" id="password" placeholder="Enter Password"
-                          [(ngModel)]="newUsers.password" name="password" required>
-                      </div>
-                      <div class="col-md-4">
-                        <h2 class="font-14 font-weight-700">Confirm Password</h2>
-                        <input type="text" class="form-control" id="ConfirmPassword" placeholder="Enter Confirm Password"
-                          [(ngModel)]="newUsers.confirmPassword" name="ConfirmPassword" required>
-                      </div>
-                      
-                      <div class="modal-footer justify-content-center">
-                        <button type="button" class="btn btn-outline-secondary btn-sm text-uppercase rounded-pill"
-                          data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-success btn-sm text-uppercase rounded-pill">Save changes</button>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div> -->
-
-
-
-
-
-
-
               <!-- Profile-specific content -->
-
-
 
               <div class="my-4">
                 <div class="modal-body">
@@ -377,16 +201,6 @@
                 </div>
               </div>
             </div>
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -444,9 +258,8 @@
 
                     <div class="col-md-6">
                       <label for="role" class="form-label">User Type</label>
-                      <select class="form-select" id="role" [(ngModel)]="newUser.role" name="role"
-                        #role="ngModel" required
-                        [ngClass]="{'is-invalid': role.invalid && (role.dirty || role.touched)}">
+                      <select class="form-select" id="role" [(ngModel)]="newUser.role" name="role" #role="ngModel"
+                        required [ngClass]="{'is-invalid': role.invalid && (role.dirty || role.touched)}">
                         <option value=" superadminuser">SuperAdmin User</option>
                         <option value="adminuser">Admin User</option>
                         <option value="admin">Admin </option>
@@ -455,20 +268,21 @@
                         User type is required.
                       </div>
                     </div>
-                    
+
                     <div class="col-md-6">
                       <label for="company" class="form-label">Company</label>
                       <select class="form-select" id="company" [(ngModel)]="newUser.companyId" name="company"
                         #company="ngModel" required
                         [ngClass]="{'is-invalid': company.invalid && (company.dirty || company.touched)}">
                         <option value="" disabled>Select a company</option>
-                        <option *ngFor="let company of companies" [value]="company._id">{{ company.companyName }}</option>
+                        <option *ngFor="let company of companies" [value]="company._id">{{ company.companyName }}
+                        </option>
                       </select>
                       <div *ngIf="company.invalid && (company.dirty || company.touched)" class="invalid-feedback">
                         Company selection is required.
                       </div>
                     </div>
-                    
+
                     <div class="col-md-6">
                       <label for="password" class="form-label">Password</label>
                       <input type="password" class="form-control" id="password" [(ngModel)]="newUser.password"
@@ -590,7 +404,7 @@
                           <td>Update Permission</td>
                           <td>Active</td>
                           <td class="text-capitalize text-center">
-                            <div class="dropdown filter-dropdown">
+                            <div class="dropdown filter-dropdown" style="position: fixed;">
                               <span class="dropdown-toggle font-16 px-3" type="button" id="dropdownMenuButton23"
                                 data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></span>
                               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton23">
@@ -598,11 +412,10 @@
                                   data-bs-target="#ExtralargeModalEdit">Edit</a>
                                 <a class="dropdown-item assigned font-13" href="javascript:;" data-bs-toggle="modal"
                                   data-bs-target="#ExtralargeModalDelete">Delete</a>
-                                  <a class="dropdown-item assigned font-13" href="javascript:;"
-                                    data-bs-toggle="offcanvas" data-bs-target="#addpg"
-                                    (click)="openPermissions(user._id)">
-                                    Permission/View
-                                  </a>
+                                <a class="dropdown-item assigned font-13" href="javascript:;" data-bs-toggle="offcanvas"
+                                  data-bs-target="#addpg" (click)="openPermissions(user._id)">
+                                  Permission/View
+                                </a>
                               </div>
                             </div>
                           </td>
@@ -633,82 +446,7 @@
                 </div>
               </div>
 
-              <!-- 
-              <div class="modal fade" id="ExtralargeModal" tabindex="-1" aria-hidden="true">
-                <div class="modal-dialog modal-xl">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h5 class="modal-title">Add </h5>
-                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                      <form class="row g-3" (ngSubmit)="submitForm()" #customerForm="ngForm">
-
-                        <div class="col-md-4">
-                          <h2 class="font-14 font-weight-700">First Name</h2>
-                          <input type="text" class="form-control" id="state" placeholder="Enter First Name" [(ngModel)]="newUsers.firstName"
-                            name="First Name" required>
-                        </div>
-                        <div class="col-md-4">
-                          <h2 class="font-14 font-weight-700">Name</h2>
-                          <input type="text" class="form-control" id="name" placeholder="Enter Name" [(ngModel)]="newUsers.name"
-                            name="Name" required>
-                        </div>
-                        <div class="col-md-4">
-                          <h2 class="font-14 font-weight-700">Email</h2>
-                          <input type="email" class="form-control" id="email" placeholder="Enter email" [(ngModel)]="newUsers.email"
-                            name="email" required>
-                        </div>
-                        
-                        <div class="col-md-4">
-                          <h2 class="font-14 font-weight-700">Type</h2>
-                          <input type="text" class="form-control" id="type" placeholder="Enter Type"
-                            [(ngModel)]="newUsers.type" name="type" required>
-                        </div>
-                       
-                        
-                        <div class="col-md-4">
-                          <h2 class="font-14 font-weight-700">Permission Group</h2>
-                          <select class="form-control" [(ngModel)]="newUsers.permissionGroup" name="PermissionGroup" required>
-                            <option>Group1</option>
-                            <option>Group2</option>
-                          </select>
-                        </div>
-                        <div class="modal-footer justify-content-center">
-                          <button type="button" class="btn btn-outline-secondary btn-sm text-uppercase rounded-pill"
-                            data-bs-dismiss="modal">Close</button>
-                          <button type="submit" class="btn btn-success btn-sm text-uppercase rounded-pill">Save changes</button>
-                        </div>
-                      </form>
-                    </div>
-                  </div>
-                </div>
-              </div> -->
             </div>
-
-
-
-
-
-
-
-            <!-- Users-specific content -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
             <!-- Permission Groups Tab -->
@@ -756,28 +494,10 @@
                   </div>
                   <div class="row bg-white px-3 py-4 mt-3 rounded">
                     <div class="col-md-12">
-                      <!-- <nav aria-label="Page navigation example ms-auto me-auto">
-                        <ul class="pagination justify-content-center gap-2 mb-0">
-                          <li class="page-item">
-                            <a class="page-link font-22" href="javascript:;" aria-label="Previous"><i
-                                class="fa fa-angle-left font-weight-300"></i></a>
-                          </li>
-                          <li class="page-item active"><a class="page-link font-14" href="javascript:;">1</a></li>
-                          <li class="page-item"><a class="page-link font-14" href="javascript:;">2</a></li>
-                          <li class="page-item"><a class="page-link font-14" href="javascript:;">3</a></li>
-                          <li class="page-item"><a class="page-link font-14" href="javascript:;">4</a></li>
-                          <li class="page-item"><a class="page-link font-14" href="javascript:;">5</a></li>
-                          <li class="page-item"><a class="page-link font-22" href="javascript:;" aria-label="Next"><i
-                                class="fa fa-angle-right font-weight-300"></i></a></li>
-                        </ul>
-                      </nav> -->
                     </div>
                   </div>
                 </div>
               </div>
-
-
-
 
 
               <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight"
@@ -858,18 +578,6 @@
                 </div>
               </div>
 
-
-
-
-              <!-- Permission Groups-specific content -->
-
-
-
-
-
-
-
-
             </div>
           </div>
 
@@ -927,24 +635,6 @@
     </div>
   </div>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
