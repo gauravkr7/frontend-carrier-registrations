@@ -47,6 +47,7 @@
                       <table class="table table-bordered">
                         <thead>
                           <tr>
+                            <th scope="col">Company</th>
                             <th scope="col">Company Name</th>
                             <th scope="col">File Name</th>
                             <th scope="col">File Description</th>
@@ -55,8 +56,9 @@
                         </thead>
                         <tbody>
                           <tr *ngFor="let file of files">
-                            <td><a class="text-primary" href="file-info-view.html">{{ file.companyName }}</a></td>
-
+                            <!-- <td><a class="text-primary" href="file-info-view.html">{{ file.companyName }}</a></td> -->
+                            <td>{{ file.companyName }}</td>
+                            <td>{{ findCompanyName(file.companyId) }}</td> 
                             <td><span class="edit-text font-14 font-weight-500 mb-2">
                               <a [href]="file.fileUpload" target="_blank">
                                 {{ file.fileUpload | slice:(file.fileUpload.lastIndexOf('/')+1) }}
@@ -91,7 +93,7 @@
                 </div>
                 <div class="row bg-white px-3 py-4 mt-3 rounded">
                   <div class="col-md-12">
-                    <nav aria-label="Page navigation example ms-auto me-auto">
+                    <!-- <nav aria-label="Page navigation example ms-auto me-auto">
                       <ul class="pagination justify-content-center gap-2 mb-0">
                         <li class="page-item">
                           <a class="page-link font-22" href="javascript:;" aria-label="Previous"><i
@@ -105,7 +107,7 @@
                         <li class="page-item"><a class="page-link font-22" href="javascript:;" aria-label="Next"><i
                               class="fa fa-angle-right font-weight-300"></i></a></li>
                       </ul>
-                    </nav>
+                    </nav> -->
                   </div>
                 </div>
               </div>

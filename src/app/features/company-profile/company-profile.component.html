@@ -7,7 +7,6 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
 
 
-
 <section class="bg-color pb-5">
   <div class="container-fluid px-5">
     <div class="row">
@@ -28,7 +27,7 @@
       
           
     </div>
-    <div class="row border rounded px-3 py-5" *ngIf="dotData">
+    <div class="row border rounded px-3 py-5" *ngIf="getDot">
       <div class="col-xl-5">
         <div class="mb-1 d-flex">
           <h3 class="text-dark font-weight-700 mb-0" style="color: #3253dd !important;">{{companyData.companyName}}</h3>
@@ -50,35 +49,65 @@
           <div class="detail-12">
             <p class="text-capitalize"><b> Contact Detail </b></p>
           </div>
-          <div class="col-md-4">
+
+          <!-- <div class="col-md-4">
             <a href="#" class="d-flex align-items-center text-dark font-weight-500 me-5 mb-2">
               <span class="svg-icon svg-icon-4 me-1"><i class="bx bxs-user-circle"></i>
               </span>
-              {{ dotData.data.data.record.content.carrier.legalName}}
+              {{ getDot.dotData.record.content.carrier.legalName}}
+            </a>
+
+          </div> -->
+
+          <div class="col-md-4">
+            <a  class="d-flex align-items-center text-dark font-weight-500 me-5 mb-2">
+              <span class="svg-icon svg-icon-4 me-1"><i class="bx bxs-user-circle"></i>
+              </span>
+              {{ getDot.dotData.record.content.carrier.legalName}}
             </a>
 
           </div>
           <div class="col-md-4">
 
-            <a href="#" class="d-flex align-items-center text-dark font-weight-500 mb-2">
+            <a  class="d-flex align-items-center text-dark font-weight-500 mb-2">
               <span class="svg-icon svg-icon-4 me-1"><i class="bx bx-mobile"></i></span>
               {{companyData.ownerPhone}}
             </a>
           </div>
           <div class="col-md-4">
-            <a href="#" class="d-flex align-items-center text-dark font-weight-500 me-5 mb-2">
+            <a  class="d-flex align-items-center text-dark font-weight-500 me-5 mb-2">
               <span class="svg-icon svg-icon-4 me-1"><i class="bx bxs-envelope"></i></span>
               {{companyData.ownerEmail}}
             </a>
           </div>
           <div class="col-md-12">
-            <a href="#" class="d-flex align-items-center text-dark font-weight-500 me-5 mb-2">
+            <a  class="d-flex align-items-center text-dark font-weight-500 me-5 mb-2">
               <span class="svg-icon svg-icon-4 me-1"><i class="bx bxl-periscope"></i></span>
-              {{ dotData.data.data.record.content.carrier.phyStreet }},
-              {{ dotData.data.data.record.content.carrier.phyCity }},
-              {{ dotData.data.data.record.content.carrier.phyState }} -
-              {{ dotData.data.data.record.content.carrier.phyZipcode }},
-              {{ dotData.data.data.record.content.carrier.phyCountry }}
+              {{ getDot.dotData.record.content.carrier.phyStreet }},
+            </a>
+          </div>
+          <div class="col-md-4">
+            <a  class="d-flex align-items-center text-dark font-weight-500 me-5 mb-2">
+              <span class="svg-icon svg-icon-4 me-1"><i class="bx bxl-periscope"></i></span>
+              {{  getDot.dotData.record.content.carrier.phyCity }},
+            </a>
+          </div>
+          <div class="col-md-4">
+            <a  class="d-flex align-items-center text-dark font-weight-500 me-5 mb-2">
+              <span class="svg-icon svg-icon-4 me-1"><i class="bx bxl-periscope"></i></span>
+              {{  getDot.dotData.record.content.carrier.phyState }},
+            </a>
+          </div>
+          <div class="col-md-4">
+            <a  class="d-flex align-items-center text-dark font-weight-500 me-5 mb-2">
+              <span class="svg-icon svg-icon-4 me-1"><i class="bx bxl-periscope"></i></span>
+              {{ getDot.dotData.record.content.carrier.phyCountry }}
+            </a>
+          </div>
+          <div class="col-md-4">
+            <a  class="d-flex align-items-center text-dark font-weight-500 me-5 mb-2">
+              <span class="svg-icon svg-icon-4 me-1"><i class="bx bxl-periscope"></i></span>
+              {{  getDot.dotData.record.content.carrier.phyZipcode }},
             </a>
           </div>
         </div>
@@ -86,7 +115,7 @@
         <div class="row mt-2">
           <div class="col-md-4">
             <p class="font-weight-600 mb-2">Company DBA</p>
-            <h2 class="font-14 mb-1">{{ dotData.data.data.record.content.carrier.dbaName }}</h2>
+            <h2 class="font-14 mb-1">{{  getDot.dotData.record.content.carrier.dbaName }}</h2>
           </div>
           <div class="col-md-4">
             <p class="font-weight-600 mb-2">SCAC</p>
@@ -94,7 +123,7 @@
           </div>
           <div class="col-md-4">
             <p class="font-weight-600 mb-2">TAX ID / EIN</p>
-            <h2 class="font-14 mb-1">{{ dotData.data.data.record.content.carrier.ein
+            <h2 class="font-14 mb-1">{{ getDot.dotData.record.content.carrier.ein
               }}</h2>
           </div>
 
@@ -104,55 +133,92 @@
           <div class="col-lg-12 mb-3">
             <h6 class="font-14 font-weight-700"> <b>Authority</b></h6>
           </div>
-          <div class="col-md-3">
+          <div class="col-md-2">
             <div class="activeDiv ">
               <p class="font-weight-600 mb-1 ">Common</p>
               <p class="border rounded align-items-center px-3 py-1 text-black text-center mb-0 font-12 d-flex justify-content-between"
                 style="border: 1px solid #28c76f !important;">
-                <span class="font-weight-600">{{ dotData.data.data.record.content.carrier.commonAuthorityStatus
+                <span class="font-weight-600">{{  getDot.dotData.record.content.carrier.commonAuthorityStatus
                   }}</span>
                 <i class="fa fa-check text-success" aria-hidden="true"></i>
               </p>
             </div>
           </div>
-          <div class="col-md-3">
+          <div class="col-md-2">
             <div class="activeDiv">
               <p class="font-weight-600 mb-1">Contract</p>
               <p
                 class="bg-light rounded align-items-center px-3 py-1 text-black text-center mb-0 font-12 d-flex justify-content-between">
-                <span class="font-weight-600">{{ dotData.data.data.record.content.carrier.contractAuthorityStatus
+                <span class="font-weight-600">{{ getDot.dotData.record.content.carrier.contractAuthorityStatus
                   }}</span>
               </p>
             </div>
           </div>
-          <div class="col-md-3">
+          <div class="col-md-2">
             <div class="activeDiv">
               <p class="font-weight-600 mb-1">Broker</p>
               <p
                 class="bg-light rounded align-items-center px-3 py-1 text-black text-center mb-0 font-12 d-flex justify-content-between">
-                <span class="font-weight-600">{{ dotData.data.data.record.content.carrier.brokerAuthorityStatus
+                <span class="font-weight-600">{{  getDot.dotData.record.content.carrier.brokerAuthorityStatus
                   }}</span>
               </p>
             </div>
           </div>
-          <div class="col-md-3">
+          <div class="col-md-2">
             <div class="activeDiv">
-              <p class="font-weight-600 mb-1">Granted On</p>
-              <p class="border rounded align-items-center px-3 py-1 text-black text-center mb-0 font-12 d-flex justify-content-between"
-                style="border: 1px solid #28c76f !important;">
-                <span class="font-weight-600">07-26-2024</span>
+              <p class="font-weight-600 mb-1">Certificate</p>
+              <p
+                class="bg-light rounded align-items-center px-3 py-1 text-black text-center mb-0 font-12 d-flex justify-content-between">
+                <span class="font-weight-600">In-Active</span>
               </p>
             </div>
           </div>
+
+          <div class="col-md-2">
+            <div class="activeDiv ">
+              <p class="font-weight-600 mb-1 ">BP insurance</p>
+              <p class="border rounded align-items-center px-3 py-1 text-black text-center mb-0 font-12 d-flex justify-content-between"
+                style="border: 1px solid #28c76f !important;">
+                <span class="font-weight-600">{{ getDot.dotData.record.content.carrier.bipdInsuranceRequired
+                  }}</span>
+                <i class="fa fa-check text-success" aria-hidden="true"></i>
+              </p>
+            </div>
+          </div>
+          
         </div>
 
         <div class="row mt-3">
-          <div class="col-md-3">
+          <div class="col-md-2">
             <div class="activeDiv">
               <p class="font-weight-600 mb-1">DOT Status</p>
               <p class="border rounded align-items-center px-3 py-1 text-black text-center mb-0 font-12 d-flex justify-content-between"
                 style="border: 1px solid #28c76f !important;">
-                <span class="font-weight-600">{{ dotData.data.data.record.content.carrier.statusCode }}</span>
+                <span class="font-weight-600">{{ getDot.dotData.record.content.carrier.statusCode }}</span>
+                <i class="fa fa-check text-success" aria-hidden="true"></i>
+              </p>
+            </div>
+          </div>
+
+          <div class="col-md-2">
+            <div class="activeDiv">
+              <p class="font-weight-600 mb-1">Insurance</p>
+              <p class="border rounded align-items-center px-3 py-1 text-black text-center mb-0 font-12 d-flex justify-content-between"
+                style="border: 1px solid #28c76f !important;">
+                <span class="font-weight-600">Active</span>
+                <i class="fa fa-check text-success" aria-hidden="true"></i>
+              </p>
+            </div>
+          </div>
+         
+          <br> <br> <br>
+          <div class="col-md-3">
+            <div class="activeDiv ">
+              <p class="font-weight-600 mb-1 ">Allow to operator</p>
+              <p class="border rounded align-items-center px-3 py-1 text-black text-center mb-0 font-12 d-flex justify-content-between"
+                style="border: 1px solid #28c76f !important;">
+                <span class="font-weight-600">{{  getDot.dotData.record.content.carrier.allowedToOperate
+                  }}</span>
                 <i class="fa fa-check text-success" aria-hidden="true"></i>
               </p>
             </div>
@@ -166,45 +232,13 @@
               </p>
             </div>
           </div>
+         
           <div class="col-md-3">
             <div class="activeDiv">
-              <p class="font-weight-600 mb-1">Insaurance</p>
+              <p class="font-weight-600 mb-1">Granted On</p>
               <p class="border rounded align-items-center px-3 py-1 text-black text-center mb-0 font-12 d-flex justify-content-between"
                 style="border: 1px solid #28c76f !important;">
-                <span class="font-weight-600">Active</span>
-                <i class="fa fa-check text-success" aria-hidden="true"></i>
-              </p>
-            </div>
-          </div>
-          <div class="col-md-3">
-            <div class="activeDiv">
-              <p class="font-weight-600 mb-1">Certificate</p>
-              <p
-                class="bg-light rounded align-items-center px-3 py-1 text-black text-center mb-0 font-12 d-flex justify-content-between">
-                <span class="font-weight-600">In-Active</span>
-              </p>
-            </div>
-          </div>
-          <br> <br> <br>
-          <div class="col-md-3">
-            <div class="activeDiv ">
-              <p class="font-weight-600 mb-1 ">Allow to operator</p>
-              <p class="border rounded align-items-center px-3 py-1 text-black text-center mb-0 font-12 d-flex justify-content-between"
-                style="border: 1px solid #28c76f !important;">
-                <span class="font-weight-600">{{ dotData.data.data.record.content.carrier.allowedToOperate
-                  }}</span>
-                <i class="fa fa-check text-success" aria-hidden="true"></i>
-              </p>
-            </div>
-          </div>
-          <div class="col-md-3">
-            <div class="activeDiv ">
-              <p class="font-weight-600 mb-1 ">Bip insurance</p>
-              <p class="border rounded align-items-center px-3 py-1 text-black text-center mb-0 font-12 d-flex justify-content-between"
-                style="border: 1px solid #28c76f !important;">
-                <span class="font-weight-600">{{ dotData.data.data.record.content.carrier.bipdInsuranceRequired
-                  }}</span>
-                <i class="fa fa-check text-success" aria-hidden="true"></i>
+                <span class="font-weight-600">07-26-2024</span>
               </p>
             </div>
           </div>
@@ -297,14 +331,13 @@
         </div>
         
         <!-- Adding some space between the counter section and the table -->
-        <div class="custom-margin ">
+        <div class="custom-margin">
           <div class="col-lg-12 mb-3">
-            <h5 class="font-14 font-weight-500"> <b>Safety Rating & OOS Rates</b></h5>
+            <h5 class="font-14 font-weight-500 text-center"><b>Safety Rating & OOS Rates</b></h5>
           </div>
           <div class="table-responsive">
             <table class="table table-bordered no-top-border">
               <thead>
-               
                 <tr>
                   <th scope="col">Type</th>
                   <th scope="col">OOS %</th>
@@ -314,18 +347,18 @@
               <tbody>
                 <tr>
                   <td>Vehicle</td>
-                  <td>  </td>
-                  <td>{{ dotData?.data?.data?.record?.content?.carrier?.vehicleOosRateNationalAverage }}</td>
+                  <td></td>
+                  <td>{{ getDot.dotData.record?.content?.carrier?.vehicleOosRateNationalAverage }}</td>
                 </tr>
                 <tr>
                   <td>Driver</td>
-                  <td>  </td>
-                  <td>{{ dotData?.data?.data?.record?.content?.carrier?.driverOosRateNationalAverage }}</td>
+                  <td></td>
+                  <td>{{ getDot.dotData.record?.content?.carrier?.driverOosRateNationalAverage }}</td>
                 </tr>
                 <tr>
                   <td>Hazmat</td>
-                  <td>  </td>
-                  <td>{{ dotData?.data?.data?.record?.content?.carrier?.hazmatOosRateNationalAverage }}</td>
+                  <td></td>
+                  <td>{{ getDot.dotData.record?.content?.carrier?.hazmatOosRateNationalAverage }}</td>
                 </tr>
               </tbody>
             </table>
@@ -333,10 +366,12 @@
         </div>
         
         
+        
       </div>
     </div>
   </div>
 </section>
+
 
 
 <main id="main" class="main mt-0 p-0">
@@ -462,7 +497,8 @@
                                   {{ companyData.w9UploadDocument |
                                   slice:(companyData.w9UploadDocument.lastIndexOf('/')+1) }}
 
-                                </a></span>
+                                </a>
+                              </span>
                             </li>
 
                           </ul>
@@ -632,196 +668,259 @@
 <!-- End Footer -->
 
 <a href="#" class="back-to-top d-flex align-items-center justify-content-center btn-success"><i
-    class="bi bi-arrow-up-short"></i></a>
+  class="bi bi-arrow-up-short"></i></a>
 
 <div class="offcanvas offcanvas-end" tabindex="-1" id="addLocation" aria-labelledby="offcanvasRightLabel"
-  style="width: 80%" data-bs-backdrop="static" data-bs-keyboard="false">
-  <div class="modal-header" style="padding: 15px; border-bottom: 1px solid #ccc">
-    <h5 class="modal-title">Edit Company Profile</h5>
-    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-h2="Close"></button>
-  </div>
-  <div class="offcanvas-body view-load position-relative">
-    <form class="row g-3" (ngSubmit)="updateCompanyProfile()">
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Company Name DBA</h2>
-        <input type="text" class="form-control" [(ngModel)]="companyToEdit.companyName" name=" companyName "
-          required="" />
-      </div>
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Corporation</h2>
-        <input type="text" class="form-control" [(ngModel)]="companyToEdit.corporation" name=" corporation "
-          required="" />
-      </div>
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">DOT</h2>
-        <input type="text" class="form-control" [(ngModel)]="companyToEdit.dot" name=" dot " required="" (focus)="onDotInputClick()" />
-      </div>
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">MC</h2>
-        <input type="text" class="form-control" [(ngModel)]="companyToEdit.mc" name="mc" required="" />
-      </div>
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Upload Documents</h2>
-        <input type="file" class="form-control" (change)="companyEditFile($event, 'uploadDocument')"
-          name="uploadDocuments" required />
-      </div>
-      <hr class="hr" />
+style="width: 80%" data-bs-backdrop="static" data-bs-keyboard="false">
+<div class="modal-header" style="padding: 15px; border-bottom: 1px solid #ccc">
+  <h5 class="modal-title">Edit Company Profile</h5>
+  <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-h2="Close"></button>
+</div>
+<div class="offcanvas-body view-load position-relative">
+  <form class="row g-3" (ngSubmit)="updateCompanyProfile()">
+    <div class="col-md-4">
+      <h2 class="font-14 font-weight-700">DOT</h2>
+      <input type="text" class="form-control" [(ngModel)]="companyToEdit.dot" name=" dot " required="" (ngModelChange)="onDotChange($event)" />
+    </div>
+    <div class="col-md-4">
+      <h2 class="font-14 font-weight-700">Company Name DBA</h2>
+      <input type="text" class="form-control" [(ngModel)]="companyToEdit.companyName" name=" companyName "
+        required="" />
+    </div>
+    <div class="col-md-4">
+      <h2 class="font-14 font-weight-700">Ein</h2>
+      <input type="text" class="form-control" [(ngModel)]="companyToEdit.ein" name="ein" required="" />
+    </div>
+    
+    <div class="col-md-4">
+      <h2 class="font-14 font-weight-700">Street</h2>
+      <input type="text" class="form-control" [(ngModel)]="companyToEdit.phyStreet" name="street" required="" />
+    </div> 
+    <div class="col-md-4">
+      <h2 class="font-14 font-weight-700">City</h2>
+      <input type="text" class="form-control" [(ngModel)]="companyToEdit.phyCity" name="city" required="" />
+    </div> 
+    <div class="col-md-4">
+      <h2 class="font-14 font-weight-700">State</h2>
+      <input type="text" class="form-control" [(ngModel)]="companyToEdit.phyState" name="state" required="" />
+    </div>
+    <div class="col-md-4">
+      <h2 class="font-14 font-weight-700">Zip Code</h2>
+      <input type="text" class="form-control" [(ngModel)]="companyToEdit.phyZipcode" name="zipCode" required="" />
+    </div>
+    <div class="col-md-4">
+      <h2 class="font-14 font-weight-700">Country</h2>
+      <input type="text" class="form-control" [(ngModel)]="companyToEdit.phyCountry" name="Country" required="" />
+    </div>
+     <div class="col-md-4">
+      <h2 class="font-14 font-weight-700">Common</h2>
+      <input type="text" class="form-control" [(ngModel)]="companyToEdit.Common" name="common" required="" />
+    </div>
+    <div class="col-md-4">
+      <h2 class="font-14 font-weight-700">Contract</h2>
+      <input type="text" class="form-control" [(ngModel)]="companyToEdit.Contract" name="contract" required="" />
+    </div>
+    <div class="col-md-4">
+      <h2 class="font-14 font-weight-700">Broker</h2>
+      <input type="text" class="form-control" [(ngModel)]="companyToEdit.Broker" name="broker" required="" />
+    </div>
+    <div class="col-md-4">
+      <h2 class="font-14 font-weight-700">Dot Status</h2>
+      <input type="text" class="form-control" [(ngModel)]="companyToEdit.DotStatus" name="dotStatus" required="" />
+    </div>
+    <div class="col-md-4">
+      <h2 class="font-14 font-weight-700">Allow to Operator</h2>
+      <input type="text" class="form-control" [(ngModel)]="companyToEdit.Allowtooperator" name="allowToOperator" required="" />
+    </div>
+    <div class="col-md-4">
+      <h2 class="font-14 font-weight-700">Bip Insurance</h2>
+      <input type="text" class="form-control" [(ngModel)]="companyToEdit.BiptoInsurance" name="bipInsurance" required="" />
+    </div>
+    <div class="col-md-4">
+      <h2 class="font-14 font-weight-700">Company DBA</h2>
+      <input type="text" class="form-control" [(ngModel)]="companyToEdit.CompanyDBA" name="companyDba" required="" />
+    </div>
+    <div class="col-md-4">
+      <h2 class="font-14 font-weight-700">Vehicle</h2>
+      <input type="text" class="form-control" [(ngModel)]="companyToEdit.Vehicle" name="vehicle" required="" />
+    </div>
+    <div class="col-md-4">
+      <h2 class="font-14 font-weight-700">Driver</h2>
+      <input type="text" class="form-control" [(ngModel)]="companyToEdit.Driver" name="driver" required="" />
+    </div>
+    <div class="col-md-4">
+      <h2 class="font-14 font-weight-700">Hazmat</h2>
+      <input type="text" class="form-control" [(ngModel)]="companyToEdit.Hazmat" name="hazmat" required="" />
+    </div>
+    <div class="col-md-4">
+      <h2 class="font-14 font-weight-700">Corporation</h2>
+      <input type="text" class="form-control" [(ngModel)]="companyToEdit.corporation" name=" corporation "
+        required="" />
+    </div>
+   
+    <div class="col-md-4">
+      <h2 class="font-14 font-weight-700">MC</h2>
+      <input type="text" class="form-control" [(ngModel)]="companyToEdit.mc" name="mc" required="" />
+    </div>
+    <div class="col-md-4">
+      <h2 class="font-14 font-weight-700">Upload Documents</h2>
+      <input type="file" class="form-control" (change)="companyEditFile($event, 'uploadDocument')"
+        name="uploadDocuments" accept=".jpg, .jpeg, .png, .pdf" required >
+    </div>
+    <hr class="hr" />
 
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">KYU</h2>
-        <input type="text" class="form-control" [(ngModel)]="companyToEdit.kyu" name="kyu" required="" />
-      </div>
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Upload Documents</h2>
-        <input type="file" class="form-control" (change)="companyEditFile($event, 'kyuUploadDocument')"
-          name="kyuUploadDocument" required />
-      </div>
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Expiration Date</h2>
-        <input type="date" class="form-control" id="kyuExpiration" placeholder="Expiration Date"
-          [(ngModel)]="companyToEdit.kyuExpiration" name="kyuExpiration" required="" />
-      </div>
+    <div class="col-md-4">
+      <h2 class="font-14 font-weight-700">KYU</h2>
+      <input type="text" class="form-control" [(ngModel)]="companyToEdit.kyu" name="kyu" required="" />
+    </div>
+    <div class="col-md-4">
+      <h2 class="font-14 font-weight-700">Upload Documents</h2>
+      <input type="file" class="form-control" (change)="companyEditFile($event, 'kyuUploadDocument')"
+        name="kyuUploadDocument" accept=".jpg, .jpeg, .png, .pdf" required >
+    </div>
+    <div class="col-md-4">
+      <h2 class="font-14 font-weight-700">Expiration Date</h2>
+      <input type="date" class="form-control" id="kyuExpiration" placeholder="Expiration Date"
+        [(ngModel)]="companyToEdit.kyuExpiration" name="kyuExpiration" required="" />
+    </div>
 
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">NY</h2>
-        <input type="text" class="form-control" [(ngModel)]="companyToEdit.ny" name="ny" required="" />
-      </div>
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Upload Documents</h2>
-        <input type="file" class="form-control" (change)="companyEditFile($event, 'nyUploadDocument')"
-          name="nyUploadDocument" required />
-      </div>
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Expiration Date</h2>
-        <input type="date" class="form-control" id="nyExpiration" placeholder="Expiration Date"
-          [(ngModel)]="companyToEdit.nyExpiration" name="nyExpiration" required="" />
-      </div>
+    <div class="col-md-4">
+      <h2 class="font-14 font-weight-700">NY</h2>
+      <input type="text" class="form-control" [(ngModel)]="companyToEdit.ny" name="ny" required="" />
+    </div>
+    <div class="col-md-4">
+      <h2 class="font-14 font-weight-700">Upload Documents</h2>
+      <input type="file" class="form-control" (change)="companyEditFile($event, 'nyUploadDocument')"
+        name="nyUploadDocument" accept=".jpg, .jpeg, .png, .pdf" required >
+    </div>
+    <div class="col-md-4">
+      <h2 class="font-14 font-weight-700">Expiration Date</h2>
+      <input type="date" class="form-control" id="nyExpiration" placeholder="Expiration Date"
+        [(ngModel)]="companyToEdit.nyExpiration" name="nyExpiration" required="" />
+    </div>
 
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">NM WDT</h2>
-        <input type="text" class="form-control" [(ngModel)]="companyToEdit.nmWdt" name="nmWdt" required="" />
-      </div>
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Ein</h2>
-        <input type="text" class="form-control" [(ngModel)]="companyToEdit.ein" name="ein" required="" />
-      </div>
-      <div class="col-md-2">
-        <h2 class="font-14 font-weight-700">W9</h2>
-        <input type="text" class="form-control" [(ngModel)]="companyToEdit.w9" name="w9" required="" />
-      </div>
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Upload Documents</h2>
-        <input type="file" class="form-control" (change)="companyEditFile($event, 'w9UploadDocument')"
-          name="w9UploadDocument" required />
-      </div>
+    <div class="col-md-4">
+      <h2 class="font-14 font-weight-700">NM WDT</h2>
+      <input type="text" class="form-control" [(ngModel)]="companyToEdit.nmWdt" name="nmWdt" required="" />
+    </div>
+   
+    <div class="col-md-2">
+      <h2 class="font-14 font-weight-700">W9</h2>
+      <input type="text" class="form-control" [(ngModel)]="companyToEdit.w9" name="w9" required="" />
+    </div>
+    <div class="col-md-4">
+      <h2 class="font-14 font-weight-700">Upload Documents</h2>
+      <input type="file" class="form-control" (change)="companyEditFile($event, 'w9UploadDocument')"
+        name="w9UploadDocument" accept=".jpg, .jpeg, .png, .pdf" required >
+    </div>
 
-      <hr class="hr" />
+    <hr class="hr" />
 
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">IFTA ACC</h2>
-        <input type="text" class="form-control" [(ngModel)]="companyToEdit.iftaAcc" name="iftaAcc" required="" />
-      </div>
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Prepass</h2>
-        <input type="text" class="form-control" [(ngModel)]="companyToEdit.prepass" name="prepass" required="" />
-      </div>
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">IRP ACC</h2>
-        <input type="text" class="form-control" [(ngModel)]="companyToEdit.irpAcc" name="irpAccw9" required="" />
-      </div>
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Expiration Date</h2>
-        <input type="date" class="form-control" id="irpRenewalDate" placeholder="Expiration Date"
-          [(ngModel)]="companyToEdit.irpRenewalDate" name="irpRenewalDate" required="" />
-      </div>
+    <div class="col-md-4">
+      <h2 class="font-14 font-weight-700">IFTA ACC</h2>
+      <input type="text" class="form-control" [(ngModel)]="companyToEdit.iftaAcc" name="iftaAcc" required="" />
+    </div>
+    <div class="col-md-4">
+      <h2 class="font-14 font-weight-700">Prepass</h2>
+      <input type="text" class="form-control" [(ngModel)]="companyToEdit.prepass" name="prepass" required="" />
+    </div>
+    <div class="col-md-4">
+      <h2 class="font-14 font-weight-700">IRP ACC</h2>
+      <input type="text" class="form-control" [(ngModel)]="companyToEdit.irpAcc" name="irpAccw9" required="" />
+    </div>
+    <div class="col-md-4">
+      <h2 class="font-14 font-weight-700">Expiration Date</h2>
+      <input type="date" class="form-control" id="irpRenewalDate" placeholder="Expiration Date"
+        [(ngModel)]="companyToEdit.irpRenewalDate" name="irpRenewalDate" required="" />
+    </div>
 
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Upload Documents</h2>
-        <input type="file" class="form-control" (change)="companyEditFile($event, 'insuranceDocument')"
-          name="insuranceDocument" required />
-      </div>
+    <div class="col-md-4">
+      <h2 class="font-14 font-weight-700">Upload Documents</h2>
+      <input type="file" class="form-control" (change)="companyEditFile($event, 'insuranceDocument')"
+        name="insuranceDocument" accept=".jpg, .jpeg, .png, .pdf" required >
+    </div>
 
-      <hr class="hr" />
+    <hr class="hr" />
 
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Address</h2>
-        <input type="text" class="form-control" [(ngModel)]="companyToEdit.address" name="address" required="" />
-      </div>
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Phone</h2>
-        <input type="text" class="form-control" [(ngModel)]="companyToEdit.phone" name="phone" required="" />
-      </div>
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Email Pull Noitce ACC</h2>
-        <input type="text" class="form-control" [(ngModel)]="companyToEdit.pullNoticeAcc" name="pullNoticeAcc"
-          required="" />
-      </div>
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Truck</h2>
-        <input type="text" class="form-control" [(ngModel)]="companyToEdit.truck" name="truck" required="" />
-      </div>
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Registration</h2>
-        <input type="text" class="form-control" [(ngModel)]="companyToEdit.registration" name="registration"
-          required="" />
-      </div>
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Upload Documents</h2>
-        <input type="file" class="form-control" (change)="companyEditFile($event, 'registrationUploadDocument')"
-          name="registrationUploadDocument" required />
-      </div>
+    <div class="col-md-4">
+      <h2 class="font-14 font-weight-700">Address</h2>
+      <input type="text" class="form-control" [(ngModel)]="companyToEdit.address" name="address" required="" />
+    </div>
+    <div class="col-md-4">
+      <h2 class="font-14 font-weight-700">Phone</h2>
+      <input type="text" class="form-control" [(ngModel)]="companyToEdit.phone" name="phone" required="" />
+    </div>
+    <div class="col-md-4">
+      <h2 class="font-14 font-weight-700">Email Pull Noitce ACC</h2>
+      <input type="text" class="form-control" [(ngModel)]="companyToEdit.pullNoticeAcc" name="pullNoticeAcc"
+        required="" />
+    </div>
+    <div class="col-md-4">
+      <h2 class="font-14 font-weight-700">Truck</h2>
+      <input type="text" class="form-control" [(ngModel)]="companyToEdit.truck" name="truck" required="" />
+    </div>
+    <div class="col-md-4">
+      <h2 class="font-14 font-weight-700">Registration</h2>
+      <input type="text" class="form-control" [(ngModel)]="companyToEdit.registration" name="registration"
+        required="" />
+    </div>
+    <div class="col-md-4">
+      <h2 class="font-14 font-weight-700">Upload Documents</h2>
+      <input type="file" class="form-control" (change)="companyEditFile($event, 'registrationUploadDocument')"
+        name="registrationUploadDocument" accept=".jpg, .jpeg, .png, .pdf" required >
+    </div>
 
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Owner Address</h2>
-        <input type="text" class="form-control" [(ngModel)]="companyToEdit.ownerAddress" name="ownerAddress"
-          required="" />
-      </div>
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Phone</h2>
-        <input type="text" class="form-control" [(ngModel)]="companyToEdit.ownerPhone" name="ownerPhone" required="" />
-      </div>
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Email</h2>
-        <input type="text" class="form-control" [(ngModel)]="companyToEdit.ownerEmail" name="ownerEmail" required="" />
-      </div>
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Number of Trailer</h2>
-        <input type="text" class="form-control" [(ngModel)]="companyToEdit.numberOfTrailer" name="numberOfTrailer"
-          required="" />
-      </div>
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Expiration Date</h2>
-        <input type="date" class="form-control" id="trailerRegistration" placeholder="Expiration Date"
-          [(ngModel)]="companyToEdit.trailerRegistration" name="trailerRegistration" required="" />
-      </div>
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Upload Documents</h2>
-        <input type="file" class="form-control" (change)="companyEditFile($event, 'trailerUploadDocument')"
-          name="trailerUploadDocument" required />
-      </div>
+    <div class="col-md-4">
+      <h2 class="font-14 font-weight-700">Owner Address</h2>
+      <input type="text" class="form-control" [(ngModel)]="companyToEdit.ownerAddress" name="ownerAddress"
+        required="" />
+    </div>
+    <div class="col-md-4">
+      <h2 class="font-14 font-weight-700">Phone</h2>
+      <input type="text" class="form-control" [(ngModel)]="companyToEdit.ownerPhone" name="ownerPhone" required="" />
+    </div>
+    <div class="col-md-4">
+      <h2 class="font-14 font-weight-700">Email</h2>
+      <input type="text" class="form-control" [(ngModel)]="companyToEdit.ownerEmail" name="ownerEmail" required="" />
+    </div>
+    <div class="col-md-4">
+      <h2 class="font-14 font-weight-700">Number of Trailer</h2>
+      <input type="text" class="form-control" [(ngModel)]="companyToEdit.numberOfTrailer" name="numberOfTrailer"
+        required="" />
+    </div>
+    <div class="col-md-4">
+      <h2 class="font-14 font-weight-700">Expiration Date</h2>
+      <input type="date" class="form-control" id="trailerRegistration" placeholder="Expiration Date"
+        [(ngModel)]="companyToEdit.trailerRegistration" name="trailerRegistration" required="" />
+    </div>
+    <div class="col-md-4">
+      <h2 class="font-14 font-weight-700">Upload Documents</h2>
+      <input type="file" class="form-control" (change)="companyEditFile($event, 'trailerUploadDocument')"
+        name="trailerUploadDocument" accept=".jpg, .jpeg, .png, .pdf" required >
+    </div>
 
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Randon DT Enrollment Cert</h2>
-        <input type="text" class="form-control" [(ngModel)]="companyToEdit.randomDtEnrollmentCert"
-          name="randomDtEnrollmentCert" required="" />
-      </div>
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Upload Documents</h2>
-        <input type="file" class="form-control" (change)="companyEditFile($event, 'randomDtUploadDocument')"
-          name="randomDtUploadDocument" required />
-      </div>
+    <div class="col-md-4">
+      <h2 class="font-14 font-weight-700">Randon DT Enrollment Cert</h2>
+      <input type="text" class="form-control" [(ngModel)]="companyToEdit.randomDtEnrollmentCert"
+        name="randomDtEnrollmentCert" required="" />
+    </div>
+    <div class="col-md-4">
+      <h2 class="font-14 font-weight-700">Upload Documents</h2>
+      <input type="file" class="form-control" (change)="companyEditFile($event, 'randomDtUploadDocument')"
+        name="randomDtUploadDocument" accept=".jpg, .jpeg, .png, .pdf" required >
+    </div>
 
-      <div class="modal-footer justify-content-center"
-        style="border-top: 1px solid #ccc; padding-top: 15px; margin-top: 15px">
-        <button type="button" class="btn btn-outline-secondary btn-sm text-uppercase rounded-pill"
-          data-bs-dismiss="offcanvas" style="margin: 10px">
-          Close
-        </button>
-        <button type="submit" class="btn btn-success btn-sm text-uppercase rounded-pill" data-bs-dismiss="offcanvas">
-          Save changes
-        </button>
-      </div>
-    </form>
-      
-  </div>
+    <div class="modal-footer justify-content-center"
+      style="border-top: 1px solid #ccc; padding-top: 15px; margin-top: 15px">
+      <button type="button" class="btn btn-outline-secondary btn-sm text-uppercase rounded-pill"
+        data-bs-dismiss="offcanvas" style="margin: 10px">
+        Close
+      </button>
+      <button type="submit" class="btn btn-success btn-sm text-uppercase rounded-pill" data-bs-dismiss="offcanvas">
+        Save changes
+      </button>
+    </div>
+  </form>
+    
+</div>
 </div>

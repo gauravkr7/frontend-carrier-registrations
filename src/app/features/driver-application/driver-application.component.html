@@ -1,808 +1,130 @@
 <app-navbar></app-navbar>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
 
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
 
-
-
 <main id="main" class="main mt-0 p-0">
-  <div id="kt_app_content" class="app-content  flex-column-fluid">
-      <div class="container-fluid px-5">
-          
-        <div class="row bg-white p-3 mt-3 rounded">
-          <div class="col-md-12">
-            <div class="d-flex justify-content-between">
-              <div>
-                <button class="btn btn-success rounded-pill font-14 active me-2">
+  <div id="kt_app_content" class="app-content flex-column-fluid">
+    <div class="container-fluid px-5">
+      <div class="row bg-white p-3 mt-3 rounded">
+        <div class="col-md-12">
+          <div class="d-flex justify-content-between">
+            <div>
+              <button class="btn btn-success rounded-pill font-14 active me-2">
                 Driver Application
-                </button>
-                
+              </button>
+            </div>
+            <div class="d-flex gap-2">
+              <div>
+                <div class="btn-group" role="group" aria-label="Basic example">
+                  <!-- Add Profile Button -->
+                  <a href="javascript:;" class="btn btn-success rounded-pill font-14" type="button"
+                    data-bs-toggle="offcanvas" data-bs-target="#addLocation" aria-controls="offcanvasRight">
+                    <i class="fa fa-plus me-2" aria-hidden="false"></i>Add Profile
+                  </a>
+                </div>
               </div>
-              <div class="d-flex gap-2">
-                <div class="form-group has-search mb-0">
-                  <span class="fa fa-search form-control-feedback"></span>
-                  <input style="height: 36px !important;" type="text" name="Search" class="form-control" placeholder="Search...">
-                </div>
-                <div>                
-                  <div class="btn-group" role="group" aria-label="Basic example">
-                    <a href="javascript:;" class="btn btn-success rounded-pill font-14" type="button" data-bs-toggle="offcanvas" data-bs-target="#addLocation" aria-controls="offcanvasRight"><i class="fa fa-plus me-2" aria-hidden="true"></i>Add Profile</a>
-                  </div>
-                </div>
+              <div>
+                <!-- Add Form Button with RouterLink -->
+                <a [routerLink]="'/driver-applicationForm'" class="btn btn-success rounded-pill font-14">
+                  <i class="fa fa-plus me-2"></i>Add Form
+                </a>
               </div>
             </div>
           </div>
         </div>
-
-        <div class="row bg-white px-3 py-4 mt-3 rounded">
-            <div class="col-md-12">
-                <div class="table-responsive">
-                  <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                          <th scope="col">Driver Name</th>
-                          <th scope="col">Address</th>
-                          <th scope="col">Phone</th>
-                          <th scope="col">Email</th>
-                          <th scope="col" width="30px">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                      
-                    </tbody>
-                  </table>
-                </div>
-            </div>
-        </div>
-        <div class="row bg-white px-3 py-4 mt-3 rounded">
-            <div class="col-md-12">
-                <nav aria-label="Page navigation example ms-auto me-auto">
-                  <ul class="pagination justify-content-center gap-2 mb-0">
-                    <li class="page-item">
-                      <a class="page-link font-22" href="javascript:;" aria-label="Previous"><i class="fa fa-angle-left font-weight-300"></i></a>
-                    </li>
-                    <li class="page-item active"><a class="page-link font-14" href="javascript:;">1</a></li>
-                    <li class="page-item"><a class="page-link font-14" href="javascript:;">2</a></li>
-                    <li class="page-item"><a class="page-link font-14" href="javascript:;">3</a></li>
-                    <li class="page-item"><a class="page-link font-14" href="javascript:;">4</a></li>
-                    <li class="page-item"><a class="page-link font-14" href="javascript:;">5</a></li>
-                    <li class="page-item"><a class="page-link font-22" href="javascript:;" aria-label="Next"><i class="fa fa-angle-right font-weight-300"></i></a></li>
-                  </ul>
-                </nav>
-            </div>
-        </div>
-
       </div>
-  </div>
-</main><!-- End #main -->
+      
 
+      <div class="row bg-white px-3 py-4 mt-3 rounded">
+        <div class="col-md-12">
+          <div class="table-responsive">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th scope="col">Driver Name</th>
+                  <th scope="col">Address</th>
+                  <th scope="col">Phone</th>
+                  <th scope="col">Email</th>
+                  <th scope="col" width="30px">Actions</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="row bg-white px-3 py-4 mt-3 rounded">
+        <div class="col-md-12"></div>
+      </div>
+    </div>
+  </div>
+</main>
+<!-- End #main -->
 
 <footer id="footer" class="footer">
   <div class="text-dark text-center">
     <span class="text-muted fw-semibold me-1">2023© all rights reserved</span>
     <a href="#" class="font-weight-700 text-hover-dark text-dark text-uppercase">3PL TEK INC.</a>
   </div>
-
-</footer><!-- End Footer -->
-
+</footer>
+<!-- End Footer -->
 
 <a href="#" class="back-to-top d-flex align-items-center justify-content-center btn-success"><i
-  class="bi bi-arrow-up-short"></i></a>
-  
+    class="bi bi-arrow-up-short"></i></a>
 
+<div class="offcanvas offcanvas-end" id="addLocation" aria-labelledby="offcanvasRightLabel" style="width: 90%;"
+  data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-header" style="padding: 15px; border-bottom: 1px solid #ccc;">
+    <h5 class="modal-title">Driver Data</h5>
 
-  <div class="offcanvas offcanvas-end"  id="addLocation" aria-labelledby="offcanvasRightLabel" style="width: 90%;" data-bs-backdrop="static" data-bs-keyboard="false">
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
 
-
-    
-
-    <div class="modal-header" style="padding: 15px; border-bottom: 1px solid #ccc;">
-      <span><h5 class="modal-title">Commercial Driver Application</h5>
-        <p>Provide all information Requested</p></span>
-      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-h2="Close"></button>
-    </div>
-    
-
-
-    
-
-    <div class="offcanvas-body view-load position-relative">
-      
-      <form class="row g-3">
-        
-        <div class="col-md-2">
-          <h2 class="font-14 font-weight-700">Dates</h2>
-          <input type="text" class="form-control" id="validationDefault02" value="dd/mm/yyyy" required="">
-        </div>
-        <div class="col-md-2">
-          <h2 class="font-14 font-weight-700">First Name</h2>
-          <input type="text" class="form-control" id="validationDefault02" value="First Name" required="">
-        </div>
-        <div class="col-md-2">
-          <h2 class="font-14 font-weight-700">Middle Name</h2>
-          <input type="text" class="form-control" id="validationDefault02" value="Middle Name" required="">
-        </div>
-        <div class="col-md-2">
-          <h2 class="font-14 font-weight-700">Last Name</h2>
-          <input type="text" class="form-control" id="validationDefault02" value="Last Name" required="">
-        </div>
-        <div class="col-md-2">
-          <h2 class="font-14 font-weight-700">Date of Birth</h2>
-          <input type="text" class="form-control" id="validationDefault02" value="dd/mm/yyyy" required="">
-        </div>
-        <div class="col-md-2">
-          <h2 class="font-14 font-weight-700">City</h2>
-          <input type="text" class="form-control" id="validationDefault02" value="City" required="">
-        </div>
-        <div class="col-md-2">
-          <h2 class="font-14 font-weight-700">State</h2>
-          <input type="text" class="form-control" id="validationDefault02" value="State" required="">
-        </div>
-        <div class="col-md-2">
-          <h2 class="font-14 font-weight-700">Zip</h2>
-          <input type="text" class="form-control" id="validationDefault02" value="Zip" required="">
-        </div>
-        <div class="col-md-2">
-          <h2 class="font-14 font-weight-700">Cellular Telephone</h2>
-          <input type="text" class="form-control" id="validationDefault02" value="Cellular Telephone" required="">
-        </div>
-        <div class="col-md-2">
-          <h2 class="font-14 font-weight-700">Social Security Number</h2>
-          <input type="text" class="form-control" id="validationDefault02" value="Social Security Number" required="">
-        </div>
-        <div class="col-md-4">
-          <h2 class="font-14 font-weight-700">Address</h2>
-          <textarea class="form-control" placeholder="Address" rows="1"></textarea>
-        </div>
-        
-        
-        <div class="col-md-12">
-          <div class="">
-            
-            <button type="button" class="collapsible" style="background: none !important;"><input type="checkbox" id="addressDetails" name="question1" data-trigger="hidden_fields_one" class="trigger form-check-input">
-              <label class="font-13 font-weight-400 mb-10" for="addressDetails">If your above address is less than 3 years continue listing them below to cover the previous 3 year period</label></button>
-            <div class="content">
-              <p>
-                <div class="row mt-2">
-                  <div class="col-md-2">
-                    <h2 class="font-14 font-weight-700">From</h2>
-                    <input type="text" class="form-control" id="validationDefault02" value="dd/mm/yyyy" required="">
-                  </div>
-                  <div class="col-md-2">
-                    <h2 class="font-14 font-weight-700">To</h2>
-                    <input type="text" class="form-control" id="validationDefault02" value="dd/mm/yyyy" required="">
-                  </div>
-                </div>
-                <div class="row mt-3">
-                  <div class="col-md-2">
-                    <h2 class="font-14 font-weight-700">City</h2>
-                    <input type="text" class="form-control" id="validationDefault02" value="City" required="">
-                  </div>
-                  <div class="col-md-2">
-                    <h2 class="font-14 font-weight-700">State</h2>
-                    <input type="text" class="form-control" id="validationDefault02" value="State" required="">
-                  </div>
-                  <div class="col-md-2">
-                    <h2 class="font-14 font-weight-700">Zip</h2>
-                    <input type="text" class="form-control" id="validationDefault02" value="Zip" required="">
-                  </div>
-                  <div class="col-md-4">
-                    <h2 class="font-14 font-weight-700">Street</h2>
-                    <textarea class="form-control" placeholder="Address" rows="1"></textarea>
-                  </div>
-                </div>
-
-                <hr class="hr">
-
-                <div class="row">
-                  <div class="col-md-2">
-                    <h2 class="font-14 font-weight-700">From</h2>
-                    <input type="text" class="form-control" id="validationDefault02" value="dd/mm/yyyy" required="">
-                  </div>
-                  <div class="col-md-2">
-                    <h2 class="font-14 font-weight-700">To</h2>
-                    <input type="text" class="form-control" id="validationDefault02" value="dd/mm/yyyy" required="">
-                  </div>
-                </div>
-    
-                <div class="row mt-3">
-                  <div class="col-md-2">
-                    <h2 class="font-14 font-weight-700">City</h2>
-                    <input type="text" class="form-control" id="validationDefault02" value="City" required="">
-                  </div>
-                  <div class="col-md-2">
-                    <h2 class="font-14 font-weight-700">State</h2>
-                    <input type="text" class="form-control" id="validationDefault02" value="State" required="">
-                  </div>
-                  <div class="col-md-2">
-                    <h2 class="font-14 font-weight-700">Zip</h2>
-                    <input type="text" class="form-control" id="validationDefault02" value="Zip" required="">
-                  </div>
-                  <div class="col-md-4">
-                    <h2 class="font-14 font-weight-700">Street</h2>
-                    <textarea class="form-control" placeholder="Address" rows="1"></textarea>
-                  </div>
-      
-                </div>
-                <hr>
-              
-                <div class="row">
-                  <div class="col-md-2">
-                    <h2 class="font-14 font-weight-700">From</h2>
-                    <input type="text" class="form-control" id="validationDefault02" value="dd/mm/yyyy" required="">
-                  </div>
-                  <div class="col-md-2">
-                    <h2 class="font-14 font-weight-700">To</h2>
-                    <input type="text" class="form-control" id="validationDefault02" value="dd/mm/yyyy" required="">
-                  </div>
-                </div>
-    
-                <div class="row mt-3">
-                  <div class="col-md-2">
-                    <h2 class="font-14 font-weight-700">City</h2>
-                    <input type="text" class="form-control" id="validationDefault02" value="City" required="">
-                  </div>
-                  <div class="col-md-2">
-                    <h2 class="font-14 font-weight-700">State</h2>
-                    <input type="text" class="form-control" id="validationDefault02" value="State" required="">
-                  </div>
-                  <div class="col-md-2">
-                    <h2 class="font-14 font-weight-700">Zip</h2>
-                    <input type="text" class="form-control" id="validationDefault02" value="Zip" required="">
-                  </div>
-                  <div class="col-md-4">
-                    <h2 class="font-14 font-weight-700">Street</h2>
-                    <textarea class="form-control" placeholder="Address" rows="1"></textarea>
-                  </div>
-                </div>
-    
-  
-                <p></p>  
-            </div>
-
-          </div>  
-
-        </div>
-       
-        <hr>
-
-        <div class="form-group text-primary">
-          <h4 class="text-capitalize font-15 font-weight-500 text-main"><i class="fa fa-folder me-2" aria-hidden="true"></i> <b>Driver’s License Information: all licenses held, last 3 years</b></h4>
-        </div>
-
-        <div class="table-responsive mb-20">
-          <table class="table table-bordered position-relative">
-              <thead>
-                  <tr>
-                      <th>#</th>
-                      <th>State</th>
-                      <th>Number</th>
-                      <th class="whitespace-nowrap">Expiration Date</th>
-                      <th class="w-100px">Action</th>
-                  </tr>
-              </thead>
-              <tbody>
-                  <tr>
-                      <td>1</td>
-                      <td><input type="text" class="form-control" name="sate" placeholder="State"></td>
-                      <td><input type="text" class="form-control" name="sate" placeholder="Number"></td>
-                      <td>
-                          <div class="has-search">
-                              <div class="input-group">
-                                  <span class="far fa-calendar-alt form-control-feedback"></span>
-                                  <input type="date" class="form-control border-radius-6" placeholder="mm/dd/yyyy">
-                              </div>
-                          </div>
-                      </td>
-                      <td>
-                          <a href="javascript:;" class="btn-action btn-action-red text-capitalize font-16 text-red"><i class="fa fa-trash-o" aria-hidden="true" style="color: #f00;"></i>
-                          </a>
-                      </td>
-                  </tr>
-                  <tr>
-                      <td>2</td>
-                      <td><input type="text" class="form-control" name="sate" placeholder="State"></td>
-                      <td><input type="text" class="form-control" name="sate" placeholder="Number"></td>
-                      <td>
-                          <div class="has-search">
-                              <div class="input-group">
-                                  <span class="far fa-calendar-alt form-control-feedback"></span>
-                                  <input type="date" class="form-control border-radius-6" placeholder="mm/dd/yyyy">
-                              </div>
-                          </div>
-                      </td>
-                      <td>
-                        <a href="javascript:;" class="btn-action btn-action-red text-capitalize font-16 text-red"><i class="fa fa-trash-o" aria-hidden="true" style="color: #f00;"></i>
-                        </a>
-                    </td>
-                  </tr>
-                  <tr>
-                      <td>3</td>
-                      <td><input type="text" class="form-control" name="sate" placeholder="State"></td>
-                      <td><input type="text" class="form-control" name="sate" placeholder="Number"></td>
-                      <td>
-                          <div class="has-search">
-                              <div class="input-group">
-                                  <span class="far fa-calendar-alt form-control-feedback"></span>
-                                  <input type="date" class="form-control border-radius-6" placeholder="mm/dd/yyyy">
-                              </div>
-                          </div>
-                      </td>
-                      <td>
-                        <a href="javascript:;" class="btn-action btn-action-red text-capitalize font-16 text-red"><i class="fa fa-trash-o" aria-hidden="true" style="color: #f00;"></i>
-                        </a>
-                    </td>
-                  </tr>
-              </tbody>
-          </table>
-      </div>
-
-      </form>
-      
-      <div class="form-group d-flex align-items-center justify-content-between text-primary">
-        <h4 class="text-capitalize font-15 font-weight-500 text-main"><i class="fa fa-folder me-2"></i> <b>Experience</b></h4>
-        <!-- <a class="text-main font-14 font-weight-500" type="button" id="addExp"><i class="fa fa-plus me-2"></i><b>Add</b></a>   -->
-        <a onclick="addRow1()" class="text-main font-14 font-weight-500"><i class="fa fa-plus me-2"></i> <b>Add</b></a>
-      </div>
-
-
-      
-        
-    
-    
-        <div class="table-responsive mb-20">
-          <table class="table table-bordered position-relative" id="productTable">
-              <thead>
-                  <tr>
-                      <!-- <th>#</th> -->
-                      <th class="whitespace-nowrap">Type of vehicle driven</th>
-                      <th>From</th>
-                      <th>To</th>
-                      <th class="whitespace-nowrap">Approximate mileage driven</th>
-                      <th class="w-100px">Action</th>
-                  </tr>
-              </thead>
-              <tbody class="exp-tbody">
-                  <tr>
-                      <td><input class="form-control" name="vehicledriven" placeholder="Type of vehicle driven"></td>
-                      <td>
-                          <div class="has-search">
-                              <div class="input-group">
-                                  <span class="far fa-calendar-alt form-control-feedback"></span><input type="date" class="form-control border-radius-6" placeholder="mm/dd/yyyy">
-                              </div>
-                          </div>
-                      </td>
-                      <td>
-                          <div class="has-search">
-                              <div class="input-group">
-                                  <span class="far fa-calendar-alt form-control-feedback"></span><input type="date" class="form-control border-radius-6" placeholder="mm/dd/yyyy">
-                              </div>
-                          </div>
-                      </td>
-                      <td><input class="form-control" name="vehicledriven" placeholder="Approximate mileage driven"></td>
-                      <td>
-                        <a href="javascript:;" class="btn-action btn-action-red text-capitalize font-16 text-red"><i class="fa fa-trash-o" aria-hidden="true" style="color: #f00;"></i>
-                        </a>
-                    </td>
-                  </tr>                    
-              </tbody>                
-          </table>
-
-          <div class="div">
-            <table id="myTablen" border="1">              
-            </table>              
-          </div>
-          
-        </div>
-
-      
-      
-    <div class="col-md-12">
-      <div class="">                
-        <button type="button" class="collapsible" style="background: none !important;"><input type="checkbox" id="addressDetails" name="question1" data-trigger="hidden_fields_one" class="trigger form-check-input">
-          <label class="font-13 font-weight-400 mb-10" for="addressDetails">All Accidents, last 3 years: (If yes please check)</label></button>
-        <div class="content">
-          <p>
-            <div class="table-responsive mb-20">
-              <table class="table table-bordered position-relative" id="productTable">
-                  <thead>
-                      <tr>
-                          <!-- <th>#</th> -->
-                          <th class="whitespace-nowrap">Date</th>
-                          <th>Describe</th>
-                          <th>Fatalities</th>
-                          <th class="whitespace-nowrap">Injuries</th>
-                          <th class="w-100px">Action</th>
-                      </tr>
-                  </thead>
-                  <tbody class="exp-tbody">
-                      <tr>
-                        <td>
-                          <div class="has-search">
-                              <div class="input-group">
-                                  <span class="far fa-calendar-alt form-control-feedback"></span><input type="date" class="form-control border-radius-6" placeholder="mm/dd/yyyy">
-                              </div>
-                          </div>
-                      </td>
-                          <td>
-                              <div class="has-search">
-                                  <div class="input-group">
-                                    <textarea class="form-control" placeholder="Describe" rows="1"></textarea>
-                                  </div>
-                              </div>
-                          </td>
-                          <td><input class="form-control" name="vehicledriven" placeholder="Fatalities"></td>
-                          <td><input class="form-control" name="vehicledriven" placeholder="Injuries"></td>
-                          <td>
-                            <a href="javascript:;" class="btn-action btn-action-red text-capitalize font-16 text-red"><i class="fa fa-trash-o" aria-hidden="true" style="color: #f00;"></i>
-                            </a>
-                        </td>
-                      </tr>
-                  </tbody>
-              </table>
-          </div>
-              <p></p>
-        </div>
-
-      </div>  
-
-    </div>
-
-    <div class="col-md-12">
-      <div class="">                
-        <button type="button" class="collapsible" style="background: none !important;"><input type="checkbox" id="addressDetails" name="question1" data-trigger="hidden_fields_one" class="trigger form-check-input">
-          <label class="font-13 font-weight-400 mb-10" for="addressDetails">List all Traffic Violations Convictions, last 3 years: (If yes please check)</label></button>
-        <div class="content">
-          <p>
-            <div class="table-responsive mb-20">
-              <table class="table table-bordered position-relative" id="productTable">
-                  <thead>
-                      <tr>
-                          <!-- <th>#</th> -->
-                          <th class="whitespace-nowrap">Date</th>
-                          <th>Violation</th>
-                          <th>State</th>
-                          <th class="whitespace-nowrap">Commercial Vehicle</th>
-                          <th class="w-100px">Action</th>
-                      </tr>
-                  </thead>
-                  <tbody class="exp-tbody">
-                      <tr>
-                        <td>
-                          <div class="has-search">
-                              <div class="input-group">
-                                  <span class="far fa-calendar-alt form-control-feedback"></span><input type="date" class="form-control border-radius-6" placeholder="mm/dd/yyyy">
-                              </div>
-                          </div>
-                      </td>
-                          <td><input class="form-control" name="vehicledriven" placeholder="Violation"></td>
-                          <td><input class="form-control" name="vehicledriven" placeholder="State"></td>
-                          <td><input type="checkbox" class="form-check-input" name="commercialvehicle"></td>
-                          <td>
-                            <a href="javascript:;" class="btn-action btn-action-red text-capitalize font-16 text-red"><i class="fa fa-trash-o" aria-hidden="true" style="color: #f00;"></i>
-                            </a>
-                        </td>
-                      </tr>
-                  </tbody>
-              </table>
-          </div>
-           <p></p>
-        </div>
-
-      </div>  
-
-    </div>
-
-    <div class="col-md-12">
-      <div class="">  
-        <h4 class="text-capitalize font-15 font-weight-500 text-main  text-primary"><i class="fa fa-folder me-2"></i><b>Have you ever had any driver license denied, suspended, revoked or canceled by any issuing state agency?</b> </h4>              
-        <button type="button" class="collapsible" style="background: none !important;">
-          <input type="checkbox" id="addressDetails" name="question1" data-trigger="hidden_fields_one" class="trigger form-check-input">
-          <label class="font-13 font-weight-400 mb-10" for="addressDetails">Yes</label> &nbsp;
-          <input type="checkbox" id="addressDetails" name="question1" data-trigger="hidden_fields_one" class="trigger form-check-input">
-          <label class="font-13 font-weight-400 mb-10" for="addressDetails">No</label>
-        </button>
-          
-        <div class="content">
-          <p>
-            <div class="form-group">
-              <label class="font-12 font-weight-400 text-uppercase mb-10">State of issuance explanation</label>
-              <textarea class="form-control" placeholder="Address" rows="3"></textarea>
-          </div>
-            <p></p>
-        </div>
-
-      </div>  
-
-    </div>
+  <div class="offcanvas-body view-load position-relative">
+    <form class="row g-3" (ngSubmit)="submitForm()" #f="ngForm">
 
 
 
-    <div class="col-xl-12">
-      <div class="form-group">
-        <h4 class="text-capitalize font-15 font-weight-500 text-main text-primary"><i class="fa fa-folder me-2"></i> <b>Employment History, last 10 years (383.35)—account for gaps between employers: (If owner/operator, list carriers leased to)</b></h4>
-   </div>
-
-   <div class="row mt-3">
-    <div class="col-md-2">
-      <h2 class="font-14 font-weight-700">From</h2>
-      <input type="text" class="form-control" id="validationDefault02" value="dd/mm/yyyy" required="">
-    </div>
-    <div class="col-md-2">
-      <h2 class="font-14 font-weight-700">To</h2>
-      <input type="text" class="form-control" id="validationDefault02" value="dd/mm/yyyy" required="">
-    </div>
-    <div class="col-md-2">
-      <h2 class="font-14 font-weight-700">Employer</h2>
-      <input type="text" class="form-control" id="validationDefault02" value="Employer" required="">
-    </div>
-    <div class="col-md-2">
-      <h2 class="font-14 font-weight-700">Supervisor</h2>
-      <input type="text" class="form-control" id="validationDefault02" value="Supervisor" required="">
-    </div>
-    <div class="col-md-2">
-      <h2 class="font-14 font-weight-700">Telephone</h2>
-      <input type="text" class="form-control" id="validationDefault02" value="Telephone" required="">
-    </div>
-    <div class="col-md-2">
-      <h2 class="font-14 font-weight-700">State</h2>
-      <input type="text" class="form-control" id="validationDefault02" value="State" required="">
-    </div>
-    <div class="col-md-2 mt-3">
-      <h2 class="font-14 font-weight-700">City</h2>
-      <input type="text" class="form-control" id="validationDefault02" value="City" required="">
-    </div>
-    <div class="col-md-2 mt-3">
-      <h2 class="font-14 font-weight-700">Zip Code</h2>
-      <input type="text" class="form-control" id="validationDefault02" value="Zip Code" required="">
-    </div>
-    <div class="col-md-4 mt-3">
-      <h2 class="font-14 font-weight-700">Street</h2>
-      <textarea class="form-control" placeholder="Address" rows="1"></textarea>
-    </div>
-    <div class="col-md-6 mt-3">
-      <h2 class="font-14 font-weight-700">Were you subject to the Federal Motor Carrier Safety Regulations during this period?</h2>
-      <textarea class="form-control" placeholder="Write Here..." rows="3"></textarea>
-    </div>
-    <div class="col-md-6 mt-3">
-      <h2 class="font-14 font-weight-700">Were you subject to 49 CFR part 40 controlled substance and alcohol testing during this period?</h2>
-      <textarea class="form-control" placeholder="Write Here..." rows="3"></textarea>
-    </div>
-    <div class="col-md-12 mt-3">
-      <h2 class="font-14 font-weight-700">Reason for Leaving</h2>
-      <textarea class="form-control" placeholder="Write Here..." rows="3"></textarea>
-    </div>
-    
-    <div class="form-group d-flex align-items-center justify-content-between text-primary mt-2">
-      <h4 class="text-capitalize font-15 font-weight-500 text-main"><b>&nbsp;</b></h4>
-      <a class="text-main font-14 font-weight-500" type="button" id="addExp"><i class="fa fa-plus me-2"></i><b>Add</b></a>  
-    </div>
-
-    
-    
-   
-   </div>
-    </div>
-   
-
-
-        
-        <div class="modal-footer justify-content-center" style="border-top: 1px solid #ccc; padding-top: 15px; margin-top: 15px; ">
-          <div>                
-            <div class="btn-group" role="group" aria-label="Basic example">
-              <a href="javascript:;" class="btn btn-success rounded-pill font-14" type="button" data-bs-toggle="offcanvas" data-bs-target="#addnext" aria-controls="offcanvasRight">Next <i class="fa fa-long-arrow-right" aria-hidden="true"></i>
-              </a>
-            </div>
-          </div>
-        </div>
-    </div>
+    <form class="row g-3" (ngSubmit)="submitForm()" #f="ngForm">
+  <div class="col-md-4">
+    <h2 class="font-14 font-weight-700">First Name</h2>
+    <input type="text" class="form-control" placeholder="First Name"
+      [(ngModel)]="newDriverapplication.FirstName" name="FirstName" required>
+  </div>
+  <div class="col-md-4">
+    <h2 class="font-14 font-weight-700">Middle Name</h2>
+    <input type="text" class="form-control" placeholder="Middle Name"
+      [(ngModel)]="newDriverapplication.MiddleName" name="MiddleName" required>
+  </div>
+  <div class="col-md-4">
+    <h2 class="font-14 font-weight-700">Last Name</h2>
+    <input type="text" class="form-control" placeholder="Last Name"
+      [(ngModel)]="newDriverapplication.LastName" name="LastName" required>
+  </div>
+  <div class="col-md-4">
+    <h2 class="font-14 font-weight-700">Email</h2>
+    <input type="email" class="form-control" placeholder="Email"
+      [(ngModel)]="newDriverapplication.email" name="email" required>
+  </div>
+  <div class="col-md-4">
+    <h2 class="font-14 font-weight-700">Phone</h2>
+    <input type="text" class="form-control" placeholder="Phone"
+      [(ngModel)]="newDriverapplication.CellularTelephone" name="CellularTelephone" required>
+  </div>
+  <div class="col-md-4">
+    <h2 class="font-14 font-weight-700">Driving Licence</h2>
+    <input type="text" class="form-control" placeholder="Driving Licence"
+      [(ngModel)]="newDriverapplication.DrivingLicence" name="DrivingLicence" required>
   </div>
   
 
-  <div class="offcanvas offcanvas-end" tabindex="-1" id="addnext" aria-labelledby="offcanvasRightLabel" style="width: 90%;">
-    
-    <div class="offcanvas-body view-load position-relative">
-      <form class="row g-3">
-
-        <div class="col-md-12">
-          <div class="">
-            
-            <button type="button" class="collapsible" style="background: none !important;"><input type="checkbox" id="addressDetails" name="question1" data-trigger="hidden_fields_one" class="trigger form-check-input">
-              <label class="font-13 font-weight-400 mb-10 text-primary" for="addressDetails"><b>I certify that this application was completed by me, and that all entries on it and information in it are true and complete to the best of my knowledge.</b></label></button>
-            <div class="content" style="display: none;">
-              <p>
-                </p><div class="row mt-2">
-                  <div class="col-md-2">
-                    <h2 class="font-14 font-weight-700">Applicant’s Signature</h2>
-                    <input type="text" class="form-control" id="validationDefault02" value="Applicant’s Signature" required="">
-                  </div>
-                  <div class="col-md-2">
-                    <h2 class="font-14 font-weight-700">To</h2>
-                    <input type="text" class="form-control" id="validationDefault02" value="dd/mm/yyyy" required="">
-                  </div>
-                </div>
-                <div class="col-xl-12 col-lg-12 mt-3">
-                  <div class="form-group">
-                      <label class="text-capitalize font-14 font-weight-400" for="certification">TO BE COMPLETED BY THE EMPLOYER</label>
-                  </div>
-              </div>
-                <div class="row mt-3">
-                  <div class="col-md-6">
-                    <h2 class="font-14 font-weight-700">Application received by</h2>
-                    <input type="text" class="form-control" id="validationDefault02" value="Received by" required="">
-                  </div>
-                  <div class="col-md-6">
-                    <h2 class="font-14 font-weight-700">Application reviewed for completeness by</h2>
-                    <input type="text" class="form-control" id="validationDefault02" value="Completeness By" required="">
-                  </div>
-                  <div class="col-md-3 mt-3">
-                    <h2 class="font-14 font-weight-700">Name</h2>
-                    <input type="text" class="form-control" id="validationDefault02" value="Name" required="">
-                  </div>
-                  <div class="col-md-3 mt-3">
-                    <h2 class="font-14 font-weight-700">Date</h2>
-                    <input type="text" class="form-control" id="validationDefault02" value="dd/mm/yyyy" required="">
-                  </div>
-                  <div class="col-md-3 mt-3">
-                    <h2 class="font-14 font-weight-700">Name</h2>
-                    <input type="text" class="form-control" id="validationDefault02" value="Name" required="">
-                  </div>
-                  <div class="col-md-3 mt-3">
-                    <h2 class="font-14 font-weight-700">Date</h2>
-                    <input type="text" class="form-control" id="validationDefault02" value="dd/mm/yyyy" required="">
-                  </div>
-                 
-                </div>
-
-                <p class="mt-3">SIGNIFICANT DATES</p>
-
-                <div class="row">
-                  <div class="col-md-4">
-                    <h2 class="font-14 font-weight-700">Date of Hire</h2>
-                    <input type="text" class="form-control" id="validationDefault02" value="dd/mm/yyyy" required="">
-                  </div>
-                  <div class="col-md-4">
-                    <h2 class="font-14 font-weight-700">Time & Date of Pre-Employment CST</h2>
-                    <input type="text" class="form-control" id="validationDefault02" value="dd/mm/yyyy" required="">
-                  </div>
-                  <div class="col-md-4">
-                    <h2 class="font-14 font-weight-700">Time & Date of Pre-Employment CST Results Received</h2>
-                    <input type="text" class="form-control" id="validationDefault02" value="dd/mm/yyyy" required="">
-                  </div>
-                  <div class="col-md-4 mt-3">
-                    <h2 class="font-14 font-weight-700">Date First Used in Safety Sensitive Position</h2>
-                    <input type="text" class="form-control" id="validationDefault02" value="dd/mm/yyyy" required="">
-                  </div>
-                  <div class="col-md-4 mt-3">
-                    <h2 class="font-14 font-weight-700">Date of Termination</h2>
-                    <input type="text" class="form-control" id="validationDefault02" value="dd/mm/yyyy" required="">
-                  </div>
-                </div>
-    
-                
-                <hr>
-              
-                
-                
-              <p></p>
-            </div>
-
-          </div>     
-          
-         
-        </div>
-
-        <div class="col-md-12" style="margin-top: 0px !important;">
-          <div class="">
-            
-            <button type="button" class="collapsible" style="background: none !important;"><input type="checkbox" id="addressDetails" name="question1" data-trigger="hidden_fields_one" class="trigger form-check-input">
-              <label class="font-13 font-weight-400 mb-10 text-primary" for="addressDetails"><b>Commercial vehicle driver applicant controlled substance and alcohol questionnaire pursuant to 49 CFR part 40.25(j)</b></label></button>
-            <div class="content" style="display: none;">
-              <p>
-                </p>
-                  <div class="row mt-2">
-                  <div class="col-md-2">
-                    <h2 class="font-14 font-weight-700">Date</h2>
-                    <input type="text" class="form-control" id="validationDefault02" value="dd/mm/yyyy" required="">
-                  </div>
-                  <div class="col-md-2">
-                    <h2 class="font-14 font-weight-700">First Name</h2>
-                    <input type="text" class="form-control" id="validationDefault02" value="First Name" required="">
-                  </div>
-                  <div class="col-md-2">
-                    <h2 class="font-14 font-weight-700">Middle Name</h2>
-                    <input type="text" class="form-control" id="validationDefault02" value="Middle Name" required="">
-                  </div>
-                  <div class="col-md-2">
-                    <h2 class="font-14 font-weight-700">Last Name</h2>
-                    <input type="text" class="form-control" id="validationDefault02" value="Last Name" required="">
-                  </div>
-                  <div class="col-md-2">
-                    <h2 class="font-14 font-weight-700">Date Of Birth</h2>
-                    <input type="text" class="form-control" id="validationDefault02" value="dd/mm/yyyy" required="">
-                  </div>
-                  <div class="col-md-2">
-                    <h2 class="font-14 font-weight-700">City</h2>
-                    <input type="text" class="form-control" id="validationDefault02" value="City" required="">
-                  </div>
-                </div>
-                <div class="row mt-3">
-                  <div class="col-md-2">
-                    <h2 class="font-14 font-weight-700">State</h2>
-                    <input type="text" class="form-control" id="validationDefault02" value="State" required="">
-                  </div>
-                  <div class="col-md-2">
-                    <h2 class="font-14 font-weight-700">Zip</h2>
-                    <input type="text" class="form-control" id="validationDefault02" value="Zip" required="">
-                  </div>
-                  <div class="col-md-2">
-                    <h2 class="font-14 font-weight-700">Cellular Telephone</h2>
-                    <input type="text" class="form-control" id="validationDefault02" value="Cellular Telephone" required="">
-                  </div>
-                  <div class="col-md-2">
-                    <h2 class="font-14 font-weight-700">Social Security Number</h2>
-                    <input type="text" class="form-control" id="validationDefault02" value="Social Security Number" required="">
-                  </div>
-                  <div class="col-md-4">
-                    <h2 class="font-14 font-weight-700">Address</h2>
-                    <textarea class="form-control" placeholder="Address" rows="1"></textarea>
-                  </div>
-                </div>
-
-                <hr>
-              
-              <p></p>
-            </div>
-            <label class="font-13 font-weight-400 mb-10 text-primary" for="addressDetails"><i class="fa fa-folder me-2"></i><b> 49 CFR 40.25(j)</b></label>
-
-          </div>   
-        </div>
-        <div class="row">
-          <div class="col-xl-12 mt-3">
-            <div class="form-group form-check form-check-inline">
-                <input type="checkbox" id="tvDetails" name="question1" class="form-check-input">
-                <label class="form-check-label" for="inlineCheckbox1">Have you ever tested positive, or refused to test, on any pre -employment drug or alcohol test administered by an employer to which you applied for, but did not obtain, safety-sensitive transportation work covered by DOT agency drug and alcohol testing rules during the past two years? <span class="text-main font-13">(If yes please check)</span></label>
-            </div>
-        </div>
-        <div class="col-xl-12 mt-3">
-          <div class="form-group form-check form-check-inline">
-              <input type="checkbox" id="tvDetails" name="question1" class="form-check-input">
-              <label class="form-check-label" for="inlineCheckbox1">Have you successfully completed the return-to-duty process?<span class="text-main font-13">(If yes please check)</span></label>
-          </div>
-      </div>
-      <div class="col-xl-12 mt-3">
-        <div class="form-group form-check form-check-inline">
-            <input type="checkbox" id="tvDetails" name="question1" class="form-check-input">
-            <label class="form-check-label" for="inlineCheckbox1">Documentation must be provided before any safety-sensitive transportation function is performed.<span class="text-main font-13">(If yes please check)</span></label>
-        </div>
-      </div>
-      <div class="col-md-2 mt-3">
-        <h2 class="font-14 font-weight-700">Applicant’s Signature</h2>
-        <input type="text" class="form-control" id="validationDefault02" value="Applicant’s Signature" required="">
-      </div>
-      <div class="col-md-2 mt-3">
-        <h2 class="font-14 font-weight-700">Dates Signed</h2>
-        <input type="text" class="form-control" id="validationDefault02" value="dd/mm/yyyy" required="">
-      </div>
-      <label class="font-13 font-weight-400 mb-10 text-primary mt-3" for="addressDetails"><i class="fa fa-folder me-2"></i><b>  To be completed by employer</b></label>
-      </div>
-
-   <div class="row mt-3">
-    <div class="col-md-6">
-      <h2 class="font-14 font-weight-700">Received By</h2>
-      <input type="text" class="form-control" id="validationDefault02" value="Received By" required="">
-    </div>
-    <div class="col-md-6">
-      <h2 class="font-14 font-weight-700">Reviewed By</h2>
-      <input type="text" class="form-control" id="validationDefault02" value="Completeness By" required="">
-    </div>
-
-        
-  <div class="modal-footer justify-content-center" style="border-top: 1px solid #ccc; padding-top: 15px; margin-top: 15px; ">
-    <button type="button" class="btn btn-outline-secondary btn-sm text-uppercase rounded-pill" data-bs-dismiss="offcanvas" style="margin: 10px;">Close</button> 
-    <button type="submit" class="btn btn-success btn-sm text-uppercase rounded-pill">Save changes</button>
-  </div>
-
-
+<div class="modal-footer justify-content-center" style="border-top: 1px solid #ccc; padding-top: 15px; margin-top: 15px;">
+  <button type="button" class="btn btn-outline-secondary btn-sm text-uppercase rounded-pill" data-bs-dismiss="offcanvas" style="margin: 10px;">Close</button>
+  <button type="submit" class="btn btn-success btn-sm text-uppercase rounded-pill" data-bs-dismiss="offcanvas">Save changes</button>
+</div>
+</form>
+     

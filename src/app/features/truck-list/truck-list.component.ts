@@ -16,6 +16,9 @@ export class TruckListComponent implements OnInit {
   truckIdToDelete: string | null = null;
   truckToEdit: any = {};
   originalTruckData: any = {}; // Store original truck data for comparison
+  fileError: string | null = null;
+  companies: any[] = [];
+
 
   constructor(
     private serviceAuthService: ServiceAuthService,
@@ -26,7 +29,32 @@ export class TruckListComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadTrucks();
+    this.loadCompany()
   }
+
+
+  loadCompany() {
+    this.serviceAuthService.getAllCompanies().subscribe((data: any) => {
+      this.companies = data;
+      this.cdr.detectChanges();
+    }, error => {
+      console.error('Error loading companies:', error);
+    });
+  }
+
+  findCompanyName(companyId: string | string[]): string {
+   
+    if (Array.isArray(companyId)) {
+        companyId = companyId.length > 0 ? companyId[0] : '';
+    }
+    console.log('find by id',companyId)
+    
+    const company = this.companies.find(company => company._id === companyId);
+    console.log("Company Name", company.companyName)
+    
+  
+    return company ? company.companyName : 'N/A';
+}
 
   loadTrucks() {
     this.serviceAuthService.getTrucksFromAPI().subscribe((trucks: any) => {
@@ -51,14 +79,25 @@ export class TruckListComponent implements OnInit {
     this.cdr.detectChanges();
   }
 
+
   onFileChange(event: any, key: string) {
     const file = event.target.files[0];
+    const allowedTypes = ['image/jpeg', 'image/png', 'application/pdf'];
+  
     if (file) {
-      this.newTruck[key] = file;
+      if (!allowedTypes.includes(file.type)) {
+        this.fileError = 'Only JPG, JPEG, PNG, and PDF formats are allowed.';
+        this.newTruck[key] = null; // Invalid file, reset the corresponding property
+        event.target.value = ''; // Optionally clear the file input
+      } else {
+        this.fileError = null;
+        this.newTruck[key] = file; // Valid file, update the object
+      }
     } else {
-      this.newTruck[key] = null;
+      this.newTruck[key] = null; // No file selected
     }
   }
+  
 
   submitForm(form: NgForm) {
     if (form.invalid) {

@@ -69,6 +69,7 @@
                         <thead>
                           <tr>
                             <th scope="col">Unit Number</th>
+                            <th scope="col">Company Name</th>
                             <th scope="col">Vin Number</th>
                             <th scope="col">Purchase Date</th>
                             <th scope="col">Monthly Payment</th>
@@ -79,7 +80,8 @@
                         <tbody>
                           <tr *ngFor="let truck of filteredTrucks">
                             <td><a class="text-primary" [routerLink]="['/truck-list-view',truck._id]">{{
-                                truck.unitNumber }}</a></td>
+                              truck.unitNumber }}</a></td>
+                              <td>{{ findCompanyName(truck.companyId) }}</td>
                             <td>{{ truck.vinNumber }}</td>
                             <td>{{ truck.purchaseDate }}</td>
                             <td>{{ truck.monthlyPayment }}</td>
@@ -112,7 +114,7 @@
                 </div>
                 <div class="row bg-white px-3 py-4 mt-3 rounded">
                   <div class="col-md-12">
-                    <nav aria-label="Page navigation example ms-auto me-auto">
+                    <!-- <nav aria-label="Page navigation example ms-auto me-auto">
                       <ul class="pagination justify-content-center gap-2 mb-0">
                         <li class="page-item">
                           <a class="page-link font-22" href="javascript:;" aria-label="Previous"><i
@@ -126,7 +128,7 @@
                         <li class="page-item"><a class="page-link font-22" href="javascript:;" aria-label="Next"><i
                               class="fa fa-angle-right font-weight-300"></i></a></li>
                       </ul>
-                    </nav>
+                    </nav> -->
                   </div>
                 </div>
               </div>
@@ -192,7 +194,7 @@
         <div class="col-md-4">
           <h2 class="font-14 font-weight-700">Upload Documents</h2>
           <input type="file" class="form-control" (change)="truckEditFile($event, 'uploadDocument')"
-            name="uploadDocuments" required>
+            name="uploadDocuments" accept=".jpg, .jpeg, .png, .pdf" required>
         </div>
 
         <hr class="hr">
@@ -205,7 +207,7 @@
         <div class="col-md-4">
           <h2 class="font-14 font-weight-700">Upload Document</h2>
           <input type="file" class="form-control" (change)="truckEditFile($event, 'uploadDocument1')"
-            name="uploadDocument" required>
+            name="uploadDocument" accept=".jpg, .jpeg, .png, .pdf" required>
         </div>
         <div class="col-md-4">
           <h2 class="font-14 font-weight-700">Renewal Date</h2>
@@ -222,7 +224,7 @@
         <div class="col-md-4">
           <h2 class="font-14 font-weight-700">Upload Documents</h2>
           <input type="file" class="form-control" (change)="truckEditFile($event, 'uploadDocument2')"
-            name="uploadDocuments" required>
+            name="uploadDocuments" accept=".jpg, .jpeg, .png, .pdf" required>
         </div>
         <div class="col-md-4">
           <h2 class="font-14 font-weight-700">Loan Bank Name</h2>
@@ -235,7 +237,7 @@
         <div class="col-md-4">
           <h2 class="font-14 font-weight-700">Upload Documents</h2>
           <input type="file" class="form-control" (change)="truckEditFile($event, 'uploadDocument3')"
-            name="uploadDocuments" required>
+            name="uploadDocuments" accept=".jpg, .jpeg, .png, .pdf" required>
         </div>
         <div class="col-md-4">
           <h2 class="font-14 font-weight-700">Bank Contact</h2>
@@ -368,8 +370,9 @@
       <!-- Upload Documents -->
       <div class="col-md-4">
         <h2 class="font-14 font-weight-700">Upload Documents</h2>
-        <input type="file" class="form-control" id="uploadDocument" (change)="onFileChange($event, 'uploadDocument')" name="uploadDocument" required>
+        <input type="file" class="form-control" id="uploadDocument" (change)="onFileChange($event, 'uploadDocument')" name="uploadDocument" accept=".jpg, .jpeg, .png, .pdf" required>
       </div>
+      
 
       <hr class="hr" />
 
@@ -389,7 +392,7 @@
     <div class="col-md-4">
       <h2 class="font-14 font-weight-700">Upload Document</h2>
       <input type="file" class="form-control" id="uploadDocument1" placeholder="Document.pdf"
-        (change)="onFileChange($event, 'uploadDocument1')" name="uploadDocument1" required>
+        (change)="onFileChange($event, 'uploadDocument1')" name="uploadDocument1" accept=".jpg, .jpeg, .png, .pdf" required>
     </div>
 
 <!-- Renewal Date -->
@@ -450,7 +453,7 @@
 <div class="col-md-4">
   <h2 class="font-14 font-weight-700">Upload Documents</h2>
   <input type="file" class="form-control" id="uploadDocument2" placeholder="Document.pdf"
-    (change)="onFileChange($event, 'uploadDocument2')" name="uploadDocument2" required>
+    (change)="onFileChange($event, 'uploadDocument2')" name="uploadDocument2" accept=".jpg, .jpeg, .png, .pdf" required>
 </div>
 <!-- Loan Bank Name -->
 <div class="col-md-4">
@@ -492,7 +495,7 @@
 <div class="col-md-4">
   <h2 class="font-14 font-weight-700">Upload Documents</h2>
   <input type="file" class="form-control" id="uploadDocument3" placeholder="Document.pdf"
-    (change)="onFileChange($event, 'uploadDocument3')" name="uploadDocument3" required>
+    (change)="onFileChange($event, 'uploadDocument3')" name="uploadDocument3" accept=".jpg, .jpeg, .png, .pdf" required>
 </div>
 
 <!-- Bank Contact -->

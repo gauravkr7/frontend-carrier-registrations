@@ -1,3 +1,11 @@
+td {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+
 .container {
   background: #f5f7fb;
   border-radius: 5px;

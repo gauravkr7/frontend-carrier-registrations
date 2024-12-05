@@ -18,6 +18,7 @@ export class TrailerListComponent implements OnInit {
   selectedTrailer: any = null;
   trailerIdToDelete: string | null = null;
   trailerToEdit: any = {};
+  companies: any[] = [];
   originalTrailerData: any = {}; // Store original trailer data for comparison
 
   constructor(
@@ -27,8 +28,33 @@ export class TrailerListComponent implements OnInit {
     private toastr: ToastrService) { }
   ngOnInit(): void {
     this.loadTrailers();
+    this.loadCompany();  }
+    
+  loadCompany() {
+    this.serviceAuthService.getAllCompanies().subscribe((data: any) => {
+      this.companies = data;
+      this.cdr.detectChanges();
+    }, error => {
+      console.error('Error loading companies:', error);
+    });
   }
 
+  findCompanyName(companyId: string | string[]): string {
+   
+    if (Array.isArray(companyId)) {
+        companyId = companyId.length > 0 ? companyId[0] : '';
+    }
+
+    console.log('find by id',companyId)
+    
+    const company = this.companies.find(company => company._id === companyId);
+    console.log("Company Name", company.companyName)
+    
+    
+  
+    return company ? company.companyName : 'N/A';
+}
+  
   loadTrailers() {
     this.serviceAuthService.getTrailersFromAPI().subscribe((trailers: any) => {
       // console.log(trailers)

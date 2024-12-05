@@ -36,10 +36,10 @@ export class LoginComponent {
       console.error('ID is undefined or null');
       return;
     }
-    console.log('Loading company data for ID:', id);
+    // console.log('Loading company data for ID:', id);
     this.authService.getCompanyById(id).subscribe(
       (data: any) => {
-        console.log('Company Data:', data);
+        // console.log('Company Data:', data);
         this.companyData = data;
       },
       (error: any) => {
@@ -51,7 +51,7 @@ export class LoginComponent {
   login() {
     this.authService.login(this.email, this.password, this.rememberMe , this.name)
       .subscribe(response => {
-        console.log(response);
+        // console.log(response);
   
         // Store company ID in local storage if it exists
         if (response.companyId) {
