@@ -18,8 +18,8 @@ export class ServiceAuthService {
   trailercreateUrl: string = 'https://compliance-backend-debcf19b5689.herokuapp.com/api/trailerList/trailer/create'; // Add create API URL
   getdriverapiUrl: string = 'https://compliance-backend-debcf19b5689.herokuapp.com/api/driverList/driver';
   drivercreateUrl: string = 'https://compliance-backend-debcf19b5689.herokuapp.com/api/driverList/driver/create'; // Add create API URL
-  driverapplicationapiUrl: string = 'https://compliance-backend-debcf19b5689.herokuapp.com/api/driverApplication/driverapplication';
-  driverapplicationcreateUrl: string = 'https://compliance-backend-debcf19b5689.herokuapp.com/api/driverApplivation/driverapplication/create'; // Add create API URL
+  driverapplicationapiUrl: string = 'https://compliance-backend-debcf19b5689.herokuapp.com/api/driverapplication';
+  driverapplicationcreateUrl: string = 'https://compliance-backend-debcf19b5689.herokuapp.com/api/driverapplication/create'; // Add create API URL
   fileapiUrl: string = 'https://compliance-backend-debcf19b5689.herokuapp.com/api/filemanager';
   filecreateUrl: string = 'https://compliance-backend-debcf19b5689.herokuapp.com/api/filemanager/create';
   getUsersapiUrl: string = 'https://compliance-backend-debcf19b5689.herokuapp.com/api/getAll';
@@ -34,6 +34,8 @@ export class ServiceAuthService {
   deleteDriverUrl: string = 'https://compliance-backend-debcf19b5689.herokuapp.com/api/driverList/driver/delete'; // Delete API URL
   updateFileUrl: string = 'https://compliance-backend-debcf19b5689.herokuapp.com/api/filemanager/update'; // Update API URL
   deleteFileUrl: string = 'https://compliance-backend-debcf19b5689.herokuapp.com/api/filemanager/delete'; // Delete API URL
+  updateUserUrl : string = 'https://compliance-backend-debcf19b5689.herokuapp.com/api/user/update'; //update API URL
+  deleteUserUrl : string ='https://compliance-backend-debcf19b5689.herokuapp.com/api/user/delete'; // Delete API URL
 
 
   dashboardcreateUrl: string = 'https://compliance-backend-debcf19b5689.herokuapp.com/api/company/create';
@@ -461,5 +463,30 @@ deleteFile(id: string) {
 
   return this.http.delete(`${this.deleteFileUrl}/${id}`, { headers });
 }
+
+deleteUsers(id: string) {
+  const token = this.getToken();
+  if (!token) {
+    throw new Error('No token stored');
+  }
+  const headers = new HttpHeaders().set( 'Authorization', `Bearer ${token}`);
+
+  return this.http.delete(`${this.deleteUserUrl}/${id}`, { headers });
+}
+ // Update Trucks
+ updateUsers(id: string, userData: any) {
+  const token = this.getToken();
+  if (!token) {
+    throw new Error('No token stored');
+  }
+
+  const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+  // When using FormData, you do not need to set the 'Content-Type' header explicitly.
+  // Browser will automatically set it when sending multipart data.
+
+  return this.http.put(`${this.updateUserUrl}/${id}`, userData, { headers });
+}
+
 
 }

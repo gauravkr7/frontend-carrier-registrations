@@ -14,6 +14,7 @@ import { DashboardComponent } from './features/dashboard/dashboard.component';
 import { DriverProfileViewComponent } from './features/driver-profile-view/driver-profile-view.component';
 import { UsersProfileComponent } from './features/users-profile/users-profile.component';
 import { TrailerListViewComponent } from './features/trailer-list-view/trailer-list-view.component';
+import { DriverApplicationFormComponent } from './features/driver-application-form/driver-application-form.component';
 
 
  
@@ -32,7 +33,8 @@ const routes: Routes = [
   { path:'trailer-list-view/:id', component:TrailerListViewComponent},
   { path: 'driver-profile-view/:id' , component : DriverProfileViewComponent},
   {path :'dashboard', component: DashboardComponent},
-  {path :'users-profile-view', component: UsersProfileComponent}
+  {path :'users-profile-view', component: UsersProfileComponent},
+  {path : 'driver-applicationForm' , component : DriverApplicationFormComponent}
 
 ];
 

@@ -18,6 +18,7 @@ export class DriverListComponent implements OnInit {
   selectedDriver: any = null;
   driverIdToDelete: string | null = null;
   driverToEdit: any = {};
+  companies: any[] = [];
   originaldriverData: any = {}; // Store original driver data for comparison
 
   constructor(
@@ -27,7 +28,28 @@ export class DriverListComponent implements OnInit {
     private renderer: Renderer2) { }
   ngOnInit(): void {
     this.loadDrivers();
+    this.loadCompany();
   }
+  loadCompany() {
+    this.serviceAuthService.getAllCompanies().subscribe((data: any) => {
+      this.companies = data;
+      this.cdr.detectChanges();
+    }, error => {
+      console.error('Error loading companies:', error);
+    });
+  }
+
+  findCompanyName(companyId: string | string[]): string {
+   
+    if (Array.isArray(companyId)) {
+        companyId = companyId.length > 0 ? companyId[0] : '';
+    }
+
+    const company = this.companies.find(company => company._id === companyId);
+    
+  
+    return company ? company.companyName : 'N/A';
+}
 
   loadDrivers() {
     this.serviceAuthService.getDriversFromAPI().subscribe((drivers: any) => {

@@ -1,37 +1,37 @@
-
 .header {
-    background-color: #f8f9fa; /* Set header background color */
-    padding: 15px; /* Add padding to the header */
-    color: black;
-  }
-  
-  .nav-link {
-    color: black !important; /* Default color */
-  }
+  background-color: #f8f9fa; /* Set header background color */
+  padding: 15px; /* Add padding to the header */
+  color: black;
+}
 
-  .nav-link:hover,
-  .nav-link.active {
-    color: blue !important; /* Color on hover and when active */
-  }
-  
-  .navbar {
-    margin-top: 15px; 
-  }
-  
-  .header-nav {
-    margin-top: 10px;
-  }
-  
-  .nav-item {
-    margin-right: 15px; 
-  }
-  
+.nav-link {
+  color: black !important; /* Default color */
+}
 
-  .main {
-    padding: 20px; 
-  }
-  
-  .btn {
-   
-  }
-  
+.nav-link:hover {
+  color: blue !important; /* Color on hover */
+}
+
+.nav-link.active {
+  color: blue !important; /* Keep active tab blue */
+}
+
+.navbar {
+  margin-top: 15px;
+}
+
+.header-nav {
+  margin-top: 10px;
+}
+
+.nav-item {
+  margin-right: 15px;
+}
+
+.main {
+  padding: 20px;
+}
+
+.btn {
+  /* Button styles */
+}

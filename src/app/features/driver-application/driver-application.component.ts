@@ -2,17 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { ServiceAuthService } from '../../service/service-auth.service';
 import { ChangeDetectorRef } from '@angular/core';
 
-
 @Component({
   selector: 'app-driver-application',
   templateUrl: './driver-application.component.html',
   styleUrl: './driver-application.component.css'
 })
-
 export class DriverApplicationComponent implements OnInit {
   driverapplication: any[] = [];
   newDriverapplication: any = {};
-  filteredDriverapplication : any[] = [];
+  newDriver: any = {}; // Added this line
+  filteredDriverapplication: any[] = [];
   loadDriverapplication: any;
 
   constructor(private serviceAuthService: ServiceAuthService, private cdr: ChangeDetectorRef) { }
@@ -23,7 +22,6 @@ export class DriverApplicationComponent implements OnInit {
 
   loadDrivers() {
     this.serviceAuthService.getDriverapplicationFromAPI().subscribe((driverapplication: any) => {
-      // console.log(driverapplication)
       this.driverapplication = driverapplication;
       this.filteredDriverapplication = driverapplication;
     }, error => {
@@ -32,7 +30,6 @@ export class DriverApplicationComponent implements OnInit {
   }
 
   filterDriverapplication(filterType: string) {
-    // console.log(filterType)
     if (filterType === 'all') {
       this.filteredDriverapplication = this.driverapplication;
     } else if (filterType === 'nonCompliant') {
@@ -42,7 +39,6 @@ export class DriverApplicationComponent implements OnInit {
     } else if (filterType === 'expiring') {
       this.filteredDriverapplication = this.driverapplication.filter(driverapplication => driverapplication.status === 'EXPIRING');
     }
-    // console.log(this.filteredDriverapplication)
     this.cdr.detectChanges();
   }
 
@@ -52,12 +48,19 @@ export class DriverApplicationComponent implements OnInit {
 
     this.serviceAuthService.createDriverapplication(this.newDriverapplication).subscribe((response: any) => {
       console.log('Driverapplication created successfully:', response);
-      // Refresh the driver application
       this.loadDriverapplication();
-      // Clear the form after submission
-      this.newDriverapplication = {};
+      this.newDriverapplication = {}; 
     }, error => {
       console.error('Error creating driverapplication:', error);
     });
   }
 }
+
+
+
+
+  
+
+  
+  
+  

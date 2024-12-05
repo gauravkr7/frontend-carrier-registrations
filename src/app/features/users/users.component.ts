@@ -2,6 +2,7 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ServiceAuthService } from '../../service/service-auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { response } from 'express';
+import { log } from '@angular-devkit/build-angular/src/builders/ssr-dev-server';
 
 @Component({
   selector: 'app-users',
@@ -11,6 +12,9 @@ import { response } from 'express';
 export class UsersComponent implements OnInit {
   users: any[] = [];
   newUsers: any = {};
+  userIdToDelete: string | null = null;
+  userToEdit: any = {};
+  originalUserData: any = {}; // Store original truck data for comparison
   selectedUserId: string = '';
   selectedUserName: string = '';
   userPermissions: any = {};
@@ -60,23 +64,31 @@ export class UsersComponent implements OnInit {
   loadCompany() {
     this.serviceAuthService.getAllCompanies().subscribe((data: any) => {
       this.companies = data;
-      this.cdr.detectChanges(); // Trigger change detection
-      // this.toastr.success('Companies loaded successfully!');
+      this.cdr.detectChanges(); 
+      
     }, error => {
       console.error('Error loading companies:', error);
-      // this.toastr.error('Failed to load companies.');
     });
   }
+  findCompanyName(companyId: string | string[]): string {
+   
+    if (Array.isArray(companyId)) {
+        companyId = companyId.length > 0 ? companyId[0] : '';
+    }
+
+    const company = this.companies.find(company => company._id === companyId);
+    
+  
+    return company ? company.companyName : 'N/A';
+}
   registerNewUser(): void {
     this.serviceAuthService.registerUser(this.newUser)
       .subscribe((response: any) => {
-        console.log('User registered successfully:', response);
-        // this.toastr.success('User registered successfully', 'Success');
+        console.log('User registered successfully:', response);    
         this.getUsersFromAPI();
         this.newUser = {};
       }, error => {
         console.error('Error registering new user:', error);
-        // this.toastr.error('Error registering new user', 'Error');
       });
   }
 
@@ -84,20 +96,20 @@ export class UsersComponent implements OnInit {
     this.serviceAuthService.getUsersFromAPI()
       .subscribe((response: any) => {
         if (response && Array.isArray(response.data)) {
-          this.users = response.data; // Assuming `response.data` is an array
+          this.users = response.data; 
           this.cdr.detectChanges();
-          // this.toastr.success('Users fetched successfully', 'Success');
+         
         } else if (Array.isArray(response)) {
-          this.users = response; // If the response itself is an array
+          this.users = response; 
           this.cdr.detectChanges();
-          // this.toastr.success('Users fetched successfully', 'Success');
+          
         } else {
           console.error('Invalid data format received from API:', response);
-          // this.toastr.error('Invalid data format from API', 'Error');
+        
         }
       }, error => {
         console.error('Error fetching users:', error);
-        // this.toastr.error('Error fetching users', 'Error');
+       
       });
   }
   
@@ -133,5 +145,76 @@ export class UsersComponent implements OnInit {
         });
     }
   }
+
+  setuserToDelete(id: string) {
+    this.userIdToDelete = id;
+  }
+
+  deleteUser(id?: string) {
+    if (id) {
+      this.serviceAuthService.deleteUsers(id).subscribe((response: any) => {
+        console.log('User deleted successfully:', response);
+        this.toastr.success('User deleted successfully!', 'Success');
+        this.getUsersFromAPI();
+        this.userIdToDelete = null;
+      }, error => {
+        console.error('Error deleting user:', error);
+        this.toastr.error('Failed to delete user.', 'Error');
+      });
+    }
+  }
+
+
+
+  
+  edituser(driver: any) {
+    this.userToEdit = { ...driver }; 
+    this.originalUserData = { ...driver }; // Save the original driver data for comparison
+  }
+
+  driverEditFile(event: any, key: string) {
+    const file = event.target.files[0];
+    if (file) {
+      this.userToEdit[key] = file;
+    }
+  }
+
+  hasChanges(): boolean {
+    // Compare original driver data with the current driverToEdit data
+    return JSON.stringify(this.userToEdit) !== JSON.stringify(this.originalUserData);
+  }
+
+  updateUsers() {
+    if (!this.hasChanges()) {
+      this.toastr.error('No changes detected. Please modify the driver details before saving.', 'Error');
+      return;
+    }
+  
+    const formData = new FormData();
+  
+    Object.keys(this.userToEdit).forEach(key => {
+      if (this.userToEdit[key] instanceof File) {
+        // Append file fields correctly
+        formData.append(key, this.userToEdit[key], this.userToEdit[key].name);
+      } else {
+        // Append non-file fields as strings
+        formData.append(key, this.userToEdit[key]);
+      }
+    });
+  
+    this.serviceAuthService.updateUsers(this.userToEdit._id, formData).subscribe(
+      (response: any) => {
+        console.log('Driver updated successfully:', response);
+        this.toastr.success('Driver updated successfully!', 'Success');
+        this.getUsersFromAPI();
+        this.userToEdit = {}; // Clear the form after successful update
+      },
+      (error) => {
+        console.error('Error updating driver:', error);
+        this.toastr.error('Failed to update driver.', 'Error');
+      }
+    );
+  }
+  
 
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ServiceAuthService } from '../../service/service-auth.service';
 import { ToastrService } from 'ngx-toastr';
 
@@ -16,10 +16,13 @@ export class FileManagerComponent implements OnInit {
   fileIdToDelete: string | null = null;
   fileToEdit: any = {};
   originalFileData: any = {}; // Add this lin
+  companies: any[] = [];
+
 
   
     
       constructor(
+        private cdr: ChangeDetectorRef,
         private serviceAuthService: ServiceAuthService,
         private toastr: ToastrService // Add this line
 
@@ -27,8 +30,28 @@ export class FileManagerComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadfiles();
+    this.loadCompany();
   }
 
+  loadCompany() {
+    this.serviceAuthService.getAllCompanies().subscribe((data: any) => {
+      this.companies = data;
+      this.cdr.detectChanges();
+    }, error => {
+      console.error('Error loading companies:', error);
+    });
+  }
+  findCompanyName(companyId: string | string[]): string {
+   
+    if (Array.isArray(companyId)) {
+        companyId = companyId.length > 0 ? companyId[0] : '';
+    }
+
+    const company = this.companies.find(company => company._id === companyId);
+    
+  
+    return company ? company.companyName : 'N/A';
+}
   loadfiles() {
     this.serviceAuthService.getFilesFromAPI()
       .subscribe((data: any) => {

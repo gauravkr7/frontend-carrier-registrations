@@ -7,36 +7,41 @@
 
   <div class="row">
     <nav class="navbar navbar-expand-lg navbar-light">
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-h2="Toggle navigation">
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
+
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+          </li>
           <li class="nav-item" *ngIf="selectedCompany">
-            <a class="nav-link" (click)="goToCompanyProfile()"style="cursor: pointer;">Company Profile</a>
-           </li>
+            <a class="nav-link" (click)="goToCompanyProfile()" style="cursor: pointer;"  routerLinkActive="active">Company Profile</a>
+           </li>
           <li class="nav-item">
-            <a class="nav-link" routerLink="/truck-list" >Truck List</a>
+            <a class="nav-link" routerLink="/truck-list" routerLinkActive="active">Truck List</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" routerLink="/trailer-list">Trailer List</a>
-          </li>
-          <li class="nav-item ">
-            <a class="nav-link" routerLink="/driver-list">Driver List </a>
+            <a class="nav-link" routerLink="/trailer-list" routerLinkActive="active">Trailer List</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" routerLink="/driver-application">Driver Application</a>
+            <a class="nav-link" routerLink="/driver-list" routerLinkActive="active">Driver List</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" routerLink="/file-manager" >File Manager</a>
+            <a class="nav-link" routerLink="/driver-application" routerLinkActive="active">Driver Application</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" routerLink="/users">Users</a>
+            <a class="nav-link" routerLink="/file-manager" routerLinkActive="active">File Manager</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/users" routerLinkActive="active">Users</a>
           </li>
         </ul>
       </div>
     </nav>
   </div>
+  
 
   <nav class="header-nav">
     <ul class="d-flex align-items-center">
@@ -99,6 +104,7 @@
     <li class="pb-3" *ngIf="selectedCompany">
       <a (click)="goToCompanyProfile()"><i class="fa fa-users" aria-hidden="true"></i><span class="ms-2"style="cursor: pointer;">Company Profile</span></a>
     </li>
+   
     <li class="pb-3">
       <a  routerLink="/truck-list"><i class="fa fa-list-alt" aria-hidden="true"></i><span class="ms-2">Truck List</span></a>
     </li>
@@ -108,20 +114,23 @@
     <li class="pb-3">
       <a  routerLink="/driver-list"><i class="fa fa-list-alt" aria-hidden="true"></i><span class="ms-2">Driver List</span></a>
     </li>
-    <li class="pb-3">
+    <!-- <li class="pb-3">
       <a routerLink="/pre-screening-list"><i class="fa fa-search"></i><span class="ms-2">Pre Screening</span></a>
-    </li>
+    </li> -->
     <li class="pb-3">
       <a routerLink="/driver-application"><i class="fa fa-file"></i><span class="ms-2">Driver Application</span></a>
     </li>
     <li class="pb-3">
       <a  routerLink="/file-manager"><i class="fa fa-folder"></i><span class="ms-2">File Manager</span></a>
     </li>
-    <li class="pb-3">
+    <!-- <li class="pb-3">
       <a  routerLink="password-manager"><i class="fa fa-lock"></i><span class="ms-2">Password Manager</span></a>
-    </li>
+    </li> -->
     <li class="pb-3">
       <a  routerLink="/users"><i class="fa fa-user" aria-hidden="true"></i><span class="ms-2">Users</span></a>
     </li>
   </ul>
   </nav>
+
+
+<!-- we need to change colour hover in company profile -->

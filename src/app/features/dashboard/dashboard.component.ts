@@ -243,18 +243,27 @@ export class DashboardComponent implements OnInit {
     if (!token) {
       throw new Error('No token stored');
     }
-  
+
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     this.serviceAuthService.createDotCompany(companyData).subscribe((response: any) => {
       // console.log('DOT company created successfully:', response);
-  
-      // Check if the response structure is valid
-      if (response && response.dot && response.dot.data && response.dot.data.record) {
-        const carrier = response.dot.data.record.content.carrier;
-  
+
+      if (
+        response &&
+        response.dot &&
+        response.dot.data &&
+        response.dot.data.dotData &&
+        response.dot.data.dotData.record &&
+        response.dot.data.mcData &&
+        response.dot.data.mcData.record
+      ) {
+        const carrier = response.dot.data.dotData.record.content.carrier;
+        const mcNumbers = response.dot.data.mcData.record.content[0];
+
         // Check if the carrier data exists
         if (carrier) {
           this.populateCompanyFields(carrier);
+          this.populateMcNumbers(mcNumbers);
           this.toastr.success('DOT company created and fields populated successfully!');
         } else {
           this.toastr.error('Carrier data is not available in the response.');
@@ -273,19 +282,37 @@ export class DashboardComponent implements OnInit {
       this.newCompany.legalName = carrier.legalName || '';
       this.newCompany.dotNumber = carrier.dotNumber || '';
       this.newCompany.ein = carrier.ein || '';
-      this.newCompany.totalDrivers = carrier.totalDrivers || '';
-      this.newCompany.totalPowerUnits = carrier.totalPowerUnits || '';
-      this.newCompany.address = `${carrier.phyStreet || ''}, ${carrier.phyCity || ''}, ${carrier.phyState || ''}, ${carrier.phyZipcode || ''}`;
-      this.newCompany.allowedToOperate = carrier.allowedToOperate || '';
-      this.newCompany.bipdInsuranceOnFile = carrier.bipdInsuranceOnFile || '';
-      this.newCompany.safetyRating = carrier.safetyRating || 'N/A';
-      this.newCompany.brokerAuthorityStatus = carrier.brokerAuthorityStatus || 'N';
+      this.newCompany.phyStreet = carrier.phyStreet || '';
+      this.newCompany.phyCountry = carrier.phyCountry || '';
+      this.newCompany.phyCity = carrier.phyCity || '';
+      this.newCompany.phyState = carrier.phyState || '';
+      this.newCompany.phyZipcode = carrier.phyZipcode || '';
+      this.newCompany.Allowtooperator = carrier.allowedToOperate || '';
+      this.newCompany.BiptoInsurance = carrier.bipdInsuranceRequired || '';
+      this.newCompany.CompanyDBA = carrier.dbaName || 'N/A';
+      this.newCompany.Broker = carrier.brokerAuthorityStatus || 'N';
+      this.newCompany.Common = carrier.commonAuthorityStatus || 'N';
+      this.newCompany.Contract = carrier.contractAuthorityStatus || 'N';
+      this.newCompany.DotStatus = carrier.statusCode || 'N';
+      this.newCompany.Vehicle = carrier.vehicleOosRateNationalAverage || 'N';
+      this.newCompany.Driver = carrier.driverOosRateNationalAverage || 'N';
+      this.newCompany.Hazmat = carrier.hazmatOosRateNationalAverage || 'N';
       this.newCompany.companyName = this.newCompany.legalName;
       this.cdr.detectChanges();
     } else {
       this.toastr.error('Carrier data is not available.');
     }
   }
+  populateMcNumbers(mcNumbers: any) {
+    console.log('MC Numbers:', mcNumbers);
+
+    if (mcNumbers) {
+        this.newCompany.mc = mcNumbers.docketNumber || '';
+        this.cdr.detectChanges();
+    } else {
+        this.toastr.error('No MC numbers available in the response.');
+    }
+}
 
 
 

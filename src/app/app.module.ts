@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http'; // Import HttpClientModule
 import { AppRoutingModule } from './app-routing.module';
@@ -22,6 +23,7 @@ import { UsersProfileComponent } from './features/users-profile/users-profile.co
 import { TrailerListViewComponent } from './features/trailer-list-view/trailer-list-view.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
+import { DriverApplicationFormComponent } from './features/driver-application-form/driver-application-form.component';
 
 
 
@@ -44,11 +46,13 @@ import { ToastrModule } from 'ngx-toastr';
     DriverProfileViewComponent,
     UsersProfileComponent,
     TrailerListViewComponent,
+    DriverApplicationFormComponent,
 
     
   ],
   imports: [
     BrowserModule,
+    ReactiveFormsModule,
     FormsModule,
     HttpClientModule, // Include HttpClientModule here
     AppRoutingModule,
@@ -63,4 +67,6 @@ import { ToastrModule } from 'ngx-toastr';
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule { }
+
+

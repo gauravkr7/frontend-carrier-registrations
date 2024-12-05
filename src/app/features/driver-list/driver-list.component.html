@@ -68,6 +68,7 @@
 
                           <tr>
                             <th scope="col">Driver Name</th>
+                            <th scope="col">Company Name</th>
                             <th scope="col">Email</th>
                             <th scope="col">Phone</th>
                             <th scope="col">Status</th>
@@ -78,7 +79,8 @@
 
                           <tr *ngFor="let driver of filteredDrivers">
                             <td><a class="text-primary" [routerLink]="['/driver-profile-view',driver._id]">{{
-                                driver.driverName }}</a></td>
+                              driver.driverName }}</a></td>
+                              <td>{{ findCompanyName(driver.companyId) }}</td>
                             <td>{{ driver.companyEmail }}</td>
                             <td>{{ driver.companyPhone }}</td>
                             <td>
@@ -110,7 +112,7 @@
                 </div>               
                 <div class="row bg-white px-3 py-4 mt-3 rounded">
                   <div class="col-md-12">
-                    <nav aria-label="Page navigation example ms-auto me-auto">
+                    <!-- <nav aria-label="Page navigation example ms-auto me-auto">
                       <ul class="pagination justify-content-center gap-2 mb-0">
                         <li class="page-item">
                           <a class="page-link font-22" href="javascript:;" aria-label="Previous"><i
@@ -124,7 +126,7 @@
                         <li class="page-item"><a class="page-link font-22" href="javascript:;" aria-label="Next"><i
                               class="fa fa-angle-right font-weight-300"></i></a></li>
                       </ul>
-                    </nav>
+                    </nav> -->
                   </div>
                 </div>
               </div>
@@ -198,7 +200,7 @@
       <div class="col-md-4">
         <h2 class="font-14 font-weight-700">Upload Document</h2>
         <input type="file" class="form-control" id="uploadDocument1" placeholder="MC"
-          (change)=" driverEditFile($event, 'uploadDocument1')" name="uploadDocument1" required="">
+          (change)=" driverEditFile($event, 'uploadDocument1')" name="uploadDocument1" accept=".jpg, .jpeg, .png, .pdf" required="">
       </div>
 
       <div class="col-md-4">
@@ -216,7 +218,7 @@
       <div class="col-md-4">
         <h2 class="font-14 font-weight-700">Upload Document</h2>
         <input type="file" class="form-control" id="uploadDocument2" placeholder="MC"
-          (change)=" driverEditFile($event, 'uploadDocument2')" name="uploadDocument2" required="">
+          (change)=" driverEditFile($event, 'uploadDocument2')" name="uploadDocument2" accept=".jpg, .jpeg, .png, .pdf" required="">
       </div>
 
       <hr class="hr" />
@@ -236,7 +238,7 @@
       <div class="col-md-4">
         <h2 class="font-14 font-weight-700">Upload Document</h2>
         <input type="file" class="form-control" id="uploadDocument3" placeholder="MC"
-          (change)=" driverEditFile($event, 'uploadDocument3')" name="uploadDocument3" required="">
+          (change)=" driverEditFile($event, 'uploadDocument3')" name="uploadDocument3" accept=".jpg, .jpeg, .png, .pdf" required="">
       </div>
 
       <div class="col-md-4">
@@ -248,7 +250,7 @@
       <div class="col-md-4">
         <h2 class="font-14 font-weight-700">Upload Document</h2>
         <input type="file" class="form-control" id="uploadDocument4" placeholder="MC"
-          (change)=" driverEditFile($event, 'uploadDocument4')" name="uploadDocument4" required="">
+          (change)=" driverEditFile($event, 'uploadDocument4')" name="uploadDocument4" accept=".jpg, .jpeg, .png, .pdf" required="">
       </div>
 
       <div class="col-md-4">
@@ -260,7 +262,7 @@
       <div class="col-md-4">
         <h2 class="font-14 font-weight-700">Upload Document</h2>
         <input type="file" class="form-control" id="uploadDocument5" placeholder="MC"
-          (change)=" driverEditFile($event, 'uploadDocument5')" name="uploadDocument5" required="">
+          (change)=" driverEditFile($event, 'uploadDocument5')" name="uploadDocument5" accept=".jpg, .jpeg, .png, .pdf" required="">
       </div>
 
       <div class="col-md-4">
@@ -279,7 +281,7 @@
       <div class="col-md-4">
         <h2 class="font-14 font-weight-700">Upload Document</h2>
         <input type="file" class="form-control" id="uploadDocument6" placeholder="Upload Document MC"
-          (change)=" driverEditFile($event, 'uploadDocument6')" name="uploadDocument6" required="">
+          (change)=" driverEditFile($event, 'uploadDocument6')" name="uploadDocument6" accept=".jpg, .jpeg, .png, .pdf" required="">
       </div>
 
       <div class="col-md-4">
@@ -391,7 +393,7 @@
       <div class="col-md-4">
         <h2 class="font-14 font-weight-700">Upload Document</h2>
         <input type="file" class="form-control" id="uploadDocument7" placeholder="Enter Detail..."
-          (change)=" driverEditFile($event, 'uploadDocument7')" name="uploadDocument7" required="">
+          (change)=" driverEditFile($event, 'uploadDocument7')" name="uploadDocument7" accept=".jpg, .jpeg, .png, .pdf" required="">
       </div>
 
       <div class="col-md-4">
@@ -403,7 +405,7 @@
       <div class="col-md-4">
         <h2 class="font-14 font-weight-700">Upload Document</h2>
         <input type="file" class="form-control" id="uploadDocument8" placeholder="Enter Detail..."
-          (change)=" driverEditFile($event, 'uploadDocument8')" name="uploadDocument8" required="">
+          (change)=" driverEditFile($event, 'uploadDocument8')" name="uploadDocument8" accept=".jpg, .jpeg, .png, .pdf" required="">
       </div>
 
       <div class="col-md-4">
@@ -415,7 +417,7 @@
       <div class="col-md-4">
         <h2 class="font-14 font-weight-700">Upload Document</h2>
         <input type="file" class="form-control" id="uploadDocument9" placeholder="Enter Detail..."
-          (change)=" driverEditFile($event, 'uploadDocument9')" name="uploadDocument9" required="">
+          (change)=" driverEditFile($event, 'uploadDocument9')" name="uploadDocument9" accept=".jpg, .jpeg, .png, .pdf" required="">
       </div>
 
       <div class="col-md-4"> 
@@ -429,7 +431,7 @@
       <div class="col-md-4">
         <h2 class="font-14 font-weight-700">Upload Document</h2>
         <input type="file" class="form-control" id="uploadDocument10" placeholder="Enter Detail..."
-          (change)=" driverEditFile($event, 'uploadDocument10')" name="uploadDocument10" required="">
+          (change)=" driverEditFile($event, 'uploadDocument10')" name="uploadDocument10" accept=".jpg, .jpeg, .png, .pdf" required="">
       </div>
 
       <div class="col-md-4">
@@ -443,7 +445,7 @@
       <div class="col-md-4">
         <h2 class="font-14 font-weight-700">Upload Document</h2>
         <input type="file" class="form-control" id="uploadDocument11" placeholder="Enter Detail..."
-          (change)=" driverEditFile($event, 'uploadDocument11')" name="uploadDocument11" required="">
+          (change)=" driverEditFile($event, 'uploadDocument11')" name="uploadDocument11" accept=".jpg, .jpeg, .png, .pdf" required="">
       </div>
 
       <div class="col-md-4">
@@ -456,7 +458,7 @@
       <div class="col-md-4">
         <h2 class="font-14 font-weight-700">Upload Document</h2>
         <input type="file" class="form-control" id="uploadDocument12" placeholder="no"
-          (change)=" driverEditFile($event, 'uploadDocument12')" name="uploadDocument12" required="">
+          (change)=" driverEditFile($event, 'uploadDocument12')" name="uploadDocument12" accept=".jpg, .jpeg, .png, .pdf" required="">
       </div>
 
       <div class="col-md-4">
@@ -468,7 +470,7 @@
       <div class="col-md-4">
         <h2 class="font-14 font-weight-700">Insurance Document</h2>
         <input type="file" class="form-control" id="insuranceDocument" placeholder="Insurance Document MC"
-          (change)=" driverEditFile($event, 'insuranceDocument')" name="insuranceDocument" required="">
+          (change)=" driverEditFile($event, 'insuranceDocument')" name="insuranceDocument" accept=".jpg, .jpeg, .png, .pdf" required="">
       </div>
 
       <div class="col-md-4">
@@ -480,7 +482,7 @@
       <div class="col-md-4">
         <h2 class="font-14 font-weight-700">Upload Document</h2>
         <input type="file" class="form-control" id="uploadDocument13" placeholder="No"
-          (change)=" driverEditFile($event, 'uploadDocument13')" name="uploadDocument13" required="">
+          (change)=" driverEditFile($event, 'uploadDocument13')" name="uploadDocument13" accept=".jpg, .jpeg, .png, .pdf" required="">
       </div>
 
       <div class="col-md-4">
@@ -492,7 +494,7 @@
       <div class="col-md-4">
         <h2 class="font-14 font-weight-700">Upload Document</h2>
         <input type="file" class="form-control" id="uploadDocument14" placeholder="Upload Document"
-          (change)=" driverEditFile($event, 'uploadDocument14')" name="uploadDocument14" required="">
+          (change)=" driverEditFile($event, 'uploadDocument14')" name="uploadDocument14" accept=".jpg, .jpeg, .png, .pdf" required="">
       </div>
 
       <div class="col-md-4">
@@ -566,7 +568,7 @@
       <div class="col-md-4">
         <h2 class="font-14 font-weight-700">Upload Document</h2>
         <input type="file" class="form-control" id="uploadDocument1" placeholder="MC"
-          (change)="onFileChange($event, 'uploadDocument1')" name="uploadDocument1" required="">
+          (change)="onFileChange($event, 'uploadDocument1')" name="uploadDocument1" accept=".jpg, .jpeg, .png, .pdf" required="">
       </div>
   
       <div class="col-md-4">
@@ -592,7 +594,7 @@
       <div class="col-md-4">
         <h2 class="font-14 font-weight-700">Upload Document</h2>
         <input type="file" class="form-control" id="uploadDocument2" placeholder="MC"
-          (change)="onFileChange($event, 'uploadDocument2')" name="uploadDocument2" required="">
+          (change)="onFileChange($event, 'uploadDocument2')" name="uploadDocument2" accept=".jpg, .jpeg, .png, .pdf" required="">
       </div>
   
       <hr class="hr" />
@@ -620,7 +622,7 @@
       <div class="col-md-4">
         <h2 class="font-14 font-weight-700">Upload Document</h2>
         <input type="file" class="form-control" id="uploadDocument3" placeholder="MC"
-          (change)="onFileChange($event, 'uploadDocument3')" name="uploadDocument3" required="">
+          (change)="onFileChange($event, 'uploadDocument3')" name="uploadDocument3" accept=".jpg, .jpeg, .png, .pdf" required="">
       </div>
   
       <div class="col-md-4">
@@ -636,7 +638,7 @@
       <div class="col-md-4">
         <h2 class="font-14 font-weight-700">Upload Document</h2>
         <input type="file" class="form-control" id="uploadDocument4" placeholder="MC"
-          (change)="onFileChange($event, 'uploadDocument4')" name="uploadDocument4" required="">
+          (change)="onFileChange($event, 'uploadDocument4')" name="uploadDocument4" accept=".jpg, .jpeg, .png, .pdf" required="">
       </div>
   
       <div class="col-md-4">
@@ -652,7 +654,7 @@
       <div class="col-md-4">
         <h2 class="font-14 font-weight-700">Upload Document</h2>
         <input type="file" class="form-control" id="uploadDocument5" placeholder="MC"
-          (change)="onFileChange($event, 'uploadDocument5')" name="uploadDocument5" required="">
+          (change)="onFileChange($event, 'uploadDocument5')" name="uploadDocument5" accept=".jpg, .jpeg, .png, .pdf" required="">
       </div>
   
       <div class="col-md-4">
@@ -678,7 +680,7 @@
       <div class="col-md-4">
         <h2 class="font-14 font-weight-700">Upload Document</h2>
         <input type="file" class="form-control" id="uploadDocument6" placeholder="Upload Document MC"
-          (change)="onFileChange($event, 'uploadDocument6')" name="uploadDocument6" required="">
+          (change)="onFileChange($event, 'uploadDocument6')" name="uploadDocument6" accept=".jpg, .jpeg, .png, .pdf" required="">
       </div>
   
       <div class="col-md-4">
@@ -862,7 +864,7 @@
       <div class="col-md-4">
         <h2 class="font-14 font-weight-700">Upload Document</h2>
         <input type="file" class="form-control" id="uploadDocument7" placeholder="Enter Detail..."
-          (change)="onFileChange($event, 'uploadDocument7')" name="uploadDocument7" required="">
+          (change)="onFileChange($event, 'uploadDocument7')" name="uploadDocument7" accept=".jpg, .jpeg, .png, .pdf" required="">
       </div>
   
       <div class="col-md-4">
@@ -878,7 +880,7 @@
       <div class="col-md-4">
         <h2 class="font-14 font-weight-700">Upload Document</h2>
         <input type="file" class="form-control" id="validationDefault02" placeholder="Enter Detail..."
-          (change)="onFileChange($event, 'uploadDocument8')" name="validationDefault02" required="">
+          (change)="onFileChange($event, 'uploadDocument8')" name="validationDefault02" accept=".jpg, .jpeg, .png, .pdf" required="">
       </div>
   
       <div class="col-md-4">
@@ -894,7 +896,7 @@
       <div class="col-md-4">
         <h2 class="font-14 font-weight-700">Upload Document</h2>
         <input type="file" class="form-control" id="validationDefault02" placeholder="Enter Detail..."
-          (change)="onFileChange($event, 'uploadDocument9')" name="validationDefault02" required="">
+          (change)="onFileChange($event, 'uploadDocument9')" name="validationDefault02" accept=".jpg, .jpeg, .png, .pdf" required="">
       </div>
   
       <div class="col-md-4">
@@ -913,7 +915,7 @@
       <div class="col-md-4">
         <h2 class="font-14 font-weight-700">Upload Document</h2>
         <input type="file" class="form-control" id="validationDefault02" placeholder="Enter Detail..."
-          (change)="onFileChange($event, 'uploadDocument10')" name="validationDefault02" required="">
+          (change)="onFileChange($event, 'uploadDocument10')" name="validationDefault02" accept=".jpg, .jpeg, .png, .pdf" required="">
       </div>
   
       <div class="col-md-4">
@@ -931,7 +933,7 @@
       <div class="col-md-4">
         <h2 class="font-14 font-weight-700">Upload Document</h2>
         <input type="file" class="form-control" id="validationDefault02" placeholder="Enter Detail..."
-          (change)="onFileChange($event, 'uploadDocument11')" name="validationDefault02" required="">
+          (change)="onFileChange($event, 'uploadDocument11')" name="validationDefault02" accept=".jpg, .jpeg, .png, .pdf" required="">
       </div>
   
       <div class="col-md-4">
@@ -948,7 +950,7 @@
       <div class="col-md-4">
         <h2 class="font-14 font-weight-700">Upload Document</h2>
         <input type="file" class="form-control" id="validationDefault02" placeholder="no"
-          (change)="onFileChange($event, 'uploadDocument12')" name="validationDefault02" required="">
+          (change)="onFileChange($event, 'uploadDocument12')" name="validationDefault02" accept=".jpg, .jpeg, .png, .pdf" required="">
       </div>
   
       <div class="col-md-4">
@@ -964,7 +966,7 @@
       <div class="col-md-4">
         <h2 class="font-14 font-weight-700">Insurance Document</h2>
         <input type="file" class="form-control" id="validationDefault02" placeholder="Insurance Document MC"
-          (change)="onFileChange($event, 'insuranceDocument')" name="validationDefault02" required="">
+          (change)="onFileChange($event, 'insuranceDocument')" name="validationDefault02" accept=".jpg, .jpeg, .png, .pdf" required="">
       </div>
   
       <div class="col-md-4">
@@ -980,7 +982,7 @@
       <div class="col-md-4">
         <h2 class="font-14 font-weight-700">Upload Document</h2>
         <input type="file" class="form-control" id="validationDefault02" placeholder="No"
-          (change)="onFileChange($event, 'uploadDocument13')" name="validationDefault02" required="">
+          (change)="onFileChange($event, 'uploadDocument13')" name="validationDefault02" accept=".jpg, .jpeg, .png, .pdf" required="">
       </div>
   
       <div class="col-md-4">
@@ -996,7 +998,7 @@
       <div class="col-md-4">
         <h2 class="font-14 font-weight-700">Upload Document</h2>
         <input type="file" class="form-control" id="validationDefault02" placeholder="Upload Document"
-          (change)="onFileChange($event, 'uploadDocument14')" name="validationDefault02" required="">
+          (change)="onFileChange($event, 'uploadDocument14')" name="validationDefault02" accept=".jpg, .jpeg, .png, .pdf" required="">
       </div>
   
          <div class="col-md-4">

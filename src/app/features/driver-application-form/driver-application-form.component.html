@@ -1,0 +1,1722 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+
+
+
+
+<div class="container">
+  
+        <div class="modal-header" style="padding: 15px; border-bottom: 1px solid #ccc">
+            <div>
+                <h5 class="modal-title">Commercial Driver Application</h5>
+                <p>Provide all information requested</p>
+            </div>
+            <!-- <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button> -->
+        </div>
+
+    <form class="row g-3 mt-3">
+        <!-- Date -->
+        <div class="col-md-2">
+            <h2 class="font-14 font-weight-700">Dates</h2>
+            <input type="date" class="form-control" id="validationDefault02" placeholder="Dates"
+                [(ngModel)]="newDriver.IControlledSubstanceAndAlcohol.Date" name="validationDefault02" required="">
+        </div>
+
+
+        <div class="col-md-2">
+            <h2 class="font-14 font-weight-700">First Name</h2>
+            <input type="text" class="form-control" id="validationDefault02" placeholder="First Name"
+                [(ngModel)]="newDriver.IControlledSubstanceAndAlcohol.FirstName" name="validationDefault02" required="">
+        </div>
+
+        <div class="col-md-2">
+            <h2 class="font-14 font-weight-700">Middle Name</h2>
+            <input type="text" class="form-control" id="validationDefault02" placeholder="Middle Name"
+                [(ngModel)]="newDriver.IControlledSubstanceAndAlcohol.MiddleName" name="validationDefault02"
+                required="">
+        </div>
+
+        <div class="col-md-2">
+            <h2 class="font-14 font-weight-700">Last Name</h2>
+            <input type="text" class="form-control" id="validationDefault02" placeholder="Last Name"
+                [(ngModel)]="newDriver.IControlledSubstanceAndAlcohol.LastName" name="validationDefault02" required="">
+        </div>
+
+        <div class="col-md-2">
+            <h2 class="font-14 font-weight-700">Date of Birth</h2>
+            <input type="date" class="form-control" id="validationDefault02" placeholder="Dates of Birth"
+                [(ngModel)]="newDriver.IControlledSubstanceAndAlcohol.DateOfBirth" name="validationDefault02"
+                required="">
+
+        </div>
+
+        <div class="col-md-2">
+            <h2 class="font-14 font-weight-700">City</h2>
+            <input type="text" class="form-control" id="validationDefault02" placeholder="City"
+                [(ngModel)]="newDriver.IControlledSubstanceAndAlcohol.City" name="validationDefault02" required="">
+        </div>
+        <div class="col-md-2">
+            <h2 class="font-14 font-weight-700">State</h2>
+            <input type="text" class="form-control" id="validationDefault02" placeholder="State"
+                [(ngModel)]="newDriver.IControlledSubstanceAndAlcohol.State" name="validationDefault02" required="">
+        </div>
+        <div class="col-md-2">
+            <h2 class="font-14 font-weight-700">Zip</h2>
+            <input type="text" class="form-control" id="validationDefault02" placeholder="Zip"
+                [(ngModel)]="newDriver.IControlledSubstanceAndAlcohol.Zip" name="validationDefault02" required="">
+        </div>
+        <div class="col-md-2">
+            <h2 class="font-14 font-weight-700">Cellular Telephone</h2>
+            <input type="text" class="form-control" id="validationDefault02" placeholder="Cellular Telephone"
+                [(ngModel)]="newDriver.IControlledSubstanceAndAlcohol.CellularTelephone" name="validationDefault02"
+                required="">
+        </div>
+        <div class="col-md-2">
+            <h2 class="font-14 font-weight-700">Social Security Number</h2>
+            <input type="text" class="form-control" id="validationDefault02" placeholder="Social Security Number"
+                [(ngModel)]="newDriver.IControlledSubstanceAndAlcohol.SocialSecurityNumber" name="validationDefault02"
+                required="">
+        </div>
+        <div class="col-md-4">
+            <h2 class="font-14 font-weight-700">Address</h2>
+            <input type="text" class="form-control" id="validationDefault02" placeholder="Address"
+                [(ngModel)]="newDriver.IControlledSubstanceAndAlcohol.Address" name="validationDefault02" required="">
+        </div>
+
+        <div class="col-md-12">
+            <div>
+                <!-- Button with a checkbox to trigger content visibility -->
+                <button type="button" class="collapsible" (click)="toggleContent()" style="background: none !important">
+                    <input type="checkbox" id="addressDetails" name="question1" class="trigger form-check-input" />
+                    <label class="font-13 font-weight-400 mb-10" for="addressDetails">
+                        If your above address is less than 3 years continue listing them
+                        below to cover the previous 3 year period
+                    </label>
+                </button>
+
+                <!-- Collapsible Content -->
+                <div *ngIf="isContentVisible" class="content">
+                    <!-- First Address Section -->
+                    <div class="row mt-2">
+                        <div class="col-md-2">
+                            <h2 class="font-14 font-weight-700">From</h2>
+                            <input type="date" class="form-control" placeholder="Date"
+                                [(ngModel)]="newDriver.IAddress.FromDate" name="" required="">
+
+                        </div>
+                        <div class="col-md-2">
+                            <h2 class="font-14 font-weight-700">To</h2>
+                            <input type="date" class="form-control" placeholder="Date"
+                                [(ngModel)]="newDriver.IAddress.ToDate" name="" required="">
+
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-md-2">
+                            <h2 class="font-14 font-weight-700">City</h2>
+                            <input type="text" class="form-control" placeholder="City"
+                                [(ngModel)]="newDriver.IAddress.City" name="" required="">
+                        </div>
+                        <div class="col-md-2">
+                            <h2 class="font-14 font-weight-700">State</h2>
+                            <input type="text" class="form-control" placeholder="State"
+                                [(ngModel)]="newDriver.IAddress.State" name="" required="">
+                        </div>
+                        <div class="col-md-2">
+                            <h2 class="font-14 font-weight-700">Zip</h2>
+                            <input type="text" class="form-control" placeholder="Zip"
+                                [(ngModel)]="newDriver.IAddress.Zip" name="" required="">
+                        </div>
+                        <div class="col-md-4">
+                            <h2 class="font-14 font-weight-700">Street</h2>
+                            <input type="text" class="form-control" placeholder="Street"
+                                [(ngModel)]="newDriver.IAddress.Street" name="" required="">
+                        </div>
+                    </div>
+
+                    <hr class="hr" />
+
+                    <div class="row mt-2">
+                        <div class="col-md-2">
+                            <h2 class="font-14 font-weight-700">From</h2>
+                            <input type="date" class="form-control" placeholder="Date"
+                                [(ngModel)]="newDriver.IAddress.FromDate" name="" required="">
+
+                        </div>
+                        <div class="col-md-2">
+                            <h2 class="font-14 font-weight-700">To</h2>
+                            <input type="date" class="form-control" placeholder="Date"
+                                [(ngModel)]="newDriver.IAddress.ToDate" name="" required="">
+
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-md-2">
+                            <h2 class="font-14 font-weight-700">City</h2>
+                            <input type="text" class="form-control" placeholder="City"
+                                [(ngModel)]="newDriver.IAddress.City" name="" required="">
+                        </div>
+                        <div class="col-md-2">
+                            <h2 class="font-14 font-weight-700">State</h2>
+                            <input type="text" class="form-control" placeholder="State"
+                                [(ngModel)]="newDriver.IAddress.State" name="" required="">
+                        </div>
+                        <div class="col-md-2">
+                            <h2 class="font-14 font-weight-700">Zip</h2>
+                            <input type="text" class="form-control" placeholder="Zip"
+                                [(ngModel)]="newDriver.IAddress.Zip" name="" required="">
+                        </div>
+                        <div class="col-md-4">
+                            <h2 class="font-14 font-weight-700">Street</h2>
+                            <input type="text" class="form-control" placeholder="Street"
+                                [(ngModel)]="newDriver.IAddress.Street" name="" required="">
+                        </div>
+                    </div>
+                    <hr />
+
+                    <div class="row mt-2">
+                        <div class="col-md-2">
+                            <h2 class="font-14 font-weight-700">From</h2>
+                            <input type="date" class="form-control" placeholder="Date"
+                                [(ngModel)]="newDriver.IAddress.FromDate" name="" required="">
+
+                        </div>
+                        <div class="col-md-2">
+                            <h2 class="font-14 font-weight-700">To</h2>
+                            <input type="date" class="form-control" placeholder="Date"
+                                [(ngModel)]="newDriver.IAddress.ToDate" name="" required="">
+
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-md-2">
+                            <h2 class="font-14 font-weight-700">City</h2>
+                            <input type="text" class="form-control" placeholder="City"
+                                [(ngModel)]="newDriver.IAddress.City" name="" required="">
+                        </div>
+                        <div class="col-md-2">
+                            <h2 class="font-14 font-weight-700">State</h2>
+                            <input type="text" class="form-control" placeholder="State"
+                                [(ngModel)]="newDriver.IAddress.State" name="" required="">
+                        </div>
+                        <div class="col-md-2">
+                            <h2 class="font-14 font-weight-700">Zip</h2>
+                            <input type="text" class="form-control" placeholder="Zip"
+                                [(ngModel)]="newDriver.IAddress.Zip" name="" required="">
+                        </div>
+                        <div class="col-md-4">
+                            <h2 class="font-14 font-weight-700">Street</h2>
+                            <input type="text" class="form-control" placeholder="Street"
+                                [(ngModel)]="newDriver.IAddress.Street" name="" required="">
+                        </div>
+                    </div>
+
+                    <p></p>
+                </div>
+            </div>
+        </div>
+
+        <hr />
+
+        <div class="form-group text-primary">
+            <h4 class="text-capitalize font-15 font-weight-500 text-main">
+                <i class="fa fa-folder me-2" aria-hidden="true"></i>
+                <b>Driver’s License Information: all licenses held, last 3 years</b>
+            </h4>
+        </div>
+
+        <div class="table-responsive mb-20">
+            <table class="table table-bordered position-relative">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>State</th>
+                        <th>Number</th>
+                        <th class="whitespace-nowrap">Expiration Date</th>
+                        <th class="w-100px">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>
+                            <input type="text" class="form-control" name="sate" placeholder="State"
+                                [(ngModel)]="newDriver.ILicense.State" name="" required="">
+                        </td>
+
+                        <td>
+                            <input type="text" class="form-control" name="sate" placeholder="Number"
+                                [(ngModel)]="newDriver.ILicense.Number" name="" required="">
+                        </td>
+                        <td>
+                            <div class="has-search">
+                                <div class="input-group">
+                                    <span class="far fa-calendar-alt form-control-feedback"></span>
+                                    <input type="date" class="form-control border-radius-6" placeholder="Date"
+                                        [(ngModel)]="newDriver.ILicense.ExpirationDate" name="" required="">
+
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <a href="javascript:;" class="btn-action btn-action-red text-capitalize font-16 text-red"><i
+                                    class="fa fa-trash-o" aria-hidden="true" style="color: #f00"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>
+                            <input type="text" class="form-control" name="sate" placeholder="State"
+                                [(ngModel)]="newDriver.ILicense.State" name="" required="">
+                        </td>
+
+                        <td>
+                            <input type="text" class="form-control" name="sate" placeholder="Number"
+                                [(ngModel)]="newDriver.ILicense.Number" name="" required="">
+                        </td>
+                        <td>
+                            <div class="has-search">
+                                <div class="input-group">
+                                    <span class="far fa-calendar-alt form-control-feedback"></span>
+                                    <input type="date" class="form-control border-radius-6" placeholder="Date"
+                                        [(ngModel)]="newDriver.ILicense.ExpirationDate" name="" required="">
+
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <a href="javascript:;" class="btn-action btn-action-red text-capitalize font-16 text-red"><i
+                                    class="fa fa-trash-o" aria-hidden="true" style="color: #f00"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>
+                            <input type="text" class="form-control" name="sate" placeholder="State"
+                                [(ngModel)]="newDriver.ILicense.State" name="" required="">
+                        </td>
+
+                        <td>
+                            <input type="text" class="form-control" name="sate" placeholder="Number"
+                                [(ngModel)]="newDriver.ILicense.Number" name="" required="">
+                        </td>
+                        <td>
+                            <div class="has-search">
+                                <div class="input-group">
+                                    <span class="far fa-calendar-alt form-control-feedback"></span>
+                                    <input type="date" class="form-control border-radius-6" placeholder="Date"
+                                        [(ngModel)]="newDriver.ILicense.ExpirationDate" name="" required="">
+
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <a href="javascript:;" class="btn-action btn-action-red text-capitalize font-16 text-red"><i
+                                    class="fa fa-trash-o" aria-hidden="true" style="color: #f00"></i>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </form>
+
+    <div class="form-group d-flex align-items-center justify-content-between text-primary">
+        <h4 class="text-capitalize font-15 font-weight-500 text-main">
+            <i class="fa fa-folder me-2"></i> <b>Experience</b>
+        </h4>
+        <!-- <a class="text-main font-14 font-weight-500" type="button" id="addExp"><i class="fa fa-plus me-2"></i><b>Add</b></a>   -->
+        <a onclick="addRow1()" class="text-main font-14 font-weight-500"><i class="fa fa-plus me-2"></i> <b>Add</b></a>
+    </div>
+
+    <div class="table-responsive mb-20">
+        <table class="table table-bordered position-relative" id="productTable">
+            <thead>
+                <tr>
+                    <!-- <th>#</th> -->
+                    <th class="whitespace-nowrap">Type of vehicle driven</th>
+                    <th>From</th>
+                    <th>To</th>
+                    <th class="whitespace-nowrap">Approximate mileage driven</th>
+                    <th class="w-100px">Action</th>
+                </tr>
+            </thead>
+            <tbody class="exp-tbody">
+                <tr>
+                    <td>
+                        <input class="form-control" name="vehicledriven" placeholder="Type of vehicle driven"
+                            [(ngModel)]="newDriver.IExperience.TypeOfVehicleDriven" name="validationDefault02"
+                            required="">
+                    </td>
+                    <td>
+                        <div class="has-search">
+                            <div class="input-group">
+                                <span class="far fa-calendar-alt form-control-feedback"></span><input type="date"
+                                    class="form-control border-radius-6" placeholder="Date"
+                                    [(ngModel)]="newDriver.IExperience.From" name="validationDefault02" required="">
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="has-search">
+                            <div class="input-group">
+                                <span class="far fa-calendar-alt form-control-feedback"></span><input type="date"
+                                    class="form-control border-radius-6" placeholder="Date"
+                                    [(ngModel)]="newDriver.IExperience.To" name="validationDefault02" required="">
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <input class="form-control" name="vehicledriven" placeholder="Approximate mileage driven"
+                            [(ngModel)]="newDriver.IExperience.ApproximateMileageDriven" name="validationDefault02"
+                            required="">
+                    </td>
+                    <td>
+                        <a href="javascript:;" class="btn-action btn-action-red text-capitalize font-16 text-red"><i
+                                class="fa fa-trash-o" aria-hidden="true" style="color: #f00"></i>
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="div">
+            <table id="myTablen" border ="1"></table>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div>
+            <!-- Button with a checkbox to trigger content visibility -->
+            <button type="button" class="collapsible" (click)="toggleContent()" style="background: none !important">
+                <input type="checkbox" id="addressDetails" name="question1" [checked]="isContentVisible"
+                    class="trigger form-check-input" />
+                <label class="font-13 font-weight-400 mb-10" for="addressDetails">
+                    All Accidents, last 3 years: (If yes please check)
+                </label>
+            </button>
+
+            <!-- Collapsible Content -->
+            <div *ngIf="isContentVisible" class="content">
+                <div class="table-responsive mb-20">
+                    <table class="table table-bordered position-relative" id="productTable">
+                        <thead>
+                            <tr>
+                                <th class="whitespace-nowrap">Date</th>
+                                <th>Describe</th>
+                                <th>Fatalities</th>
+                                <th class="whitespace-nowrap">Injuries</th>
+                                <th class="w-100px">Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody class="exp-tbody">
+                            <tr>
+                                <td>
+                                    <div class="has-search">
+                                        <div class="input-group">
+                                            <span class="far fa-calendar-alt form-control-feedback"></span><input
+                                                type="date" class="form-control border-radius-6" placeholder="Date"
+                                                [(ngModel)]="newDriver.IAccident.Date" name="validationDefault02"
+                                                required="">
+                                        </div>
+                                    </div>
+                                </td>
+
+
+
+
+                                <td>
+                                    <div class="has-search">
+                                        <div class="input-group">
+                                            <textarea class="form-control" placeholder="Describe" rows="1"
+                                                [(ngModel)]="newDriver.IAccident.Describe" name="validationDefault02"
+                                                required=""></textarea>
+                                        </div>
+                                    </div>
+                                               
+                                </td>
+
+
+                                <td>
+                                    <input class="form-control" name="vehicledriven" placeholder="Fatalities"
+                                        [(ngModel)]="newDriver.IAccident.Fatalities" name="validationDefault02"
+                                        required="">
+
+                                </td>
+                                <td>
+                                    <input class="form-control" name="vehicledriven" placeholder="Injuries"
+                                        [(ngModel)]="newDriver.IAccident.Injuries" name="validationDefault02"
+                                        required="">
+
+                                </td>
+                                <td>
+                                    <a href="javascript:;"
+                                        class="btn-action btn-action-red text-capitalize font-16 text-red"><i
+                                            class="fa fa-trash-o" aria-hidden="true" style="color: #f00"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <p></p>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <div class="col-md-12">
+        <div>
+            <!-- Button with a checkbox to trigger content visibility -->
+            <button type="button" class="collapsible" (click)="toggleTrafficViolations()"
+                style="background: none !important">
+                <input type="checkbox" id="trafficViolations" name="trafficViolations"
+                    [checked]="isTrafficViolationsVisible" class="trigger form-check-input" />
+                <label class="font-13 font-weight-400 mb-10" for="trafficViolations">
+                    List all Traffic Violations Convictions, last 3 years: (If yes
+                    please check)
+                </label>
+            </button>
+
+            <!-- Collapsible Content -->
+            <div *ngIf="isTrafficViolationsVisible" class="content">
+                <div class="table-responsive mb-20">
+                    <table class="table table-bordered position-relative" id="productTable">
+                        <thead>
+                            <tr>
+                                <th class="whitespace-nowrap">Date</th>
+                                <th>Description</th>
+                                <th>Violation Type</th>
+                                <th class="whitespace-nowrap">Fine Amount</th>
+                                <th class="w-100px">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="exp-tbody">
+                            <tr>
+                                <td>
+                                    <div class="has-search">
+                                        <div class="input-group">
+                                            <span class="far fa-calendar-alt form-control-feedback"></span><input
+                                                type="date" class="form-control border-radius-6" placeholder="Date"
+                                                [(ngModel)]="newDriver.ITrafficViolation.Date"
+                                                name="validationDefault02" required="">
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <input class="form-control" name="Description" placeholder="Description"
+                                        [(ngModel)]="newDriver.ITrafficViolation.Violation" name="validationDefault02"
+                                        required="">
+                                </td>
+                                <td>
+                                    <input class="form-control" name="Violation Type" placeholder="Violation Type"
+                                        [(ngModel)]="newDriver.ITrafficViolation.ViolationType"
+                                        name="validationDefault02" required="">
+                                </td>
+                                <td>
+                                    <input type="checkbox" class="form-check-input margin-left-20" name="Fine Amount"
+                                        [(ngModel)]="newDriver.ITrafficViolation.FineAmount" name="validationDefault02"
+                                        required="">
+
+                                </td>
+                                <td>
+                                    <a href="javascript:;"
+                                        class="btn-action btn-action-red text-capitalize font-16 text-red"><i
+                                            class="fa fa-trash-o" aria-hidden="true" style="color: #f00"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <p></p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="">
+            <h4 class="text-capitalize font-15 font-weight-500 text-main text-primary">
+                <i class="fa fa-folder me-2"></i>
+                <b>Have you ever had any driver license denied, suspended, revoked or
+                    canceled by any issuing state agency?</b>
+            </h4>
+            <button type="button" class="collapsible" style="background: none !important">
+                <input type="checkbox" id="addressDetailsYes" name="question1" (change)="onOptionChange('yes')"
+                    class="trigger form-check-input" />
+                <label class="font-13 font-weight-400 mb-10" for="addressDetailsYes">Yes</label>
+
+                <span style="margin: 0 25px">
+                    <!-- Add margin here for space -->
+                    <input type="checkbox" id="addressDetailsNo" name="question2" (change)="onOptionChange('no')"
+                        class="trigger form-check-input" />
+                    <label class="font-13 font-weight-400 mb-10" for="addressDetailsNo">No</label>
+                </span>
+            </button>
+
+            <div *ngIf="isExplanationVisible" class="content">
+                <div class="form-group">
+                    <label class="font-12 font-weight-400 text-uppercase mb-10">State of issuance explanation</label>
+                    <textarea class="form-control" placeholder="Explanation" rows="3"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="col-xl-12">
+        <div class="form-group">
+            <h4 class="text-capitalize font-15 font-weight-500 text-main text-primary">
+                <i class="fa fa-folder me-2"></i>
+                <b>Employment History, last 10 years (383.35)—account for gaps between
+                    employers: (If owner/operator, list carriers leased to)</b>
+            </h4>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-md-2">
+                <h2 class="font-14 font-weight-700">From</h2>
+                <input type="date" class="form-control" id="validationDefault02" placeholder="Date"
+                    [(ngModel)]="newDriver.IEmploymentHistory.From" name="validationDefault02" required="">
+            </div>
+            <div class="col-md-2">
+                <h2 class="font-14 font-weight-700">To</h2>
+                <input type="date" class="form-control" id="validationDefault02" placeholder="Date"
+                    [(ngModel)]="newDriver.IEmploymentHistory.To" name="validationDefault02" required="">
+            </div>
+            <div class="col-md-2">
+                <h2 class="font-14 font-weight-700">Employer</h2>
+                <input type="text" class="form-control" id="validationDefault02" placeholder="Employer"
+                    [(ngModel)]="newDriver.IEmploymentHistory.Employer" name="validationDefault02" required="">
+            </div>
+            <div class="col-md-2">
+                <h2 class="font-14 font-weight-700">Supervisor</h2>
+                <input type="text" class="form-control" id="validationDefault02" placeholder="Supervisor"
+                    [(ngModel)]="newDriver.IEmploymentHistory.Supervisor" name="validationDefault02" required="">
+            </div>
+            <div class="col-md-2">
+                <h2 class="font-14 font-weight-700">Telephone</h2>
+                <input type="text" class="form-control" id="validationDefault02" placeholder="Telephone"
+                    [(ngModel)]="newDriver.IEmploymentHistory.Telephone" name="validationDefault02" required="">
+            </div>
+            <div class="col-md-2">
+                <h2 class="font-14 font-weight-700">State</h2>
+                <input type="text" class="form-control" id="validationDefault02" placeholder="State"
+                    [(ngModel)]="newDriver.IEmploymentHistory.State" name="validationDefault02" required="">
+            </div>
+            <div class="col-md-2 mt-3">
+                <h2 class="font-14 font-weight-700">City</h2>
+                <input type="text" class="form-control" id="validationDefault02" placeholder="City"
+                    [(ngModel)]="newDriver.IEmploymentHistory.City" name="validationDefault02" required="">
+            </div>
+            <div class="col-md-2 mt-3">
+                <h2 class="font-14 font-weight-700">Zip Code</h2>
+                <input type="text" class="form-control" id="validationDefault02" placeholder="Zip Code"
+                    [(ngModel)]="newDriver.IEmploymentHistory.ZipCode" name="validationDefault02" required="">
+            </div>
+            <div class="col-md-6 mt-3">
+                <h2 class="font-14 font-weight-700">Street</h2>
+                <input type="text" class="form-control" id="validationDefault02" placeholder="Street"
+                    [(ngModel)]="newDriver.IEmploymentHistory.Street" name="validationDefault02" required="">
+            </div>
+
+
+
+
+            <div class="col-md-6 mt-3">
+                <h2 class="font-14 font-weight-700">
+                    Were you subject to the Federal Motor Carrier Safety Regulations
+                    during this period?
+                </h2>
+                <textarea class="form-control" placeholder="Write Here..." rows="3"
+                    [(ngModel)]="newDriver.IEmploymentHistory.SubjectToFMCSR" name="subjectToFMCSR" required></textarea>
+            </div>
+
+            <div class="col-md-6 mt-3">
+                <h2 class="font-14 font-weight-700">
+                    Were you subject to 49 CFR part 40 controlled substance and alcohol
+                    testing during this period?
+                </h2>
+                <textarea class="form-control" placeholder="Write Here..." rows="3"
+                    [(ngModel)]="newDriver.IEmploymentHistory.SubjectToCFRPart40" name="subjectToCFRPart40"
+                    required></textarea>
+            </div>
+
+            <div class="col-md-12 mt-3">
+                <h2 class="font-14 font-weight-700">Reason for Leaving</h2>
+                <textarea class="form-control" placeholder="Write Here..." rows="3"
+                    [(ngModel)]="newDriver.IEmploymentHistory.ReasonForLeaving" name="reasonForLeaving"
+                    required></textarea>
+            </div>
+            <div class="form-group d-flex align-items-center justify-content-between text-primary mt-2">
+                <h4 class="text-capitalize font-15 font-weight-500 text-main">
+                    <b>&nbsp;</b>
+                </h4>
+                <a class="text-main font-14 font-weight-500" type="button" id="addExp"><i
+                        class="fa fa-plus me-2"></i><b>Add</b></a>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- <div class="col-md-2 mt-3">
+        <h2 class="font-14 font-weight-700">City</h2>
+        <input type="text" class="form-control" id="validationDefault02" placeholder="City"
+            [(ngModel)]="newDriver.IEmploymentHistory.City" name="validationDefault02" required="">
+    </div> -->
+
+
+    <!-- 2. next paje create -->
+    <form class="row g-3">
+        <div class="col-md-12">
+            <div class="">
+                <!-- Upper Collapsible Button -->
+                <button type="button" (click)="toggleContent()" class="collapsible" style="background: none !important">
+                    <input type="checkbox" id="certification" class="trigger form-check-input"
+                        [checked]="isContentVisible" />
+                    <label class="font-13 font-weight-400 mb-10 text-primary" for="certification">
+                        <b>I certify that this application was completed by me, and that
+                            all entries on it and information in it are true and complete to
+                            the best of my knowledge.</b>
+                    </label>
+                </button>
+
+                <!-- Upper Collapsible Content -->
+                <div *ngIf="isContentVisible" class="content" style="margin-top: 10px">
+                    <!-- Your form content starts here -->
+                    <div class="row mt-2">
+                        <div class="col-md-2">
+                            <h2 class="font-14 font-weight-700">Applicant’s Signature</h2>
+                            <input type="text" class="form-control" id="validationDefault02" placeholder="Applicant’s Signature" 
+                            [(ngModel)]="newDriver.IEmploymentHistory.ApplicantsSignature" name="validationDefault02" required="">
+                               
+                        </div>
+                        <div class="col-md-2">
+                            <h2 class="font-14 font-weight-700">To</h2>
+                            <input type="date" class="form-control" id="validationDefault02" placeholder="Date" 
+                            [(ngModel)]="newDriver.IEmploymentHistory.To" name="validationDefault02" required="">
+                        </div>
+                    </div>
+                    <div class="col-xl-12 col-lg-12 mt-3">
+                        <div class="form-group">
+                            <label class="text-capitalize font-14 font-weight-400" for="certification">TO BE COMPLETED
+                                BY THE
+                                EMPLOYER</label>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <h2 class="font-14 font-weight-700">Application received by</h2>
+                            <input type="text" class="form-control" id="validationDefault02" placeholder="Application received by" 
+                            [(ngModel)]="newDriver.IEmploymentHistory.ApplicationReceivedBy" name="validationDefault02" required="">
+                        </div>
+                        <div class="col-md-6">
+                            <h2 class="font-14 font-weight-700"> Application reviewed for completeness by </h2>
+                            <input type="text" class="form-control" id="validationDefault02" placeholder="Completeness By" 
+                            [(ngModel)]="newDriver.IEmploymentHistory.ApplicationReviewedBy" name="validationDefault02" required="">
+                        </div>  
+                            
+                        <div class="col-md-3 mt-3">
+                            <h2 class="font-14 font-weight-700">Name</h2>
+                            <input type="text" class="form-control" id="validationDefault02" placeholder="Name" 
+                            [(ngModel)]="newDriver.IEmploymentHistory.Name" name="validationDefault02" required="">
+                        </div>
+                        <div class="col-md-3 mt-3">
+                            <h2 class="font-14 font-weight-700">Date</h2>
+                            <input type="date" class="form-control" id="validationDefault02" placeholder="Date" 
+                            [(ngModel)]="newDriver.IEmploymentHistory.Date" name="validationDefault02" required="">
+                        </div>
+                        <div class="col-md-3 mt-3">
+                            <h2 class="font-14 font-weight-700">Name</h2>
+                            <input type="text" class="form-control" id="validationDefault02" placeholder="Name" 
+                            [(ngModel)]="newDriver.IEmploymentHistory.Name" name="validationDefault02" required="">
+                        </div>
+                        <div class="col-md-3 mt-3">
+                            <h2 class="font-14 font-weight-700">Date</h2>
+                            <input type="date" class="form-control" id="validationDefault02" placeholder="Date" 
+                            [(ngModel)]="newDriver.IEmploymentHistory.Date" name="validationDefault02" required="">
+                        </div>
+                    </div>
+
+                    <p class="mt-3">SIGNIFICANT DATES</p>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <h2 class="font-14 font-weight-700">Date of Hire</h2>
+                            <input type="date" class="form-control" id="validationDefault02" placeholder="Date" 
+                            [(ngModel)]="newDriver.IEmploymentHistory.DateOfHire" name="validationDefault02" required="">
+                        </div>
+                        <div class="col-md-4">
+                            <h2 class="font-14 font-weight-700">Time & Date of Pre-Employment CST</h2>
+                            <input type="date" class="form-control" id="validationDefault02" placeholder="Date" 
+                            [(ngModel)]="newDriver.IEmploymentHistory.TimeAndDate" name="validationDefault02" required="">
+                        </div>   
+                            
+                            
+                        <div class="col-md-4">
+                            <h2 class="font-14 font-weight-700"> Time & Date of Pre-Employment CST Results Received </h2>
+                            <input type="date" class="form-control" id="validationDefault02"placeholder="Date" 
+                            [(ngModel)]="newDriver.IEmploymentHistory.ResultsReceived" name="validationDefault02" required="">
+                        </div>    
+                    
+                            
+                            
+                        <div class="col-md-4 mt-3">
+                            <h2 class="font-14 font-weight-700">Date First Used in Safety Sensitive Position </h2>
+                            <input type="date" class="form-control" id="validationDefault02" placeholder="Date" 
+                            [(ngModel)]="newDriver.IEmploymentHistory.FirstUsedInSafetySensitivePosition" name="validationDefault02" required="">
+                        </div>   
+                       
+                            
+                            
+                        <div class="col-md-4 mt-3">
+                            <h2 class="font-14 font-weight-700">Date of Termination</h2>
+                            <input type="date" class="form-control" id="validationDefault02" placeholder="Date" 
+                            [(ngModel)]="newDriver.IEmploymentHistory.TerminationDate" name="validationDefault02" required="">
+                        </div>
+                    </div>
+                </div>
+
+                <hr />
+            </div>
+        </div>
+
+        <div class="col-md-12" style="margin-top: 0px !important">
+            <div class="">
+                <!-- Lower Collapsible Button -->
+                <button type="button" (click)="toggleSecondContent()" class="collapsible"
+                    style="background: none !important">
+                    <input type="checkbox" id="substanceQuestionnaire" class="trigger form-check-input"
+                        [checked]="isSecondContentVisible" />
+                    <label class="font-13 font-weight-400 mb-10 text-primary" for="substanceQuestionnaire">
+                        <b>Commercial vehicle driver applicant controlled substance and
+                            alcohol questionnaire pursuant to 49 CFR part 40.25(j)</b>
+                    </label>
+                </button>
+
+                <!-- Lower Collapsible Content -->
+                <div *ngIf="isSecondContentVisible" class="content" style="display: block">
+                    <div class="row mt-2">
+                        <div class="col-md-2">
+                            <h2 class="font-14 font-weight-700">Date</h2>
+                            <input type="date" class="form-control" id="validationDefault02" placeholder="Date"
+                            [(ngModel)]="newDriver.IControlledSubstanceAndAlcohol.Date" name="validationDefault02" required=""> 
+                        </div>
+                        <div class="col-md-2">
+                            <h2 class="font-14 font-weight-700">First Name</h2>
+                            <input type="text" class="form-control" id="validationDefault02" placeholder="First Name"
+                            [(ngModel)]="newDriver.IControlledSubstanceAndAlcohol.FirstName" name="validationDefault02" required=""> 
+                        </div>
+                        <div class="col-md-2">
+                            <h2 class="font-14 font-weight-700">Middle Name</h2>
+                            <input type="text" class="form-control" id="validationDefault02" placeholder="Middle Name"
+                            [(ngModel)]="newDriver.IControlledSubstanceAndAlcohol.MiddleName" name="validationDefault02" required="">
+                        </div>
+                        <div class="col-md-2">
+                            <h2 class="font-14 font-weight-700">Last Name</h2>
+                            <input type="text" class="form-control" id="validationDefault02" placeholder="Last Name"
+                            [(ngModel)]="newDriver.IControlledSubstanceAndAlcohol.MiddleName" name="validationDefault02" required="">
+                        </div>
+                        <div class="col-md-2">
+                            <h2 class="font-14 font-weight-700">Date Of Birth</h2>
+                            <input type="date" class="form-control" id="validationDefault02" placeholder="DOB"
+                            [(ngModel)]="newDriver.IControlledSubstanceAndAlcohol.DateOfBirth" name="validationDefault02" required="">
+                        </div>
+                        <div class="col-md-2">
+                            <h2 class="font-14 font-weight-700">City</h2>
+                            <input type="text" class="form-control" id="validationDefault02" placeholder="City"
+                            [(ngModel)]="newDriver.IControlledSubstanceAndAlcohol.City" name="validationDefault02" required="">
+                                
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-2">
+                            <h2 class="font-14 font-weight-700">State</h2>
+                            <input type="text" class="form-control" id="validationDefault02" placeholder="State"
+                            [(ngModel)]="newDriver.IControlledSubstanceAndAlcohol.State" name="validationDefault02" required="">
+                        </div>
+                        <div class="col-md-2">
+                            <h2 class="font-14 font-weight-700">Zip</h2>
+                            <input type="text" class="form-control" id="validationDefault02" placeholder="Zip"
+                            [(ngModel)]="newDriver.IControlledSubstanceAndAlcohol.Zip" name="validationDefault02" required="">
+                        </div>
+                        <div class="col-md-2">
+                            <h2 class="font-14 font-weight-700">Cellular Telephone</h2>
+                            <input type="text" class="form-control" id="validationDefault02" placeholder="Cellular Telephone"
+                            [(ngModel)]="newDriver.IControlledSubstanceAndAlcohol.CellularTelephone" name="validationDefault02" required="">
+                        </div>
+                        <div class="col-md-2">
+                            <h2 class="font-14 font-weight-700">Social Security Number</h2>
+                            <input type="text" class="form-control" id="validationDefault02"  placeholder="Social Security Number"
+                            [(ngModel)]="newDriver.IControlledSubstanceAndAlcohol.SocialSecurityNumber" name="validationDefault02" required="">
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <h2 class="font-14 font-weight-700">Address</h2>
+                            <textarea class="form-control" placeholder="Address" rows="1"
+                            [(ngModel)]="newDriver.IControlledSubstanceAndAlcohol.Address" name="validationDefault02" required="">
+                        </textarea>
+                        </div>
+                    </div>
+                    <hr />
+                </div>
+
+                <br />
+
+                <label class="font-13 font-weight-400 mb-10 text-primary" for="addressDetails">
+                    <i class="fa fa-folder me-2"></i>
+                    <b>49 CFR 40.25(j)</b>
+                </label>
+            </div>
+        </div>
+
+
+
+        <!-- New Section -->
+        <div class="row">
+            <!-- First Checkbox -->
+            <div class="col-xl-12 mt-3">
+                <div class="form-group form-check form-check-inline">
+                    <input type="checkbox" id="checkbox1" name="question1" class="form-check-input" />
+                    <label class="form-check-label" for="checkbox1">
+                        Have you ever tested positive, or refused to test, on any
+                        pre-employment drug or alcohol test administered by an employer to
+                        which you applied for, but did not obtain, safety-sensitive
+                        transportation work covered by DOT agency drug and alcohol testing
+                        rules during the past two years?
+                        <span class="text-main font-13">(If yes please check)</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Second Checkbox -->
+            <div class="col-xl-12 mt-3">
+                <div class="form-group form-check form-check-inline">
+                    <input type="checkbox" id="checkbox2" name="question2" class="form-check-input" />
+                    <label class="form-check-label" for="checkbox2">
+                        Have you successfully completed the return-to-duty process?
+                        <span class="text-main font-13">(If yes please check)</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Third Checkbox -->
+            <div class="col-xl-12 mt-3">
+                <div class="form-group form-check form-check-inline">
+                    <input type="checkbox" id="checkbox3" name="question3" class="form-check-input"
+                        style="width: 20px; height: 20px" />
+                    <label class="form-check-label" for="checkbox3">
+                        Documentation must be provided before any safety-sensitive
+                        transportation function is performed.
+                        <span class="text-main font-13">(If yes please check)</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Applicant Signature and Date -->
+            <div class="col-md-2 mt-3">
+                <h2 class="font-14 font-weight-700">Applicant’s Signature</h2>
+                <input type="text" class="form-control" id="validationDefault02" placeholder="Applicant’s Signature"
+                [(ngModel)]="newDriver.IControlledSubstanceAndAlcohol.ApplicantsSignatures" name="validationDefault02" required="">
+            </div>
+            <div class="col-md-2 mt-3">
+                <h2 class="font-14 font-weight-700">Date Signed</h2>
+                <input type="date" class="form-control" id="validationDefault02" placeholder="Date" 
+                [(ngModel)]="newDriver.IControlledSubstanceAndAlcohol.DatesSigned" name="validationDefault02" required="">
+            </div>
+
+            <!-- Employer Section -->
+            <div class="col-xl-12 mt-3">
+                <label class="font-13 font-weight-400 mb-10 text-primary mt-3" for="employerDetails">
+                    <i class="fa fa-folder me-2"></i>
+                    <b>To be completed by employer</b>
+                </label>
+            </div>
+
+            <!-- Employer Information -->
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <h2 class="font-14 font-weight-700">Received By</h2>
+                    <input type="text" class="form-control" id="validationDefault02" placeholder="Received By" 
+                    [(ngModel)]="newDriver.IControlledSubstanceAndAlcohol.ReceivedBy" name="validationDefault02" required="">
+                </div>
+                <div class="col-md-6">
+                    <h2 class="font-14 font-weight-700">Reviewed By</h2>
+                    <input type="text" class="form-control" id="validationDefault02" placeholder="Reviewed By" 
+                    [(ngModel)]="newDriver.IControlledSubstanceAndAlcohol.ReviewedBy" name="validationDefault02" required="">
+                </div>
+
+                <div class="col-md-6 mt-3">
+                    <h2 class="font-14 font-weight-700">Title</h2>
+                    <input type="text" class="form-control" id="validationDefault02" placeholder="Title" 
+                    [(ngModel)]="newDriver.IControlledSubstanceAndAlcohol.Title" name="validationDefault02" required="">
+                </div>
+                <div class="col-md-6 mt-3">
+                    <h2 class="font-14 font-weight-700">Dates</h2>
+                    <input type="date" class="form-control" id="validationDefault02" placeholder="Dates" 
+                    [(ngModel)]="newDriver.IControlledSubstanceAndAlcohol.Dates" name="validationDefault02" required="">
+                </div>
+                <div class="col-md-6 mt-3">
+                    <h2 class="font-14 font-weight-700">Title</h2>
+                    <input type="text" class="form-control" id="validationDefault02" placeholder="Title" 
+                    [(ngModel)]="newDriver.IControlledSubstanceAndAlcohol.Title" name="validationDefault02" required="">
+                </div>
+                <div class="col-md-6 mt-3">
+                    <h2 class="font-14 font-weight-700">Dates</h2>
+                    <input type="date" class="form-control" id="validationDefault02" placeholder="Date" 
+                    [(ngModel)]="newDriver.IControlledSubstanceAndAlcohol.Dates" name="validationDefault02" required="">
+                </div>
+
+                <form [formGroup]="driverApplicationForm" (ngSubmit)="submitForm()">
+                    <div class="col-md-12 mt-3">
+                        <h4 class="text-capitalize font-15 font-weight-500 text-main text-primary">
+                            <b>The Federal Motor Carrier Safety Regulations require all
+                                previous employers of this applicant to respond to this
+                                request for information within 30 days. Failure to comply with
+                                this request is in violation of 49CFR 391.23 and 40.25, for
+                                which you may be prosecuted. Questions concerning the
+                                requirements of this regulation should be directed to the
+                                Minnesota Division Office of the Federal Motor Carrier Safety
+                                Administration at 651-291-6150, during business hours.</b>
+                        </h4>
+                    </div>
+                    <div class="col-md-9 mt-3">
+                        <h2 class="font-14 font-weight-700">To</h2>
+                        <textarea class="form-control" formControlName="To" placeholder="Write Here..." rows="3"
+                        [(ngModel)]="newDriver.IControlledSubstanceAndAlcohol.To" name="validationDefault02" required="">
+                    </textarea>
+                    </div>
+
+                    <div class="col-md-3 mt-3">
+                        <h2 class="font-14 font-weight-700">Date</h2>
+                        <input type="date" class="form-control" formControlName="date" placeholder="Date"
+                        [(ngModel)]="newDriver.IControlledSubstanceAndAlcohol.Date1" name="validationDefault02" required="">
+                    </div>
+
+                    <div class="col-md-2 mt-3">
+                        <h2 class="font-14 font-weight-700">Telephone</h2>
+                        <input type="text" class="form-control" formControlName="Telephone" placeholder="Telephone"
+                        [(ngModel)]="newDriver.IControlledSubstanceAndAlcohol.Telephone" name="validationDefault02" required="">
+                    </div>
+
+                    <div class="col-md-2 mt-3">
+                        <h2 class="font-14 font-weight-700">Fax</h2>
+                        <input type="text" class="form-control" formControlName="fax" placeholder="Fax" 
+                        [(ngModel)]="newDriver.IControlledSubstanceAndAlcohol.Fax" name="validationDefault02" required="">
+                    </div>
+
+                    <div class="col-md-12 mt-3">
+                        <div class="form-group">
+                            <p>
+                                I
+                                <input type="text" class="d-inline-block font-13" name="name" placeholder="Name"
+                                    style="padding: 0 0.75rem"
+                                    [(ngModel)]="newDriver.IControlledSubstanceAndAlcohol.Name" name="validationDefault02" required="">
+                                to release to all records of employment, including assessments
+                                of my job performance, ability, and fitness, including the
+                                dates of any and all alcohol or drug tests, with confirmed
+                                results, and/or my refusal to submit to any alcohol and drug
+                                tests and any rehabilitation completion under the direction of
+                                Substance Abuse Professional (SAP) and/or Medical Review
+                                Officer (MRO) to each and every company (or their authorized
+                                agents) making such request in connection with my application
+                                for employment with said company. I, hereby, release the
+                                above-named company, and its employees, officers, directors,
+                                and agents from any and all liability of any type as a result
+                                of providing the following information to the below mentioned
+                                person and/or company.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 mt-3">
+                        <h2 class="font-14 font-weight-700">Applicant’s Signature</h2>
+                        <input type="text" class="form-control" formControlName="applicantSignature" placeholder="Applicant’s Signature"
+                        [(ngModel)]="newDriver.IControlledSubstanceAndAlcohol.ApplicantsSignature" name="validationDefault02" required="">
+                    </div>
+
+                    <div class="col-md-3 mt-3">
+                        <h2 class="font-14 font-weight-700">Date</h2>
+                        <input type="date" class="form-control" formControlName="date" placeholder="Date"
+                        [(ngModel)]="newDriver.IControlledSubstanceAndAlcohol.Date2" name="validationDefault02" required="">
+                    </div>
+
+                    <div class="col-md-3 mt-3">
+                        <h2 class="font-14 font-weight-700">Witness’s Signature</h2>
+                        <input type="text" class="form-control" formControlName="witnessSignature" placeholder="Witness’s Signature" 
+                          [(ngModel)]="newDriver.IControlledSubstanceAndAlcohol.WitnessSignature" name="validationDefault02" required="">
+                    </div>
+
+                    <div class="col-md-3 mt-3">
+                        <h2 class="font-14 font-weight-700">Date</h2>
+                        <input type="date" class="form-control" formControlName="witnessDate" placeholder="Date"
+                        [(ngModel)]="newDriver.IControlledSubstanceAndAlcohol.Date3" name="validationDefault02" required="">
+                    </div>
+                </form>
+
+
+
+                <!-- Offcanvas Page Content (Slides in from the right) -->
+                <div>
+                    <button type="button" class="collapsible"
+                        style="background: none !important; border: none !important">
+                        <label class="font-13 font-weight-400 mb-10 text-primary" for="addressDetails"><i
+                                class="fa fa-folder me-2"></i><b>
+                                Inquiry for alcohol and controlled substance information,
+                                preceding 2 years</b></label>
+                    </button>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="font-12 font-weight-400 text-uppercase mb-10 d-block"><b>1.</b> Alcohol tests
+                                with a
+                                result of 0.04 or
+                                greater?</label>
+
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="alcoholtests" id="yescheck"
+                                    value="yes" />
+                                <label class="font-12 font-weight-400 text-uppercase mb-10" for="yescheck">Yes</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="alcoholtests" id="nocheck"
+                                    value="no" />
+                                <label class="font-12 font-weight-400 text-uppercase mb-10" for="nocheck">No</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group has-search">
+                            <label class="font-12 font-weight-400 text-uppercase mb-10">If yes, please give
+                                date(s):</label>
+                            <div class="input-group">
+                                <span class="far fa-calendar-alt form-control-feedback"></span>
+                                <input type="date" class="form-control border-radius-6" placeholder="Date" 
+                                [(ngModel)]="newDriver.IControlledSubstanceAndAlcohol.AlcoholTestDates" name="validationDefault02" required="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="font-12 font-weight-400 text-uppercase mb-10 d-block"><b>2.</b> Verified
+                                positive
+                                controlled substances test
+                                results?</label>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="alcoholtests1" id="yescheck1"
+                                    value="yes" />
+                                <label class="font-12 font-weight-400 text-uppercase mb-10" for="yescheck1">Yes</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="alcoholtests1" id="nocheck1"
+                                    value="no" />
+                                <label class="font-12 font-weight-400 text-uppercase mb-10" for="nocheck1">No</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group has-search">
+                            <label class="font-12 font-weight-400 text-uppercase mb-10">If yes, please give
+                                date(s):</label>
+                            <div class="input-group">
+                                <span class="far fa-calendar-alt form-control-feedback"></span>
+                                <input type="date" class="form-control border-radius-6" placeholder="Date" 
+                                [(ngModel)]="newDriver.IControlledSubstanceAndAlcohol.PositiveControlledSubstancesDates" name="validationDefault02" required="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="font-12 font-weight-400 text-uppercase mb-10 d-block"><b>3.</b> Refusals to be
+                                tested?</label>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="alcoholtests2" id="yescheck2"
+                                    value="yes" />
+                                <label class="font-12 font-weight-400 text-uppercase mb-10" for="yescheck2">Yes</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="alcoholtests2" id="nocheck2"
+                                    value="no" />
+                                <label class="font-12 font-weight-400 text-uppercase mb-10" for="nocheck2">No</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group has-search">
+                            <label class="font-12 font-weight-400 text-uppercase mb-10">If yes, please give
+                                date(s):</label>
+                            <div class="input-group">
+                                <span class="far fa-calendar-alt form-control-feedback"></span>
+                                <input type="date" class="form-control border-radius-6" placeholder="Date" 
+                                [(ngModel)]="newDriver.IControlledSubstanceAndAlcohol.RefusalDates" name="validationDefault02" required=""> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="font-12 font-weight-400 text-uppercase mb-10 d-block"><b>4.</b> Refusals to be
+                                tested?1</label>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="alcoholtests3" id="yescheck3"
+                                    value="yes" />
+                                <label class="font-12 font-weight-400 text-uppercase mb-10" for="yescheck3">Yes</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="alcoholtests3" id="nocheck3"
+                                    value="no" />
+                                <label class="font-12 font-weight-400 text-uppercase mb-10" for="nocheck3">No</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group has-search">
+                            <label class="font-12 font-weight-400 text-uppercase mb-10">If yes, please give
+                                date(s):</label>
+                            <div class="input-group">
+                                <span class="far fa-calendar-alt form-control-feedback"></span>
+                                <input type="date" class="form-control border-radius-6" placeholder="Date" 
+                                [(ngModel)]="newDriver.IControlledSubstanceAndAlcohol.RefusalDates" name="validationDefault02" required=""> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <label class="font-13 font-weight-400 mb-10 text-primary mt-3" for="addressDetails"><i
+                            class="fa fa-folder me-2"></i><b> Person providing the above information</b></label>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-2">
+                        <h2 class="font-14 font-weight-700">Name</h2>
+                        <input type="text" class="form-control" id="validationDefault02" placeholder="Name"
+                        [(ngModel)]="newDriver.IControlledSubstanceAndAlcohol.PersonProvidingInfoName" name="validationDefault02" required=""> 
+                    </div>
+                    <div class="col-md-2">
+                        <h2 class="font-14 font-weight-700">Title</h2>
+                        <input type="text" class="form-control" id="validationDefault02" placeholder="Title"
+                        [(ngModel)]="newDriver.IControlledSubstanceAndAlcohol.PersonProvidingInfoTitle" name="validationDefault02" required=""> 
+                    </div>
+                    <div class="col-md-2">
+                        <h2 class="font-14 font-weight-700">Company</h2>
+                        <input type="text" class="form-control" id="validationDefault02" placeholder="Company"
+                        [(ngModel)]="newDriver.IControlledSubstanceAndAlcohol.PersonProvidingInfoCompany" name="validationDefault02" required="">
+                    </div>
+                    <div class="col-md-2">
+                        <h2 class="font-14 font-weight-700">Date</h2>
+                        <input type="date" class="form-control" id="validationDefault02" placeholder="Date"
+                        [(ngModel)]="newDriver.IControlledSubstanceAndAlcohol.PersonProvidingInfoDate" name="validationDefault02" required="">
+                    </div>
+                    <div class="col-md-2">
+                        <h2 class="font-14 font-weight-700">Dear</h2>
+                        <input type="text" class="form-control" id="validationDefault02" placeholder="Dear"
+                        [(ngModel)]="newDriver.IControlledSubstanceAndAlcohol.Dear" name="validationDefault02" required="">
+                    </div>
+                    <div class="col-md-2">
+                        <h2 class="font-14 font-weight-700">Driver's Name</h2>
+                        <input type="text" class="form-control" id="validationDefault02" placeholder="Driver's Name"
+                        [(ngModel)]="newDriver.IControlledSubstanceAndAlcohol.DriversName" name="validationDefault02" required="">
+                    </div>
+                    <div class="col-md-2">
+                        <h2 class="font-14 font-weight-700">
+                            Driver's Operators Lic. No
+                        </h2>
+                        <input type="text" class="form-control" id="validationDefault02"
+                            placeholder="Driver's Operators Lic. No" 
+                            [(ngModel)]="newDriver.IControlledSubstanceAndAlcohol.DriversOperatorsLicNo" name="validationDefault02" required="">
+                    </div>
+                    <div class="col-md-2">
+                        <h2 class="font-14 font-weight-700">
+                            Driver's Social Sec. No.
+                        </h2>
+                        <input type="text" class="form-control" id="validationDefault02"
+                            placeholder="Driver's Social Sec. No." 
+                            [(ngModel)]="newDriver.IControlledSubstanceAndAlcohol.DriversSocialSecNo" name="validationDefault02" required="">
+                    </div>
+
+
+
+
+
+                    <p>
+                        The above listed individual has made application with us for
+                        employment as a driver. Applicant has indicated that the above
+                        numbered operator's license or permit has been issued by your
+                        State to applicant and that it is in good standing. In
+                        accordance with Section 391.23(a)(1) and (b) of the Federal
+                        Motor Carrier Safety Regulations, we are required to make
+                        inquiry into the driving record during the preceding 3 years
+                        of every State in which an applicant-driver has held a motor
+                        vehicle operator's license or permit during those 3 years.
+                        Therefore, please certify to us what the individual's driving
+                        record is for the preceding 3 years, or certify that no record
+                        exists if that be the case. In the event that this inquiry
+                        does not satisfy your requirements for making such inquiries,
+                        please send us such forms of yours as are necessary for us to
+                        complete our inquiry into the driving record of this
+                        individual.
+                    </p>
+
+                    <div class="col-md-2">
+                        <h2 class="font-14 font-weight-700">Respectfully yours</h2>
+                        <input type="text" class="form-control" id="validationDefault02"
+                            placeholder="Respectfully yours" required="" />
+                    </div>
+
+                    <div class="col-md-2">
+                        <h2 class="font-14 font-weight-700">
+                            (Printed) name of person making inquiry
+                        </h2>
+                        <input type="text" class="form-control" id="validationDefault02"
+                            placeholder="(Printed) name of person making inquiry" 
+                            [(ngModel)]="newDriver.IControlledSubstanceAndAlcohol.InquiryPersonName" name="validationDefault02" required="">
+                    </div>
+
+                    <div class="col-md-2">
+                        <h2 class="font-14 font-weight-700">
+                            Title of person making inquiry
+                        </h2>
+                        <input type="text" class="form-control" id="validationDefault02"
+                            placeholder="Title of person making inquiry" 
+                            [(ngModel)]="newDriver.IControlledSubstanceAndAlcohol.InquiryPersonTitle" name="validationDefault02" required="">
+                    </div>
+                    <div class="col-md-2">
+                        <h2 class="font-14 font-weight-700">Motor Carrier Name</h2>
+                        <input type="text" class="form-control" id="validationDefault02"
+                            placeholder="Motor Carrier Name" 
+                            [(ngModel)]="newDriver.IControlledSubstanceAndAlcohol.MotorCarrierName" name="validationDefault02" required="">
+                    </div>
+
+                    <div class="col-md-2">
+                        <h2 class="font-14 font-weight-700">Street</h2>
+                        <input type="text" class="form-control" id="validationDefault02" placeholder="Street"
+                        [(ngModel)]="newDriver.IControlledSubstanceAndAlcohol.MotorCarrierStreet" name="validationDefault02" required="">
+                    </div>
+                    <div class="col-md-2">
+                        <h2 class="font-14 font-weight-700">City</h2>
+                        <input type="text" class="form-control" id="validationDefault02" placeholder="City"
+                        [(ngModel)]="newDriver.IControlledSubstanceAndAlcohol.MotorCarrierCity" name="validationDefault02" required="">
+                    </div>
+                    <div class="col-md-2">
+                        <h2 class="font-14 font-weight-700">State</h2>
+                        <input type="text" class="form-control" id="validationDefault02" placeholder="State"
+                        [(ngModel)]="newDriver.IControlledSubstanceAndAlcohol.MotorCarrierState" name="validationDefault02" required="">
+                    </div>
+
+                    <div class="col-md-2">
+                        <h2 class="font-14 font-weight-700">Zip</h2>
+                        <input type="text" class="form-control" id="validationDefault02" placeholder="Zip"
+                        [(ngModel)]="newDriver.IControlledSubstanceAndAlcohol.MotorCarrierZip" name="validationDefault02" required="">
+                    </div>
+                </div>
+
+                <div class="container">
+                    <label class="font-13 font-weight-400 mb-10 text-primary mt-3" for="addressDetails">
+                        <i class="fa fa-folder me-2"></i><b> Driver's road test examination</b>
+                    </label>
+
+
+
+                    <div class="row mt-3">
+
+
+                        <div class="col-md-2">
+                            <h2 class="font-14 font-weight-700">Driver’s Name</h2>
+                            <input type="text" class="form-control" placeholder="Driver’s Name" 
+                            [(ngModel)]="newDriver.IDriver.DriversName" name="validationDefault02" required="">
+                        </div>
+
+                        <div class="col-md-2">
+                            <h2 class="font-14 font-weight-700">State</h2>
+                            <input type="text" class="form-control" placeholder="State" 
+                            [(ngModel)]="newDriver.IDriver.State" name="validationDefault02" required="">
+                        </div>
+
+                        <div class="col-md-2">
+                            <h2 class="font-14 font-weight-700">Zip</h2>
+                            <input type="text" class="form-control" placeholder="Zip" 
+                            [(ngModel)]="newDriver.IDriver.Zip" name="validationDefault02" required="">
+                        </div>
+                        <div class="col-md-2">
+                            <h2 class="font-14 font-weight-700">Driver’s Address</h2>
+                            <textarea class="form-control" rows="1" placeholder="Driver’s Address"
+                            [(ngModel)]="newDriver.IDriver.DriversAddress" name="validationDefault02" required=""></textarea>
+                        </div>
+                    </div>
+
+
+
+
+                    <p class="font-14 font-weight-400 mt-3">
+                        The road test shall be given by the motor carrier or a
+                        person designated by it. However, a driver who is a motor
+                        carrier must be given the test by another person. The test
+                        shall be given by a person who is competent to evaluate and
+                        determine whether the person who takes the test has
+                        demonstrated that he or she is capable of operating the
+                        vehicle and associated equipment that the motor carrier
+                        intends to assign.
+                    </p>
+                    <p class="font-14 font-weight-500">
+                        <b>Rating of Performance</b>
+                    </p>
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <p class="font-14 font-weight-400">
+                            <input type="text" class="form-control" name="name" placeholder="Enter Here" 
+                            [(ngModel)]="newDriver.IDriver.PreTripInspection" name="validationDefault02" required="">
+                            The pre-trip inspection (as required by 49 CFR 392.7).
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="font-14 font-weight-400">
+                            <input type="text" class="form-control" name="name" placeholder="Enter Here" 
+                            [(ngModel)]="newDriver.IDriver.PlacingEquipmentInOperation" name="validationDefault02" required="">
+                            Placing the equipment in operation.
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="font-14 font-weight-400">
+                            <input type="text" class="d-inline-block font-13" name="name" placeholder="Enter Here" 
+                            [(ngModel)]="newDriver.IDriver.UseOfVehicleControls" name="validationDefault02" required="">
+                            Use of vehicle’s controls and emergency equipment.
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="font-14 font-weight-400">
+                            <input type="text" class="d-inline-block font-13" name="name" placeholder="Enter Here" 
+                            [(ngModel)]="newDriver.IDriver.OperatingVehicleInTraffic" name="validationDefault02" required="">
+                            Operating the vehicle in traffic and while passing other
+                            vehicles.
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="font-14 font-weight-400">
+                            <input type="text" class="d-inline-block font-13" name="name" placeholder="Enter Here" 
+                            [(ngModel)]="newDriver.IDriver.TurningVehicle" name="validationDefault02" required="">
+                            Turning the vehicle.
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="font-14 font-weight-400">
+                            <input type="text" class="d-inline-block font-13" name="name" placeholder="Enter Here" 
+                            [(ngModel)]="newDriver.IDriver.BrakingSlowingVehicle" name="validationDefault02" required="">
+                            Braking and slowing the vehicle by means other than
+                            braking.
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="font-14 font-weight-400">
+                            <input type="text" class="d-inline-block font-13" name="name" placeholder="Enter Here" 
+                            [(ngModel)]="newDriver.IDriver.BackingParkingVehicle" name="validationDefault02" required="">
+                            Backing and parking the vehicle.
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="font-14 font-weight-400">
+                            <input type="text" class="d-inline-block font-13" name="name" placeholder="Enter Here" 
+                            [(ngModel)]="newDriver.IDriver.Other" name="validationDefault02" required="">
+                            Other
+                        </p>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="font-12 font-weight-400 text-uppercase mb-10">Explain</label>
+                                <textarea class="form-control" rows="3" placeholder="Write Here..."
+                                [(ngModel)]="newDriver.IDriver.Explain" name="validationDefault02" required=""></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="font-12 font-weight-400 text-uppercase mb-10">Type of equipment used in
+                                    giving the
+                                    test</label>
+                                <textarea class="form-control" rows="3" placeholder="Write Here..."
+                                [(ngModel)]="newDriver.IDriver.TypeOfEquipmentUsed" name="validationDefault02" required="">
+                            </textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="container">
+                        <label class="font-13 font-weight-400 mb-10 text-primary mt-3" for="addressDetails">
+                            <i class="fa fa-folder me-2"></i><b> Certificate of driver's road test</b>
+                        </label>
+
+                        <p class="font-14 font-weight-400 mt-3">
+                            Instructions: If the road test is successfully completed,
+                            the person who gave it shall complete a certifi-cate of
+                            the driver’s road test. The original or copy of the
+                            certificate shall be retained in the employing motor
+                            carrier’s driver qualification file of the person examined
+                            and a copy given to the person who was examined. (49 CFR
+                            391.31(e)(f)(g))
+                        </p>
+
+                        <div class="row mt-3">
+                            <div class="col-md-2">
+                                <h2 class="font-14 font-weight-700">Driver’s Name</h2>
+                                <input type="text" class="form-control" id="validationDefault02" value="Driver’s Name"
+                                [(ngModel)]="newDriver.IDriver.DriversName" name="validationDefault02" required="">
+                            </div>
+                            <div class="col-md-2">
+                                <h2 class="font-14 font-weight-700">
+                                    Social Security Number
+                                </h2>
+                                <input type="text" class="form-control" id="validationDefault02"
+                                    value="Social Security Number" 
+                                    [(ngModel)]="newDriver.IDriver.SocialSecurityNumber" name="validationDefault02" required="">
+                            </div>
+                            <div class="col-md-2">
+                                <h2 class="font-14 font-weight-700">
+                                    Operator’s or Chauffeur’s License Num
+                                </h2>
+                                <input type="text" class="form-control" id="validationDefault02" value="License Number"
+                                [(ngModel)]="newDriver.IDriver.OperatorsLicenseNumber" name="validationDefault02" required="">
+                            </div>
+                            <div class="col-md-2">
+                                <h2 class="font-14 font-weight-700">State</h2>
+                                <input type="text" class="form-control" id="validationDefault02" value="State"
+                                [(ngModel)]="newDriver.IDriver.State" name="validationDefault02" required="">
+                            </div>
+                            <div class="col-md-2">
+                                <h2 class="font-14 font-weight-700">
+                                    Type of Power Unit
+                                </h2>
+                                <input type="text" class="form-control" id="validationDefault02"
+                                    value="Type of Power Unit" 
+                                    [(ngModel)]="newDriver.IDriver.TypeOfPowerUnit" name="validationDefault02" required="">
+                            </div>
+                            <div class="col-md-2">
+                                <h2 class="font-14 font-weight-700">
+                                    Type of Trailer(s)
+                                </h2>
+                                <input type="text" class="form-control" id="validationDefault02"
+                                    value="Type of Trailer(s)" 
+                                    [(ngModel)]="newDriver.IDriver.TypeOfTrailer" name="validationDefault02" required="">
+                            </div>
+                            <div class="col-md-2">
+                                <h2 class="font-14 font-weight-700">
+                                    If passenger carrier, type of bus
+                                </h2>
+                                <input type="text" class="form-control" id="validationDefault02" value="Type of Bus "
+                                [(ngModel)]="newDriver.IDriver.TypeOfBus" name="validationDefault02" required="">
+                            </div>
+
+                            <div class="container">
+                                <label class="font-13 font-weight-400 mb-10 text-primary mt-3" for="addressDetails">
+                                    <i class="fa fa-folder me-2"></i><b>
+                                        Annual motor vehicle driver's certification of of
+                                        violations</b>
+                                </label>
+
+                                <div class="row mt-3">
+                                    <p class="font-14 font-weight-400 mb-0">
+                                        In accordance with 49 CFR 391.27, I
+                                        <input type="text" class="d-inline-block font-13" placeholder="Enter Here"
+                                            style="padding: 0 0.75rem" />
+                                        certify that the following is a true and complete
+                                        list of traffic violations (other than parking
+                                        violations) for which I have been convicted or
+                                        forfeited bond or collateral during the past 12
+                                        months.
+                                    </p>
+                                </div>
+
+                                <div class="row mt-3">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered position-relative">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-uppercase whitespace-nowrap">
+                                                        Date
+                                                    </th>
+                                                    <th class="text-uppercase whitespace-nowrap">
+                                                        Offense
+                                                    </th>
+                                                    <th class="text-uppercase whitespace-nowrap">
+                                                        Location (City/State)
+                                                    </th>
+                                                    <th class="text-uppercase whitespace-nowrap">
+                                                        Type of Vehicle Operated
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="text-capitalize"></td>
+                                                    <td class="text-capitalize"></td>
+                                                    <td class="text-capitalize"></td>
+                                                    <td class="text-capitalize"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-capitalize"></td>
+                                                    <td class="text-capitalize"></td>
+                                                    <td class="text-capitalize"></td>
+                                                    <td class="text-capitalize"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-capitalize"></td>
+                                                    <td class="text-capitalize"></td>
+                                                    <td class="text-capitalize"></td>
+                                                    <td class="text-capitalize"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-capitalize"></td>
+                                                    <td class="text-capitalize"></td>
+                                                    <td class="text-capitalize"></td>
+                                                    <td class="text-capitalize"></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <div class="col-xl-12 mt-3">
+                                        <p class="font-14 font-weight-400">
+                                            If no violations are listed above, I certify that
+                                            I have not been convicted or forfeited bond or
+                                            collateral on account of any violation required to
+                                            be listed during the past 12 months.
+                                        </p>
+                                    </div>
+
+                                    <div class="row mt-3">
+                                        <div class="col-xl-2 col-lg-4" *ngFor="let dateField of dateFields">
+                                            <div class="form-group">
+                                                <label class="font-12 font-weight-400 text-uppercase mb-10">{{
+                                                    dateField.label }}</label>
+                                                <input type="date" class="form-control border-radius-6"
+                                                    placeholder="mm/dd/yyyy" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <label class="font-13 font-weight-400 mb-10 text-primary mt-3" for="addressDetails">
+                                        <i class="fa fa-folder me-2"></i>
+                                        <b>Annual Review of Driving Record</b>
+                                    </label>
+                                    <p class="font-14 font-weight-400 mt-3">
+                                        In accordance with 49 CFR 391.25, I certify that I
+                                        have carefully reviewed the driving record of
+                                        <input type="text" class="d-inline-block font-13" name="driverName"
+                                            placeholder="Enter Here" [(ngModel)]="driverName"
+                                            style="padding: 0 0.75rem" />
+                                        to determine whether or not he/she meets the minimum
+                                        requirements for safe driving specified in 49 CFR
+                                        391.11 or is disqualified to drive a motor vehicle
+                                        pursuant to 49 CFR 391.15. In reviewing this
+                                        driver’s record, I certify that I have considered
+                                        any evidence that the driver has violated any
+                                        applicable Federal Motor Carrier Safety Regulations
+                                        or Hazardous Materials Regulations; and considered
+                                        the driver’s accident record and any evidence that
+                                        the driver has violated laws governing the
+                                        operations of motor vehicles, and I have given great
+                                        weight to violations, such as speeding, reckless
+                                        driving, and operating while under the influence of
+                                        alcohol or drugs, that indicate that the driver has
+                                        exhibited a disregard for the safety of the public.
+                                        A copy of the response from each State agency to the
+                                        inquiry required by 49 CFR 391.25(b) is attached.
+                                        This form shall be maintained in the driver’s
+                                        qualification file, as required by 49 CFR 391.51.
+                                    </p>
+                                </div>
+
+                                <div class="row mt-3">
+                                    <div class="col-md-3 mt-3">
+                                        <h2 class="font-14 font-weight-700">
+                                            Applicant’s Signature
+                                        </h2>
+                                        <input type="text" class="form-control" id="applicantSignature"
+                                            [(ngModel)]="applicantSignature" placeholder="Applicant’s Signature"
+                                            [(ngModel)]="newDriver.IDriver.ApplicantsSignature" name="validationDefault02" required="">
+                                                    
+                                    </div>
+                                    <div class="col-md-3 mt-3">
+                                        <h2 class="font-14 font-weight-700">Review Date</h2>
+                                        <input type="date" class="form-control" id="reviewDate" [(ngModel)]="reviewDate"
+                                            placeholder="Date" 
+                                            [(ngModel)]="newDriver.IDriver.ReviewDate" name="validationDefault02" required="">
+                                    </div>
+                                    <div class="col-md-3 mt-3">
+                                        <h2 class="font-14 font-weight-700">
+                                            (Reviewed By: Signature)
+                                        </h2>
+                                        <input type="text" class="form-control" id="reviewedBySignature"
+                                            [(ngModel)]="reviewedBySignature" placeholder="Signature" 
+                                            [(ngModel)]="newDriver.IDriver.ReviewedBySignature" name="validationDefault02" required="">
+                                    </div>
+                                    <div class="col-md-3 mt-3">
+                                        <h2 class="font-14 font-weight-700">
+                                            Motor Carrier’s Address
+                                        </h2>
+                                        <textarea class="form-control" rows="1" [(ngModel)]="motorCarrierAddress"
+                                            placeholder="Address"
+                                            [(ngModel)]="newDriver.IDriver.MotorCarrierAddress" name="validationDefault02" required=""></textarea>
+                                    </div>
+                                </div>
+
+
+
+
+                                <!-- Form Content for Page 2 -->
+                                <form [formGroup]="driverApplicationForm" (ngSubmit)="submitForm()">
+                                    <!-- Modal Footer -->
+                                    <div id="offcanvasRight" class="offcanvas offcanvas-end" tabindex="-1" aria-labelledby="offcanvasRightLabel">
+                                        <div class="offcanvas-header">
+                                          <h5 id="offcanvasRightLabel">Offcanvas title</h5>
+                                          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                                        </div>
+                                        <div class="offcanvas-body">
+                                          Content for the Offcanvas goes here.
+                                        </div>
+                                      </div>
+                                      
+                                      <div class="modal-footer justify-content-center"
+                                           style="border-top: 1px solid #ccc; padding-top: 15px; margin-top: 15px;">
+                                        <!-- <button type="button" class="btn btn-outline-secondary btn-sm text-uppercase rounded-pill"
+                                                data-bs-dismiss="offcanvas" style="margin: 10px;">Close</button> -->
+                                        <button type="submit" class="btn btn-success rounded-pill font-14">
+                                                <!-- data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"> -->
+                                          Submit
+                                          <i class="fa fa-location-arrow" aria-hidden="true"></i>
+                                        </button>
+                                      </div>
+                                      
+                                  </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
