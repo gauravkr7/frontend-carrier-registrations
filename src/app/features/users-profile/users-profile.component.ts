@@ -19,11 +19,15 @@ export class UsersProfileComponent {
   nonCompliantDrivers: number = 0;
   compliantDrivers: number = 0;
   expiringDrivers: number = 0;
+  isSidebarOpen: boolean = false;
 
   constructor(private authService: ServiceAuthService, private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.fetchCounts();
+  }
+  toggleSidebar() {
+    this.isSidebarOpen = !this.isSidebarOpen;
   }
 
   fetchCounts(): void {

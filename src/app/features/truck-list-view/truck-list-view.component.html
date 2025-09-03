@@ -1,4 +1,3 @@
-  
 
 <main id="main" class="main mt-0 p-0">
   <div id="kt_app_content" class="app-content  flex-column-fluid">
@@ -44,7 +43,7 @@
                             <div class="card-body text-center">
                               <img src="https://cdn.pixabay.com/photo/2014/03/25/16/58/truck-297749_1280.png" alt="avatar" class="rounded-circle img-fluid" style="width: 120px;">
                               <h5 class="my-3">{{ truckData?.unitNumber }}(Truck)</h5>
-                              <div class="d-flex justify-content-center mb-2">
+                              <!-- <div class="d-flex justify-content-center mb-2">
                                 <a href=""><i class="fa fa-pencil me-1 border p-2 rounded" aria-hidden="true"></i></a>
                                 <a href=""><i class="fa fa-bell border p-2 rounded text-danger" aria-hidden="true"></i></a> &nbsp;
                                 <div class="dropdown add-dropdown">
@@ -56,7 +55,7 @@
                                       <li><a href="javascript:;" class="dropdown-item font-13">Offline</a></li>
                                   </ul>
                                 </div>
-                              </div>
+                              </div> -->
                             </div>
                             <hr class="hr">
                             <div class="bg-light p-2 rounded-lg mb-4" >                          
@@ -74,10 +73,22 @@
                                   <span class="edit-text font-14 font-weight-500 mb-2">{{ truckData.plateNumber }}</span>
                                 </li>
                                 <li class="d-flex flex-wrap align-items-center justify-content-between mb-2">
+                                  <span class="text-capitalize font-12 font-weight-600 mb-2">License Plate State </span>
+                                  <span class="edit-text font-14 font-weight-500 mb-2">{{ truckData.licensePlateState }}</span>
+                                </li>
+                                <li class="d-flex flex-wrap align-items-center justify-content-between mb-2">
                                   <span class="text-capitalize font-12 font-weight-600 mb-2"> Expiration Date </span>
                                   <span class="edit-text font-14 font-weight-500 mb-2">{{ truckData.expirationDate }}</span>
                                 </li>
                                 <li class="d-flex flex-wrap align-items-center justify-content-between mb-2">
+                                  <span class="text-capitalize font-12 font-weight-600 mb-2"> Truck Year </span>
+                                  <span class="edit-text font-14 font-weight-500 mb-2">{{ truckData.truckYear }}</span>
+                                </li>
+                                <li class="d-flex flex-wrap align-items-center justify-content-between mb-2">
+                                  <span class="text-capitalize font-12 font-weight-600 mb-2"> Truck Make </span>
+                                  <span class="edit-text font-14 font-weight-500 mb-2">{{ truckData.truckMake }}</span>
+                                </li>
+                                <!-- <li class="d-flex flex-wrap align-items-center justify-content-between mb-2">
                                   <span class="text-capitalize font-12 font-weight-600 mb-2"> Cab Card </span>
                                   <span class="edit-text font-14 font-weight-500 mb-2">{{ truckData.cabCard }}</span>
                                 </li>
@@ -88,7 +99,7 @@
                                       {{ truckData.uploadDocument | slice:(truckData.uploadDocument.lastIndexOf('/')+1) }}
                                     </a>
                                   </span>
-                                </li>
+                                </li> -->
                                 
                               </ul>
                             </div>
@@ -99,11 +110,83 @@
                     </div>
                   </div> 
 
-                  <div class="col-md-6">
+                  <div class="col-md-9">
                     <div class=" fv-row mb-6 bg-white p-3 rounded border">
                       <div class="bg-light p-2 rounded-lg mb-2">                          
-                        <ul class="mb-0" style="padding-left: 0px !important;">                            
+                        <ul class="mb-0" style="padding-left: 0px !important;">  
+                          
+                          
                           <li class="d-flex flex-wrap align-items-center justify-content-between mb-2">
+                            <span class="text-capitalize font-12 font-weight-600 mb-2"> Truck Model </span>
+                            <span class="edit-text font-14 font-weight-500 mb-2">{{ truckData.truckModel }}</span>
+                          </li>
+                          <li class="d-flex flex-wrap align-items-center justify-content-between mb-2">
+                            <span class="text-capitalize font-12 font-weight-600 mb-2"> Gross Vehicle Weight Rating (GVWR): </span>
+                            <span class="edit-text font-14 font-weight-500 mb-2">{{ truckData.grossVehicleWeightRating }}</span>
+                          </li>
+                          <li class="d-flex flex-wrap align-items-center justify-content-between mb-2">
+                            <span class="text-capitalize font-12 font-weight-600 mb-2"> Upload CabCard </span>
+                            <span class="edit-text font-14 font-weight-500 mb-2">
+                              <a [href]="truckData.uploadDocument" target="_blank">
+                              {{ truckData.uploadDocument | slice:(truckData.uploadDocument.lastIndexOf('/')+1) }}
+                            </a></span>
+                          </li>
+                          <li class="d-flex flex-wrap align-items-center justify-content-between mb-2">
+                            <span class="text-capitalize font-12 font-weight-600 mb-2"> Engine Make: </span>
+                            <span class="edit-text font-14 font-weight-500 mb-2">{{ truckData.engineMake }}</span>
+                          </li>
+                          <li class="d-flex flex-wrap align-items-center justify-content-between mb-2">
+                            <span class="text-capitalize font-12 font-weight-600 mb-2"> Engine Model: </span>
+                            <span class="edit-text font-14 font-weight-500 mb-2">{{ truckData.engineMake }}</span>
+                          </li>
+                          <li class="d-flex flex-wrap align-items-center justify-content-between mb-2">
+                            <span class="text-capitalize font-12 font-weight-600 mb-2"> Engine Serial Number:</span>
+                            <span class="edit-text font-14 font-weight-500 mb-2">{{ truckData.engineSerialNumber }}</span>
+                          </li>
+                          <li class="d-flex flex-wrap align-items-center justify-content-between mb-2">
+                            <span class="text-capitalize font-12 font-weight-600 mb-2"> Horsepower: </span>
+                            <span class="edit-text font-14 font-weight-500 mb-2">{{ truckData.horsePower }}</span>
+                          </li>
+                          <li class="d-flex flex-wrap align-items-center justify-content-between mb-2">
+                            <span class="text-capitalize font-12 font-weight-600 mb-2"> Fuel Type: </span>
+                            <span class="edit-text font-14 font-weight-500 mb-2">{{ truckData.fuelType }}</span>
+                          </li>
+                          <li class="d-flex flex-wrap align-items-center justify-content-between mb-2">
+                            <span class="text-capitalize font-12 font-weight-600 mb-2"> Purchase Date: </span>
+                            <span class="edit-text font-14 font-weight-500 mb-2">{{ truckData.purchaseDate }}</span>
+                          </li>
+                          <li class="d-flex flex-wrap align-items-center justify-content-between mb-2">
+                            <span class="text-capitalize font-12 font-weight-600 mb-2"> Purchase Price: </span>
+                            <span class="edit-text font-14 font-weight-500 mb-2">{{ truckData.purchasePrice }}</span>
+                          </li>
+                          <li class="d-flex flex-wrap align-items-center justify-content-between mb-2">
+                            <span class="text-capitalize font-12 font-weight-600 mb-2"> Monthly Payment: </span>
+                            <span class="edit-text font-14 font-weight-500 mb-2">{{ truckData.monthlyPayment }}</span>
+                          </li>
+                          <li class="d-flex flex-wrap align-items-center justify-content-between mb-2">
+                            <span class="text-capitalize font-12 font-weight-600 mb-2"> Interest Rate: </span>
+                            <span class="edit-text font-14 font-weight-500 mb-2">{{ truckData.interestRate }}</span>
+                          </li>
+                          <li class="d-flex flex-wrap align-items-center justify-content-between mb-2">
+                            <span class="text-capitalize font-12 font-weight-600 mb-2"> Loan Ending Date: </span>
+                            <span class="edit-text font-14 font-weight-500 mb-2">{{ truckData.loanEndingDate }}</span>
+                          </li>
+                          <li class="d-flex flex-wrap align-items-center justify-content-between mb-2">
+                            <span class="text-capitalize font-12 font-weight-600 mb-2">Financing Bank: </span>
+                            <span class="edit-text font-14 font-weight-500 mb-2">{{ truckData.financingBank }}</span>
+                          </li>
+                          <li class="d-flex flex-wrap align-items-center justify-content-between mb-2">
+                            <span class="text-capitalize font-12 font-weight-600 mb-2"> Company: </span>
+                            <span class="edit-text font-14 font-weight-500 mb-2">{{ truckData.companyId }}</span>
+                          </li>
+                          <li class="d-flex flex-wrap align-items-center justify-content-between mb-2">
+                            <span class="text-capitalize font-12 font-weight-600 mb-2">Contract Number: </span>
+                            <span class="edit-text font-14 font-weight-500 mb-2">{{ truckData.contractNumber }}</span>
+                          </li>
+
+
+
+                          <!-- <li class="d-flex flex-wrap align-items-center justify-content-between mb-2">
                             <span class="text-capitalize font-12 font-weight-600 mb-2">  Annual DOT Insp  </span>
                             <span class="edit-text font-14 font-weight-500 mb-2">{{ truckData.annualDotInspDocument }}</span>
                           </li>
@@ -174,13 +257,13 @@
                           <li class="d-flex flex-wrap align-items-center justify-content-between mb-2">
                             <span class="text-capitalize font-12 font-weight-600 mb-2"> Fuel Card Number</span>
                             <span class="edit-text font-14 font-weight-500 mb-2">{{ truckData.fuelCardNumber }}</span>
-                          </li>
+                          </li> -->
                           
                         </ul>
                       </div>
                     </div>
                   </div> 
-                    <div class="col-md-3">
+                    <!-- <div class="col-md-3">
                       <div class=" fv-row mb-6 bg-white p-3 rounded border">
                         <div class="bg-light p-2 rounded-lg mb-4">                          
                           <ul class="mb-0" style="padding-left: 0px !important;">                            
@@ -257,7 +340,7 @@
                           </ul>
                         </div>
                       </div>
-                    </div>
+                    </div> -->
                     
                   </div> 
               </div>
@@ -272,8 +355,8 @@
 <!-- ======= Footer ======= -->
 <footer id="footer" class="footer">
   <div class="text-dark text-center">
-    <span class="text-muted fw-semibold me-1">2023© all rights reserved</span>
-    <a href="#" class="font-weight-700 text-hover-dark text-dark text-uppercase">3PL TEK INC.</a>
+    <span class="text-muted fw-semibold me-1">2025© all rights reserved</span>
+    <a  class="font-weight-700 text-hover-dark text-dark text-uppercase">3PL TEK INC.</a>
   </div>
 
 </footer><!-- End Footer -->

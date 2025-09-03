@@ -92,6 +92,15 @@ export class UsersComponent implements OnInit {
       });
   }
 
+
+   //New code
+   isSidebarOpen: boolean = false; // Default value
+ 
+   toggleSidebar() {
+     this.isSidebarOpen = !this.isSidebarOpen;
+   }  
+
+   
   getUsersFromAPI() {
     this.serviceAuthService.getUsersFromAPI()
       .subscribe((response: any) => {

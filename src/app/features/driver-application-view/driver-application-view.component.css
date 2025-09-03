@@ -1,0 +1,119 @@
+/* Add this to your component's CSS or global styles */
+.signature-output {
+  font-family: 'Pacifico', cursive;
+  font-size: 1.4rem;
+  color: #222;
+  border-bottom: 1px solid #ccc;
+  padding: 8px 0;
+  min-height: 40px;
+  letter-spacing: 2px;
+}
+.custom-toggle-wrapper {
+  margin: 20px 0;
+}
+
+.custom-toggle {
+  position: relative;
+  display: inline-block;
+  width: 110px;   /* Compact size */
+  height: 32px;
+}
+
+.custom-toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fa0303;
+  color: white;
+  font-weight: 600;
+  font-size: 12px;
+  border-radius: 32px;
+  transition: background-color 0.3s ease;
+  width: 100%;
+  height: 100%;
+  padding: 0 12px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.label-text {
+  z-index: 2;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.knob {
+  position: absolute;
+  height: 24px;
+  width: 24px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  border-radius: 50%;
+  transition: transform 0.4s ease;
+  z-index: 1;
+}
+
+/* When checked: background green and knob slides */
+.custom-toggle input:checked + .slider {
+  background-color: #28a745;
+}
+
+.custom-toggle input:checked + .slider .knob {
+  transform: translateX(76px); /* Adjust based on width */
+}
+.progress-tracker {
+  overflow-x: auto;
+  padding-bottom: 10px;
+}
+.tracker-step {
+  min-width: 120px;
+  position: relative;
+}
+.tracker-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #f1f5fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  font-size: 1.2rem;
+  border: 2px solid #d1d5db;
+}
+.tracker-approved .tracker-circle {
+  background: #e6f9e6;
+  border-color: #28a745;
+}
+.tracker-rejected .tracker-circle {
+  background: #ffeaea;
+  border-color: #dc3545;
+}
+.tracker-edited .tracker-circle {
+  background: #eaf1ff;
+  border-color: #0d6efd;
+}
+.tracker-inprogress .tracker-circle {
+  background: #fffbe6;
+  border-color: #ffc107;
+}
+.tracker-line {
+  flex: 0 0 24px;
+  height: 3px;
+  background: #d1d5db;
+  margin: 0 2px;
+  border-radius: 2px;
+  align-self: center;
+}
+@media (max-width: 900px) {
+  .tracker-label { font-size: 0.7rem; }
+  .tracker-step { min-width: 90px; }
+}

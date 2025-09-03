@@ -1,37 +1,158 @@
+ 
+/* Sidebar base styles */
+#sidebar {
+  max-height: 100vh;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  white-space: nowrap;
+  width: 60px; /* Default collapsed width */
+  transition: none !important; /* Remove animation effect */
+}
+ 
+/* Sidebar active (expanded) */
+#sidebar.active {
+  width: 285px !important; /* Expanded width */
+  animation: none !important;
+}
+ 
+/* Sidebar collapsed */
+#sidebar:not(.active) {
+  width: 90px !important;
+  animation: none !important;
+}
+ 
+/* Hide text when sidebar is collapsed */
+#sidebar:not(.active) .menu-title {
+  display: none;
+}
+ 
+/* Keep icons visible */
+#sidebar .menu-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+  margin-left: 20px;
+  margin: 2px;
+}
+ 
+/* Animate icons on hover */
+.menu-icon:hover {
+  animation: bounce 0.4s ease-in-out;
+}
+ 
+/* Keyframes for bounce effect */
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+ 
+/* Remove sidebar fade-in/out animations */
+#sidebar.active,
+#sidebar:not(.active) {
+  animation: none !important;
+}
+ 
+/* Sidebar toggle button instant change */
+.sidebar-toggler {
+  transition: none !important;
+}
+ 
+/* Adjust button position when sidebar opens */
+#sidebar.active .sidebar-toggler {
+  left: 280px;
+}
+ 
+/* Keep the hover effect */
+.sidebar-toggler:hover {
+  color: #007bff;
+}
+ /* Reduce the logo size */
+ .pro-sidebar-logo .icon img {
+  width: 37px;  /* Adjust as needed */
+  height: auto;
+  margin-left: 13px;
+}
+ 
+/* Reduce the text logo size */
+.pro-sidebar-logo .icon-text img {
+  width: 140px; /* Adjust as needed */
+  height: auto;
+}
+ 
+.navbar-togglers {
+  background-color: transparent;
+  border: none;
+  padding: 10px 20px; /* Balanced padding */
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Keeps icon centered */
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  border-radius: 5px;
+  font-size: 18px;
+  width: auto;
+  margin-right: auto;
+}
+ 
 .header {
-  background-color: #f8f9fa; /* Set header background color */
-  padding: 15px; /* Add padding to the header */
-  color: black;
+  width: calc(100% - 250px);
+  margin-left: 250px;
+  height: 60px;
 }
-
-.nav-link {
-  color: black !important; /* Default color */
+ 
+.header-collapsed {
+  width: calc(100% - 60px);
+  margin-left: 60px;
 }
-
-.nav-link:hover {
-  color: blue !important; /* Color on hover */
+ 
+.dropdown-menu .dropdown-item {
+  font-size: 16px;
 }
-
-.nav-link.active {
-  color: blue !important; /* Keep active tab blue */
+ 
+ 
+.custom-nav {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  white-space: nowrap;
 }
-
-.navbar {
-  margin-top: 15px;
+ 
+.custom-nav .nav-item .nav-link {
+  font-size: clamp(14px, 1vw, 18px);
 }
-
-.header-nav {
-  margin-top: 10px;
+ 
+.custom-nav .nav-item .nav-link {
+  font-size: 16px; /* Maintain a readable size */
 }
-
-.nav-item {
-  margin-right: 15px;
+.navbar-nav.custom-nav .nav-item {
+  margin: 0; /* Remove default margins */
 }
-
-.main {
-  padding: 20px;
+ 
+.navbar-nav.custom-nav .nav-link {
+  padding: 0 5px; /* Reduce padding as needed */
 }
-
-.btn {
-  /* Button styles */
-}
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 

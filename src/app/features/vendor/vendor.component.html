@@ -1,0 +1,1002 @@
+<app-navbar (toggleSidebar)="toggleSidebar()"></app-navbar>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+
+
+
+<main  id="main" class="  bg-gray main mt-0 p-0"  [ngClass]="{'full-width': isSidebarOpen, 'shift-right': !isSidebarOpen}" >
+  <div class="p-4 pb-0" >
+    <h2 style="margin-left: 90px;"  class="font-18 font-weight-700 mb-4 text-capitalize">Vendors</h2>
+    <div class="bg-white rounded-lg p-3" style="margin-left: 90px;">
+      <div class="col-md-12">
+
+        <div class="tab-content" id="myTabContent">
+          <div class="tab-pane fade active show" id="customer" role="tabpanel" aria-labelledby="home-tab">
+            <div id="kt_app_content" class="app-content  flex-column-fluid">
+              <div class="my-4">
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="d-flex justify-content-between">
+                      <div class="form-group has-search mb-0 d-flex ">
+                          <span class="fa fa-search form-control-feedback"></span>
+                          <input style="height: 40px !important; padding-left: 30px; margin-right: 10px;" type="text" name="Search"
+                            class="form-control" placeholder="Search..." [(ngModel)]="searchTerm">
+                          <button class="btn btn-success rounded-pill font-14 search-btn"  (click)="searchVendors()">
+                            <i class="bi bi-search"></i> Search
+                          </button>
+                        </div>
+                      <div>
+                        <a href="javascript:;" class="btn btn-success rounded-pill font-14" type="button"
+                          data-bs-toggle="offcanvas" data-bs-target="#addvendor" aria-controls="offcanvasRight"> <i
+                            class="fa fa-plus me-2" aria-hidden="true"></i> Add Vendor</a>
+                        <div></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-12">
+                  <div class="table-responsive">
+                    <table class="table table-bordered ">
+                      <thead>
+                        <tr>
+                          <th scope="col">Vendor ID</th>
+                          <th scope="col">Name</th>
+                          <th scope="col">Account Type</th>
+                          <th scope="col">Phone Number</th>
+                          <th scope="col">Fee Amount</th>
+                          <th scope="col">Email</th>
+                          <th scope="col">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let vendor of filteredVendors">
+                          <!-- <td><a class="text-primary" href="">{{ vendor.vendorID }}</a></td> -->
+                          <td>{{ vendor.vendorID }}</td>
+                          <td>{{ vendor.vendorName }}</td>
+                          <td>{{ getAccountDetails(vendor.accountType) }}</td>
+                          <td>{{ vendor.primaryContactPhone }}</td>
+                          <td>{{ vendor.feeAmount }}</td>
+                          <td>{{ vendor.primaryContactEmail }}</td>
+                          <td class="text-capitalize ">
+                            <div class="dropdown filter-dropdown">
+                              <span class="dropdown-toggle font-16 px-3" type="button" id="dropdownMenuButton23" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i>
+                              </span>
+                              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton2" style="">
+                                <a href="javascript:;" class="dropdown-item dispatch font-13" type="button" data-bs-toggle="offcanvas" data-bs-target="#editVendor" aria-controls="offcanvasRight" (click)="editVendor(vendor)">Edit</a>
+                                <a class="dropdown-item assiened font-13" href="javascript:;" data-bs-toggle="modal" data-bs-target="#ExtralargeModalDelete" onclick="dropdownevent('dropdownMenuButton2', 'assigned')" (click)="deleteVendor(vendor._id)">Delete</a>
+                              </div>
+                            </div>
+                          </td>  
+                        </tr>
+                      </tbody>
+                    </table>
+                    <div class="bg-white my-3 rounded pb-3 " style="margin-right: 90px;">
+                <div class="row">
+                  <div class="col-md-12">
+                    <nav aria-label="Page navigation example ms-auto me-auto">
+                      <ul class="pagination justify-content-center gap-2 mb-0" style="margin-top: 20px ;">
+                        <li class="page-item" [class.disabled]="currentPage === 1">
+                          <a class="page-link font-22 d-flex align-items-center justify-content-center" href="javascript:;" aria-label="Previous"
+                            (click)="changePage(currentPage - 1)"><i
+                              class="fa fa-angle-left font-weight-300"></i></a>
+                        </li>
+                        <li class="page-item" *ngFor="let page of getPageNumbers()"
+                          [class.active]="currentPage === page">
+                          <a class="page-link font-14 d-flex align-items-center justify-content-center" href="javascript:;" (click)="changePage(page)">{{ page
+                            }}</a>
+                        </li>
+                        <li class="page-item" [class.disabled]="currentPage === getTotalPages()">
+                          <a class="page-link font-22 d-flex align-items-center justify-content-center" href="javascript:;" aria-label="Next"
+                            (click)="changePage(currentPage + 1)"><i
+                              class="fa fa-angle-right font-weight-300"></i></a>
+                        </li>
+                      </ul>
+                    </nav>
+                    <!-- Added: Showing entries info below pagination -->
+                    <div class="text-center mt-2">
+                      <ng-container *ngIf="vendors.length > 0">
+                        <span class="badge bg-light text-dark px-3 py-2" style="font-size: 14px; font-weight: normal;">
+                          Showing
+                          {{ 1 }}
+                          to
+                          {{ vendors.length }}
+                          of
+                          {{ vendors.length }}
+                          entries (Page 1 of 1)
+                        </span>
+                      </ng-container>
+                      <ng-container *ngIf="vendors.length === 0">
+                        <span class="badge bg-light text-danger px-3 py-2" style="font-size: 14px;">
+                          No records to display.
+                        </span>
+                      </ng-container>
+                    </div>
+                    <!-- End added block -->
+                  </div>
+
+                  
+                </div>
+              </div>
+                  </div>
+                </div>
+              </div>
+              
+            </div>
+          </div>
+        </div><!-- End Default Tabs -->
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer id="footer" class="footer text-center"
+  [ngClass]="{'full-widths': isSidebarOpen, 'shift-rights': !isSidebarOpen}">
+  <div class="text-dark">
+    <span class="text-muted fw-semibold me-1">2025© all rights reserved</span>
+    <a class="font-weight-700 text-hover-dark text-dark text-uppercase">3PL TEK INC.</a>
+  </div>
+</footer>
+
+
+
+<div class="offcanvas offcanvas-end" tabindex="-1" id="addvendor" aria-labelledby="offcanvasRightLabel"
+  style="width: 80%;" data-bs-backdrop="static">
+  <div class="modal-header" style="padding: 15px; border-bottom: 1px solid #ccc;">
+    <h5 class="modal-title">Add Account</h5>
+    <div>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+  </div>
+  <div class="offcanvas-body view-load position-relative">
+    <form [formGroup]="vendorForm" class="row g-3" (ngSubmit)="submitVendor()">
+      <div class="" id="company-info" style="display: block;">
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="mb-2 d-block font-weight-700">Vendor ID:</label>
+              <input type="text" class="form-control" id="vendorID" placeholder="Enter vendor ID"
+                formControlName="vendorID" required
+                [ngClass]="{'is-invalid': vendorForm.get('vendorID')?.invalid && (vendorForm.get('vendorID')?.dirty || vendorForm.get('vendorID')?.touched)}">
+              <div
+                *ngIf="vendorForm.get('vendorID')?.invalid && (vendorForm.get('vendorID')?.dirty || vendorForm.get('vendorID')?.touched)"
+                class="invalid-feedback">
+                Vendor ID is required.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="mb-2 d-block font-weight-700">Vendor Name:</label>
+              <input type="text" class="form-control" id="vendorName" placeholder="Enter vendor name"
+                formControlName="vendorName" required
+                [ngClass]="{'is-invalid': vendorForm.get('vendorName')?.invalid && (vendorForm.get('vendorName')?.dirty || vendorForm.get('vendorName')?.touched)}">
+              <div
+                *ngIf="vendorForm.get('vendorName')?.invalid && (vendorForm.get('vendorName')?.dirty || vendorForm.get('vendorName')?.touched)"
+                class="invalid-feedback">
+                Vendor name is required.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="mb-2 d-block font-weight-700">Account Type:</label>
+              <select class="form-control" formControlName="accountType" required
+                [ngClass]="{'is-invalid': vendorForm.get('accountType')?.invalid && (vendorForm.get('accountType')?.touched || vendorForm.get('accountType')?.dirty)}">
+                
+                <option value="">-- Select Account --</option>
+                <option *ngFor="let account of filteredAccountingData" [value]="account.accountId">
+                  {{ account.accountName }} ({{ account.accountId }})
+                </option>
+              </select>
+              <div *ngIf="vendorForm.get('accountType')?.invalid && (vendorForm.get('accountType')?.touched || vendorForm.get('accountType')?.dirty)" class="invalid-feedback">
+                Account Type is required.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="mb-2 d-block font-weight-700">Business Structure:</label>
+              <select class="form-control" id="businessStructure" formControlName="businessStructure" required
+                [ngClass]="{'is-invalid': vendorForm.get('businessStructure')?.invalid && (vendorForm.get('businessStructure')?.dirty || vendorForm.get('businessStructure')?.touched)}">
+                <option value="" disabled selected>Select Business Structure</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+              </select>
+              <div
+                *ngIf="vendorForm.get('businessStructure')?.invalid && (vendorForm.get('businessStructure')?.dirty || vendorForm.get('businessStructure')?.touched)"
+                class="invalid-feedback">
+                Business structure is required.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="mb-2 d-block font-weight-700">Primary Contact Name:</label>
+              <input type="text" class="form-control" id="primaryContactName" placeholder="Enter primary contact name"
+                formControlName="primaryContactName" required
+                [ngClass]="{'is-invalid': vendorForm.get('primaryContactName')?.invalid && (vendorForm.get('primaryContactName')?.dirty || vendorForm.get('primaryContactName')?.touched)}">
+              <div
+                *ngIf="vendorForm.get('primaryContactName')?.invalid && (vendorForm.get('primaryContactName')?.dirty || vendorForm.get('primaryContactName')?.touched)"
+                class="invalid-feedback">
+                Primary contact name is required.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="mb-2 d-block font-weight-700">Primary Contact Phone:</label>
+              <input type="text" class="form-control" id="primaryContactPhone" placeholder="Enter primary contact phone"
+                formControlName="primaryContactPhone" required
+                [ngClass]="{'is-invalid': vendorForm.get('primaryContactPhone')?.invalid && (vendorForm.get('primaryContactPhone')?.dirty || vendorForm.get('primaryContactPhone')?.touched)}">
+              <div
+                *ngIf="vendorForm.get('primaryContactPhone')?.invalid && (vendorForm.get('primaryContactPhone')?.dirty || vendorForm.get('primaryContactPhone')?.touched)"
+                class="invalid-feedback">
+                Primary contact phone is required.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="mb-2 d-block font-weight-700">Primary Contact Email:</label>
+              <input type="email" class="form-control" id="primaryContactEmail"
+                placeholder="Enter primary contact email" formControlName="primaryContactEmail" required
+                [ngClass]="{'is-invalid': vendorForm.get('primaryContactEmail')?.invalid && (vendorForm.get('primaryContactEmail')?.dirty || vendorForm.get('primaryContactEmail')?.touched)}">
+              <div
+                *ngIf="vendorForm.get('primaryContactEmail')?.invalid && (vendorForm.get('primaryContactEmail')?.dirty || vendorForm.get('primaryContactEmail')?.touched)"
+                class="invalid-feedback">
+                Primary contact email is required.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="mb-2 d-block font-weight-700">Secondary Contact Name:</label>
+              <input type="text" class="form-control" id="secondaryContactName"
+                placeholder="Enter secondary contact name" formControlName="secondaryContactName" required
+                [ngClass]="{'is-invalid': vendorForm.get('secondaryContactName')?.invalid && (vendorForm.get('secondaryContactName')?.dirty || vendorForm.get('secondaryContactName')?.touched)}">
+              <div
+                *ngIf="vendorForm.get('secondaryContactName')?.invalid && (vendorForm.get('secondaryContactName')?.dirty || vendorForm.get('secondaryContactName')?.touched)"
+                class="invalid-feedback">
+                Secondary contact name is required.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="mb-2 d-block font-weight-700">Secondary Contact Phone:</label>
+              <input type="text" class="form-control" id="secondaryContactPhone"
+                placeholder="Enter secondary contact phone" formControlName="secondaryContactPhone" required
+                [ngClass]="{'is-invalid': vendorForm.get('secondaryContactPhone')?.invalid && (vendorForm.get('secondaryContactPhone')?.dirty || vendorForm.get('secondaryContactPhone')?.touched)}">
+              <div
+                *ngIf="vendorForm.get('secondaryContactPhone')?.invalid && (vendorForm.get('secondaryContactPhone')?.dirty || vendorForm.get('secondaryContactPhone')?.touched)"
+                class="invalid-feedback">
+                Secondary contact phone is required.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="mb-2 d-block font-weight-700">Secondary Contact Email:</label>
+              <input type="email" class="form-control" id="secondaryContactEmail"
+                placeholder="Enter secondary contact email" formControlName="secondaryContactEmail" required
+                [ngClass]="{'is-invalid': vendorForm.get('secondaryContactEmail')?.invalid && (vendorForm.get('secondaryContactEmail')?.dirty || vendorForm.get('secondaryContactEmail')?.touched)}">
+              <div
+                *ngIf="vendorForm.get('secondaryContactEmail')?.invalid && (vendorForm.get('secondaryContactEmail')?.dirty || vendorForm.get('secondaryContactEmail')?.touched)"
+                class="invalid-feedback">
+                Secondary contact email is required.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="mb-2 d-block font-weight-700">Street Address:</label>
+              <input type="text" class="form-control" id="streetAddress" placeholder="Enter street address"
+                formControlName="streetAddress" required
+                [ngClass]="{'is-invalid': vendorForm.get('streetAddress')?.invalid && (vendorForm.get('streetAddress')?.dirty || vendorForm.get('streetAddress')?.touched)}">
+              <div
+                *ngIf="vendorForm.get('streetAddress')?.invalid && (vendorForm.get('streetAddress')?.dirty || vendorForm.get('streetAddress')?.touched)"
+                class="invalid-feedback">
+                Street address is required.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="mb-2 d-block font-weight-700">City:</label>
+              <input type="text" class="form-control" id="city" placeholder="Enter city" formControlName="city" required
+                [ngClass]="{'is-invalid': vendorForm.get('city')?.invalid && (vendorForm.get('city')?.dirty || vendorForm.get('city')?.touched)}">
+              <div
+                *ngIf="vendorForm.get('city')?.invalid && (vendorForm.get('city')?.dirty || vendorForm.get('city')?.touched)"
+                class="invalid-feedback">
+                City is required.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="mb-2 d-block font-weight-700">State/Province:</label>
+              <input type="text" class="form-control" id="stateProvince" placeholder="Enter state/province"
+                formControlName="stateProvince" required
+                [ngClass]="{'is-invalid': vendorForm.get('stateProvince')?.invalid && (vendorForm.get('stateProvince')?.dirty || vendorForm.get('stateProvince')?.touched)}">
+              <div
+                *ngIf="vendorForm.get('stateProvince')?.invalid && (vendorForm.get('stateProvince')?.dirty || vendorForm.get('stateProvince')?.touched)"
+                class="invalid-feedback">
+                State/province is required.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="mb-2 d-block font-weight-700">Zip/Postal Code:</label>
+              <input type="text" class="form-control" id="zipPostalCode" placeholder="Enter zip/postal code"
+                formControlName="zipPostalCode" required
+                [ngClass]="{'is-invalid': vendorForm.get('zipPostalCode')?.invalid && (vendorForm.get('zipPostalCode')?.dirty || vendorForm.get('zipPostalCode')?.touched)}">
+              <div
+                *ngIf="vendorForm.get('zipPostalCode')?.invalid && (vendorForm.get('zipPostalCode')?.dirty || vendorForm.get('zipPostalCode')?.touched)"
+                class="invalid-feedback">
+                Zip/postal code is required.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="mb-2 d-block font-weight-700">Country:</label>
+              <input type="text" class="form-control" id="country" placeholder="Enter country" formControlName="country"
+                required
+                [ngClass]="{'is-invalid': vendorForm.get('country')?.invalid && (vendorForm.get('country')?.dirty || vendorForm.get('country')?.touched)}">
+              <div
+                *ngIf="vendorForm.get('country')?.invalid && (vendorForm.get('country')?.dirty || vendorForm.get('country')?.touched)"
+                class="invalid-feedback">
+                Country is required.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <h2 class="font-14 font-weight-700">Upload Compliance Documents</h2>
+            <input type="file" class="form-control" id="complianceCertificatesDocumentation"
+              (change)="onFileChange($event, 'complianceCertificatesDocumentation')" name="complianceCertificatesDocumentation" accept=".jpg, .jpeg, .png, .pdf"
+              required>
+            <small *ngIf="selectedFiles['complianceCertificatesDocumentation']">
+              Selected: {{ selectedFiles['complianceCertificatesDocumentation'].name }}
+            </small>
+            <p class="text-danger" *ngIf="fileError">{{ fileError }}</p>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="mb-2 d-block font-weight-700">Tax ID/EIN:</label>
+              <input type="text" class="form-control" id="taxID_EIN" placeholder="Enter tax ID/EIN"
+                formControlName="taxID_EIN" required
+                [ngClass]="{'is-invalid': vendorForm.get('taxID_EIN')?.invalid && (vendorForm.get('taxID_EIN')?.dirty || vendorForm.get('taxID_EIN')?.touched)}">
+              <div
+                *ngIf="vendorForm.get('taxID_EIN')?.invalid && (vendorForm.get('taxID_EIN')?.dirty || vendorForm.get('taxID_EIN')?.touched)"
+                class="invalid-feedback">
+                Tax ID/EIN is required.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="mb-2 d-block font-weight-700">Payment Terms:</label>
+              <select class="form-control" id="paymentTerms" formControlName="paymentTerms" required
+                [ngClass]="{'is-invalid': vendorForm.get('paymentTerms')?.invalid && (vendorForm.get('paymentTerms')?.dirty || vendorForm.get('paymentTerms')?.touched)}">
+                <option value="" disabled selected>Select Payment Terms</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+              </select>
+              <div
+                *ngIf="vendorForm.get('paymentTerms')?.invalid && (vendorForm.get('paymentTerms')?.dirty || vendorForm.get('paymentTerms')?.touched)"
+                class="invalid-feedback">
+                Payment terms are required.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="mb-2 d-block font-weight-700">Website URL:</label>
+              <input type="text" class="form-control" id="websiteURL" placeholder="Enter website URL"
+                formControlName="websiteURL" required
+                [ngClass]="{'is-invalid': vendorForm.get('websiteURL')?.invalid && (vendorForm.get('websiteURL')?.dirty || vendorForm.get('websiteURL')?.touched)}">
+              <div
+                *ngIf="vendorForm.get('websiteURL')?.invalid && (vendorForm.get('websiteURL')?.dirty || vendorForm.get('websiteURL')?.touched)"
+                class="invalid-feedback">
+                Website URL is required.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="mb-2 d-block font-weight-700">Operating Regions:</label>
+              <input type="text" class="form-control" id="operatingRegions" placeholder="Enter operating regions"
+                formControlName="operatingRegions" required
+                [ngClass]="{'is-invalid': vendorForm.get('operatingRegions')?.invalid && (vendorForm.get('operatingRegions')?.dirty || vendorForm.get('operatingRegions')?.touched)}">
+              <div
+                *ngIf="vendorForm.get('operatingRegions')?.invalid && (vendorForm.get('operatingRegions')?.dirty || vendorForm.get('operatingRegions')?.touched)"
+                class="invalid-feedback">
+                Operating regions are required.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="mb-2 d-block font-weight-700">Status:</label>
+              <select class="form-control" id="status" formControlName="status" required
+                [ngClass]="{'is-invalid': vendorForm.get('status')?.invalid && (vendorForm.get('status')?.dirty || vendorForm.get('status')?.touched)}">
+                <option value="Approved">Approved</option>
+                <option value="Pending">Pending</option>
+              </select>
+              <div
+                *ngIf="vendorForm.get('status')?.invalid && (vendorForm.get('status')?.dirty || vendorForm.get('status')?.touched)"
+                class="invalid-feedback">
+                Status is required.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="mb-2 d-block font-weight-700">Notes/Comments:</label>
+              <textarea rows="1" class="form-control" id="notesComments" placeholder="Enter notes/comments"
+                formControlName="notesComments" required
+                [ngClass]="{'is-invalid': vendorForm.get('notesComments')?.invalid && (vendorForm.get('notesComments')?.dirty || vendorForm.get('notesComments')?.touched)}"></textarea>
+              <div
+                *ngIf="vendorForm.get('notesComments')?.invalid && (vendorForm.get('notesComments')?.dirty || vendorForm.get('notesComments')?.touched)"
+                class="invalid-feedback">
+                Notes/comments are required.
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="mb-2 d-block font-weight-700">License/Permit/Registration Number:</label>
+              <input type="text" class="form-control" id="licensePermitRegistrationNumber"
+                placeholder="Enter license/permit/registration number" formControlName="licensePermitRegistrationNumber"
+                required
+                [ngClass]="{'is-invalid': vendorForm.get('licensePermitRegistrationNumber')?.invalid && (vendorForm.get('licensePermitRegistrationNumber')?.dirty || vendorForm.get('licensePermitRegistrationNumber')?.touched)}">
+              <div
+                *ngIf="vendorForm.get('licensePermitRegistrationNumber')?.invalid && (vendorForm.get('licensePermitRegistrationNumber')?.dirty || vendorForm.get('licensePermitRegistrationNumber')?.touched)"
+                class="invalid-feedback">
+                License/permit/registration number is required.
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="mb-2 d-block font-weight-700">Fee Type:</label>
+              <select class="form-control" id="feeType" formControlName="feeType" required
+                [ngClass]="{'is-invalid': vendorForm.get('feeType')?.invalid && (vendorForm.get('feeType')?.dirty || vendorForm.get('feeType')?.touched)}">
+                <option value="" disabled selected>Select Fee Type</option>
+                <option value="Fee 1">Fee 1</option>
+                <option value="Fee 2">Fee 2</option>
+              </select>
+              <div
+                *ngIf="vendorForm.get('feeType')?.invalid && (vendorForm.get('feeType')?.dirty || vendorForm.get('feeType')?.touched)"
+                class="invalid-feedback">
+                Fee type is required.
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="mb-2 d-block font-weight-700">Fee Amount:</label>
+              <input type="text" class="form-control" id="feeAmount" placeholder="Enter fee amount"
+                formControlName="feeAmount" required
+                [ngClass]="{'is-invalid': vendorForm.get('feeAmount')?.invalid && (vendorForm.get('feeAmount')?.dirty || vendorForm.get('feeAmount')?.touched)}">
+              <div
+                *ngIf="vendorForm.get('feeAmount')?.invalid && (vendorForm.get('feeAmount')?.dirty || vendorForm.get('feeAmount')?.touched)"
+                class="invalid-feedback">
+                Fee amount is required.
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="mb-2 d-block font-weight-700">Renewal/Expiration Date:</label>
+              <input type="date" class="form-control" id="renewalExpirationDate"
+                placeholder="Enter renewal/expiration date" formControlName="renewalExpirationDate" required
+                [ngClass]="{'is-invalid': vendorForm.get('renewalExpirationDate')?.invalid && (vendorForm.get('renewalExpirationDate')?.dirty || vendorForm.get('renewalExpirationDate')?.touched)}">
+              <div
+                *ngIf="vendorForm.get('renewalExpirationDate')?.invalid && (vendorForm.get('renewalExpirationDate')?.dirty || vendorForm.get('renewalExpirationDate')?.touched)"
+                class="invalid-feedback">
+                Renewal/expiration date is required.
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="mb-2 d-block font-weight-700">Payment Reference/Confirmation Number:</label>
+              <input type="text" class="form-control" id="paymentReferenceConfirmationNumber"
+                placeholder="Enter payment reference/confirmation number"
+                formControlName="paymentReferenceConfirmationNumber" required
+                [ngClass]="{'is-invalid': vendorForm.get('paymentReferenceConfirmationNumber')?.invalid && (vendorForm.get('paymentReferenceConfirmationNumber')?.dirty || vendorForm.get('paymentReferenceConfirmationNumber')?.touched)}">
+              <div
+                *ngIf="vendorForm.get('paymentReferenceConfirmationNumber')?.invalid && (vendorForm.get('paymentReferenceConfirmationNumber')?.dirty || vendorForm.get('paymentReferenceConfirmationNumber')?.touched)"
+                class="invalid-feedback">
+                Payment reference/confirmation number is required.
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="mb-2 d-block font-weight-700">Jurisdiction/Authority:</label>
+              <input type="text" class="form-control" id="jurisdictionAuthority"
+                placeholder="Enter jurisdiction/authority" formControlName="jurisdictionAuthority" required
+                [ngClass]="{'is-invalid': vendorForm.get('jurisdictionAuthority')?.invalid && (vendorForm.get('jurisdictionAuthority')?.dirty || vendorForm.get('jurisdictionAuthority')?.touched)}">
+              <div
+                *ngIf="vendorForm.get('jurisdictionAuthority')?.invalid && (vendorForm.get('jurisdictionAuthority')?.dirty || vendorForm.get('jurisdictionAuthority')?.touched)"
+                class="invalid-feedback">
+                Jurisdiction/authority is required.
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="mb-2 d-block font-weight-700">Payment Reference/Confirmation Number:</label>
+              <select class="form-control" id="paymentReferenceConfirmationNumber"
+                formControlName="paymentReferenceConfirmationNumber" required
+                [ngClass]="{'is-invalid': vendorForm.get('paymentReferenceConfirmationNumber')?.invalid && (vendorForm.get('paymentReferenceConfirmationNumber')?.dirty || vendorForm.get('paymentReferenceConfirmationNumber')?.touched)}">
+                <option value="" disabled selected>Select Payment Reference/Confirmation</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+              </select>
+              <div
+                *ngIf="vendorForm.get('paymentReferenceConfirmationNumber')?.invalid && (vendorForm.get('paymentReferenceConfirmationNumber')?.dirty || vendorForm.get('paymentReferenceConfirmationNumber')?.touched)"
+                class="invalid-feedback">
+                Payment reference/confirmation is required.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer justify-content-center"
+            style="border-top: 1px solid #ccc; padding-top: 15px; margin-top: 15px; ">
+            <button type="button" class="btn btn-outline-secondary btn-sm text-uppercase rounded-pill"
+            data-bs-dismiss="offcanvas" aria-label="Close" (click)="onClose()"> Close</button>
+          <button type="submit" class="btn btn-success btn-sm text-uppercase rounded-pill"
+            data-bs-dismiss="offcanvas">Submit Form</button>
+      
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+
+
+
+<div class="offcanvas offcanvas-end" tabindex="-1" id="editVendor" aria-labelledby="offcanvasRightLabel" style="width: 80%;" data-bs-backdrop="static">
+  <div class="modal-header" style="padding: 15px; border-bottom: 1px solid #ccc;">
+    <h5 class="modal-title">Edit Vendor</h5>
+    <div>
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+  </div>
+  <div class="offcanvas-body view-load position-relative">
+    <form [formGroup]="vendorForm" class="row g-3" (ngSubmit)="updateVendor()">
+      <div class="" id="company-info" style="display: block;">
+   
+        <div class="row">
+         
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="mb-2 d-block font-weight-700">Vendor ID:</label>
+              <input type="text" class="form-control" id="vendorID" placeholder="Enter vendor ID"
+                formControlName="vendorID" required
+                [ngClass]="{'is-invalid': vendorForm.get('vendorID')?.invalid && (vendorForm.get('vendorID')?.dirty || vendorForm.get('vendorID')?.touched)}">
+              <div
+                *ngIf="vendorForm.get('vendorID')?.invalid && (vendorForm.get('vendorID')?.dirty || vendorForm.get('vendorID')?.touched)"
+                class="invalid-feedback">
+                Vendor ID is required.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="mb-2 d-block font-weight-700">Vendor Name:</label>
+              <input type="text" class="form-control" id="vendorName" placeholder="Enter vendor name"
+                formControlName="vendorName" required
+                [ngClass]="{'is-invalid': vendorForm.get('vendorName')?.invalid && (vendorForm.get('vendorName')?.dirty || vendorForm.get('vendorName')?.touched)}">
+              <div
+                *ngIf="vendorForm.get('vendorName')?.invalid && (vendorForm.get('vendorName')?.dirty || vendorForm.get('vendorName')?.touched)"
+                class="invalid-feedback">
+                Vendor name is required.
+              </div>
+            </div>
+          </div>
+               <div class="col-md-4">
+            <div class="form-group">
+              <label class="mb-2 d-block font-weight-700">Account Type:</label>
+              <select class="form-control" formControlName="accountType" required
+                [ngClass]="{'is-invalid': vendorForm.get('accountType')?.invalid && (vendorForm.get('accountType')?.touched || vendorForm.get('accountType')?.dirty)}">
+                
+                <option value="">-- Select Account --</option>
+                <option *ngFor="let account of filteredAccountingData" [value]="account.accountId">
+                  {{ account.accountName }} ({{ account.accountId }})
+                </option>
+              </select>
+              <div *ngIf="vendorForm.get('accountType')?.invalid && (vendorForm.get('accountType')?.touched || vendorForm.get('accountType')?.dirty)" class="invalid-feedback">
+                Account Type is required.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="mb-2 d-block font-weight-700">Business Structure:</label>
+              <select class="form-control" id="businessStructure" formControlName="businessStructure" required
+                [ngClass]="{'is-invalid': vendorForm.get('businessStructure')?.invalid && (vendorForm.get('businessStructure')?.dirty || vendorForm.get('businessStructure')?.touched)}">
+                <option value="" disabled selected>Select Business Structure</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+              </select>
+              <div
+                *ngIf="vendorForm.get('businessStructure')?.invalid && (vendorForm.get('businessStructure')?.dirty || vendorForm.get('businessStructure')?.touched)"
+                class="invalid-feedback">
+                Business structure is required.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="mb-2 d-block font-weight-700">Primary Contact Name:</label>
+              <input type="text" class="form-control" id="primaryContactName" placeholder="Enter primary contact name"
+                formControlName="primaryContactName" required
+                [ngClass]="{'is-invalid': vendorForm.get('primaryContactName')?.invalid && (vendorForm.get('primaryContactName')?.dirty || vendorForm.get('primaryContactName')?.touched)}">
+              <div
+                *ngIf="vendorForm.get('primaryContactName')?.invalid && (vendorForm.get('primaryContactName')?.dirty || vendorForm.get('primaryContactName')?.touched)"
+                class="invalid-feedback">
+                Primary contact name is required.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="mb-2 d-block font-weight-700">Primary Contact Phone:</label>
+              <input type="text" class="form-control" id="primaryContactPhone" placeholder="Enter primary contact phone"
+                formControlName="primaryContactPhone" required
+                [ngClass]="{'is-invalid': vendorForm.get('primaryContactPhone')?.invalid && (vendorForm.get('primaryContactPhone')?.dirty || vendorForm.get('primaryContactPhone')?.touched)}">
+              <div
+                *ngIf="vendorForm.get('primaryContactPhone')?.invalid && (vendorForm.get('primaryContactPhone')?.dirty || vendorForm.get('primaryContactPhone')?.touched)"
+                class="invalid-feedback">
+                Primary contact phone is required.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="mb-2 d-block font-weight-700">Primary Contact Email:</label>
+              <input type="email" class="form-control" id="primaryContactEmail"
+                placeholder="Enter primary contact email" formControlName="primaryContactEmail" required
+                [ngClass]="{'is-invalid': vendorForm.get('primaryContactEmail')?.invalid && (vendorForm.get('primaryContactEmail')?.dirty || vendorForm.get('primaryContactEmail')?.touched)}">
+              <div
+                *ngIf="vendorForm.get('primaryContactEmail')?.invalid && (vendorForm.get('primaryContactEmail')?.dirty || vendorForm.get('primaryContactEmail')?.touched)"
+                class="invalid-feedback">
+                Primary contact email is required.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="mb-2 d-block font-weight-700">Secondary Contact Name:</label>
+              <input type="text" class="form-control" id="secondaryContactName"
+                placeholder="Enter secondary contact name" formControlName="secondaryContactName" required
+                [ngClass]="{'is-invalid': vendorForm.get('secondaryContactName')?.invalid && (vendorForm.get('secondaryContactName')?.dirty || vendorForm.get('secondaryContactName')?.touched)}">
+              <div
+                *ngIf="vendorForm.get('secondaryContactName')?.invalid && (vendorForm.get('secondaryContactName')?.dirty || vendorForm.get('secondaryContactName')?.touched)"
+                class="invalid-feedback">
+                Secondary contact name is required.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="mb-2 d-block font-weight-700">Secondary Contact Phone:</label>
+              <input type="text" class="form-control" id="secondaryContactPhone"
+                placeholder="Enter secondary contact phone" formControlName="secondaryContactPhone" required
+                [ngClass]="{'is-invalid': vendorForm.get('secondaryContactPhone')?.invalid && (vendorForm.get('secondaryContactPhone')?.dirty || vendorForm.get('secondaryContactPhone')?.touched)}">
+              <div
+                *ngIf="vendorForm.get('secondaryContactPhone')?.invalid && (vendorForm.get('secondaryContactPhone')?.dirty || vendorForm.get('secondaryContactPhone')?.touched)"
+                class="invalid-feedback">
+                Secondary contact phone is required.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="mb-2 d-block font-weight-700">Secondary Contact Email:</label>
+              <input type="email" class="form-control" id="secondaryContactEmail"
+                placeholder="Enter secondary contact email" formControlName="secondaryContactEmail" required
+                [ngClass]="{'is-invalid': vendorForm.get('secondaryContactEmail')?.invalid && (vendorForm.get('secondaryContactEmail')?.dirty || vendorForm.get('secondaryContactEmail')?.touched)}">
+              <div
+                *ngIf="vendorForm.get('secondaryContactEmail')?.invalid && (vendorForm.get('secondaryContactEmail')?.dirty || vendorForm.get('secondaryContactEmail')?.touched)"
+                class="invalid-feedback">
+                Secondary contact email is required.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="mb-2 d-block font-weight-700">Street Address:</label>
+              <input type="text" class="form-control" id="streetAddress" placeholder="Enter street address"
+                formControlName="streetAddress" required
+                [ngClass]="{'is-invalid': vendorForm.get('streetAddress')?.invalid && (vendorForm.get('streetAddress')?.dirty || vendorForm.get('streetAddress')?.touched)}">
+              <div
+                *ngIf="vendorForm.get('streetAddress')?.invalid && (vendorForm.get('streetAddress')?.dirty || vendorForm.get('streetAddress')?.touched)"
+                class="invalid-feedback">
+                Street address is required.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="mb-2 d-block font-weight-700">City:</label>
+              <input type="text" class="form-control" id="city" placeholder="Enter city" formControlName="city" required
+                [ngClass]="{'is-invalid': vendorForm.get('city')?.invalid && (vendorForm.get('city')?.dirty || vendorForm.get('city')?.touched)}">
+              <div
+                *ngIf="vendorForm.get('city')?.invalid && (vendorForm.get('city')?.dirty || vendorForm.get('city')?.touched)"
+                class="invalid-feedback">
+                City is required.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="mb-2 d-block font-weight-700">State/Province:</label>
+              <input type="text" class="form-control" id="stateProvince" placeholder="Enter state/province"
+                formControlName="stateProvince" required
+                [ngClass]="{'is-invalid': vendorForm.get('stateProvince')?.invalid && (vendorForm.get('stateProvince')?.dirty || vendorForm.get('stateProvince')?.touched)}">
+              <div
+                *ngIf="vendorForm.get('stateProvince')?.invalid && (vendorForm.get('stateProvince')?.dirty || vendorForm.get('stateProvince')?.touched)"
+                class="invalid-feedback">
+                State/province is required.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="mb-2 d-block font-weight-700">Zip/Postal Code:</label>
+              <input type="text" class="form-control" id="zipPostalCode" placeholder="Enter zip/postal code"
+                formControlName="zipPostalCode" required
+                [ngClass]="{'is-invalid': vendorForm.get('zipPostalCode')?.invalid && (vendorForm.get('zipPostalCode')?.dirty || vendorForm.get('zipPostalCode')?.touched)}">
+              <div
+                *ngIf="vendorForm.get('zipPostalCode')?.invalid && (vendorForm.get('zipPostalCode')?.dirty || vendorForm.get('zipPostalCode')?.touched)"
+                class="invalid-feedback">
+                Zip/postal code is required.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="mb-2 d-block font-weight-700">Country:</label>
+              <input type="text" class="form-control" id="country" placeholder="Enter country" formControlName="country"
+                required
+                [ngClass]="{'is-invalid': vendorForm.get('country')?.invalid && (vendorForm.get('country')?.dirty || vendorForm.get('country')?.touched)}">
+              <div
+                *ngIf="vendorForm.get('country')?.invalid && (vendorForm.get('country')?.dirty || vendorForm.get('country')?.touched)"
+                class="invalid-feedback">
+                Country is required.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="mb-2 d-block font-weight-700">Compliance Certificates Documentation:</label>
+              <input type="file" class="form-control" id="complianceCertificatesDocumentation"
+                (change)="onFileChange($event, 'complianceCertificatesDocumentation')" name="complianceCertificatesDocumentation" accept=".jpg, .jpeg, .png, .pdf">
+              <small *ngIf="selectedFiles['complianceCertificatesDocumentation']">
+                Selected: {{ selectedFiles['complianceCertificatesDocumentation'].name }}
+              </small>
+              <p class="text-danger" *ngIf="fileError">{{ fileError }}</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="mb-2 d-block font-weight-700">Tax ID/EIN:</label>
+              <input type="text" class="form-control" id="taxID_EIN" placeholder="Enter tax ID/EIN"
+                formControlName="taxID_EIN" required
+                [ngClass]="{'is-invalid': vendorForm.get('taxID_EIN')?.invalid && (vendorForm.get('taxID_EIN')?.dirty || vendorForm.get('taxID_EIN')?.touched)}">
+              <div
+                *ngIf="vendorForm.get('taxID_EIN')?.invalid && (vendorForm.get('taxID_EIN')?.dirty || vendorForm.get('taxID_EIN')?.touched)"
+                class="invalid-feedback">
+                Tax ID/EIN is required.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="mb-2 d-block font-weight-700">Payment Terms:</label>
+              <select class="form-control" id="paymentTerms" formControlName="paymentTerms" required
+                [ngClass]="{'is-invalid': vendorForm.get('paymentTerms')?.invalid && (vendorForm.get('paymentTerms')?.dirty || vendorForm.get('paymentTerms')?.touched)}">
+                <option value="" disabled selected>Select Payment Terms</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+              </select>
+              <div
+                *ngIf="vendorForm.get('paymentTerms')?.invalid && (vendorForm.get('paymentTerms')?.dirty || vendorForm.get('paymentTerms')?.touched)"
+                class="invalid-feedback">
+                Payment terms are required.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="mb-2 d-block font-weight-700">Website URL:</label>
+              <input type="text" class="form-control" id="websiteURL" placeholder="Enter website URL"
+                formControlName="websiteURL" required
+                [ngClass]="{'is-invalid': vendorForm.get('websiteURL')?.invalid && (vendorForm.get('websiteURL')?.dirty || vendorForm.get('websiteURL')?.touched)}">
+              <div
+                *ngIf="vendorForm.get('websiteURL')?.invalid && (vendorForm.get('websiteURL')?.dirty || vendorForm.get('websiteURL')?.touched)"
+                class="invalid-feedback">
+                Website URL is required.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="mb-2 d-block font-weight-700">Operating Regions:</label>
+              <input type="text" class="form-control" id="operatingRegions" placeholder="Enter operating regions"
+                formControlName="operatingRegions" required
+                [ngClass]="{'is-invalid': vendorForm.get('operatingRegions')?.invalid && (vendorForm.get('operatingRegions')?.dirty || vendorForm.get('operatingRegions')?.touched)}">
+              <div
+                *ngIf="vendorForm.get('operatingRegions')?.invalid && (vendorForm.get('operatingRegions')?.dirty || vendorForm.get('operatingRegions')?.touched)"
+                class="invalid-feedback">
+                Operating regions are required.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="mb-2 d-block font-weight-700">Status:</label>
+              <select class="form-control" id="status" formControlName="status" required
+                [ngClass]="{'is-invalid': vendorForm.get('status')?.invalid && (vendorForm.get('status')?.dirty || vendorForm.get('status')?.touched)}">
+                <option value="Approved">Approved</option>
+                <option value="Pending">Pending</option>
+              </select>
+              <div
+                *ngIf="vendorForm.get('status')?.invalid && (vendorForm.get('status')?.dirty || vendorForm.get('status')?.touched)"
+                class="invalid-feedback">
+                Status is required.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="mb-2 d-block font-weight-700">Notes/Comments:</label>
+              <textarea rows="1" class="form-control" id="notesComments" placeholder="Enter notes/comments"
+                formControlName="notesComments" required
+                [ngClass]="{'is-invalid': vendorForm.get('notesComments')?.invalid && (vendorForm.get('notesComments')?.dirty || vendorForm.get('notesComments')?.touched)}"></textarea>
+              <div
+                *ngIf="vendorForm.get('notesComments')?.invalid && (vendorForm.get('notesComments')?.dirty || vendorForm.get('notesComments')?.touched)"
+                class="invalid-feedback">
+                Notes/comments are required.
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="mb-2 d-block font-weight-700">License/Permit/Registration Number:</label>
+              <input type="text" class="form-control" id="licensePermitRegistrationNumber"
+                placeholder="Enter license/permit/registration number" formControlName="licensePermitRegistrationNumber"
+                required
+                [ngClass]="{'is-invalid': vendorForm.get('licensePermitRegistrationNumber')?.invalid && (vendorForm.get('licensePermitRegistrationNumber')?.dirty || vendorForm.get('licensePermitRegistrationNumber')?.touched)}">
+              <div
+                *ngIf="vendorForm.get('licensePermitRegistrationNumber')?.invalid && (vendorForm.get('licensePermitRegistrationNumber')?.dirty || vendorForm.get('licensePermitRegistrationNumber')?.touched)"
+                class="invalid-feedback">
+                License/permit/registration number is required.
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="mb-2 d-block font-weight-700">Fee Type:</label>
+              <select class="form-control" id="feeType" formControlName="feeType" required
+                [ngClass]="{'is-invalid': vendorForm.get('feeType')?.invalid && (vendorForm.get('feeType')?.dirty || vendorForm.get('feeType')?.touched)}">
+                <option value="" disabled selected>Select Fee Type</option>
+                <option value="Fee 1">Fee 1</option>
+                <option value="Fee 2">Fee 2</option>
+              </select>
+              <div
+                *ngIf="vendorForm.get('feeType')?.invalid && (vendorForm.get('feeType')?.dirty || vendorForm.get('feeType')?.touched)"
+                class="invalid-feedback">
+                Fee type is required.
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="mb-2 d-block font-weight-700">Fee Amount:</label>
+              <input type="text" class="form-control" id="feeAmount" placeholder="Enter fee amount"
+                formControlName="feeAmount" required
+                [ngClass]="{'is-invalid': vendorForm.get('feeAmount')?.invalid && (vendorForm.get('feeAmount')?.dirty || vendorForm.get('feeAmount')?.touched)}">
+              <div
+                *ngIf="vendorForm.get('feeAmount')?.invalid && (vendorForm.get('feeAmount')?.dirty || vendorForm.get('feeAmount')?.touched)"
+                class="invalid-feedback">
+                Fee amount is required.
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="mb-2 d-block font-weight-700">Renewal/Expiration Date:</label>
+              <input type="date" class="form-control" id="renewalExpirationDate"
+                placeholder="Enter renewal/expiration date" formControlName="renewalExpirationDate" required
+                [ngClass]="{'is-invalid': vendorForm.get('renewalExpirationDate')?.invalid && (vendorForm.get('renewalExpirationDate')?.dirty || vendorForm.get('renewalExpirationDate')?.touched)}">
+              <div
+                *ngIf="vendorForm.get('renewalExpirationDate')?.invalid && (vendorForm.get('renewalExpirationDate')?.dirty || vendorForm.get('renewalExpirationDate')?.touched)"
+                class="invalid-feedback">
+                Renewal/expiration date is required.
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="mb-2 d-block font-weight-700">Payment Reference/Confirmation Number:</label>
+              <input type="text" class="form-control" id="paymentReferenceConfirmationNumber"
+                placeholder="Enter payment reference/confirmation number"
+                formControlName="paymentReferenceConfirmationNumber" required
+                [ngClass]="{'is-invalid': vendorForm.get('paymentReferenceConfirmationNumber')?.invalid && (vendorForm.get('paymentReferenceConfirmationNumber')?.dirty || vendorForm.get('paymentReferenceConfirmationNumber')?.touched)}">
+              <div
+                *ngIf="vendorForm.get('paymentReferenceConfirmationNumber')?.invalid && (vendorForm.get('paymentReferenceConfirmationNumber')?.dirty || vendorForm.get('paymentReferenceConfirmationNumber')?.touched)"
+                class="invalid-feedback">
+                Payment reference/confirmation number is required.
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="mb-2 d-block font-weight-700">Jurisdiction/Authority:</label>
+              <input type="text" class="form-control" id="jurisdictionAuthority"
+                placeholder="Enter jurisdiction/authority" formControlName="jurisdictionAuthority" required
+                [ngClass]="{'is-invalid': vendorForm.get('jurisdictionAuthority')?.invalid && (vendorForm.get('jurisdictionAuthority')?.dirty || vendorForm.get('jurisdictionAuthority')?.touched)}">
+              <div
+                *ngIf="vendorForm.get('jurisdictionAuthority')?.invalid && (vendorForm.get('jurisdictionAuthority')?.dirty || vendorForm.get('jurisdictionAuthority')?.touched)"
+                class="invalid-feedback">
+                Jurisdiction/authority is required.
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="mb-2 d-block font-weight-700">Payment Reference/Confirmation Number:</label>
+              <select class="form-control" id="paymentReferenceConfirmationNumber"
+                formControlName="paymentReferenceConfirmationNumber" required
+                [ngClass]="{'is-invalid': vendorForm.get('paymentReferenceConfirmationNumber')?.invalid && (vendorForm.get('paymentReferenceConfirmationNumber')?.dirty || vendorForm.get('paymentReferenceConfirmationNumber')?.touched)}">
+                <option value="" disabled selected>Select Payment Reference/Confirmation</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+              </select>
+              <div
+                *ngIf="vendorForm.get('paymentReferenceConfirmationNumber')?.invalid && (vendorForm.get('paymentReferenceConfirmationNumber')?.dirty || vendorForm.get('paymentReferenceConfirmationNumber')?.touched)"
+                class="invalid-feedback">
+                Payment reference/confirmation is required.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer justify-content-center" style="border-top: 1px solid #ccc; padding-top: 15px; margin-top: 15px;">
+          <button type="button" class="btn btn-outline-secondary btn-sm text-uppercase rounded-pill"
+            data-bs-dismiss="offcanvas" aria-label="Close" (click)="onClose()"> Close</button>
+          <button type="submit" class="btn btn-success btn-sm text-uppercase rounded-pill"
+            data-bs-dismiss="offcanvas">Submit Form</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

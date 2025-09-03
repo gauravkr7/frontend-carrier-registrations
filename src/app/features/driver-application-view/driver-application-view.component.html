@@ -1,0 +1,3176 @@
+<!-- Add this to your index.html <head> -->
+<link href="https://fonts.googleapis.com/css?family=Pacifico&display=swap" rel="stylesheet">
+
+<main id="main" class="main mt-0 p-0">
+  <div class="p-4 pb-0 py-0">
+    <div class="bg-white px-3 py-3 mt-3 rounded"> 
+      <div *ngIf="driverData?.status" class="status-section mb-4">
+        <div class="card shadow-sm border-0" style="background: linear-gradient(90deg, #e3f0ff 0%, #f8fafc 100%);">
+          <div class="card-body d-flex flex-wrap align-items-center gap-4">
+            <div class="d-flex align-items-center gap-2">
+              <span class="fw-bold" style="font-size: 1.1rem;">Status:</span>
+              <span [ngClass]="{'badge bg-success': driverData.status === 'approved','badge bg-danger': driverData.status === 'rejected' || driverData.status === false,'badge bg-warning text-dark': driverData.status === 'pending' || driverData.status === true}" style="font-size: 1rem; padding: 0.6em 1.4em; letter-spacing: 1px;">
+                <i *ngIf="driverData.status === 'approved'" class="fa fa-check-circle me-1"></i>
+                <i *ngIf="driverData.status === 'rejected' || driverData.status === false"
+                  class="fa fa-times-circle me-1"></i>
+                <i *ngIf="driverData.status === 'pending' || driverData.status === true"
+                  class="fa fa-hourglass-half me-1"></i>
+                {{
+                driverData.status === true || driverData.status === 'pending'
+                ? 'Pending'
+                : driverData.status === false || driverData.status === 'rejected'
+                ? 'Rejected'
+                : (driverData.status || '-')
+                }}
+              </span>
+            </div>
+            <div class="vr mx-3 d-none d-md-block" style="height: 40px;"></div>
+            <div class="flex-grow-1">
+              <ng-container *ngIf="driverData.status === 'approved'">
+                <div class="row g-2">
+                  <div class="col-md-6 col-12">
+                    <span><i class="fa fa-user-check text-success me-1"></i> <b>Approved By:</b> {{
+                      driverData.approvedBy || '-' }}</span>
+                  </div>
+                  <div class="col-md-6 col-12">
+                    <span><i class="fa fa-sticky-note text-primary me-1"></i> <b>Approval Notes:</b> {{
+                      driverData.approvalNotes || '-' }}</span>
+                  </div>
+                  <div class="col-md-6 col-12">
+                    <span><i class="fa fa-layer-group text-info me-1"></i> <b>Approval Level:</b> {{
+                      driverData.approvalLevel || '-' }}</span>
+                  </div>
+                  <div class="col-md-6 col-12">
+                    <span><i class="fa fa-forward text-secondary me-1"></i> <b>Next Step:</b> {{ driverData.nextStep ||
+                      '-' }}</span>
+                  </div>
+                </div>
+              </ng-container>
+              <ng-container *ngIf="driverData.status === 'rejected'">
+                <div class="row g-2">
+                  <div class="col-md-6 col-12">
+                    <span><i class="fa fa-user-times text-danger me-1"></i> <b>Rejected By:</b> {{ driverData.rejectedBy
+                      || '-' }}</span>
+                  </div>
+                  <div class="col-md-6 col-12">
+                    <span><i class="fa fa-exclamation-circle text-warning me-1"></i> <b>Rejection Reason:</b> {{
+                      driverData.rejectionReason || '-' }}</span>
+                  </div>
+                  <div class="col-md-6 col-12">
+                    <span><i class="fa fa-info-circle text-secondary me-1"></i> <b>Explanation:</b> {{
+                      driverData.rejectionExplanation || '-' }}</span>
+                  </div>
+                  <div class="col-md-6 col-12">
+                    <span><i class="fa fa-calendar-check text-info me-1"></i> <b>Follow-up:</b> {{
+                      driverData.rejectionFollowup || '-' }}</span>
+                  </div>
+                  <div class="col-12">
+                    <span><i class="fa fa-bell text-primary me-1"></i> <b>Notify:</b>
+                      <ng-container *ngIf="driverData.rejectionNotify?.length; else noNotify">
+                        {{ driverData.rejectionNotify.join(', ') }}
+                      </ng-container>
+                      <ng-template #noNotify>-</ng-template>
+                    </span>
+                  </div>
+                </div>
+              </ng-container>
+              <ng-container *ngIf="driverData.status === 'pending'">
+                <span class="text-muted"><i class="fa fa-info-circle me-1"></i> This application is pending
+                  review.</span>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="d-flex justify-content-between">
+            <div>
+              <a routerLink="/driver-application" routerLinkActive="active"
+                class="btn btn-outline-secondary rounded-pill font-14">Back to
+                Dashboard</a>
+            </div>
+            <div>
+              <div class="btn-group" role="group" aria-label="Basic example">
+                <a href="javascript:;" class="btn btn-success rounded-pill font-14" type="button"
+                  data-bs-toggle="offcanvas" data-bs-target="#addLocation" aria-controls="addLocation">
+                  <i class="fa fa-pencil me-1" aria-hidden="true"></i> Edit
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+<!-- Compliance Checklist (View Only) -->
+<div class="bg-white p-4 mt-3 rounded" *ngIf="driverData?.status === 'approved' || driverData?.status === 'rejected'">
+  <h4 class="mb-3">Compliance Verification Checklist</h4>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Section Name</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let section of checklistSections; let i = index; trackBy: trackByIndex">
+        <td>{{ section }}</td>
+        <td>
+          <span [ngClass]="driverData?.isVerifiedSections?.[i] ? 'text-success' : 'text-danger'">
+            {{ driverData?.isVerifiedSections?.[i] ? 'Verified' : 'Unverified' }}
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+    <div class="bg-white p-4 mt-3 rounded">
+      <div class="bg-light p-4 pb-2 rounded mb-4">
+        <div class="mb-3">
+          <div class="row">
+            <h2 class="font-18 font-weight-700 text-primary mb-4 text-capitalize">1. Applicant Information</h2>
+            <hr>
+            <div class="col-md-2 mb-3">
+              <p class="font-weight-700 mb-2">First Name</p>
+              <h2 class="font-14 font-weight-400 mb-1">{{ driverData?.firstName || '-' }}</h2>
+            </div>
+            <div class="col-md-2 mb-3">
+              <p class="font-weight-700 mb-2">Middle Name</p>
+              <h2 class="font-14 font-weight-400 mb-1">{{ driverData?.middleName || '-' }}</h2>
+            </div>
+            <div class="col-md-2 mb-3">
+              <p class="font-weight-700 mb-2">Last Name</p>
+              <h2 class="font-14 font-weight-400 mb-1">{{ driverData?.lastName || '-' }}</h2>
+            </div>
+            <div class="col-md-2 mb-3">
+              <p class="font-weight-700 mb-2">Any other names used</p>
+              <h2 class="font-14 font-weight-400 mb-1">{{ driverData?.otherNames || 'NA' }}</h2>
+            </div>
+            <div class="col-md-2 mb-3">
+              <p class="font-weight-700 mb-2">Social Security Number</p>
+              <h2 class="font-14 font-weight-400 mb-1">{{ driverData?.ssn || '-' }}</h2>
+            </div>
+            <div class="col-md-2 mb-3">
+              <p class="font-weight-700 mb-2">Date of Birth</p>
+              <h2 class="font-14 font-weight-400 mb-1">{{ driverData?.dob || '-' }}</h2>
+            </div>
+            <div class="col-md-2 mb-3">
+              <p class="font-weight-700 mb-2">Application Date</p>
+              <h2 class="font-14 font-weight-400 mb-1">{{ driverData?.applicationDate || '-' }}</h2>
+            </div>
+            <div class="col-md-2 mb-3">
+              <p class="font-weight-700 mb-2">Position Applied</p>
+              <h2 class="font-14 font-weight-400 mb-1">{{ driverData?.positionApplied || '-' }}</h2>
+            </div>
+            <div class="col-md-2 mb-3">
+              <p class="font-weight-700 mb-2">Availability Date</p>
+              <h2 class="font-14 font-weight-400 mb-1">{{ driverData?.availabilityDate || '-' }}</h2>
+            </div>
+            <div class="col-md-2 mb-3">
+              <p class="font-weight-700 mb-2">Legal Right To Work</p>
+              <h2 class="font-14 font-weight-400 mb-1">{{ driverData?.legalRightToWork || '-' }}</h2>
+            </div>
+            <div class="col-md-2 mb-3">
+              <p class="font-weight-700 mb-2">Phone Number</p>
+              <h2 class="font-14 font-weight-400 mb-1">{{ driverData?.phone || '-' }}</h2>
+            </div>
+            <div class="col-md-2 mb-3">
+              <p class="font-weight-700 mb-2">Email Address</p>
+              <h2 class="font-14 font-weight-400 mb-1">{{ driverData?.email || '-' }}</h2>
+            </div>
+            <div class="col-md-2 mb-3">
+              <p class="font-weight-700 mb-2">Current Address (Street)</p>
+              <h2 class="font-14 font-weight-400 mb-1">{{ driverData?.currentStreet || '-' }}</h2>
+            </div>
+            <div class="col-md-2 mb-3">
+              <p class="font-weight-700 mb-2">City</p>
+              <h2 class="font-14 font-weight-400 mb-1">{{ driverData?.currentCity || '-' }}</h2>
+            </div>
+            <div class="col-md-2 mb-3">
+              <p class="font-weight-700 mb-2">State</p>
+              <h2 class="font-14 font-weight-400 mb-1">{{ driverData?.currentState || '-' }}</h2>
+            </div>
+            <div class="col-md-2 mb-3">
+              <p class="font-weight-700 mb-2">ZIP Code</p>
+              <h2 class="font-14 font-weight-400 mb-1">{{ driverData?.currentZip || '-' }}</h2>
+            </div>
+            <div class="col-md-2 mb-3">
+              <p class="font-weight-700 mb-2">How long at current address? (Years)</p>
+              <h2 class="font-14 font-weight-400 mb-1">{{ driverData?.currentYears || '-' }}</h2>
+            </div>
+            <div class="col-md-2 mb-3">
+              <p class="font-weight-700 mb-2">How long at current address? (Months)</p>
+              <h2 class="font-14 font-weight-400 mb-1">{{ driverData?.currentMonths || '-' }}</h2>
+            </div>
+            <div class="col-md-2 mb-3">
+              <p class="font-weight-700 mb-2"> How long at current address?</p>
+              <h2 class="font-14 font-weight-400 mb-1">2 Months</h2>
+            </div>
+
+            <hr>
+            <div class="col-12 mb-3" *ngIf="driverData?.previousAddresses?.length">
+              <p class="font-weight-700 mb-2">Previous Addresses (Past 3 Years)</p>
+              <div class="row" *ngFor="let addr of driverData.previousAddresses; let i = index">
+                <div class="col-md-3 mb-2">
+                  <span class="font-weight-700">Street:</span>
+                  <span>{{ addr.street || '-' }}</span>
+                </div>
+                <div class="col-md-2 mb-2">
+                  <span class="font-weight-700">City:</span>
+                  <span>{{ addr.city || '-' }}</span>
+                </div>
+                <div class="col-md-2 mb-2">
+                  <span class="font-weight-700">State:</span>
+                  <span>{{ addr.state || '-' }}</span>
+                </div>
+                <div class="col-md-2 mb-2">
+                  <span class="font-weight-700">ZIP Code:</span>
+                  <span>{{ addr.zip || '-' }}</span>
+                </div>
+                <div class="col-md-1 mb-2">
+                  <span class="font-weight-700">Years:</span>
+                  <span>{{ addr.years || '-' }}</span>
+                </div>
+                <div class="col-md-1 mb-2">
+                  <span class="font-weight-700">Months:</span>
+                  <span>{{ addr.months || '-' }}</span>
+                </div>
+                <div class="w-100"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="bg-light p-4 pb-2 rounded mb-4">
+        <div class="mb-3">
+          <div class="row">
+            <h2 class="font-18 font-weight-700 text-primary mb-4 text-capitalize">2. License Information</h2>
+            <hr>
+            <!-- Driver's Licenses -->
+            <ng-container *ngIf="driverData?.licenses?.length; else noLicense">
+              <div class="col-12 mb-3" *ngFor="let lic of driverData.licenses; let i = index">
+                <div class="row">
+                  <div class="col-md-2 mb-3">
+                    <p class="font-weight-700 mb-2">Driver's License Number</p>
+                    <h2 class="font-14 font-weight-400 mb-1">{{ lic.licenseNumber || '-' }}</h2>
+                  </div>
+                  <div class="col-md-2 mb-3">
+                    <p class="font-weight-700 mb-2">State of Issuance</p>
+                    <h2 class="font-14 font-weight-400 mb-1">{{ lic.stateOfIssuance || '-' }}</h2>
+                  </div>
+                  <div class="col-md-2 mb-3">
+                    <p class="font-weight-700 mb-2">Class</p>
+                    <h2 class="font-14 font-weight-400 mb-1">{{ lic.licenseClass || '-' }}</h2>
+                  </div>
+                  <div class="col-md-2 mb-3">
+                    <p class="font-weight-700 mb-2">Endorsements</p>
+                    <h2 class="font-14 font-weight-400 mb-1">
+                      <ng-container *ngIf="lic.endorsements?.length; else noEndorsements">
+                        {{ lic.endorsements.join(', ') }}
+                      </ng-container>
+                      <ng-template #noEndorsements>-</ng-template>
+                    </h2>
+                  </div>
+                  <div class="col-md-2 mb-3">
+                    <p class="font-weight-700 mb-2">Expiration Date</p>
+                    <h2 class="font-14 font-weight-400 mb-1">{{ lic.expirationDate || '-' }}</h2>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+            <ng-template #noLicense>
+              <div class="col-12 mb-3">
+                <h2 class="font-14 font-weight-400 mb-1">No License Information Available</h2>
+              </div>
+            </ng-template>
+            <hr>
+            <!-- Other Licenses -->
+            <!-- <div class="col-12 mb-3">
+              <p class="font-weight-700 mb-2">Other Licenses Held in Last 3 Years (including revoked/suspended)</p>
+              <ng-container *ngIf="driverData?.otherLicenses?.length; else noOtherLicenses">
+                <div class="row" *ngFor="let olic of driverData.otherLicenses; let j = index">
+                  <div class="col-md-3 mb-3">
+                    <span class="font-weight-700">License Number:</span>
+                    <span>{{ olic.licenseNumber || '-' }}</span>
+                  </div>
+                  <div class="col-md-2 mb-3">
+                    <span class="font-weight-700">State:</span>
+                    <span>{{ olic.state || '-' }}</span>
+                  </div>
+                  <div class="col-md-3 mb-3">
+                    <span class="font-weight-700">Current Status:</span>
+                    <span>{{ olic.status || '-' }}</span>
+                  </div>
+                  <div class="col-md-2 mb-3">
+                    <span class="font-weight-700">Expiration Date:</span>
+                    <span>{{ olic.date || '-' }}</span>
+                  </div>
+                  <div class="w-100"></div>
+                </div>
+              </ng-container>
+              <ng-template #noOtherLicenses>
+                <h2 class="font-14 font-weight-400 mb-1">NA</h2>
+              </ng-template>
+            </div> -->
+          </div>
+        </div>
+      </div>
+      <div class="bg-light p-4 pb-2 rounded mb-4">
+        <div class="mb-3">
+          <div class="row">
+            <h2 class="font-18 font-weight-700 text-primary mb-4 text-capitalize">3. Driving Experience</h2>
+            <hr>
+            <ng-container *ngIf="driverData?.drivingExperience?.length; else noDrivingExp">
+              <div class="col-12 mb-3" *ngFor="let exp of driverData.drivingExperience; let i = index">
+                <div class="row">
+                  <div class="col-md-2 mb-3">
+                    <p class="font-weight-700 mb-2">Equipment Type</p>
+                    <h2 class="font-14 font-weight-400 mb-1">{{ exp.equipmentType || '-' }}</h2>
+                  </div>
+                  <div class="col-md-2 mb-3">
+                    <p class="font-weight-700 mb-2">Type of Equipment</p>
+                    <h2 class="font-14 font-weight-400 mb-1">{{ exp.equipmentSubType || '-' }}</h2>
+                  </div>
+                  <div class="col-md-2 mb-3">
+                    <p class="font-weight-700 mb-2">From Date</p>
+                    <h2 class="font-14 font-weight-400 mb-1">{{ exp.fromDate || '-' }}</h2>
+                  </div>
+                  <div class="col-md-2 mb-3">
+                    <p class="font-weight-700 mb-2">To Date</p>
+                    <h2 class="font-14 font-weight-400 mb-1">{{ exp.toDate || '-' }}</h2>
+                  </div>
+                  <div class="col-md-2 mb-3">
+                    <p class="font-weight-700 mb-2">Approx. Total Miles</p>
+                    <h2 class="font-14 font-weight-400 mb-1">{{ exp.totalMiles || '-' }}</h2>
+                  </div>
+                  <div class="col-md-2 mb-3">
+                    <p class="font-weight-700 mb-2">State Operated In</p>
+                    <h2 class="font-14 font-weight-400 mb-1">{{ exp.operatedStates || '-' }}</h2>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+            <ng-template #noDrivingExp>
+              <div class="col-12 mb-3">
+                <h2 class="font-14 font-weight-400 mb-1">No Driving Experience Information Available</h2>
+              </div>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+      <div class="bg-light p-4 pb-2 rounded mb-4">
+        <div class="mb-3">
+          <div class="row">
+            <h2 class="font-18 font-weight-700 text-primary mb-4 text-capitalize">4. Employment History (Last 10 Years)
+            </h2>
+            <hr>
+            <ng-container *ngIf="driverData?.employmentHistory?.length; else noEmployment">
+              <div class="col-12 mb-3" *ngFor="let emp of driverData.employmentHistory; let i = index">
+                <div class="row">
+                  <div class="col-md-2 mb-3">
+                    <p class="font-weight-700 mb-2">Employer Name</p>
+                    <h2 class="font-14 font-weight-400 mb-1">{{ emp.employerName || '-' }}</h2>
+                  </div>
+                  <div class="col-md-2 mb-3">
+                    <p class="font-weight-700 mb-2">Phone Number</p>
+                    <h2 class="font-14 font-weight-400 mb-1">{{ emp.phone || '-' }}</h2>
+                  </div>
+                  <div class="col-md-2 mb-3">
+                    <p class="font-weight-700 mb-2">Employer Address</p>
+                    <h2 class="font-14 font-weight-400 mb-1">{{ emp.address || '-' }}</h2>
+                  </div>
+                  <div class="col-md-2 mb-3">
+                    <p class="font-weight-700 mb-2">Contact Person</p>
+                    <h2 class="font-14 font-weight-400 mb-1">{{ emp.contactPerson || '-' }}</h2>
+                  </div>
+                  <div class="col-md-2 mb-3">
+                    <p class="font-weight-700 mb-2">Position Held</p>
+                    <h2 class="font-14 font-weight-400 mb-1">{{ emp.positionHeld || '-' }}</h2>
+                  </div>
+                  <div class="col-md-2 mb-3">
+                    <p class="font-weight-700 mb-2">Salary or Pay Rate</p>
+                    <h2 class="font-14 font-weight-400 mb-1">{{ emp.payRate || '-' }}</h2>
+                  </div>
+                  <div class="col-md-2 mb-3">
+                    <p class="font-weight-700 mb-2">Start Date</p>
+                    <h2 class="font-14 font-weight-400 mb-1">{{ emp.startDate || '-' }}</h2>
+                  </div>
+                  <div class="col-md-2 mb-3">
+                    <p class="font-weight-700 mb-2">End Date</p>
+                    <h2 class="font-14 font-weight-400 mb-1">{{ emp.endDate || '-' }}</h2>
+                  </div>
+                  <div class="col-md-2 mb-3">
+                    <p class="font-weight-700 mb-2">Reason for Leaving</p>
+                    <h2 class="font-14 font-weight-400 mb-1">{{ emp.reasonForLeaving || '-' }}</h2>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-4 mb-3">
+                      <p class="font-weight-700 mb-2">
+                        <i class="fa fa-check text-primary" aria-hidden="true"></i>
+                        Was this job subject to FMCSA regulations?
+                        <span class="ms-2">{{ emp.subjectToFMCSA ? 'Yes' : 'No' }}</span>
+                      </p>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                      <p class="font-weight-700 mb-2">
+                        <i class="fa fa-check text-primary" aria-hidden="true"></i>
+                        Was this a safety-sensitive function under DOT rules?
+                        <span class="ms-2">{{ emp.safetySensitive ? 'Yes' : 'No' }}</span>
+                      </p>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                      <p class="font-weight-700 mb-2">
+                        <i class="fa fa-check text-primary" aria-hidden="true"></i>
+                        Authorization to contact this employer
+                        <span class="ms-2">{{ emp.authorizeContact ? 'Yes' : 'No' }}</span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+            <ng-template #noEmployment>
+              <div class="col-12 mb-3">
+                <h2 class="font-14 font-weight-400 mb-1">No Employment History Available</h2>
+              </div>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+      <div class="bg-light p-4 pb-2 rounded mb-4">
+        <div class="mb-3">
+          <div class="row">
+            <h2 class="font-18 font-weight-700 text-primary mb-4 text-capitalize">5. Traffic Convictions (Last 3 Years)
+            </h2>
+            <hr>
+            <ng-container *ngIf="driverData?.trafficConvictions?.length; else noConvictions">
+              <div class="col-12 mb-3" *ngFor="let tc of driverData.trafficConvictions; let i = index">
+                <div class="row">
+                  <div class="col-md-2 mb-3">
+                    <p class="font-weight-700 mb-2">Date</p>
+                    <h2 class="font-14 font-weight-400 mb-1">{{ tc.date || '-' }}</h2>
+                  </div>
+                  <div class="col-md-2 mb-3">
+                    <p class="font-weight-700 mb-2">Location (City, State):</p>
+                    <h2 class="font-14 font-weight-400 mb-1">{{ tc.location || '-' }}</h2>
+                  </div>
+                  <div class="col-md-2 mb-3">
+                    <p class="font-weight-700 mb-2">Nature of Violation</p>
+                    <h2 class="font-14 font-weight-400 mb-1">{{ tc.violation || '-' }}</h2>
+                  </div>
+                  <div class="col-md-2 mb-3">
+                    <p class="font-weight-700 mb-2">Penalty/Action Taken</p>
+                    <h2 class="font-14 font-weight-400 mb-1">{{ tc.penalty || '-' }}</h2>
+                  </div>
+                  <div class="col-md-2 mb-3">
+                    <p class="font-weight-700 mb-2">Was it in a Commercial Motor Vehicle?</p>
+                    <h2 class="font-14 font-weight-400 mb-1">{{ tc.wasInCMV ? 'Yes' : 'No' }}</h2>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+            <ng-template #noConvictions>
+              <div class="col-12 mb-3">
+                <h2 class="font-14 font-weight-400 mb-1">No Traffic Convictions Information Available</h2>
+              </div>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+      <div class="bg-light p-4 pb-2 rounded mb-4">
+        <div class="mb-3">
+          <div class="row">
+            <h2 class="font-18 font-weight-700 text-primary mb-4 text-capitalize">6. Accident Record (Last 3 Years)</h2>
+            <hr>
+            <ng-container *ngIf="driverData?.accidentRecords?.length; else noAccidents">
+              <div class="col-12 mb-3" *ngFor="let acc of driverData.accidentRecords; let i = index">
+                <div class="row">
+                  <div class="col-md-2 mb-3">
+                    <p class="font-weight-700 mb-2">Date</p>
+                    <h2 class="font-14 font-weight-400 mb-1">{{ acc.date || '-' }}</h2>
+                  </div>
+                  <div class="col-md-2 mb-3">
+                    <p class="font-weight-700 mb-2">Location (City, State):</p>
+                    <h2 class="font-14 font-weight-400 mb-1">{{ acc.location || '-' }}</h2>
+                  </div>
+                  <div class="col-md-2 mb-3">
+                    <p class="font-weight-700 mb-2">Nature of Accident</p>
+                    <h2 class="font-14 font-weight-400 mb-1">{{ acc.nature || '-' }}</h2>
+                  </div>
+                  <div class="col-md-2 mb-3">
+                    <p class="font-weight-700 mb-2">Number of Fatalities</p>
+                    <h2 class="font-14 font-weight-400 mb-1">{{ acc.fatalities != null ? acc.fatalities : '-' }}</h2>
+                  </div>
+                  <div class="col-md-2 mb-3">
+                    <p class="font-weight-700 mb-2">Number of Injuries</p>
+                    <h2 class="font-14 font-weight-400 mb-1">{{ acc.injuries != null ? acc.injuries : '-' }}</h2>
+                  </div>
+                  <div class="col-md-2 mb-3">
+                    <p class="font-weight-700 mb-2">
+                      <i class="fa fa-check text-primary" aria-hidden="true"></i> Was there a hazardous material spill?
+                    </p>
+                    <h2 class="font-14 font-weight-400 mb-1">{{ acc.hazmatSpill ? 'Yes' : 'No' }}</h2>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+            <ng-template #noAccidents>
+              <div class="col-12 mb-3">
+                <h2 class="font-14 font-weight-400 mb-1">No Accident Records Available</h2>
+              </div>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+      <div class="bg-light p-4 pb-2 rounded mb-4">
+        <div class="mb-3">
+          <div class="row">
+            <h2 class="font-18 font-weight-700 text-primary mb-4 text-capitalize">7. Criminal History</h2>
+            <hr>
+            <div class="col-md-6 mb-3">
+              <p class="font-weight-700 mb-2">
+                <i class="fa fa-check text-primary" aria-hidden="true"></i>
+                Have you ever been denied a license, permit, or privilege to operate a motor vehicle?
+              </p>
+              <h2 class="font-14 font-weight-400 mb-1">
+                {{ driverData?.deniedLicense ? (driverData?.deniedLicenseDetails || 'Yes') : 'No' }}
+              </h2>
+            </div>
+            <div class="col-md-6 mb-3">
+              <p class="font-weight-700 mb-2">
+                <i class="fa fa-check text-primary" aria-hidden="true"></i>
+                Has any license, permit, or privilege ever been suspended or revoked?
+              </p>
+              <h2 class="font-14 font-weight-400 mb-1">
+                {{ driverData?.licenseSuspended ? (driverData?.suspendedDetails || 'Yes') : 'No' }}
+              </h2>
+            </div>
+            <div class="col-md-6 mb-3">
+              <p class="font-weight-700 mb-2">
+                <i class="fa fa-check text-primary" aria-hidden="true"></i>
+                Have you ever been convicted of a felony?
+              </p>
+              <h2 class="font-14 font-weight-400 mb-1">
+                {{ driverData?.felonyConviction ? (driverData?.felonyDetails || 'Yes') : 'No' }}
+              </h2>
+            </div>
+            <div class="col-md-6 mb-3">
+              <p class="font-weight-700 mb-2">
+                <i class="fa fa-check text-primary" aria-hidden="true"></i>
+                Have you ever been convicted of driving under the influence (DUI)?
+              </p>
+              <h2 class="font-14 font-weight-400 mb-1">
+                {{ driverData?.duiConviction ? (driverData?.duiDetails || 'Yes') : 'No' }}
+              </h2>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="bg-light p-4 pb-2 rounded mb-4">
+        <div class="mb-3">
+          <div class="row">
+            <h2 class="font-18 font-weight-700 text-primary mb-4 text-capitalize">8. Military Service</h2>
+            <hr>
+            <div class="col-md-12 mb-3">
+              <p class="font-weight-700 mb-2">
+                <i class="fa fa-check text-primary" aria-hidden="true"></i>
+                Have you served in the U.S. military?
+              </p>
+              <h2 class="font-14 font-weight-400 mb-1">
+                {{ driverData?.servedInMilitary ? 'Yes' : 'No' }}
+              </h2>
+            </div>
+            <ng-container *ngIf="driverData?.servedInMilitary">
+              <div class="col-md-2 mb-3">
+                <p class="font-weight-700 mb-2">Branch of Service</p>
+                <h2 class="font-14 font-weight-400 mb-1">{{ driverData?.militaryBranch || '-' }}</h2>
+              </div>
+              <div class="col-md-2 mb-3">
+                <p class="font-weight-700 mb-2">Rank at Discharge</p>
+                <h2 class="font-14 font-weight-400 mb-1">{{ driverData?.rankAtDischarge || '-' }}</h2>
+              </div>
+              <div class="col-md-2 mb-3">
+                <p class="font-weight-700 mb-2">Dates of Service (From)</p>
+                <h2 class="font-14 font-weight-400 mb-1">{{ driverData?.serviceFromDate || '-' }}</h2>
+              </div>
+              <div class="col-md-2 mb-3">
+                <p class="font-weight-700 mb-2">Dates of Service (To)</p>
+                <h2 class="font-14 font-weight-400 mb-1">{{ driverData?.serviceToDate || '-' }}</h2>
+              </div>
+              <div class="col-md-12 mb-3">
+                <p class="font-weight-700 mb-2">Relevant driving/training experience</p>
+                <h2 class="font-14 font-weight-400 mb-1">{{ driverData?.militaryExperience || '-' }}</h2>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+      <div class="bg-light p-4 pb-2 rounded mb-4">
+        <div class="mb-3">
+          <div class="row">
+            <h2 class="font-18 font-weight-700 text-primary mb-4 text-capitalize">9. Education</h2>
+            <hr>
+            <div class="col-md-2 mb-3">
+              <p class="font-weight-700 mb-2">Highest level of education completed</p>
+              <h2 class="font-14 font-weight-400 mb-1">{{ driverData?.educationLevel || '-' }}</h2>
+            </div>
+            <div class="col-md-2 mb-3">
+              <p class="font-weight-700 mb-2">Name of School</p>
+              <h2 class="font-14 font-weight-400 mb-1">{{ driverData?.schoolName || '-' }}</h2>
+            </div>
+            <div class="col-md-2 mb-3">
+              <p class="font-weight-700 mb-2">City</p>
+              <h2 class="font-14 font-weight-400 mb-1">{{ driverData?.schoolCity || '-' }}</h2>
+            </div>
+            <div class="col-md-2 mb-3">
+              <p class="font-weight-700 mb-2">State</p>
+              <h2 class="font-14 font-weight-400 mb-1">{{ driverData?.schoolState || '-' }}</h2>
+            </div>
+            <div class="col-md-4 mb-3">
+              <p class="font-weight-700 mb-2">Area of study or certification</p>
+              <h2 class="font-14 font-weight-400 mb-1">{{ driverData?.areaOfStudy || '-' }}</h2>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 10. Medical Certification -->
+      <div class="bg-light p-4 pb-2 rounded mb-4">
+        <div class="mb-3">
+          <div class="row">
+            <h2 class="font-18 font-weight-700 text-primary mb-4 text-capitalize">10. Medical Certification</h2>
+            <hr>
+            <div class="col-md-6 mb-3">
+              <p class="font-weight-700 mb-2">
+                <i class="fa fa-check text-primary" aria-hidden="true"></i>
+                Do you currently possess a valid DOT Medical Examiner's Certificate?
+              </p>
+              <h2 class="font-14 font-weight-400 mb-1">
+                {{ driverData?.hasDotMedicalCard ? 'Yes' : 'No' }}
+              </h2>
+            </div>
+            <div class="col-md-2 mb-3">
+              <p class="font-weight-700 mb-2">Document</p>
+              <h2 class="font-14 font-weight-400 mb-1">
+                <a *ngIf="driverData?.medicalCardFile" [href]="driverData.medicalCardFile" target="_blank">
+                  {{ driverData.medicalCardFile.split('/').pop() }}
+                </a>
+                <span *ngIf="!driverData?.medicalCardFile">-</span>
+              </h2>
+            </div>
+            <div class="col-md-4 mb-3">
+              <p class="font-weight-700 mb-2">
+                <i class="fa fa-check text-primary" aria-hidden="true"></i>
+                Do you have any medical conditions that may affect your ability to drive?
+              </p>
+              <h2 class="font-14 font-weight-400 mb-1">
+                {{ driverData?.hasMedicalCondition ? 'Yes' : 'No' }}
+              </h2>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 11. Alcohol and Controlled Substances History -->
+      <div class="bg-light p-4 pb-2 rounded mb-4">
+        <div class="mb-3">
+          <div class="row">
+            <h2 class="font-18 font-weight-700 text-primary mb-4 text-capitalize">11. Alcohol and Controlled Substances
+              History</h2>
+            <hr>
+            <div class="col-md-12 mb-3">
+              <p class="font-weight-700 mb-2">
+                <i class="fa fa-check text-primary" aria-hidden="true"></i>
+                Have you ever tested positive on any DOT-mandated drug or alcohol test?
+              </p>
+              <h2 class="font-14 font-weight-400 mb-1">
+                {{ driverData?.testedPositive ? (driverData?.positiveTestDetails || 'Yes') : 'No' }}
+              </h2>
+            </div>
+            <div class="col-md-12 mb-3">
+              <p class="font-weight-700 mb-2">
+                <i class="fa fa-check text-primary" aria-hidden="true"></i>
+                Have you ever refused to take a DOT-mandated drug or alcohol test?
+              </p>
+              <h2 class="font-14 font-weight-400 mb-1">
+                {{ driverData?.refusedTest ? (driverData?.refusedTestDetails || 'Yes') : 'No' }}
+              </h2>
+            </div>
+            <div class="col-md-12 mb-3">
+              <p class="font-weight-700 mb-2">
+                <i class="fa fa-check text-primary" aria-hidden="true"></i>
+                Any other violations of DOT drug/alcohol regulations?
+              </p>
+              <h2 class="font-14 font-weight-400 mb-1">
+                {{ driverData?.otherViolations ? (driverData?.otherViolationsDetails || 'Yes') : 'No' }}
+              </h2>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 12. Motor Vehicle Record (MVR) Consent -->
+      <div class="bg-light p-4 pb-2 rounded mb-4">
+        <div class="mb-3">
+          <div class="row">
+            <h2 class="font-18 font-weight-700 text-primary mb-4 text-capitalize">12. Motor Vehicle Record (MVR) Consent
+            </h2>
+            <hr>
+            <div class="col-md-10 mb-3">
+              <p class="font-weight-700 mb-2">
+                <i class="fa fa-check text-primary" aria-hidden="true"></i>
+                I consent to the release of my Motor Vehicle Record (MVR) as described above
+              </p>
+              <h2 class="font-14 font-weight-400 mb-1">
+                {{ driverData?.mvrConsent ? 'Yes' : 'No' }}
+              </h2>
+            </div>
+            <div class="col-md-2 mb-3">
+              <p class="font-weight-700 mb-2">Date</p>
+              <h2 class="font-14 font-weight-400 mb-1">{{ driverData?.mvrConsentDate || '-' }}</h2>
+            </div>
+            <div *ngIf="driverData.mvrSignature" class="final-signature">
+              <h5>Your Final Signature:</h5>
+              <div class="signature-output">
+                {{ driverData.mvrSignature }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 13. FMCSA Pre-Employment Screening Program (PSP) -->
+      <div class="bg-light p-4 pb-2 rounded mb-4">
+        <div class="mb-3">
+          <div class="row">
+            <h2 class="font-18 font-weight-700 text-primary mb-4 text-capitalize">13. FMCSA Pre-Employment Screening
+              Program (PSP)</h2>
+            <hr>
+            <div class="col-md-10 mb-3">
+              <p class="font-weight-700 mb-2">
+                <i class="fa fa-check text-primary" aria-hidden="true"></i>
+                I authorize the employer to request my PSP Report (Optional)
+              </p>
+              <h2 class="font-14 font-weight-400 mb-1">
+                {{ driverData?.pspConsent ? 'Yes' : 'No' }}
+              </h2>
+            </div>
+            <div *ngIf="driverData.pspSignature" class="final-signature">
+              <h5>Your Final Signature:</h5>
+              <div class="signature-output">
+                {{ driverData.pspSignature }}
+              </div>
+            </div>
+            <div class="col-md-2 mb-3">
+              <p class="font-weight-700 mb-2">Date</p>
+              <h2 class="font-14 font-weight-400 mb-1">{{ driverData?.pspConsentDate || '-' }}</h2>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 14. Safety Performance History -->
+      <div class="bg-light p-4 pb-2 rounded mb-4">
+        <div class="mb-3">
+          <div class="row">
+            <h2 class="font-18 font-weight-700 text-primary mb-4 text-capitalize">14. Safety Performance History</h2>
+            <hr>
+            <div class="col-md-10 mb-3">
+              <p class="font-weight-700 mb-2">
+                <i class="fa fa-check text-primary" aria-hidden="true"></i>
+                I consent to the release of my safety performance history as described above
+              </p>
+              <h2 class="font-14 font-weight-400 mb-1">
+                {{ driverData?.SafetyPerformanceHistory ? 'Yes' : 'No' }}
+              </h2>
+            </div>
+            <div *ngIf="driverData.safetyPerformanceSignature" class="final-signature">
+              <h5>Your Final Signature:</h5>
+              <div class="signature-output">
+                {{ driverData.safetyPerformanceSignature }}
+              </div>
+            </div>
+            <div class="col-md-2 mb-3">
+              <p class="font-weight-700 mb-2">Date</p>
+              <h2 class="font-14 font-weight-400 mb-1">{{ driverData?.SafetyPerformanceHistoryDate || '-' }}</h2>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 15. Applicant Certification -->
+      <div class="bg-light p-4 pb-2 rounded mb-4">
+        <div class="mb-3">
+          <div class="row">
+            <h2 class="font-18 font-weight-700 text-primary mb-4 text-capitalize">15. Applicant Certification</h2>
+            <hr>
+            <!-- Update your signature output section -->
+            <div *ngIf="driverData.ApplicantCertificationSignature" class="final-signature">
+              <h5>Your Final Signature:</h5>
+              <div class="signature-output">
+                {{ driverData.ApplicantCertificationSignature }}
+              </div>
+            </div>
+            <div class="col-md-2 mb-3">
+              <p class="font-weight-700 mb-2">Date</p>
+              <h2 class="font-14 font-weight-400 mb-1">{{ driverData?.ApplicantCertificationDate || '-' }}</h2>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 16. Document  Certification -->
+
+      <div class="bg-light p-4 pb-2 rounded mb-4">
+        <div class="mb-3">
+          <div class="row">
+            <h2 class="font-18 font-weight-700 text-primary mb-4 text-capitalize">16. Driver Documents</h2>
+            <hr>
+            <div class="col-md-12">
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th>Document Name</th>
+                    <th>Expiration Date</th>
+                    <th>File</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let doc of driverData?.documents; let i = index">
+                    <td>{{ doc.documentName || '-' }}</td>
+                    <td>{{ doc.documentExpiration || '-' }}</td>
+                    <td>
+                      <a *ngIf="doc.documentUrl" [href]="doc.documentUrl" target="_blank">
+                        {{ doc.documentUrl.split('/').pop() }}
+                      </a>
+                      <span *ngIf="!doc.documentUrl">-</span>
+                    </td>
+                  </tr>
+                  <tr *ngIf="!driverData?.documents || !driverData.documents.length">
+                    <td colspan="3" class="text-center">No documents available</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main><!-- End #main -->
+
+<footer id="footer" class="footer">
+  <div class="text-dark text-center">
+    <span class="text-muted fw-semibold me-1">2025© all rights reserved</span>
+    <a href="#" class="font-weight-700 text-hover-dark text-dark text-uppercase">3PL TEK INC.</a>
+  </div>
+</footer>
+
+<div class="offcanvas offcanvas-end" tabindex="-1" id="addLocation" aria-labelledby="offcanvasRightLabel"
+  style="width: 80%;">
+
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvasRightLabel">Edit Driver Application</h5>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body view-load position-relative">
+    <div class="border rounded-lg">
+
+      <div class="content_acc p-4" id="step1" [style.display]="currentStep === 1 ? 'block' : 'none'">
+        <form #step1Form="ngForm">
+          <!-- Section 1: Applicant Information -->
+          <div class="row">
+            <div class="col-md-12 ">
+              <div style="display: flex; align-items: center; justify-content: space-between; ">
+                <h2 class="font-18 font-weight-700 text-primary mb-0 text-capitalize">1. Applicant Information</h2>
+                <label class="custom-toggle mb-5 ">
+                  <input type="checkbox" [(ngModel)]="isVerifiedSections[0]" name="isVerifiedToggle1"
+                    autocomplete="off" />
+                  <span class="slider">
+                    <span class="label-text" [ngClass]="isVerifiedSections[0] ? 'verified-label' : 'unverified-label'">
+                      {{ isVerifiedSections[0] ? 'Verified' : 'Unverified' }}
+                    </span>
+                    <span class="knob"></span>
+                  </span>
+                </label>
+              </div>
+
+
+              <hr>
+              <div class="row g-3">
+                <div class="" id="company-info" style="display: block;">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label class="mb-2 d-block font-weight-700"> First Name:</label>
+                        <input type="text" class="form-control custom-input" name="firstName"
+                          [(ngModel)]="driverApplication.firstName" required pattern="^[A-Za-z\s]+$"
+                          #firstNameRef="ngModel">
+                        <div
+                          *ngIf="firstNameRef.invalid && (firstNameRef.dirty || firstNameRef.touched || mainForm.submitted)"
+                          class="text-danger font-12">
+                          Only letters allowed.
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label class="mb-2 d-block font-weight-700"> Middle Name:</label>
+                        <input type="text" class="form-control custom-input" name="middleName"
+                          [(ngModel)]="driverApplication.middleName" required pattern="^[A-Za-z\s]+$"
+                          #middleNameRef="ngModel">
+                        <div
+                          *ngIf="middleNameRef.invalid && (middleNameRef.dirty || middleNameRef.touched || mainForm.submitted)"
+                          class="text-danger font-12">
+                          Only letters allowed.
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label class="mb-2 d-block font-weight-700"> Last Name:</label>
+                        <input type="text" class="form-control custom-input" name="lastName"
+                          [(ngModel)]="driverApplication.lastName" required pattern="^[A-Za-z\s]+$"
+                          #lastNameRef="ngModel">
+                        <div
+                          *ngIf="lastNameRef.invalid && (lastNameRef.dirty || lastNameRef.touched || mainForm.submitted)"
+                          class="text-danger font-12">
+                          Only letters allowed.
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label class="mb-2 d-block font-weight-700"> Any other names used:</label>
+                        <input type="text" class="form-control  custom-input" name="otherNames"
+                          [(ngModel)]="driverApplication.otherNames" required pattern="^[A-Za-z\s]+$"
+                          #otherNamesRef="ngModel" placeholder="Maiden name, alias, etc.">
+                        <div
+                          *ngIf="otherNamesRef.invalid && (otherNamesRef.dirty || otherNamesRef.touched || mainForm.submitted)"
+                          class="text-danger font-12">
+                          Only letters allowed.
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label class="mb-2 d-block font-weight-700"> Social Security Number:</label>
+                        <input type="text" class="form-control custom-input" name="ssn"
+                          [(ngModel)]="driverApplication.ssn" required pattern="^[0-9]+$" maxlength="9"
+                          #ssnRef="ngModel">
+                        <div *ngIf="ssnRef.invalid && (ssnRef.dirty || ssnRef.touched || mainForm.submitted)"
+                          class="text-danger font-12">
+                          Only numbers allowed.
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label class="mb-2 d-block font-weight-700"> Date of Birth:</label>
+                        <input type="date" class="form-control gray custom-input" name="dob"
+                          [(ngModel)]="driverApplication.dob" required>
+                      </div>
+                    </div>
+                    <div class="col-md-12">
+                      <hr class="mt-10 pb-10">
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label class="mb-2 d-block font-weight-700 "> Date of Application:</label>
+                        <input type="date" class=" form-control gray custom-input" name="applicationDate"
+                          [(ngModel)]="driverApplication.applicationDate" required>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label class="mb-2 d-block font-weight-700"> Position Applied for:</label>
+                        <input type="text" class="form-control custom-input" name="positionApplied"
+                          [(ngModel)]="driverApplication.positionApplied" required>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label class="mb-2 d-block font-weight-700"> Date Available to Work:</label>
+                        <input type="date" class="form-control gray custom-input" name="availabilityDate"
+                          [(ngModel)]="driverApplication.availabilityDate" required>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label class="mb-2 d-block font-weight-700">Do you have the legal right to work in the
+                          United States?</label>
+                        <div class="d-flex">
+                          <div class="me-3">
+                            <input type="radio" id="yes" name="legalRightToWork" [value]="true"
+                              [(ngModel)]="driverApplication.legalRightToWork" required>
+                            <label for="yes">Yes</label>
+                          </div>
+                          <div>
+                            <input type="radio" id="no" name="legalRightToWork" [value]="false"
+                              [(ngModel)]="driverApplication.legalRightToWork">
+                            <label for="no">No</label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-12">
+                      <hr class="mt-10 pb-10">
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label class="mb-2 d-block font-weight-700"> Phone Number:</label>
+                        <input type="text" class="form-control custom-input" name="phone"
+                          [(ngModel)]="driverApplication.phone" required pattern="^[0-9]+$" maxlength="15"
+                          #phone="ngModel">
+                        <div *ngIf="phone.invalid && (phone.dirty || phone.touched || mainForm.submitted)"
+                          class="text-danger font-12">
+                          Only numbers allowed.
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label class="mb-2 d-block font-weight-700"> Email Address:</label>
+                        <input type="text" class="form-control custom-input" name="email"
+                          [(ngModel)]="driverApplication.email" required>
+                      </div>
+                    </div>
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <label class="mb-2 d-block font-weight-700"> Current Address (Street):</label>
+                        <input type="text" class="form-control custom-input" name="currentStreet"
+                          [(ngModel)]="driverApplication.currentStreet" required>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label class="mb-2 d-block font-weight-700"> City:</label>
+                        <input type="text" class="form-control custom-input" name="currentCity"
+                          [(ngModel)]="driverApplication.currentCity" required pattern="^[A-Za-z\s]+$"
+                          #currentCityRef="ngModel">
+                        <div
+                          *ngIf="currentCityRef.invalid && (currentCityRef.dirty || currentCityRef.touched || mainForm.submitted)"
+                          class="text-danger font-12">
+                          Only letters allowed.
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label class="mb-2 d-block font-weight-700"> State:</label>
+                        <select class="form-control gray" name="currentState"
+                          [(ngModel)]="driverApplication.currentState" required>
+                          <option value="">Select State</option>
+                          <option value="Alabama">Alabama</option>
+                          <option value="Alaska">Alaska</option>
+                          <option value="Arizona">Arizona</option>
+                          <option value="Arkansas">Arkansas</option>
+                          <option value="California">California</option>
+                          <option value="Colorado">Colorado</option>
+                          <option value="Connecticut">Connecticut</option>
+                          <option value="Delaware">Delaware</option>
+                          <option value="Florida">Florida</option>
+                          <option value="Georgia">Georgia</option>
+                          <option value="Hawaii">Hawaii</option>
+                          <option value="Idaho">Idaho</option>
+                          <option value="Illinois">Illinois</option>
+                          <option value="Indiana">Indiana</option>
+                          <option value="Iowa">Iowa</option>
+                          <option value="Kansas">Kansas</option>
+                          <option value="Kentucky">Kentucky</option>
+                          <option value="Louisiana">Louisiana</option>
+                          <option value="Maine">Maine</option>
+                          <option value="Maryland">Maryland</option>
+                          <option value="Massachusetts">Massachusetts</option>
+                          <option value="Michigan">Michigan</option>
+                          <option value="Minnesota">Minnesota</option>
+                          <option value="Mississippi">Mississippi</option>
+                          <option value="Missouri">Missouri</option>
+                          <option value="Montana">Montana</option>
+                          <option value="Nebraska">Nebraska</option>
+                          <option value="Nevada">Nevada</option>
+                          <option value="New Hampshire">New Hampshire</option>
+                          <option value="New Jersey">New Jersey</option>
+                          <option value="New Mexico">New Mexico</option>
+                          <option value="New York">New York</option>
+                          <option value="North Carolina">North Carolina</option>
+                          <option value="North Dakota">North Dakota</option>
+                          <option value="Ohio">Ohio</option>
+                          <option value="Oklahoma">Oklahoma</option>
+                          <option value="Oregon">Oregon</option>
+                          <option value="Pennsylvania">Pennsylvania</option>
+                          <option value="Rhode Island">Rhode Island</option>
+                          <option value="South Carolina">South Carolina</option>
+                          <option value="South Dakota">South Dakota</option>
+                          <option value="Tennessee">Tennessee</option>
+                          <option value="Texas">Texas</option>
+                          <option value="Utah">Utah</option>
+                          <option value="Vermont">Vermont</option>
+                          <option value="Virginia">Virginia</option>
+                          <option value="Washington">Washington</option>
+                          <option value="West Virginia">West Virginia</option>
+                          <option value="Wisconsin">Wisconsin</option>
+                          <option value="Wyoming">Wyoming</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <label class="mb-2 d-block font-weight-700"> ZIP Code:</label>
+                        <input type="text" class="form-control custom-input" name="currentZip"
+                          [(ngModel)]="driverApplication.currentZip" required pattern="^[0-9]+$" maxlength="10"
+                          #currentZipRef="ngModel">
+                        <div
+                          *ngIf="currentZipRef.invalid && (currentZipRef.dirty || currentZipRef.touched || mainForm.submitted)"
+                          class="text-danger font-12">
+                          Only numbers allowed.
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label class="mb-2 d-block font-weight-700"> How long at current address?:</label>
+                        <input type="number" class="form-control custom-input" name="currentYears"
+                          [(ngModel)]="driverApplication.currentYears" required placeholder="Years" min="0" max="99"
+                          #currentYearsRef="ngModel">
+                        <div
+                          *ngIf="currentYearsRef.invalid && (currentYearsRef.dirty || currentYearsRef.touched || mainForm.submitted)"
+                          class="text-danger font-12">
+                          Only numbers allowed.
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label class="mb-2 d-block font-weight-700"> &nbsp; </label>
+                        <input type="number" class="form-control custom-input" name="currentMonths"
+                          [(ngModel)]="driverApplication.currentMonths" required placeholder="Months" min="0" max="11"
+                          #currentMonthsRef="ngModel">
+                        <div
+                          *ngIf="currentMonthsRef.invalid && (currentMonthsRef.dirty || currentMonthsRef.touched || mainForm.submitted)"
+                          class="text-danger font-12">
+                          Only numbers allowed.
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <label class="mb-2 d-block font-weight-700">
+                          Previous Addresses (Past 3 Years)
+                        </label>
+                        <div class="d-flex justify-content-center">
+                          <div class="d-flex justify-content-center">
+                            <button class="btn btn-sm text-uppercase rounded-pill w-100" type="button"
+                              (click)="showPreviousAddressForm = !showPreviousAddressForm"
+                              [attr.aria-expanded]="showPreviousAddressForm" aria-controls="previousAddressForm"
+                              style="background-color: #3062e1; color: white; max-width: 300px;">
+                              Add Previous Address
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- Add Previous Address Button -->
+
+
+                    <!-- Collapsible Form -->
+                    <div class="collapse mt-3" id="previousAddressForm" [class.show]="showPreviousAddressForm">
+
+                      <div class="card card-body">
+                        <ng-container *ngFor="let address of driverApplication.previousAddresses; let i = index">
+                          <div class="row">
+                            <div class="col-md-6">
+                              <div class="form-group">
+                                <label class="mb-2 d-block font-weight-700"> Street Address:</label>
+                                <input type="text" class="form-control custom-input" name="previousStreetAddress{{i}}"
+                                  [(ngModel)]="address.street" required>
+                              </div>
+                            </div>
+                            <div class="col-md-6">
+                              <div class="form-group">
+                                <label class="mb-2 d-block font-weight-700"> City:</label>
+                                <input type="text" class="form-control custom-input" name="previousCity{{i}}"
+                                  [(ngModel)]="address.city" required pattern="^[A-Za-z\s]+$"
+                                  #previousCityRef="ngModel">
+                                <div
+                                  *ngIf="previousCityRef.invalid && (previousCityRef.dirty || previousCityRef.touched || mainForm.submitted)"
+                                  class="text-danger font-12">
+                                  Only letters allowed.
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-md-6">
+                              <div class="form-group">
+                                <label class="mb-2 d-block font-weight-700"> State:</label>
+                                <select style="background-color:#e9ecef!important ;" class="form-control custom-input"
+                                  name="previousState{{i}}" [(ngModel)]="address.state" required>
+                                  <option value="">Select State</option>
+                                  <option value="Alabama">Alabama</option>
+                                  <option value="Alaska">Alaska</option>
+                                  <option value="Arizona">Arizona</option>
+                                  <option value="Arkansas">Arkansas</option>
+                                  <option value="California">California</option>
+                                  <option value="Colorado">Colorado</option>
+                                  <option value="Connecticut">Connecticut</option>
+                                  <option value="Delaware">Delaware</option>
+                                  <option value="Florida">Florida</option>
+                                  <option value="Georgia">Georgia</option>
+                                  <option value="Hawaii">Hawaii</option>
+                                  <option value="Idaho">Idaho</option>
+                                  <option value="Illinois">Illinois</option>
+                                  <option value="Indiana">Indiana</option>
+                                  <option value="Iowa">Iowa</option>
+                                  <option value="Kansas">Kansas</option>
+                                  <option value="Kentucky">Kentucky</option>
+                                  <option value="Louisiana">Louisiana</option>
+                                  <option value="Maine">Maine</option>
+                                  <option value="Maryland">Maryland</option>
+                                  <option value="Massachusetts">Massachusetts</option>
+                                  <option value="Michigan">Michigan</option>
+                                  <option value="Minnesota">Minnesota</option>
+                                  <option value="Mississippi">Mississippi</option>
+                                  <option value="Missouri">Missouri</option>
+                                  <option value="Montana">Montana</option>
+                                  <option value="Nebraska">Nebraska</option>
+                                  <option value="Nevada">Nevada</option>
+                                  <option value="New Hampshire">New Hampshire</option>
+                                  <option value="New Jersey">New Jersey</option>
+                                  <option value="New Mexico">New Mexico</option>
+                                  <option value="New York">New York</option>
+                                  <option value="North Carolina">North Carolina</option>
+                                  <option value="North Dakota">North Dakota</option>
+                                  <option value="Ohio">Ohio</option>
+                                  <option value="Oklahoma">Oklahoma</option>
+                                  <option value="Oregon">Oregon</option>
+                                  <option value="Pennsylvania">Pennsylvania</option>
+                                  <option value="Rhode Island">Rhode Island</option>
+                                  <option value="South Carolina">South Carolina</option>
+                                  <option value="South Dakota">South Dakota</option>
+                                  <option value="Tennessee">Tennessee</option>
+                                  <option value="Texas">Texas</option>
+                                  <option value="Utah">Utah</option>
+                                  <option value="Vermont">Vermont</option>
+                                  <option value="Virginia">Virginia</option>
+                                  <option value="Washington">Washington</option>
+                                  <option value="West Virginia">West Virginia</option>
+                                  <option value="Wisconsin">Wisconsin</option>
+                                  <option value="Wyoming">Wyoming</option>
+                                </select>
+                              </div>
+                            </div>
+                            <div class="col-md-6">
+                              <div class="form-group">
+                                <label class="mb-2 d-block font-weight-700"> ZIP Code:</label>
+                                <input type="text" class="form-control custom-input" name="previousZipCode{{i}}"
+                                  [(ngModel)]="address.zip" required pattern="^[0-9]+$" maxlength="10"
+                                  #previousZipCodeRef="ngModel">
+                                <div
+                                  *ngIf="previousZipCodeRef.invalid && (previousZipCodeRef.dirty || previousZipCodeRef.touched || mainForm.submitted)"
+                                  class="text-danger font-12">
+                                  Only numbers allowed.
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-md-6">
+                              <div class="form-group">
+                                <label class="mb-2 d-block font-weight-700"> Year:</label>
+                                <input type="number" class="form-control custom-input" name="previousAddressYears{{i}}"
+                                  [(ngModel)]="address.years" required min="0" max="99"
+                                  #previousAddressYearsRef="ngModel">
+                                <div
+                                  *ngIf="previousAddressYearsRef.invalid && (previousAddressYearsRef.dirty || previousAddressYearsRef.touched || mainForm.submitted)"
+                                  class="text-danger font-12">
+                                  Only numbers allowed.
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-md-6">
+                              <div class="form-group">
+                                <label class="mb-2 d-block font-weight-700"> Months:</label>
+                                <input type="number" class="form-control custom-input" name="previousAddressMonths{{i}}"
+                                  [(ngModel)]="address.months" required min="0" max="11"
+                                  #previousAddressMonthsRef="ngModel">
+                                <div
+                                  *ngIf="previousAddressMonthsRef.invalid && (previousAddressMonthsRef.dirty || previousAddressMonthsRef.touched || mainForm.submitted)"
+                                  class="text-danger font-12">
+                                  Only numbers allowed.
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-md-12 text-end">
+                              <button type="button" class="btn btn-danger btn-sm rounded-pill"
+                                (click)="removePreviousAddress(i)"
+                                [disabled]="driverApplication.previousAddresses.length === 1">
+                                Remove
+                              </button>
+                            </div>
+                          </div>
+                          <hr *ngIf="i < driverApplication.previousAddresses.length - 1">
+                        </ng-container>
+                        <div class="text-center">
+                          <button type="button" class="btn btn-success btn-sm text-uppercase rounded-pill"
+                            style="margin: 10px;" (click)="addPreviousAddress()">
+                            <i class="fa fa-plus me-2" aria-hidden="true"></i>Add
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Section 2: License Information -->
+          <div class="row">
+            <div class="col-md-12">
+              <div style="display: flex; align-items: center; justify-content: space-between; ">
+                <h2 class="font-18 font-weight-700 text-primary mb-4 text-capitalize">2. License Information</h2>
+                <label class="custom-toggle mb-5 ">
+                  <input type="checkbox" [(ngModel)]="isVerifiedSections[1]" name="isVerifiedToggle2"
+                    autocomplete="off" />
+                  <span class="slider">
+                    <span class="label-text" [ngClass]="isVerifiedSections[1] ? 'verified-label' : 'unverified-label'">
+                      {{ isVerifiedSections[1] ? 'Verified' : 'Unverified' }}
+                    </span>
+                    <span class="knob"></span>
+                  </span>
+                </label>
+              </div>
+              <hr>
+              <div class="row g-3">
+                <div class="" id="company-info" style="display: block;">
+                  <div class="row">
+                    <!-- Repeatable License Fields -->
+                    <ng-container *ngFor="let license of driverApplication.licenses; let i = index">
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="mb-2 d-block font-weight-700"> Driver's License Number:</label>
+                          <input type="text" class="form-control custom-input" name="licenseNumber{{i}}"
+                            [(ngModel)]="license.licenseNumber" required>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="mb-2 d-block font-weight-700"> State of Issuance:</label>
+                          <select class=" gray form-control custom-input" name="stateOfIssuance{{i}}"
+                            [(ngModel)]="license.stateOfIssuance" required>
+                            <option value="AL">Select State</option>
+                            <option value="Alabama">Alabama</option>
+                            <option value="Alaska">Alaska</option>
+                            <option value="Arizona">Arizona</option>
+                            <option value="Arkansas">Arkansas</option>
+                            <option value="California">California</option>
+                            <option value="Colorado">Colorado</option>
+                            <option value="Connecticut">Connecticut</option>
+                            <option value="Delaware">Delaware</option>
+                            <option value="Florida">Florida</option>
+                            <option value="Georgia">Georgia</option>
+                            <option value="Hawaii">Hawaii</option>
+                            <option value="Idaho">Idaho</option>
+                            <option value="Illinois">Illinois</option>
+                            <option value="Indiana">Indiana</option>
+                            <option value="Iowa">Iowa</option>
+                            <option value="Kansas">Kansas</option>
+                            <option value="Kentucky">Kentucky</option>
+                            <option value="Louisiana">Louisiana</option>
+                            <option value="Maine">Maine</option>
+                            <option value="Maryland">Maryland</option>
+                            <option value="Massachusetts">Massachusetts</option>
+                            <option value="Michigan">Michigan</option>
+                            <option value="Minnesota">Minnesota</option>
+                            <option value="Mississippi">Mississippi</option>
+                            <option value="Missouri">Missouri</option>
+                            <option value="Montana">Montana</option>
+                            <option value="Nebraska">Nebraska</option>
+                            <option value="Nevada">Nevada</option>
+                            <option value="New Hampshire">New Hampshire</option>
+                            <option value="New Jersey">New Jersey</option>
+                            <option value="New Mexico">New Mexico</option>
+                            <option value="New York">New York</option>
+                            <option value="North Carolina">North Carolina</option>
+                            <option value="North Dakota">North Dakota</option>
+                            <option value="Ohio">Ohio</option>
+                            <option value="Oklahoma">Oklahoma</option>
+                            <option value="Oregon">Oregon</option>
+                            <option value="Pennsylvania">Pennsylvania</option>
+                            <option value="Rhode Island">Rhode Island</option>
+                            <option value="South Carolina">South Carolina</option>
+                            <option value="South Dakota">South Dakota</option>
+                            <option value="Tennessee">Tennessee</option>
+                            <option value="Texas">Texas</option>
+                            <option value="Utah">Utah</option>
+                            <option value="Vermont">Vermont</option>
+                            <option value="Virginia">Virginia</option>
+                            <option value="Washington">Washington</option>
+                            <option value="West Virginia">West Virginia</option>
+                            <option value="Wisconsin">Wisconsin</option>
+                            <option value="Wyoming">Wyoming</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="mb-2 d-block font-weight-700"> Class:</label>
+                          <select class=" gray form-control custom-input" name="licenseClass"
+                            [(ngModel)]="license.licenseClass" required>
+                            <option value="AL">Select Class</option>
+                            <option value="AK">Class A</option>
+                            <option value="AK">Class B</option>
+                            <option value="AK">Class C</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="mb-2 d-block font-weight-700"> Endorsements:</label>
+                          <select class=" gray form-control custom-input" name="endorsements"
+                            [(ngModel)]="license.endorsements" required>
+                            <option value="H">H - Hazardous Materials</option>
+                            <option value="N">N - Tank Vehicle</option>
+                            <option value="P">P - Passenger</option>
+                            <option value="S">S - School Bus</option>
+                            <option value="T">T - Double/Triple Trailers</option>
+                            <option value="X">X - HazMat &amp; Tank Combo</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <label class="mb-2 d-block font-weight-700"> Expiration Date:</label>
+                          <input type="date" class=" gray form-control custom-input" name="expirationDate{{i}}"
+                            [(ngModel)]="license.expirationDate" required>
+                        </div>
+                      </div>
+
+                      <hr *ngIf="i < driverApplication.licenses.length - 1">
+                    </ng-container>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Section 3: Driving Experience -->
+          <div class="row">
+            <div class="col-md-12">
+              <div style="display: flex; align-items: center; justify-content: space-between; ">
+                <h2 class="font-18 font-weight-700 text-primary mb-4 text-capitalize">3. Driving Experience</h2>
+                <label class="custom-toggle mb-5 ">
+                  <input type="checkbox" [(ngModel)]="isVerifiedSections[2]" name="isVerifiedToggle3"
+                    autocomplete="off" />
+                  <span class="slider">
+                    <span class="label-text" [ngClass]="isVerifiedSections[2] ? 'verified-label' : 'unverified-label'">
+                      {{ isVerifiedSections[2] ? 'Verified' : 'Unverified' }}
+                    </span>
+                    <span class="knob"></span>
+                  </span>
+                </label>
+              </div>
+              <hr>
+              <div class="row g-3">
+                <div class="" id="company-info" style="display: block;">
+                  <div class="row">
+                    <ng-container *ngFor="let experience of driverApplication.drivingExperiences; let i = index">
+
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="mb-2 d-block font-weight-700">Equipment Type:</label>
+                          <select class="gray form-control custom-input" name="equipmentType{{i}}" required
+                            [(ngModel)]="experience.equipmentType">
+                            <option value="" selected hidden></option>
+                            <option value="Straight Truck">Straight Truck</option>
+                            <option value="Tractor & Semi-Trailer">Tractor & Semi-Trailer</option>
+                            <option value="Tractor & 2 trailers">Tractor & 2 trailers</option>
+                            <option value="Tractor & Tanker">Tractor & Tanker</option>
+                            <option value="Other">Other</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="mb-2 d-block font-weight-700">Type of Equipment:</label>
+                          <select class="form-control custom-input gray" name="typeOfEquipment{{i}}" required
+                            [(ngModel)]="experience.typeOfEquipment">
+                            <option value="" selected hidden></option>
+                            <option value="Van">Van</option>
+                            <option value="Tank">Tank</option>
+                            <option value="Flat">Flat</option>
+                            <option value="Other">Other</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="mb-2 d-block font-weight-700"> Date:</label>
+                          <input type="date" class="form-control custom-input gray" name="drivingExperienceDate1{{i}}"
+                            [(ngModel)]="experience.drivingExperienceDate1" required>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="mb-2 d-block font-weight-700"> Date:</label>
+                          <input type="date" class="form-control custom-input gray" name="drivingExperienceDate2{{i}}"
+                            [(ngModel)]="experience.drivingExperienceDate2" required>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="mb-2 d-block font-weight-700"> Approx. Total Miles:</label>
+                          <input type="text" class="form-control custom-input" name="totalMiles{{i}}"
+                            [(ngModel)]="experience.totalMiles" required pattern="^[0-9]+$" #totalMilesRef="ngModel">
+                          <div
+                            *ngIf="totalMilesRef.invalid && (totalMilesRef.dirty || totalMilesRef.touched || mainForm.submitted)"
+                            class="text-danger font-12">
+                            Only numbers allowed.
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="mb-2 d-block font-weight-700"> State Operated In:</label>
+                          <input type="text" class="form-control custom-input" name="stateOperatedIn{{i}}"
+                            [(ngModel)]="experience.stateOperatedIn" required pattern="^[A-Za-z\s]+$"
+                            #stateOperatedInRef="ngModel">
+                          <div
+                            *ngIf="stateOperatedInRef.invalid && (stateOperatedInRef.dirty || stateOperatedInRef.touched || mainForm.submitted)"
+                            class="text-danger font-12">
+                            Only letters allowed.
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-12 text-end">
+                        <button type="button" class="btn btn-danger btn-sm rounded-pill"
+                          (click)="removeDrivingExperience(i)"
+                          [disabled]="driverApplication.drivingExperiences.length === 1">
+                          Remove
+                        </button>
+                      </div>
+                      <hr *ngIf="i < driverApplication.drivingExperiences.length - 1">
+                    </ng-container>
+                    <div class="text-center">
+                      <button type="button" class="btn btn-success btn-sm text-uppercase rounded-pill"
+                        style="margin: 10px;" (click)="addDrivingExperience()">
+                        <i class="fa fa-plus me-2" aria-hidden="true"></i>Add
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- <div class="modal-footer justify-content-center">
+            <button type="button" class="btn btn-success btn-sm text-uppercase rounded-pill" (click)="goNext()"
+              style="margin: 10px;">Next</button>
+          </div> -->
+        </form>
+
+
+        <!-- <div class="content_acc p-4" id="step2" [style.display]="currentStep === 2 ? 'block' : 'none'"> -->
+        <form #step2Form="ngForm">
+          <!-- Section 4: Employment History -->
+          <div class="row">
+            <div class="col-md-12">
+
+              <div style="display: flex; align-items: center; justify-content: space-between; ">
+                <h2 class="font-18 font-weight-700 text-primary mb-4 text-capitalize">4. Employment History (Last 10
+                  Years)</h2>
+                <label class="custom-toggle mb-5 ">
+                  <input type="checkbox" [(ngModel)]="isVerifiedSections[3]" name="isVerifiedToggle4"
+                    autocomplete="off" />
+                  <span class="slider">
+                    <span class="label-text" [ngClass]="isVerifiedSections[3] ? 'verified-label' : 'unverified-label'">
+                      {{ isVerifiedSections[3] ? 'Verified' : 'Unverified' }}
+                    </span>
+                    <span class="knob"></span>
+                  </span>
+                </label>
+              </div>
+              <hr>
+              <div class="row g-3">
+                <div class="" id="company-info" style="display: block;">
+                  <div class="row">
+                    <ng-container *ngFor="let employment of driverApplication.employmentHistories; let i = index">
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="mb-2 d-block font-weight-700"> Employer Name:</label>
+                          <input type="text" class="form-control custom-input" name="employerName{{i}}"
+                            [(ngModel)]="employment.employerName" required pattern="^[A-Za-z\s]+$"
+                            #employerNameRef="ngModel">
+                          <div
+                            *ngIf="employerNameRef.invalid && (employerNameRef.dirty || employerNameRef.touched || mainForm.submitted)"
+                            class="text-danger font-12">
+                            Only letters allowed.
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="mb-2 d-block font-weight-700"> Phone Number:</label>
+                          <input type="text" class="form-control custom-input" name="employerPhoneNumber{{i}}"
+                            [(ngModel)]="employment.employerPhoneNumber" required pattern="^[0-9]+$" maxlength="15"
+                            #employerPhoneNumberRef="ngModel" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+                          <div
+                            *ngIf="employerPhoneNumberRef.invalid && (employerPhoneNumberRef.dirty || employerPhoneNumberRef.touched || mainForm.submitted)"
+                            class="text-danger font-12">
+                            Only numbers allowed.
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="mb-2 d-block font-weight-700"> Employer Address:</label>
+                          <input type="text" class="form-control custom-input" name="employerAddress{{i}}"
+                            [(ngModel)]="employment.employerAddress" required>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="mb-2 d-block font-weight-700"> Contact Person:</label>
+                          <input type="text" class="form-control custom-input" name="employerContactPerson{{i}}"
+                            [(ngModel)]="employment.employerContactPerson" required pattern="^[A-Za-z\s]+$"
+                            #employerContactPersonRef="ngModel">
+                          <div
+                            *ngIf="employerContactPersonRef.invalid && (employerContactPersonRef.dirty || employerContactPersonRef.touched || mainForm.submitted)"
+                            class="text-danger font-12">
+                            Only letters allowed.
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="mb-2 d-block font-weight-700"> Position Held:</label>
+                          <input type="text" class="form-control custom-input" name="positionHeld{{i}}"
+                            [(ngModel)]="employment.positionHeld" required pattern="^[A-Za-z\s]+$"
+                            #positionHeldRef="ngModel">
+                          <div
+                            *ngIf="positionHeldRef.invalid && (positionHeldRef.dirty || positionHeldRef.touched || mainForm.submitted)"
+                            class="text-danger font-12">
+                            Only letters allowed.
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="mb-2 d-block font-weight-700"> Salary or Pay Rate:</label>
+                          <input type="text" class="form-control custom-input" name="salaryOrPayRate{{i}}"
+                            [(ngModel)]="employment.salaryOrPayRate" required pattern="^[0-9]+$"
+                            #salaryOrPayRateRef="ngModel">
+                          <div
+                            *ngIf="salaryOrPayRateRef.invalid && (salaryOrPayRateRef.dirty || salaryOrPayRateRef.touched || mainForm.submitted)"
+                            class="text-danger font-12">
+                            Only numbers allowed.
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="mb-2 d-block font-weight-700"> Date:</label>
+                          <input type="date" class="form-control custom-input gray" name="employmentStartDate{{i}}"
+                            [(ngModel)]="employment.employmentStartDate" required>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="mb-2 d-block font-weight-700"> Date:</label>
+                          <input type="date" class="form-control custom-input gray" name="employmentEndDate{{i}}"
+                            [(ngModel)]="employment.employmentEndDate" required>
+                        </div>
+                      </div>
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <label class="mb-2 d-block font-weight-700">Reason for Leaving:</label>
+                          <textarea
+                            [ngStyle]="{'background-color': employment.reasonForLeaving ? 'white' : 'rgb(234, 236, 236)'}"
+                            name="reasonForLeaving{{i}}" [(ngModel)]="employment.reasonForLeaving"
+                            (ngModelChange)="employment.reasonForLeaving = $event" rows="4"
+                            class="form-control custom-input">
+                              </textarea>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-4">
+                          <div class="form-group">
+                            <label class="checkbox-label" style="padding-left: 0;">Was this job subject to FMCSA
+                              regulations?</label><br>
+                            <div class="d-flex">
+                              <div class="me-3">
+                                <input type="radio" id="fmcsa_yes{{i}}" name="fmcsa{{i}}" value="yes"
+                                  [(ngModel)]="employment.fmcsa">
+                                <label for="fmcsa_yes{{i}}">Yes</label>
+                              </div>
+                              <div>
+                                <input type="radio" id="fmcsa_no{{i}}" name="fmcsa{{i}}" value="no"
+                                  [(ngModel)]="employment.fmcsa">
+                                <label for="fmcsa_no{{i}}">No</label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="col-md-4">
+                          <div class="form-group">
+                            <label class="checkbox-label" style="padding-left: 0;">Was this a safety-sensitive
+                              function under DOT rules?</label><br>
+                            <div class="d-flex">
+                              <div class="me-3">
+                                <input type="radio" id="dot_yes{{i}}" name="dot_sensitive{{i}}" value="yes"
+                                  [(ngModel)]="employment.dot_sensitive">
+                                <label for="dot_yes{{i}}">Yes</label>
+                              </div>
+                              <div>
+                                <input type="radio" id="dot_no{{i}}" name="dot_sensitive{{i}}" value="no"
+                                  [(ngModel)]="employment.dot_sensitive">
+                                <label for="dot_no{{i}}">No</label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="col-md-4">
+                          <div class="form-group">
+                            <label class="checkbox-label" style="padding-left: 0;">Authorization to contact this
+                              employer</label><br>
+                            <div class="d-flex">
+                              <div class="me-3">
+                                <input type="radio" id="auth_yes{{i}}" name="auth_contact{{i}}" value="yes"
+                                  [(ngModel)]="employment.auth_contact">
+                                <label for="auth_yes{{i}}">Yes</label>
+                              </div>
+                              <div>
+                                <input type="radio" id="auth_no{{i}}" name="auth_contact{{i}}" value="no"
+                                  [(ngModel)]="employment.auth_contact">
+                                <label for="auth_no{{i}}">No</label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="col-md-12">
+                          <div class="form-group">
+                            <label class="mb-2 d-block font-weight-700">Additional Comments:</label>
+                            <textarea name="additionalComments{{i}}" [(ngModel)]="employment.additionalComments"
+                              rows="4" class="form-control custom-input"></textarea>
+                          </div>
+                        </div>
+
+                        <div class="col-md-12 text-end">
+                          <button type="button" class="btn btn-danger btn-sm rounded-pill"
+                            (click)="removeEmploymentHistory(i)"
+                            [disabled]="driverApplication.employmentHistories.length === 1">
+                            Remove
+                          </button>
+                        </div>
+                        <hr *ngIf="i < driverApplication.employmentHistories.length - 1">
+                      </div>
+                    </ng-container>
+                    <div class="text-center">
+                      <button type="button" class="btn btn-success btn-sm text-uppercase rounded-pill"
+                        style="margin: 10px;" (click)="addEmploymentHistory()">
+                        <i class="fa fa-plus me-2" aria-hidden="true"></i>Add
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Section 5: Traffic Convictions -->
+          <div class="row">
+            <div class="col-md-12">
+
+              <div style="display: flex; align-items: center; justify-content: space-between; ">
+                <h2 class="font-18 font-weight-700 text-primary mb-4 text-capitalize">5. Traffic Convictions (Last 3
+                  Years)</h2>
+                <label class="custom-toggle mb-5 ">
+                  <input type="checkbox" [(ngModel)]="isVerifiedSections[4]" name="isVerifiedToggle5"
+                    autocomplete="off" />
+                  <span class="slider">
+                    <span class="label-text" [ngClass]="isVerifiedSections[4] ? 'verified-label' : 'unverified-label'">
+                      {{ isVerifiedSections[4] ? 'Verified' : 'Unverified' }}
+                    </span>
+                    <span class="knob"></span>
+                  </span>
+                </label>
+              </div>
+              <hr>
+              <div class="row g-3">
+                <div class="" id="company-info" style="display: block;">
+                  <div class="row">
+                    <ng-container *ngFor="let conviction of driverApplication.trafficConvictions; let i = index">
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="mb-2 d-block font-weight-700"> Date:</label>
+                          <input type="date" class="form-control custom-input gray" name="trafficConvictionDate{{i}}"
+                            [(ngModel)]="conviction.trafficConvictionDate" required>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="mb-2 d-block font-weight-700"> Location (City, State):</label>
+                          <input type="text" class="form-control custom-input" name="trafficConvictionLocation{{i}}"
+                            [(ngModel)]="conviction.trafficConvictionLocation" required pattern="^[A-Za-z\s,]+$"
+                            #trafficConvictionLocationRef="ngModel">
+                          <div
+                            *ngIf="trafficConvictionLocationRef.invalid && (trafficConvictionLocationRef.dirty || trafficConvictionLocationRef.touched || mainForm.submitted)"
+                            class="text-danger font-12">
+                            Only letters allowed.
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="mb-2 d-block font-weight-700"> Nature of Violation:</label>
+                          <input type="text" class="form-control custom-input" name="trafficConvictionNature{{i}}"
+                            [(ngModel)]="conviction.trafficConvictionNature" required pattern="^[A-Za-z\s]+$"
+                            #trafficConvictionNatureRef="ngModel">
+                          <div
+                            *ngIf="trafficConvictionNatureRef.invalid && (trafficConvictionNatureRef.dirty || trafficConvictionNatureRef.touched || mainForm.submitted)"
+                            class="text-danger font-12">
+                            Only letters allowed.
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="mb-2 d-block font-weight-700"> Penalty/Action Taken:</label>
+                          <input type="text" class="form-control custom-input" name="trafficConvictionPenalty{{i}}"
+                            [(ngModel)]="conviction.trafficConvictionPenalty" required pattern="^[A-Za-z0-9\s]+$"
+                            #trafficConvictionPenaltyRef="ngModel">
+                          <div
+                            *ngIf="trafficConvictionPenaltyRef.invalid && (trafficConvictionPenaltyRef.dirty || trafficConvictionPenaltyRef.touched || mainForm.submitted)"
+                            class="text-danger font-12">
+                            Only letters and numbers allowed.
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <label class="checkbox-label" style="padding-left: 0;">Was it in a Commercial Motor
+                          Vehicle?</label><br>
+                        <div class="d-flex">
+                          <div class="me-3">
+                            <input type="radio" id="cmv_yes{{i}}" name="cmv{{i}}" value="yes"
+                              [(ngModel)]="conviction.cmv">
+                            <label for="cmv_yes{{i}}">Yes</label>
+                          </div>
+                          <div>
+                            <input type="radio" id="cmv_no{{i}}" name="cmv{{i}}" value="no"
+                              [(ngModel)]="conviction.cmv">
+                            <label for="cmv_no{{i}}">No</label>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-12 text-end">
+                        <button type="button" class="btn btn-danger btn-sm rounded-pill"
+                          (click)="removeTrafficConviction(i)"
+                          [disabled]="driverApplication.trafficConvictions.length === 1">
+                          Remove
+                        </button>
+                      </div>
+                      <hr *ngIf="i < driverApplication.trafficConvictions.length - 1">
+                    </ng-container>
+                    <div class="text-center">
+                      <button type="button" class="btn btn-success btn-sm text-uppercase rounded-pill"
+                        style="margin: 10px;" (click)="addTrafficConviction()">
+                        <i class="fa fa-plus me-2" aria-hidden="true"></i>Add
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Section 6: Accident Record -->
+          <div class="row">
+            <div class="col-md-12">
+
+              <div style="display: flex; align-items: center; justify-content: space-between; ">
+                <h2 class="font-18 font-weight-700 text-primary mb-4 text-capitalize">6. Accident Record (Last 3
+                  Years)</h2>
+                <label class="custom-toggle mb-5 ">
+                  <input type="checkbox" [(ngModel)]="isVerifiedSections[5]" name="isVerifiedToggle6"
+                    autocomplete="off" />
+                  <span class="slider">
+                    <span class="label-text" [ngClass]="isVerifiedSections[5] ? 'verified-label' : 'unverified-label'">
+                      {{ isVerifiedSections[5] ? 'Verified' : 'Unverified' }}
+                    </span>
+                    <span class="knob"></span>
+                  </span>
+                </label>
+              </div>
+              <hr>
+              <div class="row g-3">
+                <ng-container *ngFor="let accident of driverApplication.accidentRecords; let i = index">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label class="mb-2 d-block font-weight-700"> Date:</label>
+                      <input type="date" class="form-control custom-input gray" name="accidentDate{{i}}"
+                        [(ngModel)]="accident.accidentDate" required>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label class="mb-2 d-block font-weight-700"> Location (City, State):</label>
+                      <input type="text" class="form-control custom-input" name="accidentLocation{{i}}"
+                        [(ngModel)]="accident.accidentLocation" required pattern="^[A-Za-z\s,]+$"
+                        #accidentLocationRef="ngModel">
+                      <div
+                        *ngIf="accidentLocationRef.invalid && (accidentLocationRef.dirty || accidentLocationRef.touched || mainForm.submitted)"
+                        class="text-danger font-12">
+                        Only letters allowed.
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label class="mb-2 d-block font-weight-700"> Nature of Accident:</label>
+                      <input type="text" class="form-control custom-input" name="accidentNature{{i}}"
+                        [(ngModel)]="accident.accidentNature" required pattern="^[A-Za-z\s]+$"
+                        #accidentNatureRef="ngModel">
+                      <div
+                        *ngIf="accidentNatureRef.invalid && (accidentNatureRef.dirty || accidentNatureRef.touched || mainForm.submitted)"
+                        class="text-danger font-12">
+                        Only letters allowed.
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label class="mb-2 d-block font-weight-700"> Number of Fatalities:</label>
+                      <input type="text" class="form-control custom-input" name="accidentFatalities{{i}}"
+                        [(ngModel)]="accident.accidentFatalities" required pattern="^[0-9]+$"
+                        #accidentFatalitiesRef="ngModel">
+                      <div
+                        *ngIf="accidentFatalitiesRef.invalid && (accidentFatalitiesRef.dirty || accidentFatalitiesRef.touched || mainForm.submitted)"
+                        class="text-danger font-12">
+                        Only numbers allowed.
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label class="mb-2 d-block font-weight-700"> Number of Injuries:</label>
+                      <input type="number" class="form-control custom-input" name="accidentInjuries{{i}}"
+                        [(ngModel)]="accident.accidentInjuries" required #accidentInjuriesRef="ngModel">
+                      <div
+                        *ngIf="accidentInjuriesRef.invalid && (accidentInjuriesRef.dirty || accidentInjuriesRef.touched || mainForm.submitted)"
+                        class="text-danger font-12">
+                        Only numbers allowed.
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label class="mb-2 d-block font-weight-700"> Hazardous Material Spill:</label>
+                      <div class="d-flex">
+                        <div class="me-3">
+                          <input type="radio" id="hazmat_yes{{i}}" name="hazmat_spill{{i}}" value="yes"
+                            [(ngModel)]="accident.hazmat_spill">
+                          <label for="hazmat_yes{{i}}">Yes</label>
+                        </div>
+                        <div>
+                          <input type="radio" id="hazmat_no{{i}}" name="hazmat_spill{{i}}" value="no"
+                            [(ngModel)]="accident.hazmat_spill">
+                          <label for="hazmat_no{{i}}">No</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-12 text-end">
+                    <button type="button" class="btn btn-danger btn-sm rounded-pill" (click)="removeAccidentRecord(i)"
+                      [disabled]="driverApplication.accidentRecords.length === 1">
+                      Remove
+                    </button>
+                  </div>
+                  <hr *ngIf="i < driverApplication.accidentRecords.length - 1">
+                </ng-container>
+                <div class="text-center">
+                  <button type="button" class="btn btn-success btn-sm text-uppercase rounded-pill" style="margin: 10px;"
+                    (click)="addAccidentRecord()">
+                    <i class="fa fa-plus me-2" aria-hidden="true"></i>Add
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- <div class="modal-footer justify-content-center"
+            style="border-top: 1px solid #ccc; padding-top: 15px; margin-top: 15px;">
+            <button type="button" class="btn btn-outline-secondary btn-sm text-uppercase rounded-pill"
+              (click)="goBack()" style="margin: 10px;">Back</button>
+            <button type="button" class="btn btn-success btn-sm text-uppercase rounded-pill" (click)="goNext()"
+              style="margin: 10px;">Next</button>
+          </div> -->
+        </form>
+        <!-- </div> -->
+
+        <!-- <div class="content_acc p-4" id="step3" [style.display]="currentStep === 3 ? 'block' : 'none'"> -->
+        <form #step3Form="ngForm">
+          <!-- Section 7: Criminal History -->
+          <div class="row">
+            <div class="col-md-12">
+
+              <div style="display: flex; align-items: center; justify-content: space-between; ">
+                <h2 class="font-18 font-weight-700 text-primary mb-4 text-capitalize">7. Criminal History</h2>
+                <label class="custom-toggle mb-5 ">
+                  <input type="checkbox" [(ngModel)]="isVerifiedSections[6]" name="isVerifiedToggle7"
+                    autocomplete="off" />
+                  <span class="slider">
+                    <span class="label-text" [ngClass]="isVerifiedSections[6] ? 'verified-label' : 'unverified-label'">
+                      {{ isVerifiedSections[6] ? 'Verified' : 'Unverified' }}
+                    </span>
+                    <span class="knob"></span>
+                  </span>
+                </label>
+              </div>
+            </div>
+            <div class="card card-body">
+
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="checkbox-label" style="padding-left: 0;">
+                      Have you ever been denied a license, permit, or privilege to operate a motor vehicle?
+                    </label><br>
+                    <div class="d-flex">
+                      <div class="me-3">
+                        <input type="radio" id="denied_yes" name="license_denied" value="yes"
+                          [(ngModel)]="driverApplication.license_denied"
+                          (ngModelChange)="onRadioChange('license_denied', $event)">
+                        <label for="denied_yes">Yes</label>
+                      </div>
+                      <div>
+                        <input type="radio" id="denied_no" name="license_denied" value="no"
+                          [(ngModel)]="driverApplication.license_denied"
+                          (ngModelChange)="onRadioChange('license_denied', $event)">
+                        <label for="denied_no">No</label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div [ngClass]="{'collapse': !isLicenseDeniedYes, 'show': isLicenseDeniedYes}">
+                    <div class="card card-body" *ngIf="isLicenseDeniedYes">
+                      Please provide details:
+                      <textarea name="deniedLicenseDetails" [(ngModel)]="driverApplication.deniedLicenseDetails"
+                        rows="4" class="form-control custom-input"></textarea>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="checkbox-label" style="padding-left: 0;">
+                      Has any license, permit, or privilege ever been suspended or revoked?
+                    </label><br>
+                    <div class="d-flex">
+                      <div class="me-3">
+                        <input type="radio" id="revoked_yes" name="license_revoked" value="yes"
+                          [(ngModel)]="driverApplication.license_revoked" (change)="isLicenseRevokedYes = true">
+                        <label for="revoked_yes">Yes</label>
+                      </div>
+                      <div>
+                        <input type="radio" id="revoked_no" name="license_revoked" value="no"
+                          [(ngModel)]="driverApplication.license_revoked" (change)="isLicenseRevokedYes = false">
+                        <label for="revoked_no">No</label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div [ngClass]="{'collapse': !isLicenseRevokedYes, 'show': isLicenseRevokedYes}">
+                    <div class="card card-body">
+                      Please provide details:
+                      <textarea name="suspendedDetails" [(ngModel)]="driverApplication.suspendedDetails" rows="4"
+                        class="form-control custom-input"></textarea>
+                    </div>
+                  </div>
+                </div>
+
+
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="checkbox-label" style="padding-left: 0;">
+                      Have you ever been convicted of a felony?
+                    </label><br>
+                    <div class="d-flex">
+                      <div class="me-3">
+                        <input type="radio" id="felony_yes" name="felony" value="yes"
+                          [(ngModel)]="driverApplication.felony" (change)="isFelonyYes = true">
+                        <label for="felony_yes">Yes</label>
+                      </div>
+                      <div>
+                        <input type="radio" id="felony_no" name="felony" value="no"
+                          [(ngModel)]="driverApplication.felony" (change)="isFelonyYes = false">
+                        <label for="felony_no">No</label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div [ngClass]="{'collapse': !isFelonyYes, 'show': isFelonyYes}">
+                    <div class="card card-body">
+                      Please provide details:
+                      <textarea name="felonyDetails" [(ngModel)]="driverApplication.felonyDetails" rows="4"
+                        class="form-control custom-input"></textarea>
+                    </div>
+                  </div>
+                </div>
+
+
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="checkbox-label" style="padding-left: 0;">
+                      Have you ever been convicted of driving under the influence (DUI)?
+                    </label><br>
+                    <div class="d-flex">
+                      <div class="me-3">
+                        <input type="radio" id="dui_yes" name="dui" value="yes" [(ngModel)]="driverApplication.dui"
+                          (change)="isDuiYes = true">
+                        <label for="dui_yes">Yes</label>
+                      </div>
+                      <div>
+                        <input type="radio" id="dui_no" name="dui" value="no" [(ngModel)]="driverApplication.dui"
+                          (change)="isDuiYes = false">
+                        <label for="dui_no">No</label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div [ngClass]="{'collapse': !isDuiYes, 'show': isDuiYes}">
+                    <div class="card card-body">
+                      Please provide details:
+                      <textarea name="dui_details" [(ngModel)]="driverApplication.dui_details" rows="4"
+                        class="form-control custom-input"></textarea>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+          <!-- Section 8: Military Service -->
+          <div class="row">
+            <div class="col-md-12">
+
+              <div style="display: flex; align-items: center; justify-content: space-between; ">
+                <h2 class="font-18 font-weight-700 text-primary mb-4 text-capitalize">8. Military Service:</h2>
+                <label class="custom-toggle mb-5 ">
+                  <input type="checkbox" [(ngModel)]="isVerifiedSections[7]" name="isVerifiedToggle8"
+                    autocomplete="off" />
+                  <span class="slider">
+                    <span class="label-text" [ngClass]="isVerifiedSections[7] ? 'verified-label' : 'unverified-label'">
+                      {{ isVerifiedSections[7] ? 'Verified' : 'Unverified' }}
+                    </span>
+                    <span class="knob"></span>
+                  </span>
+                </label>
+              </div>
+            </div>
+            <div class="card card-body">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="checkbox-label" style="padding-left: 0;">
+                      Have you served in the U.S. military?
+                    </label><br>
+                    <div class="d-flex">
+                      <div class="me-3">
+                        <input type="radio" id="military_yes" name="servedInMilitary" value="yes"
+                          [(ngModel)]="driverApplication.servedInMilitary"
+                          (ngModelChange)="onRadioChange('servedInMilitary', $event)">
+                        <label for="military_yes">Yes</label>
+                      </div>
+                      <div>
+                        <input type="radio" id="military_no" name="servedInMilitary" value="no"
+                          [(ngModel)]="driverApplication.servedInMilitary"
+                          (ngModelChange)="onRadioChange('servedInMilitary', $event)">
+                        <label for="military_no">No</label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div [ngClass]="{'collapse': !isMilitaryYes, 'show': isMilitaryYes}">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="mb-2 d-block font-weight-700">Branch of Service:</label>
+                          <select class="form-control custom-input" name="militaryBranch"
+                            [(ngModel)]="driverApplication.militaryBranch" required>
+                            <option value="">Select Branch</option>
+                            <option value="Army">Army</option>
+                            <option value="Navy">Navy</option>
+                            <option value="Air Force">Air Force</option>
+                            <option value="Marines">Marines</option>
+                            <option value="Coast Guard">Coast Guard</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="mb-2 d-block font-weight-700">Rank at Discharge:</label>
+                          <input type="text" class="form-control custom-input" name="rankAtDischarge"
+                            [(ngModel)]="driverApplication.rankAtDischarge" required>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="mb-2 d-block font-weight-700">Dates of Service (From):</label>
+                          <input type="date" class="form-control custom-input" name="serviceFromDate"
+                            [(ngModel)]="driverApplication.serviceFromDate" required>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="mb-2 d-block font-weight-700">Dates of Service (To):</label>
+                          <input type="date" class="form-control custom-input" name="serviceToDate"
+                            [(ngModel)]="driverApplication.serviceToDate" required>
+                        </div>
+                      </div>
+                      <div class="col-md-12">
+                        <div class="card card-body">
+                          Relevant driving/training experience:
+                          <textarea name="militaryExperience" [(ngModel)]="driverApplication.militaryExperience"
+                            rows="4" class="form-control custom-input"></textarea>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Section 9: Education -->
+          <div class="row">
+            <div class="col-md-12">
+
+              <div style="display: flex; align-items: center; justify-content: space-between; ">
+                <h2 class="font-18 font-weight-700 text-primary mb-4 text-capitalize">9. Education:</h2>
+                <label class="custom-toggle mb-5 ">
+                  <input type="checkbox" [(ngModel)]="isVerifiedSections[8]" name="isVerifiedToggle9"
+                    autocomplete="off" />
+                  <span class="slider">
+                    <span class="label-text" [ngClass]="isVerifiedSections[8] ? 'verified-label' : 'unverified-label'">
+                      {{ isVerifiedSections[8] ? 'Verified' : 'Unverified' }}
+                    </span>
+                    <span class="knob"></span>
+                  </span>
+                </label>
+              </div>
+            </div>
+            <div class="card card-body">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="mb-2 d-block font-weight-700"> Highest level of education completed:</label>
+                    <select class="form-control custom-input gray" name="educationLevel"
+                      [(ngModel)]="driverApplication.educationLevel" required>
+                      <option>Select Education Level</option>
+                      <option value="College">College</option>
+                      <option value="High School">High School</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="mb-2 d-block font-weight-700"> Name of School:</label>
+                    <input type="text" class="form-control custom-input" name="schoolName"
+                      [(ngModel)]="driverApplication.schoolName" required pattern="^[A-Za-z\s]+$"
+                      #schoolNameRef="ngModel">
+                    <div
+                      *ngIf="schoolNameRef.invalid && (schoolNameRef.dirty || schoolNameRef.touched || mainForm.submitted)"
+                      class="text-danger font-12">
+                      Only letters allowed.
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="mb-2 d-block font-weight-700"> City:</label>
+                    <input type="text" class="form-control custom-input" name="schoolCity"
+                      [(ngModel)]="driverApplication.schoolCity" required pattern="^[A-Za-z\s]+$"
+                      #schoolCityRef="ngModel">
+                    <div
+                      *ngIf="schoolCityRef.invalid && (schoolCityRef.dirty || schoolCityRef.touched || mainForm.submitted)"
+                      class="text-danger font-12">
+                      Only letters allowed.
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="mb-2 d-block font-weight-700"> State:</label>
+                    <select class="form-control custom-input gray" name="schoolState"
+                      [(ngModel)]="driverApplication.schoolState" required>
+                      <option value="">Select State</option>
+                      <option value="Alabama">Alabama</option>
+                      <option value="Alaska">Alaska</option>
+                      <option value="Arizona">Arizona</option>
+                      <option value="Arkansas">Arkansas</option>
+                      <option value="California">California</option>
+                      <option value="Colorado">Colorado</option>
+                      <option value="Connecticut">Connecticut</option>
+                      <option value="Delaware">Delaware</option>
+                      <option value="Florida">Florida</option>
+                      <option value="Georgia">Georgia</option>
+                      <option value="Hawaii">Hawaii</option>
+                      <option value="Idaho">Idaho</option>
+                      <option value="Illinois">Illinois</option>
+                      <option value="Indiana">Indiana</option>
+                      <option value="Iowa">Iowa</option>
+                      <option value="Kansas">Kansas</option>
+                      <option value="Kentucky">Kentucky</option>
+                      <option value="Louisiana">Louisiana</option>
+                      <option value="Maine">Maine</option>
+                      <option value="Maryland">Maryland</option>
+                      <option value="Massachusetts">Massachusetts</option>
+                      <option value="Michigan">Michigan</option>
+                      <option value="Minnesota">Minnesota</option>
+                      <option value="Mississippi">Mississippi</option>
+                      <option value="Missouri">Missouri</option>
+                      <option value="Montana">Montana</option>
+                      <option value="Nebraska">Nebraska</option>
+                      <option value="Nevada">Nevada</option>
+                      <option value="New Hampshire">New Hampshire</option>
+                      <option value="New Jersey">New Jersey</option>
+                      <option value="New Mexico">New Mexico</option>
+                      <option value="New York">New York</option>
+                      <option value="North Carolina">North Carolina</option>
+                      <option value="North Dakota">North Dakota</option>
+                      <option value="Ohio">Ohio</option>
+                      <option value="Oklahoma">Oklahoma</option>
+                      <option value="Oregon">Oregon</option>
+                      <option value="Pennsylvania">Pennsylvania</option>
+                      <option value="Rhode Island">Rhode Island</option>
+                      <option value="South Carolina">South Carolina</option>
+                      <option value="South Dakota">South Dakota</option>
+                      <option value="Tennessee">Tennessee</option>
+                      <option value="Texas">Texas</option>
+                      <option value="Utah">Utah</option>
+                      <option value="Vermont">Vermont</option>
+                      <option value="Virginia">Virginia</option>
+                      <option value="Washington">Washington</option>
+                      <option value="West Virginia">West Virginia</option>
+                      <option value="Wisconsin">Wisconsin</option>
+                      <option value="Wyoming">Wyoming</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="mb-2 d-block font-weight-700"> Area of study or certification:</label>
+                    <input type="text" class="form-control custom-input" name="areaOfStudy"
+                      [(ngModel)]="driverApplication.areaOfStudy" required pattern="^[A-Za-z\s]+$"
+                      #areaOfStudyRef="ngModel">
+                    <div
+                      *ngIf="areaOfStudyRef.invalid && (areaOfStudyRef.dirty || areaOfStudyRef.touched || mainForm.submitted)"
+                      class="text-danger font-12">
+                      Only letters allowed.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- <div class="modal-footer justify-content-center">
+            <button type="button" class="btn btn-outline-secondary btn-sm text-uppercase rounded-pill"
+              (click)="goBack()" style="margin: 10px;">Back</button>
+            <button type="button" class="btn btn-success btn-sm text-uppercase rounded-pill" (click)="goNext()"
+              style="margin: 10px;">Next</button>
+          </div> -->
+        </form>
+        <!-- </div> -->
+
+        <!-- <div class="content_acc p-4" id="step4" [style.display]="currentStep === 4 ? 'block' : 'none'"> -->
+        <form #step4Form="ngForm">
+          <!-- Section 10: Medical Certification -->
+          <div class="row">
+            <div class="col-md-12">
+
+              <div style="display: flex; align-items: center; justify-content: space-between; ">
+                <h2 class="font-18 font-weight-700 text-primary mb-4 text-capitalize">10. Medical Certification:
+                </h2>
+                <label class="custom-toggle mb-5 ">
+                  <input type="checkbox" [(ngModel)]="isVerifiedSections[9]" name="isVerifiedToggle10"
+                    autocomplete="off" />
+                  <span class="slider">
+                    <span class="label-text" [ngClass]="isVerifiedSections[9] ? 'verified-label' : 'unverified-label'">
+                      {{ isVerifiedSections[9] ? 'Verified' : 'Unverified' }}
+                    </span>
+                    <span class="knob"></span>
+                  </span>
+                </label>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="form-group">
+                <label class="checkbox-label" style="padding-left: 0;">
+                  Do you currently possess a valid DOT Medical Examiner's Certificate?
+                </label><br>
+                <div class="d-flex">
+                  <div class="me-3">
+                    <input type="radio" id="dot_med_cert_yes" name="dot_med_cert" value="yes"
+                      [(ngModel)]="driverApplication.dot_med_cert">
+                    <label for="dot_med_cert_yes">Yes</label>
+                  </div>
+                  <div>
+                    <input type="radio" id="dot_med_cert_no" name="dot_med_cert" value="no"
+                      [(ngModel)]="driverApplication.dot_med_cert">
+                    <label for="dot_med_cert_no">No</label>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            <div class="card card-body">
+              <div class="row">
+                <div class="col-md-12 text-center">
+                  <div class="form-group">
+                    <label class="mb-2 d-block font-weight-700"> Branch of Service:</label>
+                    <div class="file-upload" id="medicalCertificateUpload">
+                      <div class="file-upload-icon">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                      </div>
+                      <p>Click to upload or drag and drop</p>
+                      <input type="file" class="form-control" (change)="onMedicalCardFileChange($event)">
+                      <p class="small-text">PDF, JPG, or PNG (Max 5MB)</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+                        
+            </div>
+            <div class="col-md-12 mt-10">
+              <div class="form-group">
+                <label class="checkbox-label" style="padding-left: 0;">
+                  Do you have any medical conditions that may affect your ability to drive?
+                </label><br>
+                <div class="d-flex">
+                  <div class="me-3">
+                    <input type="radio" id="medical_condition_yes" name="medical_condition" value="yes"
+                      [(ngModel)]="driverApplication.medical_condition">
+                    <label for="medical_condition_yes">Yes</label>
+                  </div>
+                  <div>
+                    <input type="radio" id="medical_condition_no" name="medical_condition" value="no"
+                      [(ngModel)]="driverApplication.medical_condition">
+                    <label for="medical_condition_no">No</label>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <!-- Section 11: Alcohol and Controlled Substances History -->
+          <div class="row">
+            <div class="col-md-12">
+
+              <div style="display: flex; align-items: center; justify-content: space-between; ">
+                <h2 class="font-18 font-weight-700 text-primary mb-4 text-capitalize">11. Alcohol and Controlled
+                  Substances History:</h2>
+                <label class="custom-toggle mb-5 ">
+                  <input type="checkbox" [(ngModel)]="isVerifiedSections[10]" name="isVerifiedToggle11"
+                    autocomplete="off" />
+                  <span class="slider">
+                    <span class="label-text" [ngClass]="isVerifiedSections[10] ? 'verified-label' : 'unverified-label'">
+                      {{ isVerifiedSections[10] ? 'Verified' : 'Unverified' }}
+                    </span>
+                    <span class="knob"></span>
+                  </span>
+                </label>
+              </div>
+            </div>
+            <div class="p-0 mb-2">
+              <div class="mb-3" style="display: flex; justify-content: center; align-items: center;">
+                <button
+                  style="color: hsl(0, 0%, 96%); background-color: rgb(0, 71, 189); height: 30px; font-size: 0.75rem; padding: 0 12px;"
+                  class="btn text-uppercase rounded-pill" type="button" data-bs-toggle="collapse"
+                  (click)="showDrugAlcoholcollapse = !showDrugAlcoholcollapse">
+                  DOT Drug & Alcohol Testing Regulations <i class="ri-arrow-down-s-fill"></i>
+                </button>
+              </div>
+
+
+              <div class="collapse mt-2" id="myCollapse" [class.show]="showDrugAlcoholcollapse">
+
+                <div class="card card-body">
+                  Under DOT regulations (§40.25), you must disclose any previous violations of drug and alcohol
+                  testing rules, including positive tests, refusals to test, or other violations. Providing false
+                  information may disqualify you from employment.
+                </div>
+              </div>
+              <div class="card card-body">
+                <div class="row">
+
+                  <!-- First Group -->
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <label class="checkbox-label" style="padding-left: 0;">
+                        Have you ever tested positive on any DOT-mandated drug or alcohol test?
+                      </label><br>
+                      <div class="d-flex">
+                        <div class="me-3">
+                          <input type="radio" id="dot_test_1_yes" name="dot_test_1" value="yes"
+                            [(ngModel)]="driverApplication.dot_test_1" (change)="isDotTest1Yes = true">
+                          <label for="dot_test_1_yes">Yes</label>
+                        </div>
+                        <div>
+                          <input type="radio" id="dot_test_1_no" name="dot_test_1" value="no"
+                            [(ngModel)]="driverApplication.dot_test_1" (change)="isDotTest1Yes = false">
+                          <label for="dot_test_1_no">No</label>
+                        </div>
+                      </div>
+                    </div>
+                    <div [ngClass]="{ 'collapse': !isDotTest1Yes, 'show': isDotTest1Yes }">
+                      <div class="card card-body">
+                        Please provide details and documentation of successful completion of return-to-duty
+                        process:
+                        <textarea name="positiveTestDetails" [(ngModel)]="driverApplication.positiveTestDetails"
+                          rows="4" class="form-control custom-input"></textarea>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Second Group -->
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <label class="checkbox-label" style="padding-left: 0;">
+                        Have you refused a DOT-mandated drug or alcohol test?
+                      </label><br>
+                      <div class="d-flex">
+                        <div class="me-3">
+                          <input type="radio" id="dot_test_2_yes" name="dot_test_2" value="yes"
+                            [(ngModel)]="driverApplication.dot_test_2" (change)="isDotTest2Yes = true">
+                          <label for="dot_test_2_yes">Yes</label>
+                        </div>
+                        <div>
+                          <input type="radio" id="dot_test_2_no" name="dot_test_2" value="no"
+                            [(ngModel)]="driverApplication.dot_test_2" (change)="isDotTest2Yes = false">
+                          <label for="dot_test_2_no">No</label>
+                        </div>
+                      </div>
+                    </div>
+                    <div [ngClass]="{ 'collapse': !isDotTest2Yes, 'show': isDotTest2Yes }">
+                      <div class="card card-body">
+                        Please provide details:
+                        <textarea name="refusedTestDetails" [(ngModel)]="driverApplication.refusedTestDetails" rows="4"
+                          class="form-control custom-input"></textarea>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Third Group -->
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <label class="checkbox-label" style="padding-left: 0;">
+                        Have you ever completed a SAP program?
+                      </label><br>
+                      <div class="d-flex">
+                        <div class="me-3">
+                          <input type="radio" id="dot_test_3_yes" name="dot_test_3" value="yes"
+                            [(ngModel)]="driverApplication.dot_test_3" (change)="isDotTest3Yes = true">
+                          <label for="dot_test_3_yes">Yes</label>
+                        </div>
+                        <div>
+                          <input type="radio" id="dot_test_3_no" name="dot_test_3" value="no"
+                            [(ngModel)]="driverApplication.dot_test_3" (change)="isDotTest3Yes = false">
+                          <label for="dot_test_3_no">No</label>
+                        </div>
+                      </div>
+                    </div>
+                    <div [ngClass]="{ 'collapse': !isDotTest3Yes, 'show': isDotTest3Yes }">
+                      <div class="card card-body">
+                        Please provide details:
+                        <textarea name="otherViolationsDetails" [(ngModel)]="driverApplication.otherViolationsDetails"
+                          rows="4" class="form-control custom-input"></textarea>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- <div class="modal-footer justify-content-center">
+            <button type="button" class="btn btn-outline-secondary btn-sm text-uppercase rounded-pill"
+              (click)="goBack()" style="margin: 10px;">Back</button>
+            <button type="button" class="btn btn-success btn-sm text-uppercase rounded-pill" (click)="goNext()"
+              style="margin: 10px;">Next</button>
+          </div> -->
+        </form>
+        <!-- </div> -->
+
+
+        <!-- <div class="content_acc p-4" id="step5" [style.display]="currentStep === 5 ? 'block' : 'none'"> -->
+        <form (ngSubmit)="submitForm()" #mainForm="ngForm">
+          <!-- Section 12: MVR Consent -->
+          <div class="row">
+            <div class="col-md-12">
+
+              <div style="display: flex; align-items: center; justify-content: space-between; ">
+                <h2 class="font-18 font-weight-700 text-primary mb-4 text-capitalize">12. Motor Vehicle Record (MVR)
+                  Consent:</h2>
+                <label class="custom-toggle mb-5 ">
+                  <input type="checkbox" [(ngModel)]="isVerifiedSections[11]" name="isVerifiedToggle12"
+                    autocomplete="off" />
+                  <span class="slider">
+                    <span class="label-text" [ngClass]="isVerifiedSections[11] ? 'verified-label' : 'unverified-label'">
+                      {{ isVerifiedSections[11] ? 'Verified' : 'Unverified' }}
+                    </span>
+                    <span class="knob"></span>
+                  </span>
+                </label>
+              </div>
+            </div>
+            <div class="p-0 mb-2">
+              <div style="display: flex; justify-content: center; align-items: center;">
+                <button
+                  style="color: hsl(0, 0%, 96%); background-color: rgb(0, 71, 189); height: 30px; font-size: 0.75rem; padding: 0 16px; min-width: 60px;"
+                  class="btn text-uppercase rounded-pill" type="button" data-bs-toggle="collapse"
+                  (click)="MotorVehicleRecord = !MotorVehicleRecord">
+                  About MVR Checks <i class="ri-arrow-down-s-fill"></i>
+                </button>
+              </div>
+              <div class="collapse mt-2" id="myCollapse" [class.show]="MotorVehicleRecord">
+                <div class="card card-body">
+                  Federal Motor Carrier Safety Regulations (FMCSR) require employers to review the driving record
+                  of all applicants for safety-sensitive positions. Your Motor Vehicle Record (MVR) will be
+                  reviewed for any violations, suspensions, or revocations that may affect your eligibility for
+                  employment.By consenting below, you authorize the release of your MVR to the employer for
+                  employment purposes only.
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="checkbox-label mt-20" style="padding-left: 0;">
+                      I consent to the release of my Motor Vehicle Record (MVR) as described above
+                    </label><br>
+                    <div class="d-flex">
+                      <div class="me-3">
+                        <input type="radio" id="mvr_consent_yes" name="mvr_consent" value="yes"
+                          [(ngModel)]="driverApplication.mvr_consent">
+                        <label for="mvr_consent_yes">Yes</label>
+                      </div>
+                      <div>
+                        <input type="radio" id="mvr_consent_no" name="mvr_consent" value="no"
+                          [(ngModel)]="driverApplication.mvr_consent">
+                        <label for="mvr_consent_no">No</label>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            <div class="card card-body">
+              <div class="row">
+                <!-- Signature Input Section -->
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="form-field">
+                      <label class="mb-2 d-block font-weight-700">Enter Your Name for Signature</label>
+                      <!-- <p>Sign in the box below using your finger or stylus</p> -->
+                      <input type="text" [(ngModel)]="driverApplication.mvrSignature" (input)="updateSignature()"
+                        class="form-control signature-input custom-input gray" placeholder="Type your full name"
+                        name="mvrSignature" required>
+                    </div>
+                  </div>
+                </div>
+                <div *ngIf="driverApplication.mvrSignature" class="final-signature">
+                  <h5>Your Final Signature:</h5>
+                  <div class="signature-output">{{ driverApplication.mvrSignature }}</div>
+                </div>
+                <div class="col-md-12 ">
+                  <div class="form-group">
+                    <label class="mb-2 d-block font-weight-700 "> Date:</label>
+                    <input type="date" class="form-control custom-input gray" name="mvrConsentDate"
+                      [(ngModel)]="driverApplication.mvrConsentDate" required>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Section 13: PSP -->
+          <div class="row">
+            <div class="col-md-12">
+
+              <div style="display: flex; align-items: center; justify-content: space-between; ">
+                <h2 class="font-18 font-weight-700 text-primary mb-4 text-capitalize">13. FMCSA Pre-Employment
+                  Screening Program (PSP):</h2>
+                <label class="custom-toggle mb-5 ">
+                  <input type="checkbox" [(ngModel)]="isVerifiedSections[12]" name="isVerifiedToggle13"
+                    autocomplete="off" />
+                  <span class="slider">
+                    <span class="label-text" [ngClass]="isVerifiedSections[12] ? 'verified-label' : 'unverified-label'">
+                      {{ isVerifiedSections[12] ? 'Verified' : 'Unverified' }}
+                    </span>
+                    <span class="knob"></span>
+                  </span>
+                </label>
+              </div>
+            </div>
+            <div class="p-0 mb-2">
+              <div style="display: flex; justify-content: center; align-items: center;">
+                <button
+                  style="color: hsl(0, 0%, 96%); background-color: rgb(0, 71, 189); height: 30px; font-size: 0.75rem; padding: 0 16px; min-width: 60px;"
+                  class="btn text-uppercase rounded-pill" type="button" data-bs-toggle="collapse"
+                  (click)="FMCSA = !FMCSA">
+                  About PSP Reports <i class="ri-arrow-down-s-fill"></i>
+                </button>
+              </div>
+              <div class="collapse mt-2 " id="myCollapse" [class.show]="FMCSA">
+                <div class="card card-body"> The Pre-Employment Screening Program (PSP) allows motor carriers
+                  access to a driver's five-year crash and three-year inspection history as part of the hiring
+                  process. Your PSP report will include:
+                  <br>
+                  1. Crash data from the past 5 years<br>
+                  2. Inspection data from the past 3 years<br>
+                  3. Details of any violations found during inspections<br> This information helps carriers make
+                  more informed hiring decisions and improve highway safety. Your PSP report will only be used for
+                  employment purposes.
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="checkbox-label mt-20" style="padding-left: 0;">
+                      I authorize the employer to request my PSP Report (Optional)
+                    </label><br>
+                    <div class="d-flex">
+                      <div class="me-3">
+                        <input type="radio" id="psp_report_yes" name="psp_report" value="yes"
+                          [(ngModel)]="driverApplication.psp_report">
+                        <label for="psp_report_yes">Yes</label>
+                      </div>
+                      <div>
+                        <input type="radio" id="psp_report_no" name="psp_report" value="no"
+                          [(ngModel)]="driverApplication.psp_report">
+                        <label for="psp_report_no">No</label>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            <div class="card card-body">
+              <div class="row">
+                <!-- Signature Input Section -->
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="form-field">
+                      <label class="mb-2 d-block font-weight-700">Enter Your Name for Signature</label>
+                      <!-- <p>Sign in the box below using your finger or stylus</p> -->
+                      <input type="text" [(ngModel)]="driverApplication.pspSignature" (input)="updateSignature()"
+                        class="form-control signature-input custom-input gray" placeholder="Type your full name"
+                        name="pspSignature" required>
+                    </div>
+                  </div>
+                </div>
+                <div *ngIf="driverApplication.pspSignature" class="final-signature">
+                  <h5>Your Final Signature:</h5>
+                  <div class="signature-output">{{ driverApplication.pspSignature }}</div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="mb-2 d-block font-weight-700"> Date:</label>
+                    <input type="date" class="form-control custom-input gray" name="pspConsentDate"
+                      [(ngModel)]="driverApplication.pspConsentDate" required>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Section 14: Safety Performance History -->
+          <div class="row">
+            <div class="col-md-12">
+
+              <div style="display: flex; align-items: center; justify-content: space-between; ">
+                <h2 class="font-18 font-weight-700 text-primary mb-4 text-capitalize">14. Safety Performance
+                  History:</h2>
+                <label class="custom-toggle mb-5 ">
+                  <input type="checkbox" [(ngModel)]="isVerifiedSections[13]" name="isVerifiedToggle14"
+                    autocomplete="off" />
+                  <span class="slider">
+                    <span class="label-text" [ngClass]="isVerifiedSections[13] ? 'verified-label' : 'unverified-label'">
+                      {{ isVerifiedSections[13] ? 'Verified' : 'Unverified' }}
+                    </span>
+                    <span class="knob"></span>
+                  </span>
+                </label>
+              </div>
+            </div>
+            <div class="p-0 mb-2">
+              <!-- Toggle Button -->
+              <div style="display: flex; justify-content: center; align-items: center;">
+                <button
+                  style="color: hsl(0, 0%, 96%); background-color: rgb(0, 71, 189); height: 30px; font-size: 0.75rem; padding: 0 16px; min-width: 60px;"
+                  class="btn text-uppercase rounded-pill" type="button" data-bs-toggle="collapse"
+                  (click)="SafetyPerformanceHistory = !SafetyPerformanceHistory">
+                  About Safety Performance History <i class="ri-arrow-down-s-fill"></i>
+                </button>
+              </div>
+              <!-- Collapsible Content -->
+              <div class="collapse mt-2" id="myCollapse" [class.show]="SafetyPerformanceHistory">
+                <div class="card card-body">
+                  Federal regulations require motor carriers to investigate the safety performance history of new
+                  drivers from all previous DOT-regulated employers during the past three years.<br>
+                  By consenting below, you authorize the release of your safety performance history, which may
+                  include:<br>
+
+                  1. Accidents involving motor vehicles<br>
+                  2. Drug and alcohol testing violations<br>
+                  3. Employment verification for DOT-regulated positions
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="checkbox-label mt-20" style="padding-left: 0;">
+                      I consent to the release of my safety performance history as described above
+                    </label><br>
+                    <div class="d-flex">
+                      <div class="me-3">
+                        <input type="radio" id="SafetyPerformanceHistory_yes" name="SafetyPerformanceHistory"
+                          value="yes" [(ngModel)]="driverApplication.SafetyPerformanceHistory">
+                        <label for="SafetyPerformanceHistory_yes">Yes</label>
+                      </div>
+                      <div>
+                        <input type="radio" id="SafetyPerformanceHistory_no" name="SafetyPerformanceHistory" value="no"
+                          [(ngModel)]="driverApplication.SafetyPerformanceHistory">
+                        <label for="SafetyPerformanceHistoryy_no">No</label>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            <div class="card card-body">
+              <div class="row">
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="form-field">
+                      <label class="mb-2 d-block font-weight-700">Enter Your Name for Signature</label>
+                      <!-- <p>Sign in the box below using your finger or stylus</p> -->
+                      <input type="text" [(ngModel)]="driverApplication.safetyPerformanceSignature"
+                        (input)="updateSignature()" class="form-control signature-input custom-input gray"
+                        placeholder="Type your full name" name="safetyPerformanceSignature" required>
+                    </div>
+                  </div>
+                </div>
+                <div *ngIf="driverApplication.safetyPerformanceSignature" class="final-signature">
+                  <h5>Your Final Signature:</h5>
+                  <div class="signature-output">{{ driverApplication.safetyPerformanceSignature }}</div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="mb-2 d-block font-weight-700"> Date:</label>
+                    <input type="date" class="form-control custom-input gray" name="SafetyPerformanceHistoryDate"
+                      [(ngModel)]="driverApplication.SafetyPerformanceHistoryDate" required>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Section 15: Applicant Certification -->
+          <div class="row">
+            <div class="col-md-12">
+
+              <div style="display: flex; align-items: center; justify-content: space-between; ">
+                <h2 class="font-18 font-weight-700 text-primary mb-4 text-capitalize">15. Applicant Certification:
+                </h2>
+                <label class="custom-toggle mb-5 ">
+                  <input type="checkbox" [(ngModel)]="isVerifiedSections[14]" name="isVerifiedToggle15"
+                    autocomplete="off" />
+                  <span class="slider">
+                    <span class="label-text" [ngClass]="isVerifiedSections[14] ? 'verified-label' : 'unverified-label'">
+                      {{ isVerifiedSections[14] ? 'Verified' : 'Unverified' }}
+                    </span>
+                    <span class="knob"></span>
+                  </span>
+                </label>
+              </div>
+            </div>
+            <div class="p-0 mb-2">
+              <div class="mb-3" style="display: flex; justify-content: center; align-items: center;">
+                <button
+                  style="color: hsl(0, 0%, 96%); background-color: rgb(0, 71, 189); height: 30px; font-size: 0.75rem; padding: 0 18px; min-width: 60px; letter-spacing: 0.3px;"
+                  class="btn text-uppercase rounded-pill" type="button" data-bs-toggle="collapse"
+                  (click)="ApplicantCertification = !ApplicantCertification">
+                  Certification Statement <i class="ri-arrow-down-s-fill"></i>
+                </button>
+              </div>
+              <div class="collapse mt-2" id="myCollapse" [class.show]="ApplicantCertification">
+                <div class="card card-body">
+                  "This certifies that this application was completed by me, and that all entries and information
+                  are true and complete to the best of my knowledge. I understand that any omission or false
+                  information is grounds for disqualification or termination."
+                </div>
+              </div>
+            </div>
+            <div class="card card-body">
+              <div class="row">
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="form-field">
+                      <label class="mb-2 d-block font-weight-700">Enter Your Name for Signature</label>
+                      <!-- <p>Sign in the box below using your finger or stylus</p> -->
+                      <input type="text" [(ngModel)]="driverApplication.ApplicantCertificationSignature"
+                        (input)="updateSignature()" class="form-control signature-input custom-input gray"
+                        placeholder="Type your full name" name="ApplicantCertificationSignature" required>
+                    </div>
+                  </div>
+                </div>
+                <div *ngIf="driverApplication.ApplicantCertificationSignature" class="final-signature">
+                  <h5>Your Final Signature:</h5>
+                  <div class="signature-output">{{ driverApplication.ApplicantCertificationSignature }}</div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="mb-2 d-block font-weight-700"> Date:</label>
+                    <input type="date" class="form-control custom-input gray" name="ApplicantCertificationDate"
+                      [(ngModel)]="driverApplication.ApplicantCertificationDate" required>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Section 16: Upload Certification -->
+          <div class="row mb-3">
+            <div class="col-md-12">
+
+              <div style="display: flex; align-items: center; justify-content: space-between; ">
+                <h2 class="font-18 font-weight-700 text-primary mb-0 text-capitalize">16. Driver Documents</h2>
+                <label class="custom-toggle mb-5 ">
+                  <input type="checkbox" [(ngModel)]="isVerifiedSections[15]" name="isVerifiedToggle16"
+                    autocomplete="off" />
+                  <span class="slider">
+                    <span class="label-text" [ngClass]="isVerifiedSections[15] ? 'verified-label' : 'unverified-label'">
+                      {{ isVerifiedSections[15] ? 'Verified' : 'Unverified' }}
+                    </span>
+                    <span class="knob"></span>
+                  </span>
+                </label>
+              </div>
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th>Document Name</th>
+                    <th>Expiration Date</th>
+                    <th>Upload File</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let doc of documents; let i = index">
+                    <td>
+                      <input type="text" class="form-control" placeholder="Document Name"
+                        [(ngModel)]="documents[i].documentName" name="documentName{{i}}" required>
+                    </td>
+                    <td>
+                      <input type="date" class="form-control" [(ngModel)]="documents[i].documentExpiration"
+                        name="documentExpiration{{i}}">
+                    </td>
+                    <td>
+                      <input type="file" class="form-control" (change)="onFileChange($event, i)">
+                      <div *ngIf="documentUrl[i]">
+                        <span>
+                          {{ getDocumentFileName(documentUrl[i]) }}
+                        </span>
+                        <button type="button" class="btn btn-link text-danger p-0" (click)="removeFile(i)">
+                          <i class="fa fa-times"></i> Remove
+                        </button>
+                      </div>
+                      <div *ngIf="documents[i].documentUrl">
+                        <a [href]="documents[i].documentUrl" target="_blank">View Document</a>
+                      </div>
+                    </td>
+                    <td>
+                      <button type="button" class="btn btn-danger btn-sm" (click)="removeDocument(i)">
+                        <i class="fa fa-trash"></i>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <button type="button" class="btn btn-outline-success btn-sm mt-3" (click)="addDocument()"
+                style="color: #f9faff; border-color:#f9faff ; background-color: #304ccb; ">
+                <i class="fa fa-plus"></i> Add Document
+              </button>
+            </div>
+          </div>
+          <div class="modal-footer justify-content-center"
+            style="border-top: 1px solid #ccc; padding-top: 15px; margin-top: 15px; ">
+            <button type="button" class="btn btn-outline-secondary btn-sm text-uppercase rounded-pill"
+              data-bs-dismiss="offcanvas" aria-label="Close" (click)="onClose()"> Close</button>
+            <button type="submit" class="btn btn-success btn-sm text-uppercase rounded-pill"
+              style="margin: 10px;">Submit</button>
+            <button type="button" class="btn btn-success btn-sm text-uppercase rounded-pill" style="margin: 10px;"
+              data-bs-toggle="modal" data-bs-target="#checklistModal">
+              Show Compliance Checklist
+            </button>
+          </div>
+        </form>
+        <!-- </div> -->
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Compliance Checklist Modal -->
+<div class="modal fade" id="checklistModal" tabindex="-1" aria-labelledby="checklistModalLabel" aria-hidden="true"
+  #checklistModal>
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="checklistModalLabel">Compliance Verification Checklist</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Section Name</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let section of checklistSections; let i = index; trackBy: trackByIndex">
+              <td>{{ section }}</td>
+              <td>
+                <span [ngClass]="isVerifiedSections[i] ? 'text-success' : 'text-danger'">
+                  {{ isVerifiedSections[i] ? 'Verified' : 'Unverified' }}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="mt-3 d-flex align-items-center gap-2">
+          <button type="button" class="btn btn-success btn-sm me-2" (click)="openApproveModal()">Approve</button>
+          <button type="button" class="btn btn-danger btn-sm me-2" (click)="openRejectModal()">Reject</button>
+          <button type="button" class="btn btn-outline-secondary btn-sm text-uppercase rounded-pill"
+            data-bs-dismiss="modal" aria-label="Close"> Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Approve Application Modal (Angular/Bootstrap) -->
+<div class="modal fade" id="approveModal" tabindex="-1" aria-labelledby="approveModalLabel" aria-hidden="true"
+  #approveModal>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <form (ngSubmit)="confirmApprove()" #approveForm="ngForm">
+        <div class="modal-header">
+          <h5 class="modal-title" id="approveModalLabel">Approve Driver Application</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+            (click)="closeApproveModal()"></button>
+        </div>
+        <div class="modal-body">
+          <p>You are about to approve <b>{{ driverData?.firstName }} {{ driverData?.middleName }} {{
+              driverData?.lastName }}</b>'s driver application. This action will:</p>
+          <ul style="margin: 15px 0 20px 20px; color: #666;">
+            <li>Change application status to "Approved"</li>
+            <li>Notify the driver and other stakeholders</li>
+            <li>Initiate the onboarding process</li>
+            <li>Create a driver profile in the system</li>
+          </ul>
+          <div class="mb-3">
+            <label class="form-label">Approval Notes <span class="text-danger">*</span></label>
+            <textarea class="form-control" placeholder="Add your approval comments..." required
+              [(ngModel)]="approvalNotes" name="approvalNotes"></textarea>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Next Steps <span class="text-danger">*</span></label>
+            <select class="form-control" required [(ngModel)]="nextStep" name="nextStep">
+              <option value="">Select next action...</option>
+              <option value="onboarding">Begin Onboarding Process</option>
+              <option value="training">Schedule Training</option>
+              <option value="dispatch">Assign to Dispatch</option>
+              <option value="conditional">Conditional Approval (Pending Items)</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Approval Level <span class="text-danger">*</span></label>
+            <select class="form-control" required [(ngModel)]="approvalLevel" name="approvalLevel">
+              <option value="">Select approval level...</option>
+              <option value="final">Final Approval</option>
+              <option value="recommend">Recommend for Final Approval</option>
+              <option value="conditional">Conditional Approval</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"
+            (click)="closeApproveModal()">Cancel</button>
+          <button type="submit" class="btn btn-success">
+            <i class="fas fa-check"></i> Confirm Approval
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- Reject Application Modal (Angular/Bootstrap) -->
+<div class="modal fade" id="rejectModal" tabindex="-1" aria-labelledby="rejectModalLabel" aria-hidden="true"
+  #rejectModal>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <form (ngSubmit)="confirmReject()" #rejectForm="ngForm">
+        <div class="modal-header">
+          <h5 class="modal-title" id="rejectModalLabel">Reject Driver Application</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+            (click)="closeRejectModal()"></button>
+        </div>
+        <div class="modal-body">
+          <p>You are about to reject <b>{{ driverData?.firstName }} {{ driverData?.middleName }} {{ driverData?.lastName
+              }}</b>'s driver application. Please provide details:</p>
+          <div class="mb-3">
+            <label class="form-label">Reason for Rejection <span class="text-danger">*</span></label>
+            <select class="form-control" required [(ngModel)]="rejectionReason" name="rejectionReason">
+              <option value="">Select a reason...</option>
+              <option value="incomplete">Incomplete Application</option>
+              <option value="license">License Issues</option>
+              <option value="medical">Medical Certification Issues</option>
+              <option value="history">Safety Performance History</option>
+              <option value="drug">Drug Test Results</option>
+              <option value="background">Background Check Findings</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Detailed Explanation <span class="text-danger">*</span></label>
+            <textarea class="form-control" placeholder="Provide specific reasons for rejection..." required
+              [(ngModel)]="rejectionExplanation" name="rejectionExplanation"></textarea>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Follow-up Action</label>
+            <select class="form-control" [(ngModel)]="rejectionFollowup" name="rejectionFollowup">
+              <option value="">Select action...</option>
+              <option value="resubmit">Request Resubmission</option>
+              <option value="permanent">Permanent Rejection</option>
+              <option value="followup">Schedule Follow-up</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Notify Additional Parties</label>
+            <select class="form-control" multiple [(ngModel)]="rejectionNotify" name="rejectionNotify">
+              <option value="recruiter">Recruiting Team</option>
+              <option value="safety">Safety Department</option>
+              <option value="hr">Human Resources</option>
+              <option value="manager">Fleet Manager</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"
+            (click)="closeRejectModal()">Cancel</button>
+          <button type="submit" class="btn btn-danger">
+            <i class="fas fa-times"></i> Confirm Rejection
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

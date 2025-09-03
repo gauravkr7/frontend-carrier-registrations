@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { ServiceAuthService } from './service/service-auth.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
@@ -23,7 +24,38 @@ import { UsersProfileComponent } from './features/users-profile/users-profile.co
 import { TrailerListViewComponent } from './features/trailer-list-view/trailer-list-view.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
+import { EmploymentApplicationFormComponent } from './features/employment-application-form/employment-application-form.component';
+import { DrugPolicyComponent } from './features/drug-policy/drug-policy.component';
+import { ClearingHouseConsentFormComponent } from './features/clearing-house-consent-form/clearing-house-consent-form.component';
+import { BackgroundConsentFormComponent } from './features/background-consent-form/background-consent-form.component';
+import { MvrFormComponent } from './features/mvr-form/mvr-form.component';
+import { SphFormComponent } from './features/sph-form/sph-form.component';
+import { AnnualReviewFromComponent } from './features/annual-review-from/annual-review-from.component';
+import { HosServiceRecordComponent } from './features/hos-service-record/hos-service-record.component';
+import { I9FormComponent } from './features/i-9-form/i-9-form.component';
+import { RoadTestFormComponent } from './features/road-test-form/road-test-form.component';
+import { W9FormComponent } from './features/w-9-form/w-9-form.component';
+import { PspFormComponent } from './features/psp-form/psp-form.component';
+import { ExpiryComponent } from './features/expiry/expiry.component';
+import { PasswordManagerComponent } from './features/password-manager/password-manager.component';
+import { SidebarComponent } from './sidebar/sidebar.component';
+import { AccountPermitsComponent } from './features/account-permits/account-permits.component';
+import { CommonModule } from '@angular/common';
+import { VendorComponent } from './features/vendor/vendor.component';
+import { ExpiryviewComponent } from './features/expiryview/expiryview.component';
+import { ServicessComponent } from './features/servicess/servicess.component';
+import { CustomerComponent } from './features/customer/customer.component';
+import { SaledetailsComponent } from './features/saledetails/saledetails.component';
+import { ExpensedetailsComponent } from './features/expensedetails/expensedetails.component'; // Add this import
+import { RouterModule } from '@angular/router'; // Import RouterModule
 import { DriverApplicationFormComponent } from './features/driver-application-form/driver-application-form.component';
+import { DriverApplicationViewComponent } from './features/driver-application-view/driver-application-view.component';
+import { CrmComponent } from './features/crm/crm.component';
+import { TaskManagerComponent } from './features/task-manager/task-manager.component';
+
+
+
+
 
 
 
@@ -47,6 +79,35 @@ import { DriverApplicationFormComponent } from './features/driver-application-fo
     UsersProfileComponent,
     TrailerListViewComponent,
     DriverApplicationFormComponent,
+    EmploymentApplicationFormComponent,
+    DrugPolicyComponent,
+    ClearingHouseConsentFormComponent,
+    BackgroundConsentFormComponent,
+    MvrFormComponent,
+    SphFormComponent,
+    AnnualReviewFromComponent,
+    HosServiceRecordComponent,
+    I9FormComponent,
+    RoadTestFormComponent,
+    W9FormComponent,
+    PspFormComponent,
+    ExpiryComponent,
+    PasswordManagerComponent,
+    SidebarComponent,
+    AccountPermitsComponent,
+    VendorComponent,
+    ExpiryviewComponent,
+    ServicessComponent,
+    CustomerComponent,
+    SaledetailsComponent,
+    ExpensedetailsComponent,
+    DriverApplicationFormComponent,
+    DriverApplicationViewComponent,
+    CrmComponent,
+    TaskManagerComponent,
+ 
+
+    
 
     
   ],
@@ -62,6 +123,8 @@ import { DriverApplicationFormComponent } from './features/driver-application-fo
       positionClass: 'toast-top-right',
       preventDuplicates: true,
     }), // No need for explicit typing here
+    CommonModule, // Add this
+    RouterModule // Include RouterModule here
     // other modules
   ],
   providers: [],

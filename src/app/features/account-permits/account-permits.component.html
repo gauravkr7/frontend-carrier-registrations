@@ -1,0 +1,2164 @@
+<app-navbar (toggleSidebar)="toggleSidebar()"></app-navbar>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+
+
+
+
+<main id="main" class=" bg-gray main mt-0 p-0" [ngClass]="{'full-width': isSidebarOpen, 'shift-right': !isSidebarOpen}">
+  <div class="p-4 pb-0">
+    <h2 style="margin-left: 90px;" class="font-18 font-weight-700 mb-4 text-capitalize">Accounting</h2>
+    <div style="margin-left: 90px;" class="bg-white rounded-lg p-3 min-h-screen">
+      <div class="col-md-12">
+        <ul class="nav nav-pills gap-2 border-bottom pb-4" id="myTab" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link rounded-pill bg-nav-info" [class.active]="activeTab === 'customer'" id="home-tab"
+              data-bs-toggle="tab" data-bs-target="#customer" type="button" role="tab" aria-controls="home"
+              aria-selected="activeTab === 'customer'" (click)="onTabChange('customer')">Account
+              Types</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link rounded-pill bg-nav-info" [class.active]="activeTab === 'file'" id="profile-tab"
+              data-bs-toggle="tab" data-bs-target="#file" type="button" role="tab" aria-controls="profile"
+              aria-selected="activeTab === 'file'" (click)="onTabChange('file')">Sales Orders</button>
+          </li>
+
+          <li class="nav-item" role="presentation">
+            <button class="nav-link rounded-pill bg-nav-info" [class.active]="activeTab === 'forms'" id="contact-tab"
+              data-bs-toggle="tab" data-bs-target="#forms" type="button" role="tab" aria-controls="contact"
+              aria-selected="activeTab === 'forms'" (click)="onTabChange('forms')">Expenses</button>
+          </li>
+
+          <li class="nav-item" role="presentation">
+            <button class="nav-link rounded-pill bg-nav-info" [class.active]="activeTab === 'email'" id="contact-tab"
+              data-bs-toggle="tab" data-bs-target="#email" type="button" role="tab" aria-controls="contact"
+              aria-selected="activeTab === 'email'" (click)="onTabChange('email')">Accounts Payable</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link rounded-pill bg-nav-info" [class.active]="activeTab === 'receivable'"
+              id="contact-tab" data-bs-toggle="tab" data-bs-target="#receivable" type="button" role="tab"
+              aria-controls="contact" aria-selected="activeTab === 'receivable'"
+              (click)="onTabChange('receivable')">Accounts Receivable</button>
+          </li>
+        </ul>
+        <div class="tab-content" id="myTabContent">
+          <div class="tab-pane fade" [ngClass]="{'active show': activeTab === 'customer'}" id="customer" role="tabpanel"
+            aria-labelledby="home-tab">
+            <div id="kt_app_content" class="app-content  flex-column-fluid">
+              <div class="my-4">
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="d-flex justify-content-between">
+                      <!-- Add this inside the Account Types tab, above the table -->
+                      <div class="form-group has-search mb-0 d-flex align-items-center">
+                        <span class="fa fa-search form-control-feedback"></span>
+                        <input style="height: 36px !important; padding-left: 30px; margin-right: 10px;" type="text"
+                          name="Search" class="form-control" placeholder="Search..." [(ngModel)]="accountSearchTerm"
+                          (keyup.enter)="searchAccounts()">
+                        <button type="button"
+                          class="btn btn-success rounded-pill font-14 search-btn d-flex align-items-center"
+                          style="height: 36px; margin-left: 5px;" (click)="searchAccounts()">
+                          <i class="fa fa-search me-2"></i> Search
+                        </button>
+                      </div>
+                      <div>
+                        <a href="javascript:;" class="btn btn-success rounded-pill font-14" type="button"
+                          data-bs-toggle="offcanvas" data-bs-target="#addLocation3" aria-controls="offcanvasRight"> <i
+                            class="fa fa-plus me-2" aria-hidden="true"></i> Add Account</a>
+                        <div></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-12">
+                  <div class="table-responsive">
+                    <table class="table table-bordered ">
+                      <thead>
+                        <tr>
+                          <th scope="col">Account ID</th>
+                          <th scope="col">Name</th>
+                          <th scope="col">Type</th>
+                          <th scope="col">Description</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let account of paginatedAccounts">
+                          <!-- <td><a class="text-primary" href="">{{ account.accountId }}</a></td> -->
+                          <td>{{ account.accountId }}</td>
+                          <td>{{ account.accountName }}</td>
+                          <td>{{ account.type }}</td>
+                          <td>{{ account.description }}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bg-white my-3 rounded" style="margin-right: 90px; ">
+                <div class="row">
+                  <div class="col-md-12">
+                    <nav aria-label="Page navigation example ms-auto me-auto">
+                      <ul class="pagination justify-content-center gap-2 mb-0" style="margin-top: 20px ;">
+                        <li class="page-item" [class.disabled]="currentAccountsPage === 1">
+                          <a class="page-link font-22 d-flex align-items-center justify-content-center"
+                            href="javascript:;" aria-label="Previous"
+                            (click)="changeAccountsPage(currentAccountsPage - 1)">
+                            <i class="fa fa-angle-left font-weight-300"></i>
+                          </a>
+                        </li>
+                        <li class="page-item" *ngFor="let page of [].constructor(totalAccountsPages); let i = index"
+                          [class.active]="currentAccountsPage === i + 1">
+                          <a class="page-link font-14 d-flex align-items-center justify-content-center"
+                            href="javascript:;" (click)="changeAccountsPage(i + 1)">
+                            {{ i + 1 }}
+                          </a>
+                        </li>
+                        <li class="page-item" [class.disabled]="currentAccountsPage === totalAccountsPages">
+                          <a class="page-link font-22 d-flex align-items-center justify-content-center"
+                            href="javascript:;" aria-label="Next" (click)="changeAccountsPage(currentAccountsPage + 1)">
+                            <i class="fa fa-angle-right font-weight-300"></i>
+                          </a>
+                        </li>
+                      </ul>
+                    </nav>
+                    <!-- Accounts Summary -->
+                    <div class="text-center mt-2" style="margin-bottom: 20px;">
+                      <ng-container *ngIf="paginatedAccounts.length > 0">
+                        <span class="badge bg-light text-dark px-3 py-2" style="font-size: 14px; font-weight: normal;">
+                          Showing
+                          {{
+                          ((currentAccountsPage - 1) * accountsPerPage) + 1
+                          }}
+                          to
+                          {{
+                          ((currentAccountsPage - 1) * accountsPerPage) + paginatedAccounts.length
+                          }}
+                          of
+                          {{
+                          accounts.length
+                          }}
+                          entries (Page {{ currentAccountsPage }} of {{ totalAccountsPages }})
+                        </span>
+                      </ng-container>
+                      <ng-container *ngIf="paginatedAccounts.length === 0">
+                        <span class="badge bg-light text-danger px-3 py-2" style="font-size: 15px;">
+                          No records to display.
+                        </span>
+                      </ng-container>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane fade" [ngClass]="{'active show': activeTab === 'file'}" id="file" role="tabpanel"
+            aria-labelledby="profile-tab">
+
+
+
+
+
+            <div id="kt_app_content" class="app-content flex-column-fluid">
+              <div class="my-4">
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="d-flex justify-content-between">
+                      <!-- Add this inside the Sales Orders tab, above the table -->
+                      <div class="form-group has-search mb-0 d-flex align-items-center">
+                        <span class="fa fa-search form-control-feedback"></span>
+                        <input style="height: 36px !important; padding-left: 30px; margin-right: 10px;" type="text"
+                          name="Search" class="form-control" placeholder="Search..." [(ngModel)]="salesOrderSearchTerm"
+                          (keyup.enter)="searchSalesOrders()">
+                        <button type="button"
+                          class="btn btn-success rounded-pill font-14 search-btn d-flex align-items-center"
+                          style="height: 36px; margin-left: 5px;" (click)="searchSalesOrders()">
+                          <i class="fa fa-search me-2"></i> Search
+                        </button>
+                      </div>
+                      <div>
+                        <div class="btn-group" role="group" aria-label="Basic example">
+                          <a href="javascript:;" class="btn btn-success rounded-pill font-14" type="button"
+                            data-bs-toggle="offcanvas" data-bs-target="#addLocation1" aria-controls="offcanvasRight"><i
+                              class="fa fa-plus me-2" aria-hidden="true"></i> Add Sales Order</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-12">
+                  <div class="table-responsive">
+                    <table class="table table-bordered  ">
+                      <thead>
+                        <tr>
+                          <th scope="col">Order ID</th>
+                          <th scope="col">Customer</th>
+                          <th scope="col">Order Date</th>
+                          <th scope="col">Amount</th>
+                          <th scope="col">Invoice Status</th>
+                          <th scope="col">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let sale of paginatedSalesOrders">
+                          <td>{{ sale.orderId }}</td>
+                          <td>{{ sale.customerName }}</td>
+                          <td>{{ sale.invoiceDate | date:'MM-dd-yyyy' }}</td>
+                          <td>${{ getSaleCategoryTotal(sale) | number:'1.2-2' }}</td>
+                          <td>{{ sale.status || 'Not Generated' }}</td> <!-- Display status -->
+
+                          <td class="text-capitalize ">
+                            <div class="dropdown filter-dropdown">
+                              <span class="dropdown-toggle font-16 px-3" type="button" id="dropdownMenuButton23"
+                                data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i>
+                              </span>
+                              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
+
+
+                                <a href="javascript:;" class="dropdown-item assigned font-13"
+                                  (click)="generatePDF(sale)" type="button" data-bs-target="#ExtralargeModalEdit"
+                                  aria-controls="offcanvasRight"> Generate Invoice</a>
+                                <a href="javascript:void(0)" class="dropdown-item assigned font-13"
+                                  (click)="openEditSalesOrderModal(sale)" data-bs-toggle="offcanvas"
+                                  data-bs-target="#editSalesOrderModal" aria-controls="editSalesOrderModal"
+                                  data-bs-dismiss="offcanvas">Edit</a>
+                                <a href="javascript:;" class="dropdown-item assigned font-13"
+                                  (click)="deleteSalesOrder(sale)" type="button" data-bs-target="#ExtralargeModalEdit"
+                                  aria-controls="offcanvasRight"> Delete</a>
+                                <a href="javascript:;" class="dropdown-item assigned font-13"
+                                  [routerLink]="['/saledetails', sale.orderId]" type="button" title="View Details">View
+                                  Details</a>
+
+                              </div>
+                            </div>
+
+
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div class="row bg-white px-3 py-4 mt-3 rounded mb-4" style="margin-right: 90px;">
+                <div class="col-md-12">
+                  <nav aria-label="Page navigation example ms-auto me-auto">
+                    <ul class="pagination justify-content-center gap-2 mb-0">
+                      <li class="page-item" [class.disabled]="currentSalesOrdersPage === 1">
+                        <a class="page-link font-22 d-flex align-items-center justify-content-center"
+                          href="javascript:;" aria-label="Previous"
+                          (click)="changeSalesOrdersPage(currentSalesOrdersPage - 1)">
+                          <i class="fa fa-angle-left font-weight-300"></i>
+                        </a>
+                      </li>
+                      <li class="page-item" *ngFor="let page of [].constructor(totalSalesOrdersPages); let i = index"
+                        [class.active]="currentSalesOrdersPage === i + 1">
+                        <a class="page-link font-14 d-flex align-items-center justify-content-center"
+                          href="javascript:;" (click)="changeSalesOrdersPage(i + 1)">
+                          {{ i + 1 }}
+                        </a>
+                      </li>
+                      <li class="page-item" [class.disabled]="currentSalesOrdersPage === totalSalesOrdersPages">
+                        <a class="page-link font-22 d-flex align-items-center justify-content-center"
+                          href="javascript:;" aria-label="Next"
+                          (click)="changeSalesOrdersPage(currentSalesOrdersPage + 1)">
+                          <i class="fa fa-angle-right font-weight-300"></i>
+                        </a>
+                      </li>
+                    </ul>
+                  </nav>
+                  <!-- Sales Orders Summary -->
+                  <div class="text-center mt-2">
+                    <ng-container *ngIf="paginatedSalesOrders.length > 0">
+                      <span class="badge bg-light text-dark px-3 py-2" style="font-size: 14px; font-weight: normal;">
+                        Showing
+                        1
+                        to
+                        {{ paginatedSalesOrders.length }}
+                        of
+                        {{ paginatedSalesOrders.length }}
+                        entries (Page {{ currentSalesOrdersPage }} of {{ totalSalesOrdersPages }})
+                      </span>
+                    </ng-container>
+                    <ng-container *ngIf="paginatedSalesOrders.length === 0">
+                      <span class="badge bg-light text-danger px-3 py-2" style="font-size: 15px;">
+                        No records to display.
+                      </span>
+                    </ng-container>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane fade" [ngClass]="{'active show': activeTab === 'forms'}" id="forms" role="tabpanel"
+            aria-labelledby="contact-tab">
+
+            <div id="kt_app_content" class="app-content flex-column-fluid">
+              <div class="my-4">
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="d-flex justify-content-between">
+                      <div class="form-group has-search mb-0 d-flex align-items-center">
+                        <span class="fa fa-search form-control-feedback"></span>
+                        <input style="height: 36px !important; padding-left: 30px; margin-right: 10px;" type="text"
+                          name="Search" class="form-control" placeholder="Search..." [(ngModel)]="expenseSearchTerm"
+                          (keyup.enter)="searchExpenses()">
+                        <button type="button"
+                          class="btn btn-success rounded-pill font-14 search-btn d-flex align-items-center"
+                          style="height: 36px; margin-left: 5px;" (click)="searchExpenses()">
+                          <i class="fa fa-search me-2"></i> Search
+                        </button>
+                      </div>
+                      <div>
+                        <div class="btn-group" role="group" aria-label="Basic example">
+                          <a href="javascript:;" class="btn btn-success rounded-pill font-14" type="button"
+                            data-bs-toggle="offcanvas" data-bs-target="#addLocation2" aria-controls="offcanvasRight"><i
+                              class="fa fa-plus me-2" aria-hidden="true"></i>Add Expense</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-12">
+                  <div class="table-responsive">
+                    <table class="table table-bordered ">
+                      <thead>
+                        <tr>
+                          <th scope="col">Expense ID</th>
+                          <th scope="col">Vendor</th>
+                          <th scope="col">Bill Date</th>
+                          <th scope="col">Amount</th>
+                          <th scope="col">Bill Status</th>
+                          <th scope="col">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let expense of paginatedExpenses">
+                          <!-- <td><a class="text-primary">{{ expense.expenseId }}</a></td> -->
+                          <td>{{ expense.expenseId }}</td>
+                          <td>{{ expense.vendorName }}</td>
+                          <td>{{ expense.billDate | date: 'MM-dd-yyyy' }}</td>
+                          <td>${{ getExpenseCategoryTotal(expense) | number:'1.2-2' }}</td>
+                          <td>{{ expense.status || 'Not Generated' }}</td>
+                          <td class="text-capitalize ">
+                            <div class="dropdown filter-dropdown">
+                              <span class="dropdown-toggle font-16 px-3" type="button" id="dropdownMenuButton23"
+                                data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i>
+                              </span>
+                              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
+
+
+                                <a href="javascript:;" class="dropdown-item assigned font-13"
+                                  (click)="generateExpensePDF(expense)" type="button" aria-controls="offcanvasRight">
+                                  Generate Bill</a>
+                                <a href="javascript:void(0)" class="dropdown-item assigned font-13"
+                                  (click)="openEditExpenseModal(expense)" data-bs-toggle="offcanvas"
+                                  data-bs-target="#editExpenseModal" aria-controls="editExpenseModal"
+                                  data-bs-dismiss="offcanvas">Edit</a>
+                                <a href="javascript:;" class="dropdown-item assigned font-13"
+                                  (click)="deleteExpense(expense)" type="button" data-bs-target="#ExtralargeModalEdit"
+                                  aria-controls="offcanvasRight"> Delete</a>
+                                <a href="javascript:;" class="dropdown-item assigned font-13"
+                                  [routerLink]="['/expensedetails', expense.expenseId]" type="button"
+                                  title="View Details">View Details</a>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div class="bg-white mt-3 rounded " style="margin-right: 90px;">
+                <div class="row">
+                  <div class="col-md-12 mb-5">
+                    <nav aria-label="Page navigation example ms-auto me-auto">
+                      <ul class="pagination justify-content-center gap-2 mb-0" style="margin-top: 20px ;">
+                        <li class="page-item" [class.disabled]="currentExpensesPage === 1">
+                          <a class="page-link font-22 d-flex align-items-center justify-content-center"
+                            href="javascript:;" aria-label="Previous"
+                            (click)="changeExpensesPage(currentExpensesPage - 1)">
+                            <i class="fa fa-angle-left font-weight-300"></i>
+                          </a>
+                        </li>
+                        <li class="page-item" *ngFor="let page of [].constructor(totalExpensesPages); let i = index"
+                          [class.active]="currentExpensesPage === i + 1">
+                          <a class="page-link font-14 d-flex align-items-center justify-content-center"
+                            href="javascript:;" (click)="changeExpensesPage(i + 1)">
+                            {{ i + 1 }}
+                          </a>
+                        </li>
+                        <li class="page-item" [class.disabled]="currentExpensesPage === totalExpensesPages">
+                          <a class="page-link font-22 d-flex align-items-center justify-content-center"
+                            href="javascript:;" aria-label="Next" (click)="changeExpensesPage(currentExpensesPage + 1)">
+                            <i class="fa fa-angle-right font-weight-300"></i>
+                          </a>
+                        </li>
+                      </ul>
+                    </nav>
+                    <!-- Expenses Summary -->
+                    <div class="text-center mt-2">
+                      <ng-container *ngIf="paginatedExpenses.length > 0">
+                        <span class="badge bg-light text-dark px-3 py-2" style="font-size: 14px;
+  font-weight: normal;">
+                          Showing
+                          1
+                          to
+                          {{ paginatedExpenses.length }}
+                          of
+                          {{ paginatedExpenses.length }}
+                          entries (Page {{ currentExpensesPage }} of {{ totalExpensesPages }})
+                        </span>
+                      </ng-container>
+                      <ng-container *ngIf="paginatedExpenses.length === 0">
+                        <span class="badge bg-light text-danger px-3 py-2" style="font-size: 15px;">
+                          No records to display.
+                        </span>
+                      </ng-container>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="tab-pane fade" [ngClass]="{'active show': activeTab === 'email'}" id="email" role="tabpanel"
+            aria-labelledby="contact-tab">
+            <div id="kt_app_content" class="app-content flex-column-fluid">
+              <div class="my-4">
+                <div class="card mb-4">
+                  <div class="card-header">
+                    <span>Accounts Payable</span>
+                  </div>
+                  <div class="card-body">
+                    <!-- AP Summary Cards -->
+                    <div class="row">
+                      <div class="col-md-3">
+                        <div class="card summary-card bg-light">
+                          <div class="card-body">
+                            <h6 class="card-subtitle mb-2 text-muted">Total Pending AP</h6>
+                            <h3 class="card-title">{{ totalPendingAP | currency }}</h3>
+                            <p class="card-text text-success"><small>{{ totalPendingBills }} bills</small></p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <div class="card summary-card bg-light">
+                          <div class="card-body">
+                            <h6 class="card-subtitle mb-2 text-muted">Due This Week</h6>
+                            <h3 class="card-title">{{ dueThisWeekAP | currency }}</h3>
+                            <p class="card-text text-warning"><small>{{ dueThisWeekBills }} bills</small></p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <div class="card summary-card bg-light">
+                          <div class="card-body">
+                            <h6 class="card-subtitle mb-2 text-muted">Overdue</h6>
+                            <h3 class="card-title">{{ overdueAP | currency }}</h3>
+                            <p class="card-text text-danger"><small>{{ overdueBills }} bills</small></p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <div class="card summary-card bg-light">
+                          <div class="card-body">
+                            <h6 class="card-subtitle mb-2 text-muted">Paid This Month</h6>
+                            <h3 class="card-title">{{ paidThisMonthAP | currency }}</h3>
+                            <p class="card-text text-success"><small>{{ paidBillsThisMonth }} bills</small></p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- AP Filters -->
+                    <div class="card mb-4">
+                      <div class="card-header bg-light d-flex justify-content-between align-items-center"
+                        style="cursor: pointer;" (click)="toggleFilters()">
+                        <h6 class="mb-0">Filters</h6>
+                        <div class="radial-arrow-container">
+                          <div class="radial-arrow" [class.active]="showFilters">→</div>
+                        </div>
+                      </div>
+
+                      <div class="card-body" *ngIf="showFilters">
+                        <form class="row g-3" (ngSubmit)="applyARFilters()">
+                          <div class="col-md-3">
+                            <label for="apVendorFilter" class="form-label">Customer</label>
+                            <select class="form-control" id="apVendorFilter" (click)="onVendorDropdownClick()"
+                              (change)="applyFilters()">
+                              <option value="">All Vendors</option>
+                              <option *ngFor="let vendor of uniqueVendors" [value]="vendor">{{ vendor }}</option>
+                            </select>
+                          </div>
+                          <div class="col-md-3">
+                            <label for="apStatusFilter" class="form-label">Status</label>
+                            <select style="background-color: white;" class="form-select" id="apStatusFilter"
+                              [(ngModel)]="apFilters.status">
+                              <option value="">All Statuses</option>
+                              <option value="Pending">Pending</option>
+                              <option value="Paid">Paid</option>
+                              <option value="Overdue">Overdue</option>
+                              <option value="Overshort">Overshort</option>
+                            </select>
+                          </div>
+                          <!-- <div class="col-md-3">
+                  <label for="apDateFrom" class="form-label">From Date</label>
+                  <input style="font-size: 18px;" type="date" class="form-control" id="arDateFrom" (change)="filterExpensesByDateRange()">
+                </div>
+                <div class="col-md-3">
+                  <label for="apDateTo" class="form-label">To Date</label>
+                  <input style="font-size: 18px;" type="date" class="form-control" id="arDateTo" (change)="filterExpensesByDateRange()">
+                </div> -->
+                          <div class="col-md-3">
+                            <label for="apDateFrom" class="form-label">From Date</label>
+                            <input style="font-size: 18px;" type="date" class="form-control" id="apDateFrom"
+                              [(ngModel)]="apFilters.dateFrom" (change)="filterExpensesByDateRange()">
+                          </div>
+                          <div class="col-md-3">
+                            <label for="apDateTo" class="form-label">To Date</label>
+                            <input style="font-size: 18px;" type="date" class="form-control" id="apDateTo"
+                              [(ngModel)]="apFilters.dateTo" (change)="filterExpensesByDateRange()">
+                          </div>
+
+                          <div class="col-12">
+                            <button type="button" class="btn btn-primary me-2" (click)="applyFilters()">Apply
+                              Filters</button>
+                            <button type="button" class="btn btn-outline-secondary"
+                              (click)="resetFilters()">Reset</button>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+
+
+
+
+
+                    <!-- AP Table -->
+                    <div class="table-responsive">
+                      <table class="table table-bordered">
+                        <thead>
+                          <tr>
+                            <th scope="col">Bill ID</th>
+                            <th scope="col">Vendor</th>
+                            <th scope="col">Payment Method</th>
+                            <th scope="col">Bill Date</th>
+                            <th scope="col">Due Date</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Amount Paid</th>
+                            <th scope="col">Payment Status</th>
+                            <th scope="col">Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+
+                          <tr *ngFor="let expense of paginatedPayableExpenses">
+                            <td><a class="text-primary" [routerLink]="['/expensedetails', expense.expenseId]" href="">{{
+                                expense.expenseId }}</a></td>
+                            <td>{{ expense.vendorName }}</td>
+                            <td>{{ expense.paymentMethod || 'Not Recorded' }}</td>
+                            <td>{{ expense.billDate | date: 'MM-dd-yyyy' }}</td>
+                            <td>{{ expense.duedate | date: 'MM-dd-yyyy' }}</td>
+                            <td>${{ getExpenseCategoryTotal(expense) | number:'1.2-2' }}</td>
+                            <td>${{ expense.paidAmount || "Not paid" }}</td>
+                            <td>
+                              <span class="badge" [ngClass]="{
+                        'badge-overdue': isOverdue(expense.duedate, expense.status1),
+                        'badge-paid': expense.status1 === 'Paid',
+                        'badge-pending': expense.status1 === 'Pending',
+                        'badge-overshort': isOvershort(expense.amount, expense.paidAmount)
+                      }">
+                                {{ getPaymentStatus(expense, 'status1') }}
+                              </span>
+                            </td>
+                            <td class="text-capitalize">
+                              <div class="dropdown filter-dropdown">
+                                <span class="dropdown-toggle font-16 px-3" type="button" id="dropdownMenuButton23"
+                                  data-bs-toggle="dropdown" aria-expanded="false">
+                                  <i class="fa fa-ellipsis-v"></i>
+                                </span>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton23">
+                                  <a href="javascript:;" class="dropdown-item font-13" data-bs-toggle="modal"
+                                    data-bs-target="#paymentMethodModal1"
+                                    (click)="openPaymentModalExpense(expense)">Mark as Payble</a>
+                                  <a href="javascript:;" class="dropdown-item font-13">
+                                    <label for="uploadDocumentInput-{{ expense.expenseId }}"
+                                      style="cursor: pointer;">Upload Document</label>
+                                    <input type="file" id="uploadDocumentInput-{{ expense.expenseId }}"
+                                      style="display: none;" (change)="onExpenseFileSelected($event, expense)" />
+                                  </a>
+                                  <a class="dropdown-item font-13"
+                                    [routerLink]="['/expensedetails', expense.expenseId]">View Details</a>
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                <div class="bg-white mb-5 rounded" style="margin-right: 90px;">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <nav aria-label="Page navigation example ms-auto me-auto">
+                        <ul class="pagination justify-content-center gap-2 mb-0" style="margin-top: 20px ;">
+                          <li class="page-item" [class.disabled]="currentPayablePage === 1">
+                            <a class="page-link font-22 d-flex align-items-center justify-content-center"
+                              href="javascript:;" aria-label="Previous"
+                              (click)="changePayablePage(currentPayablePage - 1)">
+                              <i class="fa fa-angle-left font-weight-300"></i></a>
+                          </li>
+                          <li class="page-item" *ngFor="let page of [].constructor(totalPayablePages); let i = index"
+                            [class.active]="currentPayablePage === i + 1">
+                            <a class="page-link font-14 d-flex align-items-center justify-content-center"
+                              href="javascript:;" (click)="changePayablePage(i + 1)">
+                              {{ i + 1 }}
+                            </a>
+                          </li>
+                          <li class="page-item" [class.disabled]="currentPayablePage === totalPayablePages">
+                            <a class="page-link font-22 d-flex align-items-center justify-content-center"
+                              href="javascript:;" aria-label="Next" (click)="changePayablePage(currentPayablePage + 1)">
+                              <i class="fa fa-angle-right font-weight-300"></i></a>
+                          </li>
+                        </ul>
+                      </nav>
+                      <!-- Accounts Payable Summary -->
+                      <div class="text-center mt-2">
+                        <ng-container *ngIf="paginatedPayableExpenses.length > 0">
+                          <span class="badge bg-light text-dark px-3 py-2" style="font-size: 14px;
+  font-weight: normal;">
+                            Showing
+                            {{
+                            ((currentPayablePage - 1) * payablePerPage) + 1
+                            }}
+                            to
+                            {{
+                            ((currentPayablePage - 1) * payablePerPage) + paginatedPayableExpenses.length
+                            }}
+                            of
+                            {{
+                            filteredExpenseOrders.length
+                            }}
+                            entries (Page {{ currentPayablePage }} of {{ totalPayablePages }})
+                          </span>
+                        </ng-container>
+                        <ng-container *ngIf="paginatedPayableExpenses.length === 0">
+                          <span class="badge bg-light text-danger px-3 py-2" style="font-size: 15px;">
+                            No records to display.
+                          </span>
+                        </ng-container>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="tab-pane fade" [ngClass]="{'active show': activeTab === 'receivable'}" id="receivable"
+            role="tabpanel" aria-labelledby="contact-tab">
+            <div id="kt_app_content" class="app-content flex-column-fluid">
+              <div class="my-4">
+                <div class="card mb-4">
+                  <div class="card-header">
+                    <span>Accounts Receivable</span>
+                  </div>
+                  <div class="card-body">
+                    <!-- AR Summary Cards -->
+                    <div class="row mb-4">
+                      <div class="col-md-3">
+                        <div class="card summary-card bg-light">
+                          <div class="card-body">
+                            <h6 class="card-subtitle mb-2 text-muted">Total Pending AR</h6>
+                            <h3 class="card-title">
+                              {{ (totalPendingAR - overdueAR) | currency }}
+                            </h3>
+                            <p class="card-text text-success">
+                              <small>{{ totalPendingInvoices - overdueInvoices }} invoices</small>
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <div class="card summary-card bg-light">
+                          <div class="card-body">
+                            <h6 class="card-subtitle mb-2 text-muted">Due This Week</h6>
+                            <h3 class="card-title">{{ dueThisWeekAR | currency }}</h3>
+                            <p class="card-text text-warning"><small>{{ dueThisWeekInvoices }} invoices</small></p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <div class="card summary-card bg-light">
+                          <div class="card-body">
+                            <h6 class="card-subtitle mb-2 text-muted">Overdue</h6>
+                            <h3 class="card-title">{{ overdueAR | currency }}</h3>
+                            <p class="card-text text-danger">
+                              <small>{{ overdueInvoices }} invoices</small>
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <div class="card summary-card bg-light">
+                          <div class="card-body">
+                            <h6 class="card-subtitle mb-2 text-muted">Paid This Month</h6>
+                            <h3 class="card-title">{{ paidThisMonthAR | currency }}</h3>
+                            <p class="card-text text-success"><small>{{ paidInvoicesThisMonth }} invoices</small></p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+
+
+
+
+
+
+
+
+                    <!-- AR Filters -->
+                    <div class="card mb-4">
+                      <div class="card-header bg-light d-flex justify-content-between align-items-center"
+                        style="cursor: pointer;" (click)="toggleFilters()">
+                        <h6 class="mb-0">Filters</h6>
+                        <div class="radial-arrow-container">
+                          <div class="radial-arrow " [class.active]="showFilters">→</div>
+                        </div>
+                      </div>
+                      <div class="card-body" *ngIf="showFilters">
+                        <form class="row g-3">
+                          <div class="col-md-3">
+                            <label for="arCustomerFilter" class="form-label">Customer</label>
+                            <select style="background-color: white;" class="form-select" id="arCustomerFilter"
+                              (change)="filterSalesOrdersByCustomer($event)">
+                              <option value="">All Customers</option>
+                              <option *ngFor="let customer of uniqueCustomers" [value]="customer">{{ customer }}
+                              </option>
+                            </select>
+                          </div>
+
+
+
+                          <div class="col-md-3">
+                            <label for="arStatusFilter" class="form-label">Status</label>
+                            <select style="background-color: white;" class="form-select" id="arStatusFilter"
+                              (change)="filterSalesOrdersByStatus($event)">
+                              <option value="">All Statuses</option>
+                              <option value="Pending">Pending</option>
+                              <option value="Paid">Paid</option>
+                              <option value="Overdue">Overdue</option>
+                              <option value="Overshort">Overshort</option>
+                            </select>
+                          </div>
+                          <div class="col-md-3">
+                            <label for="arDateFrom" class="form-label">From Date</label>
+                            <input type="date" style="font-size: 18px;" class="form-control" id="arDateFrom"
+                              (change)="filterSalesOrdersByDateRange()">
+                          </div>
+                          <div class="col-md-3">
+                            <label for="arDateTo" class="form-label">To Date</label>
+                            <input type="date" style="font-size: 18px;" class="form-control" id="arDateTo"
+                              (change)="filterSalesOrdersByDateRange()">
+                          </div>
+
+                          <!-- <div class="col-md-3">
+                    <label for="arDateFrom" class="form-label">From Date</label>
+                    <input type="date" class="form-control" id="arDateFrom" 
+                           (change)="filterSalesOrdersByDateRange()"
+                           [value]="currentFilters.dateFrom">
+                  </div>
+                  <div class="col-md-3">
+                    <label for="arDateTo" class="form-label">To Date</label>
+                    <input type="date" class="form-control" id="arDateTo" 
+                           (change)="filterSalesOrdersByDateRange()"
+                           [value]="currentFilters.dateTo">
+                  </div> -->
+
+                          <div class="col-12">
+                            <button type="button" class="btn btn-primary me-2" (click)="applySalesOrderFilters()">Apply
+                              Filters</button>
+                            <button type="button" class="btn btn-outline-secondary"
+                              (click)="resetSalesOrderFilters()">Reset</button>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+
+
+
+                    <!-- AR Table -->
+                    <div class="table-responsive">
+                      <table class="table table-bordered ">
+                        <thead>
+                          <tr>
+                            <th scope="col">Invoice ID</th>
+                            <th scope="col">Customer</th>
+                            <th scope="col">Payment Method</th>
+                            <th scope="col">Invoice Date</th>
+                            <th scope="col">Due Date</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Amount Paid</th>
+                            <th scope="col">Payment Status</th>
+                            <th scope="col">Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let sale of paginatedReceivableSales">
+                            <td><a class="text-primary" [routerLink]="['/saledetails', sale.orderId]" href="">{{
+                                sale.orderId }}</a>
+                            </td>
+                            <td>{{ sale.customerName }}</td>
+
+                            <td>{{ sale.paymentMethod || 'Not Recorded' }}</td>
+                            <td>{{ sale.invoiceDate | date:'MM-dd-yyyy' }}</td>
+                            <td>{{ sale.duedate | date:'MM-dd-yyyy' }}</td>
+                            <td>${{ getSaleCategoryTotal(sale) | number:'1.2-2' }}</td>
+                            <td>${{ sale.paidAmount ? (sale.paidAmount | number:'1.2-2') : 'Not paid' }}</td>
+
+                            <td>
+                              <span class="badge" [ngClass]="{
+                        'badge-paid': sale.status2 === 'Paid',
+                        'badge-overdue': isOverdue(sale.duedate, sale.status2),
+                        'badge-overshort': isOvershort(sale.amount, sale.paidAmount),
+                        'badge-pending': sale.status2 === 'Pending'
+                      }">
+                                {{ getPaymentStatus(sale, 'status2') }}
+                              </span>
+                            </td>
+
+                            <td class="text-capitalize">
+                              <div class="dropdown filter-dropdown">
+                                <span class="dropdown-toggle font-16 px-3" type="button" id="dropdownMenuButton23"
+                                  data-bs-toggle="dropdown" aria-expanded="false">
+                                  <i class="fa fa-ellipsis-v"></i>
+                                </span>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton23">
+                                  <a href="javascript:;" class="dropdown-item font-13" data-bs-toggle="modal"
+                                    data-bs-target="#paymentMethodModal" (click)="openPaymentModal(sale)">Mark as
+                                    Received</a>
+                                  <a href="javascript:;" class="dropdown-item font-13">
+                                    <label for="uploadDocumentInput-{{ sale.orderId }}" style="cursor: pointer;">Upload
+                                      Document</label>
+                                    <input type="file" id="uploadDocumentInput-{{ sale.orderId }}"
+                                      style="display: none;" (change)="onSalesFileSelected($event, sale)" />
+                                  </a>
+                                  <a class="dropdown-item font-13" [routerLink]="['/saledetails', sale.orderId]">View
+                                    Details</a>
+                                </div>
+                              </div>
+                                          
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                <div class="bg-white mb-5 rounded" style="margin-right: 90px;">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <nav aria-label="Page navigation example ms-auto me-auto">
+                        <ul class="pagination justify-content-center gap-2 mb-0" style="margin-top: 20px ;">
+                          <li class="page-item" [class.disabled]="currentReceivablePage === 1">
+                            <a class="page-link font-22 d-flex align-items-center justify-content-center"
+                              href="javascript:;" aria-label="Previous"
+                              (click)="changeReceivablePage(currentReceivablePage - 1)">
+                              <i class="fa fa-angle-left font-weight-300"></i></a>
+                          </li>
+                          <li class="page-item" *ngFor="let page of [].constructor(totalReceivablePages); let i = index"
+                            [class.active]="currentReceivablePage === i + 1">
+                            <a class="page-link font-14 d-flex align-items-center justify-content-center"
+                              href="javascript:;" (click)="changeReceivablePage(i + 1)">
+                              {{ i + 1 }}
+                            </a>
+                          </li>
+                          <li class="page-item" [class.disabled]="currentReceivablePage === totalReceivablePages">
+                            <a class="page-link font-22 d-flex align-items-center justify-content-center"
+                              href="javascript:;" aria-label="Next"
+                              (click)="changeReceivablePage(currentReceivablePage + 1)">
+                              <i class="fa fa-angle-right font-weight-300"></i></a>
+                          </li>
+                        </ul>
+                      </nav>
+                      <!-- Accounts Receivable Summary -->
+                      <div class="text-center mt-2">
+                        <ng-container *ngIf="paginatedReceivableSales.length > 0">
+                          <span class="badge bg-light text-dark px-3 py-2" style="font-size: 14px;
+  font-weight: normal;">
+                            Showing
+                            {{
+                            ((currentReceivablePage - 1) * receivablePerPage) + 1
+                            }}
+                            to
+                            {{
+                            ((currentReceivablePage - 1) * receivablePerPage) + paginatedReceivableSales.length
+                            }}
+                            of
+                            {{
+                            filteredSalesOrders.length
+                            }}
+                            entries (Page {{ currentReceivablePage }} of {{ totalReceivablePages }})
+                          </span>
+                        </ng-container>
+                        <ng-container *ngIf="paginatedReceivableSales.length === 0">
+                          <span class="badge bg-light text-danger px-3 py-2" style="font-size: 15px;">
+                            No records to display.
+                          </span>
+                        </ng-container>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+<footer id="footer" class="footer text-center"
+  [ngClass]="{'full-widths': isSidebarOpen, 'shift-rights': !isSidebarOpen}">
+  <div class="text-dark">
+    <span class="text-muted fw-semibold me-1">2025© all rights reserved</span>
+    <a class="font-weight-700 text-hover-dark text-dark text-uppercase">3PL TEK INC.</a>
+  </div>
+</footer>
+<div class="offcanvas offcanvas-end" tabindex="-1" id="addLocation3" aria-labelledby="offcanvasRightLabel"
+  style="width: 80%;" data-bs-backdrop="static">
+  <div class="modal-header" style="padding: 15px; border-bottom: 1px solid #ccc;">
+    <h5 class="modal-title">Add Account</h5>
+    <div>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-h2="Close"></button>
+    </div>
+  </div>
+  <div class="offcanvas-body view-load position-relative">
+    <form class="row g-3" (ngSubmit)="submitAccountForm()" [formGroup]="accountForm">
+      <div class="row">
+        <!-- Type -->
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class="mb-2 d-block font-weight-700">Select Type:</label>
+            <select class="form-control" formControlName="type" (change)="onTypeChange()">
+              <option value="">Select Type</option>
+              <option value="Income">Income</option>
+              <option value="Expense">Expense</option>
+              <option value="Bank">Bank</option>
+              <option value="Credit Card">Credit Card</option>
+              <option value="Cost of Goods Sold">Cost of Goods Sold</option>
+              <option value="Fixed Assets">Fixed Assets</option>
+              <option value="Other Assets">Other Assets</option>
+              <option value="Liabilities">Liabilities</option>
+            </select>
+            <div
+              *ngIf="accountForm.get('type')?.invalid && (accountForm.get('type')?.dirty || accountForm.get('type')?.touched)"
+              class="invalid-feedback">
+              Type is required.
+            </div>
+          </div>
+        </div>
+
+        <!-- Account Name -->
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class="mb-2 d-block font-weight-700">Account Name:</label>
+            <input type="text" class="form-control" placeholder="Enter account name" formControlName="accountName"
+              required
+              [ngClass]="{'is-invalid': accountForm.get('accountName')?.invalid && (accountForm.get('accountName')?.dirty || accountForm.get('accountName')?.touched)}">
+            <div
+              *ngIf="accountForm.get('accountName')?.invalid && (accountForm.get('accountName')?.dirty || accountForm.get('accountName')?.touched)"
+              class="invalid-feedback">
+              Account name is required.
+            </div>
+          </div>
+        </div>
+
+        <!-- Bank Fields (Bank Type Only) -->
+        <div *ngIf="selectedType === 'Bank'" class="col-md-6">
+          <label class="mb-2 d-block font-weight-700">Bank Account Number:</label>
+          <input type="text" class="form-control" formControlName="bankAccountNumber"
+            placeholder="Enter bank account number">
+        </div>
+
+        <div *ngIf="selectedType === 'Bank'" class="col-md-6">
+          <label class="mb-2 d-block font-weight-700">Bank Name:</label>
+          <input type="text" class="form-control" formControlName="bankName" placeholder="Enter bank name">
+        </div>
+
+        <div *ngIf="selectedType === 'Bank'" class="col-md-6">
+          <label class="mb-2 d-block font-weight-700">Bank Type:</label>
+          <select class="form-control" formControlName="bankType">
+            <option value="">Select Bank Type</option>
+            <option value="Checking">Checking</option>
+            <option value="Savings">Savings</option>
+            <option value="Credit Card">Credit Card</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <!-- Credit Card Fields -->
+        <div *ngIf="selectedType === 'Credit Card'" class="col-md-6">
+          <label class="mb-2 d-block font-weight-700">Card Number:</label>
+          <input type="text" class="form-control" formControlName="cardNumber" placeholder="Enter card number">
+        </div>
+
+        <div *ngIf="selectedType === 'Credit Card'" class="col-md-6">
+          <label class="mb-2 d-block font-weight-700">Provider Name:</label>
+          <input type="text" class="form-control" formControlName="providerName" placeholder="Enter provider name">
+        </div>
+
+        <!-- Description (All Types) -->
+        <div class="col-md-12">
+          <div class="form-group">
+            <label class="mb-2 d-block font-weight-700">Description:</label>
+            <input type="text" class="form-control" placeholder="Enter description" formControlName="description"
+              [ngClass]="{'is-invalid': accountForm.get('description')?.invalid && (accountForm.get('description')?.dirty || accountForm.get('description')?.touched)}">
+            <div
+              *ngIf="accountForm.get('description')?.invalid && (accountForm.get('description')?.dirty || accountForm.get('description')?.touched)"
+              class="invalid-feedback">
+              Description is required.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer justify-content-center"
+        style="border-top: 1px solid #ccc; padding-top: 15px; margin-top: 15px;">
+        <button type="button" class="btn btn-outline-secondary btn-sm text-uppercase rounded-pill"
+          data-bs-dismiss="offcanvas" aria-label="Close" (click)="onClose()">Close</button>
+        <button type="submit" class="btn btn-success btn-sm text-uppercase rounded-pill">Save changes</button>
+      </div>
+    </form>
+
+  </div>
+</div>
+<!-- Add Sales Orders Modal -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="addLocation1" aria-labelledby="offcanvasRightLabel"
+  style="width: 80%;" data-bs-backdrop="static">
+  <div class="modal-header" style="padding: 15px; border-bottom: 1px solid #ccc;">
+    <h5 class="modal-title">Add Sales Orders</h5>
+    <div>
+
+
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-h2="Close"></button>
+    </div>
+
+  </div>
+  <div class="offcanvas-body view-load position-relative p-4 pb-0">
+
+    <form [formGroup]="salesOrderForm" (ngSubmit)="submitSalesOrderForm()" class="row g-3">
+      <div class="bg-white rounded-lg p-4">
+
+        <div class="row g-3 mb-4">
+          <div class="col-md-6">
+            <label class="form-label">Customer</label>
+            <select formControlName="customerName" class="form-select" (change)="onSalesCustomerChange($event)">
+              <option value="" disabled selected>Select Customer</option>
+              <option *ngFor="let company of companies" [value]="company.companyName">{{ company.companyName }}</option>
+            </select>
+            <div></div>
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label">Customer Ref</label>
+            <input type="text" formControlName="customerRef" class="form-control"
+              [ngClass]="{ 'is-invalid': salesOrderForm.get('customerRef')?.invalid && (salesOrderForm.get('customerRef')?.touched || salesOrderForm.get('customerRef')?.dirty) }" />
+            <div
+              *ngIf="salesOrderForm.get('customerRef')?.invalid && (salesOrderForm.get('customerRef')?.touched || salesOrderForm.get('customerRef')?.dirty)"
+              class="invalid-feedback">
+              Customer Ref is required.
+            </div>
+          </div>
+
+        </div>
+
+        <div class="row g-3 mb-4">
+          <div class="col-md-6">
+            <label class="form-label">Mailing Address</label>
+            <textarea formControlName="mailingAddress" rows="3" class="form-control"
+              [ngClass]="{ 'is-invalid': salesOrderForm.get('mailingAddress')?.invalid && (salesOrderForm.get('mailingAddress')?.touched || salesOrderForm.get('mailingAddress')?.dirty) }"></textarea>
+            <div
+              *ngIf="salesOrderForm.get('mailingAddress')?.invalid && (salesOrderForm.get('mailingAddress')?.touched || salesOrderForm.get('mailingAddress')?.dirty)"
+              class="invalid-feedback">
+              Mailing Address is required.
+            </div>
+          </div>
+          <div class="col-md-2">
+            <label class="form-label">Invoice Date</label>
+            <input type="date" formControlName="invoiceDate" class="form-control"
+              [ngClass]="{ 'is-invalid': salesOrderForm.get('invoiceDate')?.invalid && (salesOrderForm.get('invoiceDate')?.touched || salesOrderForm.get('invoiceDate')?.dirty) }" />
+            <div
+              *ngIf="salesOrderForm.get('invoiceDate')?.invalid && (salesOrderForm.get('invoiceDate')?.touched || salesOrderForm.get('invoiceDate')?.dirty)"
+              class="invalid-feedback">
+              Invoice Date is required.
+            </div>
+          </div>
+          <div class="col-md-2">
+            <label class="form-label">Terms</label>
+            <select formControlName="terms" class="form-select"
+              [ngClass]="{ 'is-invalid': salesOrderForm.get('terms')?.invalid && (salesOrderForm.get('terms')?.touched || salesOrderForm.get('terms')?.dirty) }">
+              <option value="">Select Terms</option>
+              <option>Due on receipt</option>
+              <option>7 Days</option>
+              <option>15 Days</option>
+              <option>30 Days</option>
+              <option>45 Days</option>
+            </select>
+            <div
+              *ngIf="salesOrderForm.get('terms')?.invalid && (salesOrderForm.get('terms')?.touched || salesOrderForm.get('terms')?.dirty)"
+              class="invalid-feedback">
+              Terms are required.
+            </div>
+          </div>
+
+          <div class="col-md-2">
+            <label class="form-label">Due Date</label>
+            <!-- Make due date readonly, it will be set automatically -->
+            <input type="date" formControlName="duedate" class="form-control" readonly
+              [ngClass]="{ 'is-invalid': salesOrderForm.get('duedate')?.invalid && (salesOrderForm.get('duedate')?.touched || salesOrderForm.get('duedate')?.dirty) }" />
+            <div
+              *ngIf="salesOrderForm.get('duedate')?.invalid && (salesOrderForm.get('duedate')?.touched || salesOrderForm.get('duedate')?.dirty)"
+              class="invalid-feedback">
+              Due Date is required.
+            </div>
+          </div>
+        </div>
+
+        <!-- Category Details Dynamic Table -->
+        <div class="card p-4 mb-4">
+          <h5>Category Details</h5>
+
+          <div class="table-responsive">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Category</th>
+                  <th>Description</th>
+                  <th>Quantity</th>
+                  <th>Amount</th>
+                  <th>Total Amount</th> <!-- New column -->
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody formArrayName="categories">
+                <tr *ngFor="let item of categoryControls.controls; let i = index" [formGroupName]="i">
+                  <td>{{ i + 1 }}</td>
+                  <td>
+                    <select class="form-select" (change)="onCategoryServiceChange($event, i)"
+                      [ngModel]="categoryControls.at(i).get('category')?.value">
+                      <option value="" disabled>Select a service</option>
+                      <option *ngFor="let service of availableServices" [value]="service.serviceName">
+                        {{ service.serviceName }}
+                      </option>
+                      <option value="Others">Others</option>
+                    </select>
+                  </td>
+                  <td><input type="text" formControlName="description" class="form-control" /></td>
+                  <td>
+                    <input type="number" formControlName="quantity" class="form-control"
+                      (input)="onCategoryQuantityChange($event, i)" min="1" />
+                  </td>
+                  <td>
+                    <!-- Show fixed amount (price of selected service) -->
+                    <input type="number" formControlName="amount" class="form-control" min="0" readonly />
+                  </td>
+                  <td>
+                    <!-- Show total: amount * quantity -->
+                    <div class="input-group">
+                      <span class="input-group-text bg-light">$</span>
+                      <input type="text" class="form-control bg-light" style="font-weight:600;" readonly
+                        [value]="(item.get('quantity')?.value || 1) * (item.get('amount')?.value || 0) | number:'1.2-2'">
+                    </div>
+                  </td>
+                  <td>
+                    <button *ngIf="i >= 1" type="button" class="btn btn-link p-0"
+                      (click)="removeCategory(i); $event.stopPropagation(); $event.preventDefault();">
+                      <i class="fa fa-trash text-danger" style="cursor:pointer;"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="d-flex gap-2 mt-3">
+            <button type="button" class="btn btn-outline-secondary btn-sm text-uppercase rounded-pill"
+              (click)="addCategory()">Add lines</button>
+            <button type="button" class="btn btn-outline-secondary btn-sm text-uppercase rounded-pill"
+              (click)="clearCategories()">Clear all lines</button>
+          </div>
+        </div>
+        <!-- Notes and Upload -->
+        <div class="card p-4 mb-4">
+          <div class="row">
+            <div class="col-md-6">
+              <h5>Notes</h5>
+              <textarea formControlName="notes" class="form-control" rows="4"
+                placeholder="Enter your notes here..."></textarea>
+            </div>
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Upload Document</h2>
+              <input style="margin-top: 10px;" type="file" class="form-control" id="salesuploadDocument"
+                (change)="onFileChange($event, 'salesuploadDocument')" name="salesuploadDocument"
+                accept=".jpg, .jpeg, .png, .pdf" required>
+              <small *ngIf="selectedFiles['salesuploadDocument']">
+                Selected: {{ selectedFiles['salesuploadDocument'].name }}
+              </small>
+              <p class="text-danger" *ngIf="fileError">{{ fileError }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer Buttons -->
+        <div class="modal-footer justify-content-center"
+          style="border-top: 1px solid #ccc; padding-top: 15px; margin-top: 15px; ">
+          <button type="button" class="btn btn-outline-secondary btn-sm text-uppercase rounded-pill"
+            data-bs-dismiss="offcanvas" aria-label="Close" (click)="onClose()"> Close</button>
+          <button type="submit" class="btn btn-success btn-sm text-uppercase rounded-pill">Save changes</button>
+        </div>
+
+      </div>
+    </form>
+  </div>
+</div>
+
+
+
+<div class="offcanvas offcanvas-end" tabindex="-1" id="addLocation2" aria-labelledby="offcanvasRightLabel"
+  style="width: 80%;" data-bs-backdrop="static">
+  <div class="modal-header" style="padding: 15px; border-bottom: 1px solid #ccc;">
+    <h5 class="modal-title">Add Expense</h5>
+    <div>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-h2="Close"></button>
+    </div>
+  </div>
+  <div class="offcanvas-body view-load position-relative p-4 pb-0">
+    <form [formGroup]="expenseForm" (ngSubmit)="submitExpenseForm()" class="row g-3">
+      <div class="bg-white rounded-lg p-4">
+        <div class="row g-3 mb-3">
+          <div class="col-md-4">
+            <label class="form-label">Vendor Name</label>
+            <select formControlName="vendorName" class="form-select"
+              [ngClass]="{ 'is-invalid': expenseForm.get('vendorName')?.invalid && (expenseForm.get('vendorName')?.touched || expenseForm.get('vendorName')?.dirty) }"
+              (change)="onExpenseVendorChange($event)">
+              <option value="">Select Vendor</option>
+              <option *ngFor="let vendor of availableVendors" [value]="vendor.vendorName">{{ vendor.vendorName }}
+              </option>
+            </select>
+            <div
+              *ngIf="expenseForm.get('vendorName')?.invalid && (expenseForm.get('vendorName')?.touched || expenseForm.get('vendorName')?.dirty)"
+              class="invalid-feedback">
+              Vendor is required.
+            </div>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Vendor Ref</label>
+            <input type="text" formControlName="vendorRefrence" class="form-control"
+              [ngClass]="{ 'is-invalid': expenseForm.get('vendorRefrence')?.invalid && (expenseForm.get('vendorRefrence')?.touched || expenseForm.get('vendorRefrence')?.dirty) }" />
+            <div
+              *ngIf="expenseForm.get('vendorRefrence')?.invalid && (expenseForm.get('vendorRefrence')?.touched || expenseForm.get('vendorRefrence')?.dirty)"
+              class="invalid-feedback">
+              Vendor Ref is required.
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label">Bill No.</label>
+            <input type="text" formControlName="billNumber" class="form-control"
+              [ngClass]="{ 'is-invalid': expenseForm.get('billNumber')?.invalid && (expenseForm.get('billNumber')?.touched || expenseForm.get('billNumber')?.dirty) }" />
+            <div
+              *ngIf="expenseForm.get('billNumber')?.invalid && (expenseForm.get('billNumber')?.touched || expenseForm.get('billNumber')?.dirty)"
+              class="invalid-feedback">
+              Bill No. is required.
+            </div>
+          </div>
+        </div>
+        <div class="row g-3 mb-3">
+          <div class="col-md-6">
+            <label class="form-label">Mailing Address</label>
+            <textarea formControlName="mailingAddress" rows="3" class="form-control"
+              [ngClass]="{ 'is-invalid': expenseForm.get('mailingAddress')?.invalid && (expenseForm.get('mailingAddress')?.touched || expenseForm.get('mailingAddress')?.dirty) }"></textarea>
+            <div
+              *ngIf="expenseForm.get('mailingAddress')?.invalid && (expenseForm.get('mailingAddress')?.touched || expenseForm.get('mailingAddress')?.dirty)"
+              class="invalid-feedback">
+              Mailing Address is required.
+            </div>
+          </div>
+
+          <div class="col-md-2">
+            <label class="form-label">Bill Date</label>
+            <input type="date" formControlName="billDate" class="form-control"
+              [ngClass]="{ 'is-invalid': expenseForm.get('billDate')?.invalid && (expenseForm.get('billDate')?.touched || expenseForm.get('billDate')?.dirty) }" />
+            <div
+              *ngIf="expenseForm.get('billDate')?.invalid && (expenseForm.get('billDate')?.touched || expenseForm.get('billDate')?.dirty)"
+              class="invalid-feedback">
+              Bill Date is required.
+            </div>
+          </div>
+          <div class="col-md-2">
+            <label class="form-label">Terms</label>
+            <select formControlName="terms" class="form-select"
+              [ngClass]="{ 'is-invalid': expenseForm.get('terms')?.invalid && (expenseForm.get('terms')?.touched || expenseForm.get('terms')?.dirty) }">
+              <option value="">Select Terms</option>
+              <option>Due on receipt</option>
+              <option>7 Days</option>
+              <option>15 Days</option>
+              <option>30 Days</option>
+              <option>45 Days</option>
+            </select>
+            <div
+              *ngIf="expenseForm.get('terms')?.invalid && (expenseForm.get('terms')?.touched || expenseForm.get('terms')?.dirty)"
+              class="invalid-feedback">
+              Terms are required.
+            </div>
+          </div>
+          <div class="col-md-2">
+            <label class="form-label">Due Date</label>
+            <input type="date" formControlName="duedate" class="form-control" readonly
+              [ngClass]="{ 'is-invalid': expenseForm.get('duedate')?.invalid && (expenseForm.get('duedate')?.touched || expenseForm.get('duedate')?.dirty) }" />
+            <div
+              *ngIf="expenseForm.get('duedate')?.invalid && (expenseForm.get('duedate')?.touched || expenseForm.get('duedate')?.dirty)"
+              class="invalid-feedback">
+              Due Date is required.
+            </div>
+          </div>
+        </div>
+        <div class="row g-3 mb-3">
+          <div class="col-md-3">
+            <label for="paymentMethodByField" class="form-label">Payment Method</label>
+            <select class="form-select" id="paymentMethodByField" formControlName="paymentMethodByField"
+              [ngClass]="{ 'is-invalid': expenseForm.get('paymentMethodByField')?.invalid && (expenseForm.get('paymentMethodByField')?.touched || expenseForm.get('paymentMethodByField')?.dirty) }">
+              <option value="">Select Payment Method</option>
+              <option value="Cash">Cash</option>
+              <option value="Credit Card">Credit Card</option>
+              <option value="Bank Transfer">Bank Transfer</option>
+            </select>
+            <div
+              *ngIf="expenseForm.get('paymentMethodByField')?.invalid && (expenseForm.get('paymentMethodByField')?.touched || expenseForm.get('paymentMethodByField')?.dirty)"
+              class="invalid-feedback">
+              Payment Method is required.
+            </div>
+          </div>
+        </div>
+        <hr class="my-4">
+
+
+        <div class="card p-3 mb-4">
+          <h5 class="mb-3">Expense Details</h5>
+          <div class="table-responsive">
+            <table class="table table-bordered align-middle">
+              <thead class="table-light">
+                <tr>
+                  <th>#</th>
+                  <th>Category</th>
+                  <th>Description</th>
+                  <th>Quantity</th>
+                  <th>Amount</th>
+                  <th>Total</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <!-- Update the Total column in Add Expense (inside #addLocation2 modal) -->
+              <tbody formArrayName="categories">
+                <tr *ngFor="let item of expenseTypeControls.controls; let i = index" [formGroupName]="i">
+                  <td>{{ i + 1 }}</td>
+                  <td>
+                    <select class="form-select" formControlName="category" (change)="onCategoryChange($event, i)">
+                      <option value="" disabled>Select a category</option>
+                      <option *ngFor="let cat of filteredAccountingData" [value]="cat.accountName">{{ cat.accountName }}
+                      </option>
+                    </select>
+                  </td>
+                  <td><input type="text" formControlName="description" class="form-control" /></td>
+                  <td>
+                    <input type="number" formControlName="quantity" class="form-control" min="1"
+                      (input)="onExpenseQuantityChange($event, i)" />
+                  </td>
+                  <td>
+                    <input type="number" formControlName="amount" class="form-control" />
+                  </td>
+                  <td>
+                    <!-- Updated Total Amount design: input group with $ sign, readonly, styled like sales -->
+                    <div class="input-group">
+                      <span class="input-group-text bg-light">$</span>
+                      <input type="text" class="form-control bg-light" style="font-weight:600;" readonly
+                        [value]="(item.get('quantity')?.value || 1) * (item.get('amount')?.value || 0) | number:'1.2-2'">
+                    </div>
+                  </td>
+                  <td>
+                    <button *ngIf="i >= 1" type="button" class="btn btn-link p-0"
+                      (click)="removeExpenseRow(i); $event.stopPropagation(); $event.preventDefault();">
+                      <i class="fa fa-trash text-danger" style="cursor:pointer;"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="d-flex gap-2 mt-2">
+            <button type="button" class="btn btn-outline-secondary btn-sm text-uppercase rounded-pill"
+              (click)="addExpenseRow()">Add lines</button>
+            <button type="button" class="btn btn-outline-secondary btn-sm text-uppercase rounded-pill"
+              (click)="clearAllExpenseRows()">Clear all lines</button>
+          </div>
+        </div>
+
+
+        <div class="row g-3 mb-3">
+          <div class="col-md-6">
+            <h5>Notes</h5>
+            <textarea formControlName="notes" class="form-control" rows="4"
+              placeholder="Enter your notes here..."></textarea>
+          </div>
+          <div class="col-md-4">
+            <h5>Upload Document</h5>
+            <input style="margin-top: 10px;" type="file" class="form-control" id="expenseuploadDocument"
+              (change)="onFileChange($event, 'expenseuploadDocument')" name="expenseuploadDocument"
+              accept=".jpg, .jpeg, .png, .pdf" required>
+            <small *ngIf="selectedFiles['expenseuploadDocument']">
+              Selected: {{ selectedFiles['expenseuploadDocument'].name }}
+            </small>
+            <p class="text-danger" *ngIf="fileError">{{ fileError }}</p>
+          </div>
+        </div>
+        <div class="modal-footer justify-content-center"
+          style="border-top: 1px solid #ccc; padding-top: 15px; margin-top: 15px; ">
+          <button type="button" class="btn btn-outline-secondary btn-sm text-uppercase rounded-pill"
+            data-bs-dismiss="offcanvas" aria-label="Close" (click)="onClose()"> Close</button>
+          <button type="submit" class="btn btn-success btn-sm text-uppercase rounded-pill">Save changes</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Hidden Invoice Container -->
+<div id="invoice-container" style="position: absolute; left: -9999px; top: 0; width: 1000px;">
+  <div class="main mt-0 p-0">
+    <div class="p-4 pb-0">
+      <div class="bg-white rounded-lg p-3">
+        <div class="col-md-12">
+          <div class="pb-3">
+            <div class="container mt-5">
+              <div class="invoice-header">
+                <div class="row border-bottom">
+                  <div class="col-md-6">
+
+                    <img src="assets/img/3dlogo.png" alt="Company Logo" class="logo">
+                  </div>
+                  <div class="col-md-6 text-end">
+                    <h2 class="invoice-title">INVOICE</h2>
+                    <p>3PL Tek Inc.</p>
+                    <p>47 W 13th St, New York, NY 10011, USA</p>
+                  </div>
+                </div>
+              </div>
+              <div class="invoice-body mt-3">
+                <div class="row mb-4">
+                  <div class="col-md-6">
+                    <h5><strong>Bill To</strong></h5>
+                    <div *ngIf="companyDetails">
+
+                      <p><strong>{{ selectedSaleOrder.customerName }}</strong></p>
+                      <p>
+                        {{ selectedSaleOrder.mailingAddress }}<br>
+                        <!-- Add more customer fields if available, e.g. city, state, zip -->
+                      </p>
+                      <p *ngIf="selectedSaleOrder.customerEmail">Email: {{ selectedSaleOrder.customerEmail }}</p>
+                      <p *ngIf="selectedSaleOrder.customerPhone">Phone: {{ selectedSaleOrder.customerPhone }}</p>
+                    </div>
+                  </div>
+                  <div class="col-md-6 text-md-end">
+                    <p><strong>Bill ID:</strong> {{ selectedSaleOrder?.customerRef || 'N/A' }}</p>
+                    <p><strong>Date:</strong> {{ selectedSaleOrder?.invoiceDate | date:'MM-dd-yyyy' }}</p>
+                    <p><strong>Due Date:</strong> {{ dueDate | date:'MM-dd-yyyy' }}</p>
+                  </div>
+                </div>
+                <table class="table table-bordered">
+                  <thead class="table-light">
+                    <tr>
+                      <th>Service</th>
+                      <th class="text-end">Amount</th>
+
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let cat of selectedSaleOrder?.categories">
+                      <td>{{ cat.category }}</td>
+                      <td class="text-end">{{ cat.amount | currency }}</td>
+
+                    </tr>
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <td><strong>Subtotal</strong></td>
+                      <td colspan="2" class="text-end">
+                        {{ getSaleCategoriesSubtotal() | currency }}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>Total Amount Due</strong></td>
+                      <td colspan="2" class="text-end"><strong> {{ getSaleCategoriesSubtotal() | currency }}</strong>
+                      </td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+              <div class="footer mt-5 bg-light p-4">
+                <p>Please ensure that payment is made within 30 days of receiving this invoice. Late payments may be
+                  subject to additional charges.</p>
+                <p><strong>3PL Tek Inc.</strong></p>
+                <p>47 W 13th St, New York, NY 10011, USA</p>
+                <p>support&#64;gmail.com | (222) 123-123</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div id="bill-container" style="position: absolute; left: -9999px; top: 0; width: 1000px;">
+  <div class="main mt-0 p-0">
+    <div class="p-4 pb-0">
+      <div class="bg-white rounded-lg p-3">
+        <div class="col-md-12">
+          <div class="pb-3">
+            <div class="container my-5">
+              <div class="text-center">
+                <img src="assets/images/3pltek-logo.png" alt="Company Logo" class="logo" style="max-width: 150px;">
+              </div>
+              <div class="card border-radius0 mt-4">
+                <div style="margin-top: -85px;" class="card-header text-center bg-light">
+                  <h3 class="text-uppercase">Bill</h3>
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                    <!-- Billed By -->
+                    <div class="col-md-6">
+                      <h5>Billed By:</h5>
+                      <p>
+                        <strong>3PL TEK INC.</strong><br>
+                        47 W 13th St, New York, NY 10011, USA<br>
+                        Email: support&#64;gmail.com<br>
+                        Phone: 222-123-123
+                      </p>
+                    </div>
+
+                    <!-- Bill To -->
+                    <div class="col-md-6 text-end">
+                      <h5>Bill To:</h5>
+                      <p>
+                        <strong>{{ selectedExpense?.vendorName || 'N/A' }}</strong><br>
+                        {{ companyDetails?.phyStreet || 'N/A' }}<br>
+                        {{ companyDetails?.phyCity || 'N/A' }}<br>
+                        {{ companyDetails?.phyState || 'N/A' }}<br>
+                        {{ companyDetails?.phyZipcode || 'N/A' }}<br>
+                        Email: {{ companyDetails?.companyEmail || 'N/A' }}<br>
+                      </p>
+                    </div>
+                  </div>
+
+                  <!-- Bill Info -->
+                  <div class="row mt-3">
+                    <div class="col-md-6">
+                      <p><strong>Bill ID:</strong> {{ selectedExpense?.expenseId || 'N/A' }}</p>
+                    </div>
+                    <div class="col-md-6 text-end">
+                      <p><strong>Date:</strong> {{ selectedExpense?.billDate | date: 'MM-dd-yyyy' }}</p>
+                      <p><strong>Due Date:</strong> {{ selectedExpense?.duedate | date: 'MM-dd-yyyy' }}</p>
+                    </div>
+                  </div>
+
+                  <!-- Expense Categories Table -->
+                  <table class="table table-bordered mt-3">
+                    <thead class="table-dark">
+                      <tr>
+                        <th>Category</th>
+                        <th>Description</th>
+                        <th>Quantity</th>
+                        <th class="text-end">Amount</th>
+                        <th class="text-end">Total</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let cat of selectedExpense?.categories">
+                        <td>{{ cat.category }}</td>
+                        <td>{{ cat.description }}</td>
+                        <td>{{ cat.quantity || 1 }}</td>
+                        <td class="text-end">{{ cat.amount | currency }}</td>
+                        <td class="text-end">{{ (cat.amount || 0) * (cat.quantity || 1) | currency }}</td>
+                      </tr>
+                    </tbody>
+                    <tfoot>
+                      <tr>
+                        <td colspan="4"><strong>Subtotal</strong></td>
+                        <td class="text-end">{{ getExpenseCategoryTotal(selectedExpense) | currency }}</td>
+                      </tr>
+                      <tr>
+                        <td colspan="4"><strong>Discount</strong></td>
+                        <td class="text-end">$0.00</td>
+                      </tr>
+                      <tr class="table-light">
+                        <td colspan="4"><strong>Total Amount Due</strong></td>
+                        <td class="text-end"><strong>{{ selectedExpense?.amount | currency }} </strong></td>
+                      </tr>
+                    </tfoot>
+                  </table>
+
+                  <div class="footer mt-5 bg-light p-4">
+                    <p>Please ensure that payment is made within 30 days of receiving this bill. Late payments may be
+                      subject to additional charges.</p>
+                    <p><strong>3PL Tek Inc.</strong></p>
+                    <p>47 W 13th St, New York, NY 10011, USA</p>
+                    <p>support&#64;gmail.com | (222) 123-123</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="paymentMethodModal" tabindex="-1" aria-labelledby="paymentMethodModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content border-0 shadow-lg rounded-3">
+      <div class="modal-header bg-light">
+        <h5 class="modal-title fw-bold" id="paymentMethodModalLabel">Select Payment Method</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+        <form [formGroup]="paymentForm">
+          <div class="row g-4">
+
+            <!-- Payment ID -->
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="paymentId" class="form-label fw-semibold">Payment ID</label>
+                <input type="text" class="form-control" id="paymentId" formControlName="paymentId"
+                  placeholder="Enter payment ID" />
+              </div>
+            </div>
+
+            <!-- Payment Type -->
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="paymentType" class="form-label fw-semibold">Payment Type</label>
+                <input type="text" class="form-control" id="paymentType" formControlName="paymentType"
+                  placeholder="Enter payment type" />
+              </div>
+            </div>
+
+            <!-- Reference ID -->
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="refrenceId" class="form-label fw-semibold">Reference ID</label>
+                <input type="text" class="form-control" id="refrenceId" formControlName="refrenceId"
+                  placeholder="Enter reference ID" />
+              </div>
+            </div>
+
+            <!-- Payment Date -->
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="paymentDate" class="form-label fw-semibold">Payment Date</label>
+                <input type="date" class="form-control" id="paymentDate" formControlName="paymentDate" />
+              </div>
+            </div>
+
+            <!-- Paid Amount -->
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="paidAmount" class="form-label fw-semibold">Paid Amount</label>
+                <input type="number" class="form-control" id="paidAmount" formControlName="paidAmount"
+                  placeholder="Enter paid amount" />
+              </div>
+            </div>
+
+            <!-- Payment Method -->
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="paymentMethod" class="form-label fw-semibold">Payment Method</label>
+                <select class="form-control" id="paymentMethod" formControlName="paymentMethod">
+                  <option value="">-- Select Payment Method --</option>
+                  <option value="Credit Card">Credit Card</option>
+                  <option value="Debit Card">Debit Card</option>
+                  <option value="Check">Check</option>
+                  <option value="Net Banking">Net Banking</option>
+                  <option value="Cash">Cash</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Account -->
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="account" class="form-label fw-semibold">Account</label>
+                <input type="text" class="form-control" id="account" formControlName="account"
+                  placeholder="Enter account info" />
+              </div>
+            </div>
+
+            <!-- Bank (With datalist) -->
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="bank" class="form-label fw-semibold">Bank</label>
+                <select class="form-control" id="bank" formControlName="bank" required placeholder="Select Bank">
+
+                  <option *ngFor="let option of bankOptions" [value]="option">
+                    {{ option }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="uploadDocumentInput-payment" class="form-label fw-semibold">Upload Document</label>
+                <input type="file" class="form-control" id="uploadDocumentInput-payment"
+                  (change)="onSalesFileSelected($event, selectedSale)" />
+              </div>
+            </div>
+
+
+            <!-- Transaction Notes -->
+            <div class="col-12">
+              <div class="form-group">
+                <label for="transectionNotes" class="form-label fw-semibold">Transaction Notes</label>
+                <textarea class="form-control" id="transectionNotes" formControlName="transectionNotes" rows="3"
+                  placeholder="Enter transaction notes"></textarea>
+              </div>
+            </div>
+
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer bg-light">
+        <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-success rounded-pill px-4 text-uppercase fw-semibold"
+          (click)="confirmPayment()" data-bs-dismiss="modal">
+          Confirm Payment
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="paymentMethodModal1" tabindex="-1" aria-labelledby="paymentMethodModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg"> <!-- Changed to modal-lg for more space -->
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="paymentMethodModalLabel">Select Payment Method</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="paymentForm">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label for="paymentId" class="form-label">Payment ID</label>
+              <input type="text" class="form-control" id="paymentId" formControlName="paymentId"
+                placeholder="Enter payment ID">
+            </div>
+            <div class="col-md-6">
+              <label for="paymentType" class="form-label">Payment Type</label>
+              <input type="text" class="form-control" id="paymentType" formControlName="paymentType"
+                placeholder="Enter reference ID">
+            </div>
+            <div class="col-md-6">
+              <label for="refrenceId" class="form-label">Reference ID</label>
+              <input type="text" class="form-control" id="refrenceId" formControlName="refrenceId"
+                placeholder="Enter reference ID">
+            </div>
+            <div class="col-md-6">
+              <label for="paymentDate" class="form-label">Payment Date</label>
+              <input type="date" class="form-control" id="paymentDate" formControlName="paymentDate">
+            </div>
+            <div class="col-md-6">
+              <label for="paidAmount" class="form-label">Paid Amount</label>
+              <input type="number" class="form-control" id="paidAmount" formControlName="paidAmount"
+                placeholder="Enter paid amount">
+            </div>
+            <div class="col-md-6">
+              <label for="paymentMethod" class="form-label">Payment Method</label>
+              <select class="form-control" id="paymentMethod" formControlName="paymentMethod">
+                <option value="Credit Card">Credit Card</option>
+                <option value="Debit Card">Debit Card</option>
+                <option value="Check">Check</option>
+                <option value="Net Banking">Net Banking</option>
+                <option value="Cash">Cash</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label for="account" class="form-label">Account</label>
+              <input type="text" class="form-control" id="account" formControlName="account"
+                placeholder="Enter account info">
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="uploadDocumentInput-{{ selectedExpense?.expenseId }}" class="form-label fw-semibold">Upload
+                  Document</label>
+                <input type="file" class="form-control" id="uploadDocumentInput-{{ selectedExpense?.expenseId }}"
+                  (change)="onExpenseFileSelected($event, selectedExpense)" />
+              </div>
+            </div>
+            <div class="col-12">
+              <label for="transectionNotes" class="form-label">Transaction Notes</label>
+              <textarea class="form-control" id="transectionNotes" formControlName="transectionNotes" rows="2"
+                placeholder="Enter transaction notes"></textarea>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal"
+          style="font-size: 13px;">Cancel</button>
+        <button type="button" class="btn btn-success btn-sm text-uppercase rounded-pill"
+          (click)="confirmPaymentExpense()" data-bs-dismiss="modal">Confirm Payment</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Expense Modal -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="editExpenseModal" aria-labelledby="offcanvasRightLabel"
+  style="width: 80%;">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvasRightLabel">Edit Expense</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body" style="max-height: 80vh; overflow-y: auto;">
+    <form [formGroup]="editExpenseForm" (ngSubmit)="onUpdateExpense()" class="row g-3">
+      <div class="bg-white rounded-lg p-4">
+        <div class="row g-3 mb-4">
+          <div class="col-md-4">
+            <label class="form-label">Vendor Name</label>
+            <select formControlName="vendorName" class="form-select" (change)="onEditExpenseVendorChange($event)">
+              <option value="">Select Vendor</option>
+              <option *ngFor="let cat of filteredAccountingData" [value]="cat.accountName">
+                {{ cat.accountName }}
+              </option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Vendor Ref</label>
+            <input type="text" formControlName="vendorRefrence" class="form-control" />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Bill No.</label>
+            <input type="text" formControlName="billNumber" class="form-control" />
+          </div>
+        </div>
+        <div class="row g-3 mb-4">
+          <div class="col-md-6">
+            <label class="form-label">Mailing Address</label>
+            <textarea formControlName="mailingAddress" rows="3" class="form-control"></textarea>
+          </div>
+          <div class="col-md-2">
+            <label class="form-label">Bill Date</label>
+            <input type="date" formControlName="billDate" class="form-control" />
+          </div>
+          <div class="col-md-2">
+            <label class="form-label">Terms</label>
+            <select formControlName="terms" class="form-select">
+              <option value="">Select Terms</option>
+              <option>Due on receipt</option>
+              <option>7 Days</option>
+              <option>15 Days</option>
+              <option>30 Days</option>
+              <option>45 Days</option>
+            </select>
+          </div>
+          <div class="col-md-2">
+            <label class="form-label">Due Date</label>
+            <input type="date" formControlName="duedate" class="form-control" readonly />
+          </div>
+        </div>
+        <!-- Category Details Dynamic Table -->
+        <div class="card p-4 mb-4">
+          <h5>Expense Details</h5>
+          <div class="table-responsive">
+            <table class="table table-bordered align-middle">
+              <thead class="table-light">
+                <tr>
+                  <th>#</th>
+                  <th>Category</th>
+                  <th>Description</th>
+                  <th>Quantity</th>
+                  <th>Amount</th>
+                  <th>Total</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody formArrayName="categories">
+                <tr *ngFor="let item of editExpenseCategoryControls.controls; let i = index" [formGroupName]="i">
+                  <td>{{ i + 1 }}</td>
+                  <td>
+                    <select class="form-select" formControlName="category"
+                      (change)="onEditExpenseCategoryChange($event, i)">
+                      <option value="" disabled>Select a Vendor</option>
+                      <option *ngFor="let cat of filteredAccountingData" [value]="cat.accountName">
+                        {{ cat.accountName }}
+                      </option>
+                      <option value="Others">Others</option>
+                    </select>
+                  </td>
+                  <td><input type="text" formControlName="description" class="form-control" /></td>
+                  <td><input type="number" formControlName="quantity" class="form-control" /></td>
+                  <td><input type="number" formControlName="amount" class="form-control" /></td>
+                  <td>
+                    <div class="input-group">
+                      <span class="input-group-text bg-light">$</span>
+                      <input type="text" class="form-control bg-light" style="font-weight:600;" readonly
+                        [value]="(item.get('quantity')?.value || 1) * (item.get('amount')?.value || 0) | number:'1.2-2'">
+                    </div>
+                  </td>
+                  <td>
+                    <button *ngIf="i >= 1" type="button" class="btn btn-link p-0"
+                      (click)="removeEditCategory(i); $event.stopPropagation(); $event.preventDefault();">
+                      <i class="fa fa-trash text-danger" style="cursor:pointer;"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="d-flex gap-2 mt-3">
+            <button type="button" class="btn btn-outline-secondary btn-sm text-uppercase rounded-pill"
+              (click)="addEditExpenseCategory()">Add lines</button>
+            <button type="button" class="btn btn-outline-secondary btn-sm text-uppercase rounded-pill"
+              (click)="clearEditExpenseCategories()">Clear all lines</button>
+          </div>
+        </div>
+        <!-- Notes and Upload -->
+        <div class="card p-4 mb-4">
+          <div class="row">
+            <div class="col-md-6">
+              <h5>Notes</h5>
+              <textarea formControlName="notes" class="form-control" rows="4"></textarea>
+            </div>
+            <div class="col-md-4">
+              <h5>Upload Document</h5>
+              <input style="margin-top: 10px;" type="file" class="form-control" id="editExpenseUploadDocument"
+                accept=".jpg, .jpeg, .png, .pdf" (change)="onEditExpenseFileSelected($event)" />
+              <small *ngIf="selectedFiles['editExpenseUploadDocument']">{{
+                selectedFiles['editExpenseUploadDocument']?.name }}</small>
+              <p class="text-danger" *ngIf="fileError">{{ fileError }}</p>
+            </div>
+          </div>
+        </div>
+        <!-- Footer Buttons -->
+        <div class="modal-footer justify-content-center"
+          style="border-top: 1px solid #ccc; padding-top: 15px; margin-top: 15px; ">
+          <button type="button" class="btn btn-outline-secondary btn-sm text-uppercase rounded-pill"
+            data-bs-dismiss="offcanvas" aria-label="Close" (click)="closeEditExpenseModal()"> Close</button>
+          <button type="submit" class="btn btn-success btn-sm text-uppercase rounded-pill">Save changes</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Edit Sales Order Modal -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="editSalesOrderModal" aria-labelledby="offcanvasRightLabel"
+  style="width: 80%;">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvasRightLabel">Edit Sales Order</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body" style="max-height: 80vh; overflow-y: auto;">
+    <form [formGroup]="editSalesOrderForm" (ngSubmit)="onUpdateSalesOrder()" class="row g-3">
+      <div class="bg-white rounded-lg p-4">
+        <div class="row g-3 mb-4">
+          <div class="col-md-6">
+            <label class="form-label">Customer</label>
+            <select formControlName="customerName" class="form-select"
+              [ngClass]="{ 'is-invalid': editSalesOrderForm.get('customerName')?.invalid && (editSalesOrderForm.get('customerName')?.touched || editSalesOrderForm.get('customerName')?.dirty) }"
+              (change)="onEditSalesCustomerChange($event)">
+              <option value="">Select a customer</option>
+              <option *ngFor="let company of companies" [value]="company.companyName">
+                {{ company.companyName }}
+              </option>
+            </select>
+            <div
+              *ngIf="editSalesOrderForm.get('customerName')?.invalid && (editSalesOrderForm.get('customerName')?.touched || editSalesOrderForm.get('customerName')?.dirty)"
+              class="invalid-feedback">
+              Customer is required.
+            </div>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Customer Ref</label>
+            <input type="text" formControlName="customerRef" class="form-control"
+              [ngClass]="{ 'is-invalid': editSalesOrderForm.get('customerRef')?.invalid && (editSalesOrderForm.get('customerRef')?.touched || editSalesOrderForm.get('customerRef')?.dirty) }" />
+            <div
+              *ngIf="editSalesOrderForm.get('customerRef')?.invalid && (editSalesOrderForm.get('customerRef')?.touched || editSalesOrderForm.get('customerRef')?.dirty)"
+              class="invalid-feedback">
+              Customer Ref is required.
+            </div>
+          </div>
+
+        </div>
+
+        <div class="row g-3 mb-4">
+          <div class="col-md-6">
+            <label class="form-label">Mailing Address</label>
+            <textarea formControlName="mailingAddress" rows="3" class="form-control"
+              [ngClass]="{ 'is-invalid': editSalesOrderForm.get('mailingAddress')?.invalid && (editSalesOrderForm.get('mailingAddress')?.touched || editSalesOrderForm.get('mailingAddress')?.dirty) }"></textarea>
+            <div
+              *ngIf="editSalesOrderForm.get('mailingAddress')?.invalid && (editSalesOrderForm.get('mailingAddress')?.touched || editSalesOrderForm.get('mailingAddress')?.dirty)"
+              class="invalid-feedback">
+              Mailing Address is required.
+            </div>
+          </div>
+          <div class="col-md-2">
+            <label class="form-label">Invoice Date</label>
+            <input type="date" formControlName="invoiceDate" class="form-control"
+              [ngClass]="{ 'is-invalid': editSalesOrderForm.get('invoiceDate')?.invalid && (editSalesOrderForm.get('invoiceDate')?.touched || editSalesOrderForm.get('invoiceDate')?.dirty) }" />
+            <div
+              *ngIf="editSalesOrderForm.get('invoiceDate')?.invalid && (editSalesOrderForm.get('invoiceDate')?.touched || editSalesOrderForm.get('invoiceDate')?.dirty)"
+              class="invalid-feedback">
+              Invoice Date is required.
+            </div>
+          </div>
+          <div class="col-md-2">
+            <label class="form-label">Terms</label>
+            <select formControlName="terms" class="form-select"
+              [ngClass]="{ 'is-invalid': editSalesOrderForm.get('terms')?.invalid && (editSalesOrderForm.get('terms')?.touched || editSalesOrderForm.get('terms')?.dirty) }">
+              <option value="">Select Terms</option>
+              <option>Due on receipt</option>
+              <option>7 Days</option>
+              <option>15 Days</option>
+              <option>30 Days</option>
+              <option>45 Days</option>
+            </select>
+            <div
+              *ngIf="editSalesOrderForm.get('terms')?.invalid && (editSalesOrderForm.get('terms')?.touched || editSalesOrderForm.get('terms')?.dirty)"
+              class="invalid-feedback">
+              Terms are required.
+            </div>
+          </div>
+          <div class="col-md-2">
+            <label class="form-label">Due Date</label>
+            <input type="date" formControlName="duedate" class="form-control" readonly
+              [ngClass]="{ 'is-invalid': editSalesOrderForm.get('duedate')?.invalid && (editSalesOrderForm.get('duedate')?.touched || editSalesOrderForm.get('duedate')?.dirty) }" />
+            <div
+              *ngIf="editSalesOrderForm.get('duedate')?.invalid && (editSalesOrderForm.get('duedate')?.touched || editSalesOrderForm.get('duedate')?.dirty)"
+              class="invalid-feedback">
+              Due Date is required.
+            </div>
+          </div>
+        </div>
+
+        <!-- Category Details Dynamic Table -->
+        <div class="card p-4 mb-4">
+          <h5>Category Details</h5>
+
+          <div class="table-responsive">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Category</th>
+                  <th>Description</th>
+                  <th>Quantity</th>
+                  <th>Amount</th>
+                  <th>Total Amount</th> <!-- New column -->
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody formArrayName="categories">
+                <tr *ngFor="let item of editCategoryControls.controls; let i = index" [formGroupName]="i">
+                  <td>{{ i + 1 }}</td>
+                  <td>
+                    <select class="form-select" formControlName="category"
+                      (change)="onEditCategoryServiceChange($event, i)">
+                      <option value="" disabled>Select a service</option>
+                      <option *ngFor="let service of availableServices" [value]="service.serviceName">
+                        {{ service.serviceName }}
+                      </option>
+                      <option value="Others">Others</option>
+                    </select>
+                  </td>
+                  <td><input type="text" formControlName="description" class="form-control" /></td>
+                  <td><input type="number" formControlName="quantity" class="form-control" min="1" /></td>
+                  <td><input type="number" formControlName="amount" class="form-control" min="0" /></td>
+                  <td>
+                    <div class="input-group">
+                      <span class="input-group-text bg-light">$</span>
+                      <input type="text" class="form-control bg-light" style="font-weight:600;" readonly
+                        [value]="(item.get('quantity')?.value || 1) * (item.get('amount')?.value || 0) | number:'1.2-2'">
+                    </div>
+                  </td>
+                  <td>
+                    <button *ngIf="i >= 1" type="button" class="btn btn-link p-0"
+                      (click)="removeEditCategory(i); $event.stopPropagation(); $event.preventDefault();">
+                      <i class="fa fa-trash text-danger" style="cursor:pointer;"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="d-flex gap-2 mt-3">
+            <button type="button" class="btn btn-outline-secondary btn-sm text-uppercase rounded-pill"
+              (click)="addEditCategory()">Add lines</button>
+            <button type="button" class="btn btn-outline-secondary btn-sm text-uppercase rounded-pill"
+              (click)="clearEditCategories()">Clear all lines</button>
+          </div>
+        </div>
+        <!-- Notes and Upload -->
+        <div class="card p-4 mb-4">
+          <div class="row">
+            <div class="col-md-6">
+              <h5>Notes</h5>
+              <textarea formControlName="notes" class="form-control" rows="4"></textarea>
+            </div>
+            <div class="col-md-4">
+              <h5>Upload Document</h5>
+              <input style="margin-top: 10px;" type="file" class="form-control" id="editExpenseUploadDocument"
+                accept=".jpg, .jpeg, .png, .pdf" (change)="onEditExpenseFileSelected($event)" />
+              <small *ngIf="selectedFiles['editExpenseUploadDocument']">{{
+                selectedFiles['editExpenseUploadDocument']?.name }}</small>
+              <p class="text-danger" *ngIf="fileError">{{ fileError }}</p>
+            </div>
+          </div>
+        </div>
+        <!-- Footer Buttons -->
+        <div class="modal-footer justify-content-center"
+          style="border-top: 1px solid #ccc; padding-top: 15px; margin-top: 15px; ">
+          <button type="button" class="btn btn-outline-secondary btn-sm text-uppercase rounded-pill"
+            data-bs-dismiss="offcanvas" aria-label="Close" (click)="closeEditExpenseModal()"> Close</button>
+          <button type="submit" class="btn btn-success btn-sm text-uppercase rounded-pill">Save changes</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,4 +1,4 @@
-<app-navbar></app-navbar>
+<app-navbar (toggleSidebar)="toggleSidebar()"></app-navbar>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" />
@@ -6,57 +6,191 @@
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
 
-<main id="main" class="main mt-0 p-0">
-  <div id="kt_app_content" class="app-content  flex-column-fluid">
-    <div class="container-fluid px-5">
-      <div class="row bg-white px-3 py-4 mt-3 rounded">
-        <div class="col-md-12">
+
+
+<style>
+  .sidebar_ac {
+    width: 250px;
+    background-color: #eeeeee;
+    padding: 20px;
+    height: 100vh;
+    position: fixed;
+  }
+
+  .sidebar_ac h2 {
+    color: white;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .sidebar_ac ul {
+    list-style-type: none;
+    padding-left: 0px !important;
+
+  }
+
+  .sidebar_ac ul li {
+    margin: 15px 0;
+  }
+
+  .sidebar_ac ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.1em;
+    display: block;
+    padding: 10px;
+    transition: background-color 0.3s ease;
+  }
+
+  .sidebar_ac ul li a:active,
+
+  .sidebar_ac ul li a:focus {
+
+    background-color: #304ccb !important;
+
+  }
+
+
+
+  .content_ac {
+    margin-left: 270px;
+    width: calc(100% - 270px);
+  }
+
+  h1 {
+    color: #333;
+    margin-bottom: 20px;
+  }
+
+  form {
+    background-color: white;
+    border-radius: 10px;
+  }
+
+  form label {
+    font-weight: bold;
+  }
+
+  form input[type="text"],
+  form input[type="email"],
+  form input[type="tel"],
+  form input[type="number"],
+  form input[type="date"],
+  form select,
+  form textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+
+  form input[type="submit"] {
+    background-color: #304ccb;
+    color: white;
+    padding: 15px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  form input[type="submit"]:hover {
+    background-color: #3062e1;
+  }
+</style>
+
+<style>
+  .table td,
+  .table th {
+    text-align: left !important;
+  }
+</style>
+
+
+<main id="main" class=" bg-gray  main mt-0 p-0"
+  [ngClass]="{'full-width': isSidebarOpen, 'shift-right': !isSidebarOpen}">
+  <div class="p-4 pb-0">
+    <h2 style="margin-left: 85px;" class="font-18 font-weight-700 mb-4 text-capitalize">Truck List</h2>
+    <div style="margin-left: 90px;" class="    bg-white rounded-lg p-3">
+      <div class=" bg-styles  row bg-white px-3 mt-3 rounded">
+        <div class="    col-md-12">
+
+
+
+
+
 
 
           <!-- Default Tabs -->
           <ul class="nav nav-pills gap-2 border-bottom pb-4" id="myTab" role="tablist">
-            <li class="nav-item" role="presentation">
+            <li class="nav-item d-flex align-items-center gap-2" role="presentation">
               <button class="nav-link rounded-pill active bg-nav-info" id="home-tab" data-bs-toggle="tab"
                 data-bs-target="#customer" type="button" role="tab" aria-controls="home" aria-selected="true"
-                (click)="filterTrucks('all')">Truck List</button>
+                (click)="filterTrucks('all')">
+                Truck List
+                <span class="ms-1" [ngStyle]="{'color': activeFilter === 'all' ? '#ffffff' : '#3253dd'}">
+                  ({{ totalTrucks }})
+                </span>
+              </button>
             </li>
 
-              <li class="nav-item" role="presentation">
+            <li class="nav-item d-flex align-items-center gap-2" role="presentation">
               <button class="nav-link rounded-pill bg-nav-success" id="home-tab" data-bs-toggle="tab"
                 data-bs-target="#customer" type="button" role="tab" aria-controls="home" aria-selected="true"
-                (click)="filterTrucks('nonCompliant')">Compliant Trucks</button>
+                (click)="filterTrucks('compliant')">
+                Compliant Trucks
+                <span class="ms-1" [ngStyle]="{'color': activeFilter === 'compliant' ? '#ffffff' : '#28c76f'}">
+                  ({{ compliantTrucks }})
+                </span>
+              </button>
             </li>
-            <li class="nav-item" role="presentation">
-              <button class="nav-link rounded-pill bg-nav-warning" (click)="filterTrucks('compliant')" id="home-tab"
-                data-bs-toggle="tab" data-bs-target="#customer" type="button" role="tab" aria-controls="home"
-                aria-selected="true">Non-Compliant Trucks</button>
+
+            <li class="nav-item d-flex align-items-center gap-2" role="presentation">
+              <button class="nav-link rounded-pill bg-nav-warning" id="home-tab" data-bs-toggle="tab"
+                data-bs-target="#customer" type="button" role="tab" aria-controls="home" aria-selected="true"
+                (click)="filterTrucks('nonCompliant')">
+                Non-Compliant Trucks
+                <span class="ms-1" [ngStyle]="{'color': activeFilter === 'nonCompliant' ? '#ffffff' : '#ff9f43'}">
+                  ({{ nonCompliantTrucks }})
+                </span>
+              </button>
             </li>
-          
-            
-            <li class="nav-item" role="presentation">
+
+            <li class="nav-item d-flex align-items-center gap-2" role="presentation">
               <button class="nav-link rounded-pill bg-nav-danger" id="home-tab" data-bs-toggle="tab"
                 data-bs-target="#customer" type="button" role="tab" aria-controls="home" aria-selected="true"
-                (click)="filterTrucks('expiring')">Expiring Trucks</button>
+                (click)="filterTrucks('expiring')">
+                Expiring Trucks
+                <span class="ms-1" [ngStyle]="{'color': activeFilter === 'expiring' ? '#ffffff' : '#ea5455'}">
+                  ({{ expiringTrucks }})
+                </span>
+              </button>
             </li>
           </ul>
 
 
-          <div class="tab-content" id="myTabContent">
+
+          <div class="tab-content" id="myTabContent ">
             <div class="tab-pane fade active show" id="customer" role="tabpanel" aria-labelledby="home-tab">
               <div id="kt_app_content" class="app-content  flex-column-fluid">
                 <div class="my-4">
                   <div class="row">
                     <div class="col-md-12">
-                      <div class="d-flex justify-content-between">
-                        <div class="form-group has-search mb-0">
+                      <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                        <div class="form-group has-search mb-0 d-flex ">
                           <span class="fa fa-search form-control-feedback"></span>
-                          <input style="height: 36px !important;" type="text" name="Search" class="form-control"
-                            placeholder="Search...">
-                        </div>
-                        <div>
-                          <button type="button" class="btn btn-success rounded-pill font-14" data-bs-toggle="offcanvas" data-bs-target="#addLocation">
-                            <i class="fa fa-plus me-2" aria-hidden="true"></i>Add Truck
+                          <input style="height: 40px !important; padding-left: 30px; margin-right: 10px;" type="text" name="Search"
+                            class="form-control" placeholder="Search..." [(ngModel)]="searchTerm">
+                          <button class="btn btn-success rounded-pill font-14 search-btn" (click)="searchTrucks()">
+                            <i class="bi bi-search"></i> Search
                           </button>
+                        </div>
+
+                        <div>
+                          <a href="javascript:;" class="btn btn-success rounded-pill font-14" type="button"
+                            data-bs-toggle="offcanvas" data-bs-target="#addLocation" aria-controls="offcanvasRight"> <i
+                              class="fa fa-plus me-2" aria-hidden="true"></i> Add Truck</a>
                         </div>
                       </div>
                     </div>
@@ -65,7 +199,7 @@
                 <div class="row">
                   <div class="col-lg-12">
                     <div class="table-responsive">
-                      <table class="table table-bordered">
+                      <table class="table table-bordered" style="text-align: left;">
                         <thead>
                           <tr>
                             <th scope="col">Unit Number</th>
@@ -78,21 +212,37 @@
                           </tr>
                         </thead>
                         <tbody>
-                          <tr *ngFor="let truck of filteredTrucks">
+                          <tr *ngFor="let truck of paginatedTrucks; let i = index">
+
                             <td><a class="text-primary" [routerLink]="['/truck-list-view',truck._id]">{{
-                              truck.unitNumber }}</a></td>
-                              <td>{{ findCompanyName(truck.companyId) }}</td>
+                                truck.unitNumber }}</a></td>
+                            <td>{{ findCompanyName(truck.companyId) }}</td>
                             <td>{{ truck.vinNumber }}</td>
-                            <td>{{ truck.purchaseDate }}</td>
+                            <td>{{ truck.purchaseDate | date:'MM-dd-yyyy' }}</td>
                             <td>{{ truck.monthlyPayment }}</td>
                             <td>
-                              <span class="badge font-13 font-weight-700 text-uppercase" [ngClass]="{
+                              <span class="badge font-13 font-weight-500 text-uppercase" [ngClass]="{
                                 'bg-label-success': truck.status === 'APPROVED',
                                 'bg-label-warning': truck.status === 'PENDING',
-                                'bg-label-danger': truck.status === 'EXPIRING'}">{{ truck.status }}</span>
+                                'bg-label-danger': truck.status === 'EXPIRING'}">{{ truck.status }}</span>
                             </td>
-                            <td class="text-capitalize text-center">
-                              <div class="dropdown filter-dropdown" style="position: fixed;">
+                            <!-- <td class="text-capitalize text-center" width="12%">
+                              <a href="javascript:;"class="btn-action text-capitalize  me-1"
+                                (click)="editTruck(truck)" type="button" data-bs-toggle="offcanvas"
+                                data-bs-target="#ExtralargeModalEdit" aria-controls="offcanvasRight"> <i
+                                  class="fa fa-pencil" aria-hidden="true"></i></a>
+                              <a href="javascript:;"
+                                class="btn-action btn-action-red text-capitalize text-danger me-1"><i
+                                  class="fa fa-upload" aria-hidden="true"></i></a>
+                              <a href="javascript:;"
+                                class="btn-action btn-action-red text-capitalize text-danger me-1"><i
+                                  class="fa fa-download" aria-hidden="true"></i></a>
+                              <a class="btn-action btn-action-red text-capitalize text-danger me-1" href="javascript:;"
+                                data-bs-toggle="modal" data-bs-target="#ExtralargeModalDelete"
+                                (click)="setTruckToDelete(truck._id)"><i class="fa fa-comment" aria-hidden="true"></i></a>
+                            </td> -->
+                            <td class="text-capitalize ">
+                              <div class="dropdown filter-dropdown">
                                 <span class="dropdown-toggle font-16 px-3" type="button" id="dropdownMenuButton23"
                                   data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i>
                                 </span>
@@ -106,29 +256,65 @@
                                 </div>
                               </div>
                             </td>
-                            </tr>
+                          </tr>
                         </tbody>
                       </table>
+                      <div class="bg-white my-3 rounded pb-3 " style="margin-right: 90px;">
+                        <div class="row">
+                          <div class="col-md-12">
+                            <nav aria-label="Page navigation example ms-auto me-auto">
+                              <ul class="pagination justify-content-center gap-2 mb-0">
+                                <li class="page-item" [class.disabled]="currentPage === 1">
+                                  <a class="page-link font-22 d-flex align-items-center justify-content-center"
+                                    href="javascript:;" aria-label="Previous" (click)="changePage(currentPage - 1)"><i
+                                      class="fa fa-angle-left font-weight-300"></i></a>
+                                </li>
+                                <li class="page-item" *ngFor="let page of getPageNumbers()"
+                                  [class.active]="currentPage === page">
+                                  <a class="page-link font-14 d-flex align-items-center justify-content-center"
+                                    href="javascript:;" (click)="changePage(page)">{{ page
+                                    }}</a>
+                                </li>
+                                <li class="page-item" [class.disabled]="currentPage === getTotalPages()">
+                                  <a class="page-link font-22 d-flex align-items-center justify-content-center"
+                                    href="javascript:;" aria-label="Next" (click)="changePage(currentPage + 1)"><i
+                                      class="fa fa-angle-right font-weight-300"></i></a>
+                                </li>
+                              </ul>
+                            </nav>
+                            <!-- Add summary below pagination -->
+                            <div class="text-center mt-2">
+                              <ng-container *ngIf="paginatedTrucks.length > 0">
+                                <span class="badge bg-light text-dark px-3 py-2" style="font-size: 14px; font-weight: normal;">
+                                  Showing
+                                  {{
+                                  ((currentPage - 1) * pageSize) + 1
+                                  }}
+                                  to
+                                  {{
+                                  ((currentPage - 1) * pageSize) + paginatedTrucks.length
+                                  }}
+                                  of
+                                  {{
+                                  filteredTrucks.length
+                                  }}
+                                  entries (Page {{ currentPage }} of {{ getTotalPages() }})
+                                </span>
+                              </ng-container>
+                              <ng-container *ngIf="paginatedTrucks.length === 0">
+                                <span class="badge bg-light text-danger px-3 py-2" style="font-size: 14px; ">
+                                  No records to display.
+                                </span>
+                              </ng-container>
+                            </div>
+                            <!-- <div *ngIf="currentPage === getTotalPages()" class="text-center mt-2">
+                              Total Records: {{ totalTrucks }}
+                            </div> -->
+                          </div>
+                        </div>
+                      </div>
+
                     </div>
-                  </div>
-                </div>
-                <div class="row bg-white px-3 py-4 mt-3 rounded">
-                  <div class="col-md-12">
-                    <!-- <nav aria-label="Page navigation example ms-auto me-auto">
-                      <ul class="pagination justify-content-center gap-2 mb-0">
-                        <li class="page-item">
-                          <a class="page-link font-22" href="javascript:;" aria-label="Previous"><i
-                              class="fa fa-angle-left font-weight-300"></i></a>
-                        </li>
-                        <li class="page-item active"><a class="page-link font-14" href="javascript:;">1</a></li>
-                        <li class="page-item"><a class="page-link font-14" href="javascript:;">2</a></li>
-                        <li class="page-item"><a class="page-link font-14" href="javascript:;">3</a></li>
-                        <li class="page-item"><a class="page-link font-14" href="javascript:;">4</a></li>
-                        <li class="page-item"><a class="page-link font-14" href="javascript:;">5</a></li>
-                        <li class="page-item"><a class="page-link font-22" href="javascript:;" aria-label="Next"><i
-                              class="fa fa-angle-right font-weight-300"></i></a></li>
-                      </ul>
-                    </nav> -->
                   </div>
                 </div>
               </div>
@@ -137,13 +323,69 @@
         </div>
       </div>
     </div>
-      
   </div>
 </main>
+
+
+
+
 
 <!-- End Default Tabs -->
 
 
+<!-- <div class="modal fade" id="ExtralargeModalDelete" style="display: none;" aria-hidden="true">
+  <div class="modal-dialog modal-md modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body">
+        <form action="/submit-insurance-info" method="POST" enctype="multipart/form-data">
+          <div class="row">
+            <div class="col-md-6">
+              <h2 class="font-14 font-weight-700">Date:</h2>
+              <input type="text" class="form-control" id="validationDefault02" value="" required="">
+            </div>
+            <div class="col-md-6">
+              <h2 class="font-14 font-weight-700">Remark:</h2>
+              <input type="text" class="form-control" id="validationDefault02" value="" required="">
+            </div>
+            <div class="col-md-6">
+              <h2 class="font-14 font-weight-700">Next Date:</h2>
+              <input type="text" class="form-control" id="validationDefault02" value="" required="">
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer justify-content-center">
+        <button type="button" class="btn btn-success btn-sm text-uppercase rounded-pill px-3">Save</button>
+      </div>
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="table-responsive">
+            <table class="table table-bordered">
+              <tbody>
+                <tr>
+                  <th scope="col">Sr. No</th>
+                  <th scope="col">Date</th>
+                  <th scope="col">Remark</th>
+                  <th scope="col">Next Follow Ups</th>
+                </tr>
+              </tbody>
+            </table>
+            <table class="table table-bordered">
+              <tbody>
+                <tr style="width: 100%; text-align: center; background-color: rgb(255, 244, 224);">
+                  <td style="width: 100%;">Comments..</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+
+<!-- // special line add for edit -->
 <div class="modal fade" id="ExtralargeModalDelete" tabindex="-1" style="display: none;" aria-hidden="true">
   <div class="modal-dialog modal-md modal-dialog-centered">
     <div class="modal-content">
@@ -162,474 +404,1177 @@
   </div>
 </div>
 
-<div class="offcanvas offcanvas-end" tabindex="-1" id="ExtralargeModalEdit" aria-labelledby="offcanvasRightLabel"
-    style="width: 80%;" data-bs-backdrop="static" data-bs-keyboard="false">
-    <div class="modal-header" style="padding: 15px; border-bottom: 1px solid #ccc;">
-      <h5 class="modal-title">Edit Truck</h5>
+<!-- Add the off-canvas for editing -->
+<div class="offcanvas offcanvas-end" id="ExtralargeModalEdit" aria-labelledby="offcanvasRightLabel" style="width: 80%;"
+  data-bs-backdrop="static">
+  <div class="modal-header" style="padding: 15px; border-bottom: 1px solid #ccc;">
+    <h5 class="modal-title">Edit Truck</h5>
+    <div>
       <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
-    <div class="offcanvas-body view-load position-relative">
-      <form class="row g-3" (ngSubmit)="updateTruck()">
-        <div class="col-md-4">
-          <h2 class="font-14 font-weight-700">Unit Number</h2>
-          <input type="text" class="form-control" [(ngModel)]="truckToEdit.unitNumber" name="unitNumber" required>
-        </div>
-        <div class="col-md-4">
-          <h2 class="font-14 font-weight-700">VIN Number</h2>
-          <input type="text" class="form-control" [(ngModel)]="truckToEdit.vinNumber" name="vinNumber" required>
-        </div>
-        <div class="col-md-4">
-          <h2 class="font-14 font-weight-700">Plate Number</h2>
-          <input type="text" class="form-control" [(ngModel)]="truckToEdit.plateNumber" name="plateNumber" required>
-        </div>
-        <div class="col-md-4">
-          <h2 class="font-14 font-weight-700">Expiration Date</h2>
-          <input type="text" class="form-control" [(ngModel)]="truckToEdit.expirationDate" name="expirationDate"
-            required>
-        </div>
-        <div class="col-md-4">
-          <h2 class="font-14 font-weight-700">Cab Card</h2>
-          <input type="text" class="form-control" [(ngModel)]="truckToEdit.cabCard" name="cabCard" required>
-        </div>
-        <div class="col-md-4">
-          <h2 class="font-14 font-weight-700">Upload Documents</h2>
-          <input type="file" class="form-control" (change)="truckEditFile($event, 'uploadDocument')"
-            name="uploadDocuments" accept=".jpg, .jpeg, .png, .pdf" required>
-        </div>
+  </div>
 
-        <hr class="hr">
+  <div class="offcanvas-body view-load position-relative">
+    <form class="row g-3" (ngSubmit)="updateTruck()">
+      <div class="sidebar_ac">
+        <h3 class="text-black text-center">Company Form</h3>
+        <ul>
+          <li [ngClass]="{'active-option': activeSection === 'company-info'}">
+            <a href="#" class="toggle-section text-black"
+              (click)="showSection('company-info'); $event.preventDefault();">
+              Truck Information
+            </a>
+          </li>
+          <!-- <li [ngClass]="{'active-option': activeSection === 'insurance-info'}">
+            <a href="#" class="toggle-section text-black"
+              (click)="showSection('insurance-info'); $event.preventDefault();">
+              Engine Information
+            </a>
+          </li>
+          <li [ngClass]="{'active-option': activeSection === 'h-info'}">
+            <a href="#" class="toggle-section text-black" (click)="showSection('h-info'); $event.preventDefault();">
+              Purchase & Financing Information
+            </a>
+          </li> -->
+          <li [ngClass]="{'active-option': activeSection === 'g-info'}">
+            <a href="#" class="toggle-section text-black" (click)="showSection('g-info'); $event.preventDefault();">
+              Documents
+            </a>
+          </li>
+          <!-- <li [ngClass]="{'active-option': activeSection === 'k-info'}">
+            <a href="#" class="toggle-section text-black" (click)="showSection('k-info'); $event.preventDefault();">
+              Annual Inspection Documents
+            </a>
+          </li>
+          <li [ngClass]="{'active-option': activeSection === 'l-info'}">
+            <a href="#" class="toggle-section text-black" (click)="showSection('l-info'); $event.preventDefault();">
+              Maintenance Documents
+            </a>
+          </li> -->
+        </ul>
+      </div>
 
-        <div class="col-md-4">
-          <h2 class="font-14 font-weight-700">Annual DOT Insp</h2>
-          <input type="text" class="form-control" [(ngModel)]="truckToEdit.annualDotInspDocument" name="annualDOTInsp"
-            required>
-        </div>
-        <div class="col-md-4">
-          <h2 class="font-14 font-weight-700">Upload Document</h2>
-          <input type="file" class="form-control" (change)="truckEditFile($event, 'uploadDocument1')"
-            name="uploadDocument" accept=".jpg, .jpeg, .png, .pdf" required>
-        </div>
-        <div class="col-md-4">
-          <h2 class="font-14 font-weight-700">Renewal Date</h2>
-          <input type="text" class="form-control" [(ngModel)]="truckToEdit.renewalDate" name="renewalDate" required>
-        </div>
-        <div class="col-md-4">
-          <h2 class="font-14 font-weight-700">Purchase Date</h2>
-          <input type="text" class="form-control" [(ngModel)]="truckToEdit.purchaseDate" name="purchaseDate" required>
-        </div>
-        <div class="col-md-4">
-          <h2 class="font-14 font-weight-700">Purchase Price</h2>
-          <input type="text" class="form-control" [(ngModel)]="truckToEdit.purchasePrice" name="purchasePrice" required>
-        </div>
-        <div class="col-md-4">
-          <h2 class="font-14 font-weight-700">Upload Documents</h2>
-          <input type="file" class="form-control" (change)="truckEditFile($event, 'uploadDocument2')"
-            name="uploadDocuments" accept=".jpg, .jpeg, .png, .pdf" required>
-        </div>
-        <div class="col-md-4">
-          <h2 class="font-14 font-weight-700">Loan Bank Name</h2>
-          <input type="text" class="form-control" [(ngModel)]="truckToEdit.loanBankName" name="loanBankName" required>
-        </div>
-        <div class="col-md-4">
-          <h2 class="font-14 font-weight-700">Loan ACC Number</h2>
-          <input type="text" class="form-control" [(ngModel)]="truckToEdit.loanAccNumber" name="loanACCNumber" required>
-        </div>
-        <div class="col-md-4">
-          <h2 class="font-14 font-weight-700">Upload Documents</h2>
-          <input type="file" class="form-control" (change)="truckEditFile($event, 'uploadDocument3')"
-            name="uploadDocuments" accept=".jpg, .jpeg, .png, .pdf" required>
-        </div>
-        <div class="col-md-4">
-          <h2 class="font-14 font-weight-700">Bank Contact</h2>
-          <input type="text" class="form-control" [(ngModel)]="truckToEdit.bankContact" name="bankContact" required>
-        </div>
-        <div class="col-md-4">
-          <h2 class="font-14 font-weight-700">Interest Rate</h2>
-          <input type="text" class="form-control" [(ngModel)]="truckToEdit.interestRate" name="interestRate" required>
-        </div>
-        <div class="col-md-4">
-          <h2 class="font-14 font-weight-700">Monthly Payment</h2>
-          <input type="text" class="form-control" [(ngModel)]="truckToEdit.monthlyPayment" name="monthlyPayment"
-            required>
-        </div>
-        <div class="col-md-4">
-          <h2 class="font-14 font-weight-700">Payoff Date</h2>
-          <input type="text" class="form-control" [(ngModel)]="truckToEdit.payoffDate" name="payoffDate" required>
-        </div>
-        <div class="col-md-4">
-          <h2 class="font-14 font-weight-700">Prepass Transponder Number</h2>
-          <input type="text" class="form-control" [(ngModel)]="truckToEdit.prepassTransponderNumber"
-            name="prepassTransponderNumber" required>
-        </div>
-        <div class="col-md-4">
-          <h2 class="font-14 font-weight-700">Fuel Card Number</h2>
-          <input type="text" class="form-control" [(ngModel)]="truckToEdit.fuelCardNumber" name="fuelCardNumber"
-            required>
-        </div>
-        <div class="col-md-4">
-          <h2 class="font-14 font-weight-700">Status</h2>
-          <select class="form-control" [(ngModel)]="truckToEdit.status" name="status" required>
-            <option value="APPROVED">APPROVED</option>
-            <option value="PENDING">PENDING</option>
-            <option value="EXPIRING">EXPIRING</option>
-          </select>
+      <div class="content_ac" *ngIf="activeSection === 'company-info'">
+        <h3 class="mb-4">Truck Information</h3>
+        <div>
+          <div class="row">
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Company</h2>
+              <select [class.gray-bg]="!truckToEdit.companyId" [class.white-bg]="truckToEdit.companyId"
+                class="form-control custom-select" id="companyId" [(ngModel)]="truckToEdit.companyId" name="companyId"
+                required>
+                <option *ngFor="let company of companies" [value]="company._id">
+                  {{ company.companyName }}
+                </option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Truck Number (Unit Number)</h2>
+              <input [class.gray-bg]="!truckToEdit.unitNumber" [class.white-bg]="truckToEdit.unitNumber" type="text"
+                class="form-control" id="unitNumber" placeholder="Enter unit number"
+                [(ngModel)]="truckToEdit.unitNumber" name="unitNumber" required>
+            </div>
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">VIN (Vehicle Identification Number)</h2>
+              <input [class.gray-bg]="!truckToEdit.vinNumber" [class.white-bg]="truckToEdit.vinNumber" type="text"
+                class="form-control" id="vinNumber" placeholder="VIN Number" [(ngModel)]="truckToEdit.vinNumber"
+                name="vinNumber" required>
+            </div>
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">License Plate Number</h2>
+              <input [class.gray-bg]="!truckToEdit.plateNumber" [class.white-bg]="truckToEdit.plateNumber" type="text"
+                class="form-control" id="plateNumber" placeholder="Plate Number" [(ngModel)]="truckToEdit.plateNumber"
+                name="plateNumber" required>
+            </div>
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">License Plate State</h2>
+              <select [class.gray-bg]="!truckToEdit.licensePlateState" [class.white-bg]="truckToEdit.licensePlateState"
+                class="form-control custom-select" id="licensePlateState" [(ngModel)]="truckToEdit.licensePlateState"
+                name="licensePlateState" #licensePlateState="ngModel"
+                [ngClass]="{'is-invalid': licensePlateState.invalid && (licensePlateState.dirty || licensePlateState.touched)}"
+                required>
+                <option value="" hidden>Select State</option>
+                <option value="AL">Alabama</option>
+                <option value="AK">Alaska</option>
+                <option value="AZ">Arizona</option>
+                <option value="AR">Arkansas</option>
+                <option value="CA">California</option>
+                <option value="CO">Colorado</option>
+                <option value="CT">Connecticut</option>
+                <option value="DE">Delaware</option>
+                <option value="FL">Florida</option>
+                <option value="GA">Georgia</option>
+                <option value="HI">Hawaii</option>
+                <option value="ID">Idaho</option>
+                <option value="IL">Illinois</option>
+                <option value="IN">Indiana</option>
+                <option value="IA">Iowa</option>
+                <option value="KS">Kansas</option>
+                <option value="KY">Kentucky</option>
+                <option value="LA">Louisiana</option>
+                <option value="ME">Maine</option>
+                <option value="MD">Maryland</option>
+                <option value="MA">Massachusetts</option>
+                <option value="MI">Michigan</option>
+                <option value="MN">Minnesota</option>
+                <option value="MS">Mississippi</option>
+                <option value="MO">Missouri</option>
+                <option value="MT">Montana</option>
+                <option value="NE">Nebraska</option>
+                <option value="NV">Nevada</option>
+                <option value="NH">New Hampshire</option>
+                <option value="NJ">New Jersey</option>
+                <option value="NM">New Mexico</option>
+                <option value="NY">New York</option>
+                <option value="NC">North Carolina</option>
+                <option value="ND">North Dakota</option>
+                <option value="OH">Ohio</option>
+                <option value="OK">Oklahoma</option>
+                <option value="OR">Oregon</option>
+                <option value="PA">Pennsylvania</option>
+                <option value="RI">Rhode Island</option>
+                <option value="SC">South Carolina</option>
+                <option value="SD">South Dakota</option>
+                <option value="TN">Tennessee</option>
+                <option value="TX">Texas</option>
+                <option value="UT">Utah</option>
+                <option value="VT">Vermont</option>
+                <option value="VA">Virginia</option>
+                <option value="WA">Washington</option>
+                <option value="WV">West Virginia</option>
+                <option value="WI">Wisconsin</option>
+                <option value="WY">Wyoming</option>
+              </select>
+              <div *ngIf="licensePlateState.invalid && (licensePlateState.dirty || licensePlateState.touched)"
+                class="invalid-feedback">
+                License Plate State is required.
+              </div>
+            </div>
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Expiration Date</h2>
+              <input  [class.gray-bg]="!truckToEdit.expirationDate"
+         [class.white-bg]="truckToEdit.expirationDate" type="date" class="form-control" id="expirationDate" placeholder="Expiration Date"
+                [(ngModel)]="truckToEdit.expirationDate" name="expirationDate" required>
+            </div>
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Truck Year</h2>
+              <input  [class.gray-bg]="!truckToEdit.truckYear"
+         [class.white-bg]="truckToEdit.truckYear" type="text" class="form-control border-radius-6" id="truckYear" placeholder="Enter truck year"
+                [(ngModel)]="truckToEdit.truckYear" name="truckYear" required>
+            </div>
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Truck Make</h2>
+
+              <select  [class.gray-bg]="!truckToEdit.truckMake"
+          [class.white-bg]="truckToEdit.truckMake" class="form-control custom-select" id="truckMake" [(ngModel)]="truckToEdit.truckMake"
+                name="truckMake" required (ngModelChange)="onEditTruckMakeChange()">
+                <option value="" disabled selected>Select Truck Make</option>
+                <option value="Freightliner">Freightliner</option>
+                <option value="Kenworth">Kenworth</option>
+                <option value="Peterbilt">Peterbilt</option>
+                <option value="International">International (Navistar)</option>
+                <option value="Volvo">Volvo Trucks</option>
+                <option value="Mack">Mack Trucks</option>
+                <option value="Western Star">Western Star</option>
+                <option value="Tesla">Tesla</option>
+                <option value="Nikola">Nikola</option>
+              </select>
+            </div>
+
+
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Truck Model</h2>
+              <select [class.gray-bg]="!truckToEdit.truckModel"
+          [class.white-bg]="truckToEdit.truckModel" class="form-control custom-select" id="truckModel" [(ngModel)]="truckToEdit.truckModel"
+                name="truckModel" required>
+                <option value="" disabled selected>Select Truck Model</option>
+                <!-- Freightliner Models -->
+                <option *ngIf="truckToEdit.truckMake === 'Freightliner'" value="Cascadia">Cascadia</option>
+                <option *ngIf="truckToEdit.truckMake === 'Freightliner'" value="eCascadia">eCascadia (electric)</option>
+                <option *ngIf="truckToEdit.truckMake === 'Freightliner'" value="M2 106 Plus">M2 106 Plus</option>
+                <option *ngIf="truckToEdit.truckMake === 'Freightliner'" value="M2 112 Plus">M2 112 Plus</option>
+                <option *ngIf="truckToEdit.truckMake === 'Freightliner'" value="108SD Plus">108SD Plus</option>
+                <option *ngIf="truckToEdit.truckMake === 'Freightliner'" value="114SD Plus">114SD Plus</option>
+                <option *ngIf="truckToEdit.truckMake === 'Freightliner'" value="EconicSD">EconicSD</option>
+                <option *ngIf="truckToEdit.truckMake === 'Freightliner'" value="eM2">eM2 (electric)</option>
+                <!-- Kenworth Models -->
+                <option *ngIf="truckToEdit.truckMake === 'Kenworth'" value="T680">T680</option>
+                <option *ngIf="truckToEdit.truckMake === 'Kenworth'" value="T680E">T680E (electric)</option>
+                <option *ngIf="truckToEdit.truckMake === 'Kenworth'" value="T880">T880</option>
+                <option *ngIf="truckToEdit.truckMake === 'Kenworth'" value="T880E">T880E (electric)</option>
+                <option *ngIf="truckToEdit.truckMake === 'Kenworth'" value="W900">W900</option>
+                <option *ngIf="truckToEdit.truckMake === 'Kenworth'" value="W990">W990</option>
+                <option *ngIf="truckToEdit.truckMake === 'Kenworth'" value="T800">T800</option>
+                <option *ngIf="truckToEdit.truckMake === 'Kenworth'" value="C500">C500</option>
+                <option *ngIf="truckToEdit.truckMake === 'Kenworth'" value="T180">T180</option>
+                <option *ngIf="truckToEdit.truckMake === 'Kenworth'" value="T280">T280</option>
+                <option *ngIf="truckToEdit.truckMake === 'Kenworth'" value="T380">T380</option>
+                <option *ngIf="truckToEdit.truckMake === 'Kenworth'" value="T480">T480</option>
+                <option *ngIf="truckToEdit.truckMake === 'Kenworth'" value="K270">K270</option>
+                <option *ngIf="truckToEdit.truckMake === 'Kenworth'" value="K370">K370</option>
+                <option *ngIf="truckToEdit.truckMake === 'Kenworth'" value="K270E">K270E</option>
+                <option *ngIf="truckToEdit.truckMake === 'Kenworth'" value="K370E">K370E</option>
+                <!-- Peterbilt Models -->
+                <option *ngIf="truckToEdit.truckMake === 'Peterbilt'" value="579">579</option>
+                <option *ngIf="truckToEdit.truckMake === 'Peterbilt'" value="579EV">579EV (electric)</option>
+                <option *ngIf="truckToEdit.truckMake === 'Peterbilt'" value="567">567</option>
+                <option *ngIf="truckToEdit.truckMake === 'Peterbilt'" value="567EV">567EV (electric)</option>
+                <option *ngIf="truckToEdit.truckMake === 'Peterbilt'" value="389">389</option>
+                <option *ngIf="truckToEdit.truckMake === 'Peterbilt'" value="389X">389X</option>
+                <option *ngIf="truckToEdit.truckMake === 'Peterbilt'" value="520">520</option>
+                <option *ngIf="truckToEdit.truckMake === 'Peterbilt'" value="520EV">520EV (electric)</option>
+                <option *ngIf="truckToEdit.truckMake === 'Peterbilt'" value="536">536</option>
+                <option *ngIf="truckToEdit.truckMake === 'Peterbilt'" value="537">537</option>
+                <option *ngIf="truckToEdit.truckMake === 'Peterbilt'" value="548">548</option>
+                <option *ngIf="truckToEdit.truckMake === 'Peterbilt'" value="535">535</option>
+                <!-- International Models -->
+                <option *ngIf="truckToEdit.truckMake === 'International'" value="LT Series">LT Series</option>
+                <option *ngIf="truckToEdit.truckMake === 'International'" value="RH Series">RH Series</option>
+                <option *ngIf="truckToEdit.truckMake === 'International'" value="HX Series">HX Series</option>
+                <option *ngIf="truckToEdit.truckMake === 'International'" value="HV Series">HV Series</option>
+                <option *ngIf="truckToEdit.truckMake === 'International'" value="MV Series">MV Series</option>
+                <!-- Volvo Models -->
+                <option *ngIf="truckToEdit.truckMake === 'Volvo'" value="VNL Series">VNL Series</option>
+                <option *ngIf="truckToEdit.truckMake === 'Volvo'" value="VNR Series">VNR Series</option>
+                <option *ngIf="truckToEdit.truckMake === 'Volvo'" value="VNR Electric">VNR Electric</option>
+                <option *ngIf="truckToEdit.truckMake === 'Volvo'" value="VNX Series">VNX Series</option>
+                <option *ngIf="truckToEdit.truckMake === 'Volvo'" value="VAH Series">VAH Series</option>
+                <option *ngIf="truckToEdit.truckMake === 'Volvo'" value="VHD Series">VHD Series</option>
+                <!-- Mack Models -->
+                <option *ngIf="truckToEdit.truckMake === 'Mack'" value="Anthem">Anthem</option>
+                <option *ngIf="truckToEdit.truckMake === 'Mack'" value="Pinnacle">Pinnacle</option>
+                <option *ngIf="truckToEdit.truckMake === 'Mack'" value="Granite">Granite</option>
+                <option *ngIf="truckToEdit.truckMake === 'Mack'" value="TerraPro">TerraPro</option>
+                <option *ngIf="truckToEdit.truckMake === 'Mack'" value="LR Electric">LR Electric</option>
+                <option *ngIf="truckToEdit.truckMake === 'Mack'" value="MD Series">MD Series</option>
+                <!-- Western Star Models -->
+                <option *ngIf="truckToEdit.truckMake === 'Western Star'" value="47X">47X</option>
+                <option *ngIf="truckToEdit.truckMake === 'Western Star'" value="49X">49X</option>
+                <option *ngIf="truckToEdit.truckMake === 'Western Star'" value="57X">57X</option>
+                <!-- Tesla Model -->
+                <option *ngIf="truckToEdit.truckMake === 'Tesla'" value="Semi">Semi (electric)</option>
+                <!-- Nikola Models -->
+                <option *ngIf="truckToEdit.truckMake === 'Nikola'" value="Tre BEV">Tre BEV</option>
+              </select>
+            </div>
+
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Gross Vehicle Weight Rating (GVWR)</h2>
+              <input [class.gray-bg]="!truckToEdit.grossVehicleWeightRating"
+         [class.white-bg]="truckToEdit.grossVehicleWeightRating" type="text" class="form-control border-radius-6" id="grossVehicleWeightRating"
+                placeholder="Enter GVWR" [(ngModel)]="truckToEdit.grossVehicleWeightRating"
+                name="grossVehicleWeightRating" required>
+            </div>
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700 mb-2">Upload CabCard</h2>
+              <input  [class.gray-bg]="!selectedFiles['uploadDocument']"
+         [class.white-bg]="selectedFiles['uploadDocument']" type="file" class="form-control" id="uploadDocument"
+                (change)="onFileChange($event, 'uploadDocument')" name="uploadDocument" accept=".jpg, .jpeg, .png, .pdf"
+                required>
+              <small *ngIf="selectedFiles['uploadDocument']">
+                Selected: {{ selectedFiles['uploadDocument'].name }}
+              </small>
+              <p class="text-danger" *ngIf="fileError">{{ fileError }}</p>
+            </div>
+            <div class="col-md-4 d-blocks">
+              <h2 class="font-14 font-weight-700 mb-0 mb-2" style="margin-top: 4px;">Status</h2>
+              <select [class.gray-bg]="!truckToEdit.status"
+          [class.white-bg]="truckToEdit.status" class="form-control custom-select mt-1" [(ngModel)]="truckToEdit.status" name="status" required>
+                <option value="APPROVED">APPROVED</option>
+                <option value="PENDING">PENDING</option>
+                <option value="EXPIRING">EXPIRING</option>
+              </select>
+            </div>
+
+
+
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Engine Make:</h2>
+              <select  [class.gray-bg]="!truckToEdit.engineMake"
+          [class.white-bg]="truckToEdit.engineMake" class="form-control custom-select" id="engineMake" [(ngModel)]="truckToEdit.engineMake"
+                name="engineMake" required (ngModelChange)="onEditEngineMakeChange()">
+                <option value="" disabled>Select Engine Make</option>
+                <option *ngIf="truckToEdit.truckMake === 'Freightliner'" value="Detroit">Detroit</option>
+                <option *ngIf="truckToEdit.truckMake === 'Kenworth'" value="PACCAR">PACCAR</option>
+                <option *ngIf="truckToEdit.truckMake === 'Kenworth'" value="Cummins">Cummins</option>
+                <option *ngIf="truckToEdit.truckMake === 'Peterbilt'" value="PACCAR">PACCAR</option>
+                <option *ngIf="truckToEdit.truckMake === 'Peterbilt'" value="Cummins">Cummins</option>
+                <option *ngIf="truckToEdit.truckMake === 'International'" value="International">International</option>
+                <option *ngIf="truckToEdit.truckMake === 'International'" value="Cummins">Cummins</option>
+                <option *ngIf="truckToEdit.truckMake === 'Volvo'" value="Volvo">Volvo</option>
+                <option *ngIf="truckToEdit.truckMake === 'Mack'" value="Mack">Mack</option>
+                <option *ngIf="truckToEdit.truckMake === 'Western Star'" value="Detroit">Detroit</option>
+                <option *ngIf="truckToEdit.truckMake === 'Tesla'" value="Tesla">Tesla</option>
+                <option *ngIf="truckToEdit.truckMake === 'Nikola'" value="Nikola">Nikola</option>
+              </select>
+            </div>
+
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Engine Model</h2>
+              <select [class.gray-bg]="!truckToEdit.engineModel"
+          [class.white-bg]="truckToEdit.engineModel" class="form-control custom-select" id="engineModel" [(ngModel)]="truckToEdit.engineModel"
+                name="engineModel" required>
+                <option value="" disabled>Select Engine Model</option>
+                <!-- Freightliner Models -->
+                <option *ngIf="truckToEdit.engineMake === 'Detroit'" value="DD13">DD13</option>
+                <option *ngIf="truckToEdit.engineMake === 'Detroit'" value="DD15">DD15</option>
+                <option *ngIf="truckToEdit.engineMake === 'Detroit'" value="DD16">DD16</option>
+                <!-- Kenworth Models -->
+                <option *ngIf="truckToEdit.engineMake === 'PACCAR'" value="PACCAR MX-13">PACCAR MX-13 (12.9L)</option>
+                <option *ngIf="truckToEdit.engineMake === 'Cummins'" value="Cummins ISX15">Cummins ISX15</option>
+                <!-- Peterbilt Models -->
+                <option *ngIf="truckToEdit.engineMake === 'PACCAR'" value="PACCAR MX-13">PACCAR MX-13</option>
+                <option *ngIf="truckToEdit.engineMake === 'Cummins'" value="Cummins ISX15">Cummins ISX15</option>
+                <!-- International Models -->
+                <option *ngIf="truckToEdit.engineMake === 'International'" value="International A26">International A26
+                </option>
+                <option *ngIf="truckToEdit.engineMake === 'Cummins'" value="Cummins X15">Cummins X15</option>
+                <!-- Volvo Models -->
+                <option *ngIf="truckToEdit.engineMake === 'Volvo'" value="D11">D11</option>
+                <option *ngIf="truckToEdit.engineMake === 'Volvo'" value="D13">D13</option>
+                <option *ngIf="truckToEdit.engineMake === 'Volvo'" value="D13TC">D13TC (Turbo Compound)</option>
+                <!-- Mack Models -->
+                <option *ngIf="truckToEdit.engineMake === 'Mack'" value="MP7">MP7 (10.8L)</option>
+                <option *ngIf="truckToEdit.engineMake === 'Mack'" value="MP8">MP8 (13.0L)</option>
+                <option *ngIf="truckToEdit.engineMake === 'Mack'" value="MP8HE">MP8HE (High Efficiency)</option>
+                <!-- Western Star Models -->
+                <!-- <option *ngIf="truckToEdit.engineMake === 'Detroit'" value="DD13">DD13</option>
+              <option *ngIf="truckToEdit.engineMake === 'Detroit'" value="DD15">DD15</option>
+              <option *ngIf="truckToEdit.engineMake === 'Detroit'" value="DD16">DD16</option> -->
+                <!-- Tesla Models -->
+                <option *ngIf="truckToEdit.engineMake === 'Tesla'" value="Three independent electric motors">Three
+                  independent electric motors</option>
+                <!-- Nikola Models -->
+                <option *ngIf="truckToEdit.engineMake === 'Nikola'" value="Electric motor powered by battery">Electric
+                  motor powered by battery (BEV)</option>
+                <option *ngIf="truckToEdit.engineMake === 'Nikola'"
+                  value="Electric motor powered by hydrogen fuel cell">
+                  Electric motor powered by hydrogen fuel cell (FCEV)</option>
+              </select>
+            </div>
+
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Engine Serial Number</h2>
+              <input [class.bg-gray]="!truckToEdit.engineSerialNumber" [class.bg-white]="truckToEdit.engineSerialNumber" type="text" class="form-control" id="engineSerialNumber" placeholder="Enter engine serial number"
+                [(ngModel)]="truckToEdit.engineSerialNumber" name="engineSerialNumber" required>
+            </div>
+
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Horsepower:</h2>
+              <input [class.bg-gray]="!truckToEdit.horsePower" [class.bg-white]="truckToEdit.horsePower" type="text" class="form-control border-radius-6" id="horsePower" placeholder="Enter horsepower"
+                [(ngModel)]="truckToEdit.horsePower" name="horsePower" required>
+            </div>
+
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Fuel Type</h2>
+              <select [class.bg-gray]="!truckToEdit.fuelType" [class.bg-white]="truckToEdit.fuelType" class="form-control custom-select" id="fuelType" [(ngModel)]="truckToEdit.fuelType"
+                name="fuelType" required>
+                <option value="Diesel">Diesel</option>
+                <option value="Gasoline">Gasoline</option>
+                <option value="Electric">Electric</option>
+                <option value="Hybrid">Hybrid</option>
+              </select>
+            </div>
+
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Purchase Date</h2>
+              <input [class.bg-gray]="!truckToEdit.purchaseDate" [class.bg-white]="truckToEdit.purchaseDate" type="date" class="form-control border-radius-6" id="purchaseDate"
+                placeholder="Enter purchase date" [(ngModel)]="truckToEdit.purchaseDate" name="purchaseDate" required>
+            </div>
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Purchase Price ($)</h2>
+              <input [class.bg-gray]="!truckToEdit.purchasePrice" [class.bg-white]="truckToEdit.purchasePrice" type="text" class="form-control border-radius-6" id="purchasePrice"
+                placeholder="Enter purchase price" [(ngModel)]="truckToEdit.purchasePrice" name="purchasePrice"
+                required>
+            </div>
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Monthly Payment ($)</h2>
+              <input [class.bg-gray]="!truckToEdit.monthlyPayment" [class.bg-white]="truckToEdit.monthlyPayment" type="text" class="form-control border-radius-6" id="monthlyPayment"
+                placeholder="Enter monthly payment" [(ngModel)]="truckToEdit.monthlyPayment" name="monthlyPayment"
+                required>
+            </div>
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Interest Rate (%)</h2>
+              <input [class.bg-gray]="!truckToEdit.interestRate" [class.bg-white]="truckToEdit.interestRate" type="text" class="form-control border-radius-6" id="interestRate"
+                placeholder="Enter interest rate" [(ngModel)]="truckToEdit.interestRate" name="interestRate" required>
+            </div>
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Loan Ending Date</h2>
+              <input [class.bg-gray]="!truckToEdit.loanEndingDate" [class.bg-white]="truckToEdit.loanEndingDate" type="date" class="form-control border-radius-6" id="loanEndingDate"
+                placeholder="Enter loan ending date" [(ngModel)]="truckToEdit.loanEndingDate" name="loanEndingDate"
+                required>
+            </div>
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Financing Bank</h2>
+              <input [class.bg-gray]="!truckToEdit.financingBank" [class.bg-white]="truckToEdit.financingBank" type="text" class="form-control" id="financingBank" placeholder="Enter financing bank"
+                [(ngModel)]="truckToEdit.financingBank" name="financingBank" required>
+            </div>
+
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Contract Number</h2>
+              <input [class.bg-gray]="!truckToEdit.contractNumber" [class.bg-white]="truckToEdit.contractNumber" type="text" class="form-control" id="contractNumber" placeholder="Enter contract number"
+                [(ngModel)]="truckToEdit.contractNumber" name="contractNumber" required>
+            </div>
+
+          </div>
         </div>
         <div class="modal-footer justify-content-center"
           style="border-top: 1px solid #ccc; padding-top: 15px; margin-top: 15px;">
           <button type="button" class="btn btn-outline-secondary btn-sm text-uppercase rounded-pill"
-            data-bs-dismiss="offcanvas" style="margin: 10px;">Close</button>
-          <button type="submit" class="btn btn-success btn-sm text-uppercase rounded-pill" data-bs-dismiss="offcanvas">Save changes</button>
+            data-bs-dismiss="offcanvas" aria-label="Close">Close</button>
+          <button type="submit" class="btn btn-success btn-sm text-uppercase rounded-pill"
+            data-bs-dismiss="offcanvas">Save Changes</button>
+          <!-- <button type="button" class="btn btn-success btn-sm text-uppercase rounded-pill"
+            (click)="goToSection('g-info')">Next</button> -->
+            <button type="button" class="btn btn-success btn-sm text-uppercase rounded-pill"
+            (click)="goToSection('g-info'); $event.preventDefault(); $event.stopPropagation();">Next</button> 
+
+
         </div>
-      </form>
-     </div>
+      </div>
+
+
+
+
+
+      <div class="content_ac" *ngIf="activeSection === 'g-info'">
+        <h3 class="mb-4">Documents</h3>
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="table-responsive">
+              <table class="table table-bordered">
+
+
+                <tbody>
+                  <tr *ngFor="let file of truckToEdit.ninetyDaysDocument">
+                    <td>{{ file.name }}</td>
+                    <td class="text-capitalize whitespace-nowrap" width="15%">
+                      <a href="javascript:;" class="btn-action text-danger me-1"
+                        (click)="removeFile(file, 'ninetyDaysDocument', true)">
+                        <i class="fa fa-trash" aria-hidden="true"></i>
+                      </a>
+                    </td>
+                  </tr>
+                  <tr *ngIf="!truckToEdit.ninetyDaysDocument?.length">
+                    <td colspan="2" class="text-center">No documents selected</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4" style="margin-top: 15px; margin-left: -15px!important;">
+          <h2 style="margin-bottom: 5px;" class="font-14 font-weight-700">Upload Documents </h2>
+          <input type="file" class="form-control" id="editNinetyDaysDocument"
+            (change)="onFileChange($event, 'ninetyDaysDocument', true, true)" name="editNinetyDaysDocument"
+            accept=".jpg, .jpeg, .png, .pdf" multiple />
+        </div>
+
+
+        <div class="modal-footer justify-content-center"
+          style="border-top: 1px solid #ccc; padding-top: 15px; margin-top: 15px;">
+
+
+
+
+          <button type="button" class="btn btn-outline-secondary btn-sm text-uppercase rounded-pill"
+            data-bs-dismiss="offcanvas" aria-label="Close" (click)="onClose()"> Close</button>
+          <button type="submit" class="btn btn-success btn-sm text-uppercase rounded-pill"
+            data-bs-dismiss="offcanvas">Submit Form</button>
+
+
+
+
+        </div>
+      </div>
+
+
+    </form>
+  </div>
 </div>
 
+<!-- // special line add for edit -->
 
-<!-- ======= Footer ======= -->
-<footer id="footer" class="footer">
-  <div class="text-dark text-center">
-    <span class="text-muted fw-semibold me-1">2023© all rights reserved</span>
-    <a class="text-muted fw-semibold text-hover-primary">Trucking</a> <!-- href="#" -->
+
+
+
+<footer id="footer" class="footer text-center"
+  [ngClass]="{'full-widths': isSidebarOpen, 'shift-rights': !isSidebarOpen}">
+  <div class="text-dark">
+    <span class="text-muted fw-semibold me-1">2025© all rights reserved</span>
+    <a class="font-weight-700 text-hover-dark text-dark text-uppercase">3PL TEK INC.</a>
   </div>
-
 </footer>
-<!-- End Footer -->
 
-<!-- //form models -->
+
+
+
+
 <a href="#" class="back-to-top d-flex align-items-center justify-content-center btn-success">
   <i class="bi bi-arrow-up-short"></i>
 </a>
 
-<div class="offcanvas offcanvas-end" id="addLocation" aria-labelledby="offcanvasRightLabel" style="width: 80%;" data-bs-backdrop="static" data-bs-keyboard="false">
+<div class="offcanvas offcanvas-end" id="addLocation" aria-labelledby="offcanvasRightLabel" style="width: 80%;"
+  data-bs-backdrop="static">
   <div class="modal-header" style="padding: 15px; border-bottom: 1px solid #ccc;">
     <h5 class="modal-title">Add Truck</h5>
     <div>
-      
       <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
   </div>
 
   <div class="offcanvas-body view-load position-relative">
     <form class="row g-3" (ngSubmit)="submitForm(f)" #f="ngForm">
-      <!-- Unit Number -->
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Unit Number</h2>
-        
-          <input type="text" class="form-control" id="unitNumber" placeholder="Enter unit number"
-            [(ngModel)]="newTruck.unitNumber" name="unitNumber" #unitNumber="ngModel" required
-            [ngClass]="{'is-invalid': unitNumber.invalid && (unitNumber.dirty || unitNumber.touched)}">
-        <div *ngIf="unitNumber.invalid && (unitNumber.dirty || unitNumber.touched)" class="invalid-feedback">
-          Unit number is required.
+      <div class="sidebar_ac">
+        <h3 class="text-black text-center">Company Form</h3>
+        <ul>
+          <li [ngClass]="{'active-option': activeSection === 'company-info'}">
+            <a href="#" class="toggle-section text-black"
+              (click)="showSection('company-info'); $event.preventDefault();">
+              Truck Information
+            </a>
+          </li>
+          <!-- <li [ngClass]="{'active-option': activeSection === 'insurance-info'}">
+            <a href="#" class="toggle-section text-black"
+              (click)="showSection('insurance-info'); $event.preventDefault();">
+              Engine Information
+            </a>
+          </li>
+          <li [ngClass]="{'active-option': activeSection === 'h-info'}">
+            <a href="#" class="toggle-section text-black" (click)="showSection('h-info'); $event.preventDefault();">
+              Purchase & Financing Information
+            </a>
+          </li> -->
+          <li [ngClass]="{'active-option': activeSection === 'g-info'}">
+            <a href="#" class="toggle-section text-black" (click)="showSection('g-info'); $event.preventDefault();">
+              Documents
+            </a>
+          </li>
+          <!-- <li [ngClass]="{'active-option': activeSection === 'k-info'}">
+            <a href="#" class="toggle-section text-black" (click)="showSection('k-info'); $event.preventDefault();">
+              Annual Inspection Documents
+            </a>
+          </li>
+          <li [ngClass]="{'active-option': activeSection === 'l-info'}">
+            <a href="#" class="toggle-section text-black" (click)="showSection('l-info'); $event.preventDefault();">
+              Maintenance Documents
+            </a>
+          </li> -->
+        </ul>
+      </div>
+
+
+
+
+
+      <div class="content_ac" *ngIf="activeSection === 'company-info'">
+        <h3 class="mb-4">Truck Information</h3>
+        <div>
+
+          <div class="row">
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Company</h2>
+              <select class="form-control custom-select" [class.gray-bg]="!newTruck.companyId"
+                [class.white-bg]="newTruck.companyId" id="companyId" [(ngModel)]="newTruck.companyId" name="companyId"
+                #companyId="ngModel" required
+                [ngClass]="{'is-invalid': companyId.invalid && (companyId.dirty || companyId.touched)}">
+                <option value="" disabled selected>Select Company</option>
+                <option *ngFor="let company of companies" [value]="company._id">
+                  {{ company.companyName }}
+                </option>
+              </select>
+              <div *ngIf="companyId.invalid && (companyId.dirty || companyId.touched)" class="invalid-feedback">
+                Company is required.
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Truck Number (Unit Number)</h2>
+              <input type="text" class="form-control" [class.gray-bg]="!newTruck.unitNumber"
+                [class.white-bg]="newTruck.unitNumber" id="unitNumber" placeholder="Enter unit number"
+                [(ngModel)]="newTruck.unitNumber" name="unitNumber" #unitNumber="ngModel" required
+                [ngClass]="{'is-invalid': unitNumber.invalid && (unitNumber.dirty || unitNumber.touched)}">
+              <div *ngIf="unitNumber.invalid && (unitNumber.dirty || unitNumber.touched)" class="invalid-feedback">
+                Unit number is required.
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">VIN (Vehicle Identification Number):</h2>
+              <input type="text" class="form-control" [class.gray-bg]="!newTruck.vinNumber"
+                [class.white-bg]="newTruck.vinNumber" id="vinNumber" placeholder="VIN Number"
+                [(ngModel)]="newTruck.vinNumber" name="vinNumber" #vinNumber="ngModel" required
+                [ngClass]="{'is-invalid': vinNumber.invalid && (vinNumber.dirty || vinNumber.touched)}">
+              <div *ngIf="vinNumber.invalid && (vinNumber.dirty || vinNumber.touched)" class="invalid-feedback">
+                VIN number is required.
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">License Plate Number</h2>
+              <input type="text" class="form-control" [class.gray-bg]="!newTruck.plateNumber"
+                [class.white-bg]="newTruck.plateNumber" id="plateNumber" placeholder="Plate Number"
+                [(ngModel)]="newTruck.plateNumber" name="plateNumber" #plateNumber="ngModel" required
+                [ngClass]="{'is-invalid': plateNumber.invalid && (plateNumber.dirty || plateNumber.touched)}">
+              <div *ngIf="plateNumber.invalid && (plateNumber.dirty || plateNumber.touched)" class="invalid-feedback">
+                Plate Number is required.
+              </div>
+            </div>
+
+
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">License Plate State</h2>
+              <select [class.gray-bg]="!newTruck.licensePlateState" [class.white-bg]="newTruck.licensePlateState"
+                class="form-control custom-select" id="licensePlateState" [(ngModel)]="newTruck.licensePlateState"
+                name="licensePlateState" #licensePlateState="ngModel"
+                [ngClass]="{'is-invalid': licensePlateState.invalid && (licensePlateState.dirty || licensePlateState.touched)}"
+                required>
+                <option value="" hidden>Select State</option>
+                <option value="AL">Alabama</option>
+                <option value="AK">Alaska</option>
+                <option value="AZ">Arizona</option>
+                <option value="AR">Arkansas</option>
+                <option value="CA">California</option>
+                <option value="CO">Colorado</option>
+                <option value="CT">Connecticut</option>
+                <option value="DE">Delaware</option>
+                <option value="FL">Florida</option>
+                <option value="GA">Georgia</option>
+                <option value="HI">Hawaii</option>
+                <option value="ID">Idaho</option>
+                <option value="IL">Illinois</option>
+                <option value="IN">Indiana</option>
+                <option value="IA">Iowa</option>
+                <option value="KS">Kansas</option>
+                <option value="KY">Kentucky</option>
+                <option value="LA">Louisiana</option>
+                <option value="ME">Maine</option>
+                <option value="MD">Maryland</option>
+                <option value="MA">Massachusetts</option>
+                <option value="MI">Michigan</option>
+                <option value="MN">Minnesota</option>
+                <option value="MS">Mississippi</option>
+                <option value="MO">Missouri</option>
+                <option value="MT">Montana</option>
+                <option value="NE">Nebraska</option>
+                <option value="NV">Nevada</option>
+                <option value="NH">New Hampshire</option>
+                <option value="NJ">New Jersey</option>
+                <option value="NM">New Mexico</option>
+                <option value="NY">New York</option>
+                <option value="NC">North Carolina</option>
+                <option value="ND">North Dakota</option>
+                <option value="OH">Ohio</option>
+                <option value="OK">Oklahoma</option>
+                <option value="OR">Oregon</option>
+                <option value="PA">Pennsylvania</option>
+                <option value="RI">Rhode Island</option>
+                <option value="SC">South Carolina</option>
+                <option value="SD">South Dakota</option>
+                <option value="TN">Tennessee</option>
+                <option value="TX">Texas</option>
+                <option value="UT">Utah</option>
+                <option value="VT">Vermont</option>
+                <option value="VA">Virginia</option>
+                <option value="WA">Washington</option>
+                <option value="WV">West Virginia</option>
+                <option value="WI">Wisconsin</option>
+                <option value="WY">Wyoming</option>
+              </select>
+              <div *ngIf="licensePlateState.invalid && (licensePlateState.dirty || licensePlateState.touched)"
+                class="invalid-feedback">
+                License Plate State is required.
+              </div>
+            </div>
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Expiration Date</h2>
+              <input type="date" class="form-control" [class.gray-bg]="!newTruck.expirationDate"
+                [class.white-bg]="newTruck.expirationDate" id="expirationDate" placeholder="Expiration Date"
+                [(ngModel)]="newTruck.expirationDate" name="expirationDate" #expirationDate="ngModel" required
+                [ngClass]="{'is-invalid': expirationDate.invalid && (expirationDate.dirty || expirationDate.touched)}">
+              <div *ngIf="expirationDate.invalid && (expirationDate.dirty || expirationDate.touched)"
+                class="invalid-feedback">
+                Expiration Date is required.
+              </div>
+            </div>
+            <div class="col-md-4" style="margin-top:4px;">
+              <h2 class="font-14 font-weight-700 mb-2">Truck Year</h2>
+              <input type="text" class="form-control border-radius-6" [class.gray-bg]="!newTruck.truckYear"
+                [class.white-bg]="newTruck.truckYear" id="truckYear" placeholder="Enter truck year"
+                [(ngModel)]="newTruck.truckYear" name="truckYear" #truckYear="ngModel" required
+                [ngClass]="{'is-invalid': truckYear.invalid && (truckYear.dirty || truckYear.touched)}">
+              <div *ngIf="truckYear.invalid && (truckYear.dirty || truckYear.touched)" class="invalid-feedback">
+                Truck year is required.
+              </div>
+            </div>
+
+
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700 mb-">Truck Make</h2>
+              <select class="form-control custom-select" [class.gray-bg]="!newTruck.truckMake"
+                [class.white-bg]="newTruck.truckMake" id="truckMake" [(ngModel)]="newTruck.truckMake" name="truckMake"
+                #truckMake="ngModel" required (ngModelChange)="onTruckMakeChange()"
+                [ngClass]="{'is-invalid': truckMake.invalid && (truckMake.dirty || truckMake.touched)}">
+                <option value="" disabled selected>Select Truck Make</option>
+                <option value="Freightliner">Freightliner</option>
+                <option value="Kenworth">Kenworth</option>
+                <option value="Peterbilt">Peterbilt</option>
+                <option value="International">International (Navistar)</option>
+                <option value="Volvo">Volvo Trucks</option>
+                <option value="Mack">Mack Trucks</option>
+                <option value="Western Star">Western Star</option>
+                <option value="Tesla">Tesla</option>
+                <option value="Nikola">Nikola</option>
+              </select>
+              <div *ngIf="truckMake.invalid && (truckMake.dirty || truckMake.touched)" class="invalid-feedback">
+                Truck make is required.
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Truck Model</h2>
+              <select [class.gray-bg]="!newTruck.truckModel" [class.white-bg]="newTruck.truckModel"
+                class="form-control custom-select" id="truckModel" [(ngModel)]="newTruck.truckModel" name="truckModel"
+                #truckModel="ngModel" required
+                [ngClass]="{'is-invalid': truckModel.invalid && (truckModel.dirty || truckModel.touched)}">
+                <option value="" disabled selected>Select Truck Model</option>
+                <!-- Freightliner Models -->
+                <option *ngIf="newTruck.truckMake === 'Freightliner'" value="Cascadia">Cascadia</option>
+                <option *ngIf="newTruck.truckMake === 'Freightliner'" value="eCascadia">eCascadia (electric)</option>
+                <option *ngIf="newTruck.truckMake === 'Freightliner'" value="M2 106 Plus">M2 106 Plus</option>
+                <option *ngIf="newTruck.truckMake === 'Freightliner'" value="M2 112 Plus">M2 112 Plus</option>
+                <option *ngIf="newTruck.truckMake === 'Freightliner'" value="108SD Plus">108SD Plus</option>
+                <option *ngIf="newTruck.truckMake === 'Freightliner'" value="114SD Plus">114SD Plus</option>
+                <option *ngIf="newTruck.truckMake === 'Freightliner'" value="EconicSD">EconicSD</option>
+                <option *ngIf="newTruck.truckMake === 'Freightliner'" value="eM2">eM2 (electric)</option>
+                <!-- Kenworth Models -->
+                <option *ngIf="newTruck.truckMake === 'Kenworth'" value="T680">T680</option>
+                <option *ngIf="newTruck.truckMake === 'Kenworth'" value="T680E">T680E (electric)</option>
+                <option *ngIf="newTruck.truckMake === 'Kenworth'" value="T880">T880</option>
+                <option *ngIf="newTruck.truckMake === 'Kenworth'" value="T880E">T880E (electric)</option>
+                <option *ngIf="newTruck.truckMake === 'Kenworth'" value="W900">W900</option>
+                <option *ngIf="newTruck.truckMake === 'Kenworth'" value="W990">W990</option>
+                <option *ngIf="newTruck.truckMake === 'Kenworth'" value="T800">T800</option>
+                <option *ngIf="newTruck.truckMake === 'Kenworth'" value="C500">C500</option>
+                <option *ngIf="newTruck.truckMake === 'Kenworth'" value="T180">T180</option>
+                <option *ngIf="newTruck.truckMake === 'Kenworth'" value="T280">T280</option>
+                <option *ngIf="newTruck.truckMake === 'Kenworth'" value="T380">T380</option>
+                <option *ngIf="newTruck.truckMake === 'Kenworth'" value="T480">T480</option>
+                <option *ngIf="newTruck.truckMake === 'Kenworth'" value="K270">K270</option>
+                <option *ngIf="newTruck.truckMake === 'Kenworth'" value="K370">K370</option>
+                <option *ngIf="newTruck.truckMake === 'Kenworth'" value="K270E">K270E</option>
+                <option *ngIf="newTruck.truckMake === 'Kenworth'" value="K370E">K370E</option>
+                <!-- Peterbilt Models -->
+                <option *ngIf="newTruck.truckMake === 'Peterbilt'" value="579">579</option>
+                <option *ngIf="newTruck.truckMake === 'Peterbilt'" value="579EV">579EV (electric)</option>
+                <option *ngIf="newTruck.truckMake === 'Peterbilt'" value="567">567</option>
+                <option *ngIf="newTruck.truckMake === 'Peterbilt'" value="567EV">567EV (electric)</option>
+                <option *ngIf="newTruck.truckMake === 'Peterbilt'" value="389">389</option>
+                <option *ngIf="newTruck.truckMake === 'Peterbilt'" value="389X">389X</option>
+                <option *ngIf="newTruck.truckMake === 'Peterbilt'" value="520">520</option>
+                <option *ngIf="newTruck.truckMake === 'Peterbilt'" value="520EV">520EV (electric)</option>
+                <option *ngIf="newTruck.truckMake === 'Peterbilt'" value="536">536</option>
+                <option *ngIf="newTruck.truckMake === 'Peterbilt'" value="537">537</option>
+                <option *ngIf="newTruck.truckMake === 'Peterbilt'" value="548">548</option>
+                <option *ngIf="newTruck.truckMake === 'Peterbilt'" value="535">535</option>
+                <!-- International Models -->
+                <option *ngIf="newTruck.truckMake === 'International'" value="LT Series">LT Series</option>
+                <option *ngIf="newTruck.truckMake === 'International'" value="RH Series">RH Series</option>
+                <option *ngIf="newTruck.truckMake === 'International'" value="HX Series">HX Series</option>
+                <option *ngIf="newTruck.truckMake === 'International'" value="HV Series">HV Series</option>
+                <option *ngIf="newTruck.truckMake === 'International'" value="MV Series">MV Series</option>
+                <!-- Volvo Models -->
+                <option *ngIf="newTruck.truckMake === 'Volvo'" value="VNL Series">VNL Series</option>
+                <option *ngIf="newTruck.truckMake === 'Volvo'" value="VNR Series">VNR Series</option>
+                <option *ngIf="newTruck.truckMake === 'Volvo'" value="VNR Electric">VNR Electric</option>
+                <option *ngIf="newTruck.truckMake === 'Volvo'" value="VNX Series">VNX Series</option>
+                <option *ngIf="newTruck.truckMake === 'Volvo'" value="VAH Series">VAH Series</option>
+                <option *ngIf="newTruck.truckMake === 'Volvo'" value="VHD Series">VHD Series</option>
+                <!-- Mack Models -->
+                <option *ngIf="newTruck.truckMake === 'Mack'" value="Anthem">Anthem</option>
+                <option *ngIf="newTruck.truckMake === 'Mack'" value="Pinnacle">Pinnacle</option>
+                <option *ngIf="newTruck.truckMake === 'Mack'" value="Granite">Granite</option>
+                <option *ngIf="newTruck.truckMake === 'Mack'" value="TerraPro">TerraPro</option>
+                <option *ngIf="newTruck.truckMake === 'Mack'" value="LR Electric">LR Electric</option>
+                <option *ngIf="newTruck.truckMake === 'Mack'" value="MD Series">MD Series</option>
+                <!-- Western Star Models -->
+                <option *ngIf="newTruck.truckMake === 'Western Star'" value="47X">47X</option>
+                <option *ngIf="newTruck.truckMake === 'Western Star'" value="49X">49X</option>
+                <option *ngIf="newTruck.truckMake === 'Western Star'" value="57X">57X</option>
+                <!-- Tesla Model -->
+                <option *ngIf="newTruck.truckMake === 'Tesla'" value="Semi">Semi (electric)</option>
+                <!-- Nikola Models -->
+                <option *ngIf="newTruck.truckMake === 'Nikola'" value="Tre BEV">Tre BEV</option>
+              </select>
+              <div *ngIf="truckModel.invalid && (truckModel.dirty || truckModel.touched)" class="invalid-feedback">
+                Truck model is required.
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700 mb-2" style="margin-top:4px;">Gross Vehicle Weight Rating (GVWR)</h2>
+              <input type="text" class="form-control border-radius-6"
+                [class.gray-bg]="!newTruck.grossVehicleWeightRating"
+                [class.white-bg]="newTruck.grossVehicleWeightRating" id="grossVehicleWeightRating"
+                placeholder="Enter GVWR" [(ngModel)]="newTruck.grossVehicleWeightRating" name="grossVehicleWeightRating"
+                #grossVehicleWeightRating="ngModel" required
+                [ngClass]="{'is-invalid': grossVehicleWeightRating.invalid && (grossVehicleWeightRating.dirty || grossVehicleWeightRating.touched)}">
+              <div
+                *ngIf="grossVehicleWeightRating.invalid && (grossVehicleWeightRating.dirty || grossVehicleWeightRating.touched)"
+                class="invalid-feedback">
+                GVWR is required.
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Upload CabCard</h2>
+              <input style="margin-top: 10px;" type="file" class="form-control"
+                [class.gray-bg]="!selectedFiles['uploadDocument']" [class.white-bg]="selectedFiles['uploadDocument']"
+                id="uploadDocument" (change)="onFileChange($event, 'uploadDocument')" name="uploadDocument"
+                accept=".jpg, .jpeg, .png, .pdf" required>
+              <small *ngIf="selectedFiles['uploadDocument']">
+                Selected: {{ selectedFiles['uploadDocument'].name }}
+              </small>
+              <p class="text-danger" *ngIf="fileError">{{ fileError }}</p>
+            </div>
+
+
+
+            <div class="col-md-4 d-blocks">
+              <h2 class="font-14 font-weight-700 mb-0">Status</h2>
+              <select [class.gray-bg]="!newTruck.status" [class.white-bg]="newTruck.status"
+                style="margin-top: 10px!important;" class="form-control custom-select mt-1"
+                [(ngModel)]="newTruck.status" name="status" #status="ngModel" required
+                [ngClass]="{'is-invalid': status.invalid && (status.dirty || status.touched)}">
+                <option value="APPROVED">APPROVED</option>
+                <option value="PENDING">PENDING</option>
+                <option value="EXPIRING">EXPIRING</option>
+              </select>
+              <div *ngIf="status.invalid && (status.dirty || status.touched)" class="invalid-feedback">
+                <i class="fa fa-exclamation-circle"></i> Status is required.
+              </div>
+            </div>
+
+
+
+
+
+            <!--new oneeeeeeeeeeeeeeeeeeeeeeeeeeeeeee -->
+
+
+
+            <!-- Engine Information Form Fields -->
+
+
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Engine Make</h2>
+              <select [class.gray-bg]="!newTruck.engineMake" [class.white-bg]="newTruck.engineMake"
+                class="form-control custom-select" id="engineMake" [(ngModel)]="newTruck.engineMake" name="engineMake"
+                required (ngModelChange)="onEngineMakeChange()">
+                <option value="" disabled>Select Engine Make</option>
+                <option *ngIf="newTruck.truckMake === 'Freightliner'" value="Detroit">Detroit</option>
+                <option *ngIf="newTruck.truckMake === 'Kenworth'" value="PACCAR">PACCAR</option>
+                <option *ngIf="newTruck.truckMake === 'Kenworth'" value="Cummins">Cummins</option>
+                <option *ngIf="newTruck.truckMake === 'Peterbilt'" value="PACCAR">PACCAR</option>
+                <option *ngIf="newTruck.truckMake === 'Peterbilt'" value="Cummins">Cummins</option>
+                <option *ngIf="newTruck.truckMake === 'International'" value="International">International</option>
+                <option *ngIf="newTruck.truckMake === 'International'" value="Cummins">Cummins</option>
+                <option *ngIf="newTruck.truckMake === 'Volvo'" value="Volvo">Volvo</option>
+                <option *ngIf="newTruck.truckMake === 'Mack'" value="Mack">Mack</option>
+                <option *ngIf="newTruck.truckMake === 'Western Star'" value="Detroit">Detroit</option>
+                <option *ngIf="newTruck.truckMake === 'Tesla'" value="Tesla">Tesla</option>
+                <option *ngIf="newTruck.truckMake === 'Nikola'" value="Nikola">Nikola</option>
+              </select>
+            </div>
+
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Engine Model</h2>
+              <select [class.gray-bg]="!newTruck.engineModel" [class.white-bg]="newTruck.engineModel"
+                class="form-control custom-select" id="engineModel" [(ngModel)]="newTruck.engineModel"
+                name="engineModel" required>
+                <option value="" disabled>Select Engine Model</option>
+                <!-- Freightliner Models -->
+                <option *ngIf="newTruck.engineMake === 'Detroit'" value="DD13">DD13</option>
+                <option *ngIf="newTruck.engineMake === 'Detroit'" value="DD15">DD15</option>
+                <option *ngIf="newTruck.engineMake === 'Detroit'" value="DD16">DD16</option>
+                <!-- Kenworth Models -->
+                <option *ngIf="newTruck.engineMake === 'PACCAR'" value="PACCAR MX-13">PACCAR MX-13 (12.9L)</option>
+                <option *ngIf="newTruck.engineMake === 'Cummins'" value="Cummins ISX15">Cummins ISX15</option>
+                <!-- Peterbilt Models -->
+                <option *ngIf="newTruck.engineMake === 'PACCAR'" value="PACCAR MX-13">PACCAR MX-13</option>
+                <option *ngIf="newTruck.engineMake === 'Cummins'" value="Cummins ISX15">Cummins ISX15</option>
+                <!-- International Models -->
+                <option *ngIf="newTruck.engineMake === 'International'" value="International A26">International A26
+                </option>
+                <option *ngIf="newTruck.engineMake === 'Cummins'" value="Cummins X15">Cummins X15</option>
+                <!-- Volvo Models -->
+                <option *ngIf="newTruck.engineMake === 'Volvo'" value="D11">D11</option>
+                <option *ngIf="newTruck.engineMake === 'Volvo'" value="D13">D13</option>
+                <option *ngIf="newTruck.engineMake === 'Volvo'" value="D13TC">D13TC (Turbo Compound)</option>
+                <!-- Mack Models -->
+                <option *ngIf="newTruck.engineMake === 'Mack'" value="MP7">MP7 (10.8L)</option>
+                <option *ngIf="newTruck.engineMake === 'Mack'" value="MP8">MP8 (13.0L)</option>
+                <option *ngIf="newTruck.engineMake === 'Mack'" value="MP8HE">MP8HE (High Efficiency)</option>
+                <!-- Western Star Models -->
+                <!-- <option *ngIf="newTruck.engineMake === 'Detroit'" value="DD13">DD13</option>
+              <option *ngIf="newTruck.engineMake === 'Detroit'" value="DD15">DD15</option>
+              <option *ngIf="newTruck.engineMake === 'Detroit'" value="DD16">DD16</option> -->
+                <!-- Tesla Models -->
+                <option *ngIf="newTruck.engineMake === 'Tesla'" value="Three independent electric motors">Three
+                  independent electric motors</option>
+                <!-- Nikola Models -->
+                <option *ngIf="newTruck.engineMake === 'Nikola'" value="Electric motor powered by battery">Electric
+                  motor powered by battery (BEV)</option>
+                <option *ngIf="newTruck.engineMake === 'Nikola'" value="Electric motor powered by hydrogen fuel cell">
+                  Electric motor powered by hydrogen fuel cell (FCEV)</option>
+              </select>
+            </div>
+
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Engine Serial Number</h2>
+              <input [class.gray-bg]="!newTruck.engineSerialNumber" [class.white-bg]="newTruck.engineSerialNumber"
+                type="text" class="form-control" id="engineSerialNumber" placeholder="Enter engine serial number"
+                [(ngModel)]="newTruck.engineSerialNumber" name="engineSerialNumber" required>
+            </div>
+
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700 mb-2" style="margin-top:4px;">Horsepower</h2>
+              <input [class.gray-bg]="!newTruck.horsePower" [class.white-bg]="newTruck.horsePower" type="input"
+                class="form-control border-radius-6 " id="horsePower" placeholder="Enter horsepower"
+                [(ngModel)]="newTruck.horsePower" name="horsePower" required>
+            </div>
+
+
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700 ">Fuel Type</h2>
+              <select [class.gray-bg]="!newTruck.fuelType" [class.white-bg]="newTruck.fuelType"
+                class="form-control custom-select" id="fuelType" [(ngModel)]="newTruck.fuelType" name="fuelType"
+                required>
+                <option value="Diesel">Diesel</option>
+                <option value="Gasoline">Gasoline</option>
+                <option value="Electric">Electric</option>
+                <option value="Hybrid">Hybrid</option>
+              </select>
+            </div>
+
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Purchase Date</h2>
+              <input [class.gray-bg]="!newTruck.purchaseDate" [class.white-bg]="newTruck.purchaseDate" type="date"
+                class="form-control border-radius-6" id="purchaseDate" placeholder="Enter purchase date"
+                [(ngModel)]="newTruck.purchaseDate" name="purchaseDate" required>
+            </div>
+
+          </div>
+
+
+          <!-- Engine Information Form Fields -->
+
+
+          <div class="row mb-3">
+            <div class="col-md-4">
+              <label for="purchasePrice" class="font-14 font-weight-bold">Purchase Price ($)</label>
+              <input [class.gray-bg]="!newTruck.purchasePrice" [class.white-bg]="newTruck.purchasePrice" type="text"
+                class="form-control border-radius-6" id="purchasePrice" placeholder="Enter purchase price"
+                [(ngModel)]="newTruck.purchasePrice" name="purchasePrice" required>
+            </div>
+
+            <div class="col-md-4">
+              <label for="monthlyPayment" class="font-14 font-weight-bold">Monthly Payment ($)</label>
+              <input [class.gray-bg]="!newTruck.monthlyPayment" [class.white-bg]="newTruck.monthlyPayment" type="text"
+                class="form-control border-radius-6" id="monthlyPayment" placeholder="Enter monthly payment"
+                [(ngModel)]="newTruck.monthlyPayment" name="monthlyPayment" required>
+            </div>
+
+            <div class="col-md-4">
+              <label for="interestRate" class="font-14 font-weight-bold">Interest Rate (%)</label>
+              <input [class.gray-bg]="!newTruck.interestRate" [class.white-bg]="newTruck.interestRate" type="text"
+                class="form-control border-radius-6" id="interestRate" placeholder="Enter interest rate"
+                [(ngModel)]="newTruck.interestRate" name="interestRate" required>
+            </div>
+          </div>
+
+          <div class="row ">
+            <div class="col-md-4">
+              <label for="loanEndingDate" class="font-14 font-weight-bold">Loan Ending Date</label>
+              <input [class.gray-bg]="!newTruck.loanEndingDate" [class.white-bg]="newTruck.loanEndingDate" type="date"
+                class="form-control border-radius-6" id="loanEndingDate" placeholder="Enter loan ending date"
+                [(ngModel)]="newTruck.loanEndingDate" name="loanEndingDate" required>
+            </div>
+
+            <div class="col-md-4">
+              <label for="financingBank" class="font-14 font-weight-bold">Financing Bank</label>
+              <input [class.gray-bg]="!newTruck.financingBank" [class.white-bg]="newTruck.financingBank" type="text"
+                class="form-control border-radius-6" id="financingBank" placeholder="Enter financing bank"
+                [(ngModel)]="newTruck.financingBank" name="financingBank" required>
+            </div>
+
+            <div class="col-md-4">
+              <label for="contractNumber" class="font-14 font-weight-bold " >Contract Number</label>
+              <input [class.gray-bg]="!newTruck.contractNumber" [class.white-bg]="newTruck.contractNumber" type="text"
+                class="form-control border-radius-6" id="contractNumber" placeholder="Enter contract number"
+                [(ngModel)]="newTruck.contractNumber" name="contractNumber" required>
+            </div>
+          </div>
+        </div>
+
+
+
+        <!--new  -->
+
+
+        <!-- [Your form fields for Engine Information are here] -->
+        <div class="modal-footer justify-content-center"
+          style="border-top: 1px solid #ccc; padding-top: 15px; margin-top: 15px;">
+
+          <button type="button" class="btn btn-outline-secondary btn-sm text-uppercase rounded-pill"
+            data-bs-dismiss="offcanvas" aria-label="Close" (click)="onClose()"> Close</button>
+          <!-- <button type="button" class="btn btn-outline-secondary btn-sm text-uppercase rounded-pill"  (click)="onClose()">Close</button> -->
+
+
+          <!-- <button type="button" class="btn btn-success btn-sm text-uppercase rounded-pill"
+            (click)="goToSection('g-info')">Next</button> -->
+
+                    <button type="button" class="btn btn-success btn-sm text-uppercase rounded-pill"
+            (click)="goToSection('g-info'); $event.preventDefault(); $event.stopPropagation();">Next</button>
+
+        </div>
+
+
+      </div>
+  <!--new -->
+
+      <div class="content_ac" *ngIf="activeSection === 'g-info'">
+        <h3 class="mb-4">Documents</h3>
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="table-responsive">
+              <table class="table table-bordered">
+                <!-- <thead>
+                  <tr>
+                    <th>90 Days Documents</th>
+                    <th width="30px">Actions</th>
+                  </tr>
+                </thead> -->
+                <tbody>
+                  <tr *ngFor="let file of newTruck.ninetyDaysDocument">
+                    <td>{{ file.name }}</td>
+                    <td class="text-capitalize whitespace-nowrap" width="15%">
+                      <a href="javascript:;" class="btn-action text-danger me-1"
+                        (click)="removeFile(file, 'ninetyDaysDocument')">
+                        <i class="fa fa-trash" aria-hidden="true"></i>
+                      </a>
+                    </td>
+                  </tr>
+                  <tr *ngIf="!newTruck.ninetyDaysDocument?.length">
+                    <td colspan="2" class="text-center">No documents selected</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="col-md-4" style="margin-top: 15px; margin-left: 1px;">
+            <h2 style="margin-bottom: 5px; " class="font-14 font-weight-700">Upload Documents </h2>
+            <input type="file" class="form-control" id="ninetyDaysDocument"
+              (change)="onFileChange($event, 'ninetyDaysDocument', true)" name="ninetyDaysDocument"
+              accept=".jpg, .jpeg, .png, .pdf" multiple />
+          </div>
+        </div>
+
+
+
+        <br>
+
+
+        <!-- <div class="row">
+          <div class="col-lg-12">
+            <div class="table-responsive">
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th scope="col">Annual Inspection Date</th>
+                    <th scope="col" width="30px">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let file of newTruck.annualInspectionDocument">
+                    <td>{{ file.name }}</td>
+                    <td class="text-capitalize whitespace-nowrap" width="15%">
+                      <a href="javascript:;" class="btn-action text-danger me-1"
+                        (click)="removeFile(file, 'annualInspectionDocument')">
+                        <i class="fa fa-trash" aria-hidden="true"></i>
+                      </a>
+                    </td>
+                  </tr>
+                  <tr *ngIf="!newTruck.annualInspectionDocument?.length">
+                    <td colspan="2" class="text-center">No documents selected</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="col-md-4" style="margin-top: 15px; margin-left: 1px;">
+            <h2 style="margin-bottom: 5px; " class="font-14 font-weight-700">Upload Documents </h2>
+            <input type="file" class="form-control" id="annualInspectionDocument"
+              (change)="onFileChange($event, 'annualInspectionDocument', true)" name="annualInspectionDocument"
+              accept=".jpg, .jpeg, .png, .pdf" multiple />
+          </div>
+        </div> -->
+
+
+        <!-- <div class="row">
+          <div class="col-lg-12">
+            <div class="table-responsive">
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th scope="col"> Maintenance Documents</th>
+                    <th scope="col" width="30px">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let file of newTruck.maintenanceDocument">
+                    <td>{{ file.name }}</td>
+                    <td class="text-capitalize whitespace-nowrap" width="15%">
+                      <a href="javascript:;" class="btn-action text-danger me-1"
+                        (click)="removeFile(file, 'maintenanceDocument')">
+                        <i class="fa fa-trash" aria-hidden="true"></i>
+                      </a>
+                    </td>
+                  </tr>
+                  <tr *ngIf="!newTruck.maintenanceDocument?.length">
+                    <td colspan="2" class="text-center">No documents selected</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4" style="margin-top: 15px; margin-left: -13px;">
+          <h2 style="margin-bottom: 5px;" class="font-14 font-weight-700">Upload Documents </h2>
+          <input type="file" class="form-control" id="maintenanceDocument"
+            (change)="onFileChange($event, 'maintenanceDocument', true)" name="maintenanceDocument"
+            accept=".jpg, .jpeg, .png, .pdf" multiple />
+        </div> -->
+
+
+
+
+        <div class="modal-footer justify-content-center"
+          style="border-top: 1px solid #ccc; padding-top: 15px; margin-top: 15px;">
+
+
+
+
+          <button type="button" class="btn btn-outline-secondary btn-sm text-uppercase rounded-pill"
+            data-bs-dismiss="offcanvas" aria-label="Close" (click)="onClose()"> Close</button>
+          <!-- <button type="button" class="btn btn-outline-secondary btn-sm text-uppercase rounded-pill"  (click)="onClose()">Close</button> -->
+
+          <button type="submit" class="btn btn-success btn-sm text-uppercase rounded-pill"
+            data-bs-dismiss="offcanvas">Submit Form</button>
+
+
+
+
         </div>
       </div>
-      
-      <!-- VIN Number -->
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">VIN Number</h2>
-        <input type="text" class="form-control" id="vinNumber" placeholder="VIN Number"
-          [(ngModel)]="newTruck.vinNumber" name="vinNumber" #vinNumber="ngModel" required
-          [ngClass]="{'is-invalid': vinNumber.invalid && (vinNumber.dirty || vinNumber.touched)}">
-        <div *ngIf="vinNumber.invalid && (vinNumber.dirty || vinNumber.touched)" class="invalid-feedback">
-          VIN number is required.
-        </div>
-      </div>
-
-      <!-- Plate Number --> 
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Plate Number</h2>
-        <input type="text" class="form-control" id="plateNumber" placeholder="Plate Number"
-        [(ngModel)]="newTruck.plateNumber" name="plateNumber" #plateNumber="ngModel" required
-        [ngClass]="{'is-invalid': plateNumber.invalid && (plateNumber.dirty || plateNumber.touched)}">
-      <div *ngIf="plateNumber.invalid && (plateNumber.dirty || plateNumber.touched)" class="invalid-feedback">
-        Plate Number is required.
-      </div>
-    </div>
-
-      <!-- Expiration Date -->
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Expiration Date</h2>
-        <input type="date" class="form-control" id="expirationDate" placeholder="Expiration Date"
-          [(ngModel)]="newTruck.expirationDate" name="expirationDate"  #expirationDate="ngModel" required
-          [ngClass]="{'is-invalid':expirationDate.invalid && (expirationDate.dirty ||expirationDate.touched)}">
-          <div *ngIf="expirationDate.invalid && (expirationDate.dirty || expirationDate.touched)" class="invalid-feedback">
-            Plate Number is required.
-          </div>
-      </div>
-
-      <!-- Cab Card -->
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Cab Card</h2>
-        <input type="text" class="form-control" id="cabCard" placeholder="Cab Card"
-          [(ngModel)]="newTruck.cabCard" name="cabCard" #cabCard ="ngModel" required
-          [ngClass]="{'is-invalid':cabCard.invalid && (cabCard.dirty ||cabCard.touched)}">
-          <div *ngIf="cabCard.invalid && (cabCard.dirty || cabCard.touched)" class="invalid-feedback">
-            Cab Card is required.
-          </div>
-      </div>
-
-      <!-- Upload Documents -->
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Upload Documents</h2>
-        <input type="file" class="form-control" id="uploadDocument" (change)="onFileChange($event, 'uploadDocument')" name="uploadDocument" accept=".jpg, .jpeg, .png, .pdf" required>
-      </div>
-      
-
-      <hr class="hr" />
-
-      <!-- Annual DOT Insp -->
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Annual DOT Insp</h2>
-        <input type="text" class="form-control" id="annualDotInspDocument" placeholder="Annual DOT Insp"
-          [(ngModel)]="newTruck.annualDotInspDocument" name="annualDotInspDocument" #annualDotInspDocument = "ngModel" required
-          [ngClass]="{'is-invalid':annualDotInspDocument.invalid && (annualDotInspDocument.dirty ||annualDotInspDocument.touched)}">
-          <div *ngIf="annualDotInspDocument.invalid && (annualDotInspDocument.dirty || annualDotInspDocument.touched)" class="invalid-feedback">
-            Annual DOT Insp is required.
-          </div>
-      </div>
-
-    <!-- Upload Document -->
-   
-    <div class="col-md-4">
-      <h2 class="font-14 font-weight-700">Upload Document</h2>
-      <input type="file" class="form-control" id="uploadDocument1" placeholder="Document.pdf"
-        (change)="onFileChange($event, 'uploadDocument1')" name="uploadDocument1" accept=".jpg, .jpeg, .png, .pdf" required>
-    </div>
-
-<!-- Renewal Date -->
-<div class="col-md-4">
-  <h2 class="font-14 font-weight-700">Renewal Date</h2>
-  <input 
-    type="date" 
-    class="form-control" 
-    id="renewalDate" 
-    placeholder="Renewal Date"
-    [(ngModel)]="newTruck.renewalDate" 
-    name="renewalDate" 
-    #renewalDate="ngModel" 
-    required
-    [ngClass]="{'is-invalid': renewalDate.invalid && (renewalDate.dirty || renewalDate.touched)}">
-  <div *ngIf="renewalDate.invalid && (renewalDate.dirty || renewalDate.touched)" class="invalid-feedback">
-    <i class="fa fa-exclamation-circle"></i> Renewal Date is required.
-  </div>
-</div>
-
-<!-- Purchase Date -->
-<div class="col-md-4">
-  <h2 class="font-14 font-weight-700">Purchase Date</h2>
-  <input 
-    type="date" 
-    class="form-control" 
-    id="purchaseDate" 
-    placeholder="Purchase Date"
-    [(ngModel)]="newTruck.purchaseDate" 
-    name="purchaseDate" 
-    #purchaseDate="ngModel" 
-    required
-    [ngClass]="{'is-invalid': purchaseDate.invalid && (purchaseDate.dirty || purchaseDate.touched)}">
-  <div *ngIf="purchaseDate.invalid && (purchaseDate.dirty || purchaseDate.touched)" class="invalid-feedback">
-    <i class="fa fa-exclamation-circle"></i> Purchase Date is required.
-  </div>
-</div>
-
-<!-- Purchase Price -->
-<div class="col-md-4">
-  <h2 class="font-14 font-weight-700">Purchase Price</h2>
-  <input 
-    type="number" 
-    class="form-control" 
-    id="purchasePrice" 
-    placeholder="Purchase Price"
-    [(ngModel)]="newTruck.purchasePrice" 
-    name="purchasePrice" 
-    #purchasePrice="ngModel" 
-    required
-    [ngClass]="{'is-invalid': purchasePrice.invalid && (purchasePrice.dirty || purchasePrice.touched)}">
-  <div *ngIf="purchasePrice.invalid && (purchasePrice.dirty || purchasePrice.touched)" class="invalid-feedback">
-    <i class="fa fa-exclamation-circle"></i> Purchase Price is required.
-  </div>
-</div>
-
-<!-- Upload Documents -->
-<div class="col-md-4">
-  <h2 class="font-14 font-weight-700">Upload Documents</h2>
-  <input type="file" class="form-control" id="uploadDocument2" placeholder="Document.pdf"
-    (change)="onFileChange($event, 'uploadDocument2')" name="uploadDocument2" accept=".jpg, .jpeg, .png, .pdf" required>
-</div>
-<!-- Loan Bank Name -->
-<div class="col-md-4">
-  <h2 class="font-14 font-weight-700">Loan Bank Name</h2>
-  <input 
-    type="text" 
-    class="form-control" 
-    id="loanBankName" 
-    placeholder="Loan Bank Name"
-    [(ngModel)]="newTruck.loanBankName" 
-    name="loanBankName" 
-    #loanBankName="ngModel" 
-    required
-    [ngClass]="{'is-invalid': loanBankName.invalid && (loanBankName.dirty || loanBankName.touched)}">
-  <div *ngIf="loanBankName.invalid && (loanBankName.dirty || loanBankName.touched)" class="invalid-feedback">
-    <i class="fa fa-exclamation-circle"></i> Loan Bank Name is required.
-  </div>
-</div>
-
-<!-- Loan ACC Number -->
-<div class="col-md-4">
-  <h2 class="font-14 font-weight-700">Loan ACC Number</h2>
-  <input 
-    type="text" 
-    class="form-control" 
-    id="loanAccNumber" 
-    placeholder="Loan ACC Number"
-    [(ngModel)]="newTruck.loanAccNumber" 
-    name="loanAccNumber" 
-    #loanAccNumber="ngModel" 
-    required
-    [ngClass]="{'is-invalid': loanAccNumber.invalid && (loanAccNumber.dirty || loanAccNumber.touched)}">
-  <div *ngIf="loanAccNumber.invalid && (loanAccNumber.dirty || loanAccNumber.touched)" class="invalid-feedback">
-    <i class="fa fa-exclamation-circle"></i> Loan ACC Number is required.
-  </div>
-</div>
-
-<!-- Upload Documents -->
-<div class="col-md-4">
-  <h2 class="font-14 font-weight-700">Upload Documents</h2>
-  <input type="file" class="form-control" id="uploadDocument3" placeholder="Document.pdf"
-    (change)="onFileChange($event, 'uploadDocument3')" name="uploadDocument3" accept=".jpg, .jpeg, .png, .pdf" required>
-</div>
-
-<!-- Bank Contact -->
-<div class="col-md-4">
-  <h2 class="font-14 font-weight-700">Bank Contact</h2>
-  <input 
-    type="text" 
-    class="form-control" 
-    id="bankContact" 
-    placeholder="Bank Contact"
-    [(ngModel)]="newTruck.bankContact" 
-    name="bankContact" 
-    #bankContact="ngModel" 
-    required
-    [ngClass]="{'is-invalid': bankContact.invalid && (bankContact.dirty || bankContact.touched)}">
-  <div *ngIf="bankContact.invalid && (bankContact.dirty || bankContact.touched)" class="invalid-feedback">
-    <i class="fa fa-exclamation-circle"></i> Bank Contact is required.
-  </div>
-</div>
-
-<!-- Interest Rate -->
-<div class="col-md-4">
-  <h2 class="font-14 font-weight-700">Interest Rate</h2>
-  <input 
-    type="number" 
-    class="form-control" 
-    id="interestRate" 
-    placeholder="Interest Rate"
-    [(ngModel)]="newTruck.interestRate" 
-    name="interestRate" 
-    #interestRate="ngModel" 
-    required
-    [ngClass]="{'is-invalid': interestRate.invalid && (interestRate.dirty || interestRate.touched)}">
-  <div *ngIf="interestRate.invalid && (interestRate.dirty || interestRate.touched)" class="invalid-feedback">
-    <i class="fa fa-exclamation-circle"></i> Interest Rate is required.
-  </div>
-</div>
-
-<!-- Monthly Payment -->
-<div class="col-md-4">
-  <h2 class="font-14 font-weight-700">Monthly Payment</h2>
-  <input 
-    type="number" 
-    class="form-control" 
-    id="monthlyPayment" 
-    placeholder="Monthly Payment"
-    [(ngModel)]="newTruck.monthlyPayment" 
-    name="monthlyPayment" 
-    #monthlyPayment="ngModel" 
-    required
-    [ngClass]="{'is-invalid': monthlyPayment.invalid && (monthlyPayment.dirty || monthlyPayment.touched)}">
-  <div *ngIf="monthlyPayment.invalid && (monthlyPayment.dirty || monthlyPayment.touched)" class="invalid-feedback">
-    <i class="fa fa-exclamation-circle"></i> Monthly Payment is required.
-  </div>
-</div>
-
-<!-- Payoff Date -->
-<div class="col-md-4">
-  <h2 class="font-14 font-weight-700">Payoff Date</h2>
-  <input 
-    type="date" 
-    class="form-control" 
-    id="payoffDate" 
-    placeholder="Payoff Date"
-    [(ngModel)]="newTruck.payoffDate" 
-    name="payoffDate" 
-    #payoffDate="ngModel" 
-    required
-    [ngClass]="{'is-invalid': payoffDate.invalid && (payoffDate.dirty || payoffDate.touched)}">
-  <div *ngIf="payoffDate.invalid && (payoffDate.dirty || payoffDate.touched)" class="invalid-feedback">
-    <i class="fa fa-exclamation-circle"></i> Payoff Date is required.
-  </div>
-</div>
-
-<!-- Prepass Transponder Number -->
-<div class="col-md-4">
-  <h2 class="font-14 font-weight-700">Prepass Transponder Number</h2>
-  <input 
-    type="text" 
-    class="form-control" 
-    id="prepassTransponderNumber" 
-    placeholder="Prepass Transponder Number"
-    [(ngModel)]="newTruck.prepassTransponderNumber" 
-    name="prepassTransponderNumber" 
-    #prepassTransponderNumber="ngModel" 
-    required
-    [ngClass]="{'is-invalid': prepassTransponderNumber.invalid && (prepassTransponderNumber.dirty || prepassTransponderNumber.touched)}">
-  <div *ngIf="prepassTransponderNumber.invalid && (prepassTransponderNumber.dirty || prepassTransponderNumber.touched)" class="invalid-feedback">
-    <i class="fa fa-exclamation-circle"></i> Prepass Transponder Number is required.
-  </div>
-</div>
-
-<!-- Fuel Card Number -->
-<div class="col-md-4">
-  <h2 class="font-14 font-weight-700">Fuel Card Number</h2>
-  <input 
-    type="text" 
-    class="form-control" 
-    id="fuelCardNumber" 
-    placeholder="Fuel Card Number"
-    [(ngModel)]="newTruck.fuelCardNumber" 
-    name="fuelCardNumber" 
-    #fuelCardNumber="ngModel" 
-    required
-    [ngClass]="{'is-invalid': fuelCardNumber.invalid && (fuelCardNumber.dirty || fuelCardNumber.touched)}">
-  <div *ngIf="fuelCardNumber.invalid && (fuelCardNumber.dirty || fuelCardNumber.touched)" class="invalid-feedback">
-    <i class="fa fa-exclamation-circle"></i> Fuel Card Number is required.
-  </div>
-</div>
-
-<!-- Status -->
-<div class="col-md-4">
-  <h2 class="font-14 font-weight-700">Status</h2>
-  <select 
-    class="form-control" 
-    [(ngModel)]="newTruck.status" 
-    name="status" 
-    #status="ngModel" 
-    required
-    [ngClass]="{'is-invalid': status.invalid && (status.dirty || status.touched)}">
-    <option value="APPROVED">APPROVED</option>
-    <option value="PENDING">PENDING</option>
-    <option value="EXPIRING">EXPIRING</option>
-  </select>
-  <div *ngIf="status.invalid && (status.dirty || status.touched)" class="invalid-feedback">
-    <i class="fa fa-exclamation-circle"></i> Status is required.
-  </div>
-</div>
-
-
-<div class="modal-footer justify-content-center" style="border-top: 1px solid #ccc; padding-top: 15px; margin-top: 15px;">
-  <button type="button" class="btn btn-outline-secondary btn-sm text-uppercase rounded-pill" data-bs-dismiss="offcanvas" style="margin: 10px;">Close</button>
-  <button type="submit" class="btn btn-success btn-sm text-uppercase rounded-pill" data-bs-dismiss="offcanvas">Save changes</button>
-</div>
-    </form>
-  </div>
-</div>
+      <!--new oneeeeeeeeeeeeeeeeeeeeeeeeeeeeeee -->

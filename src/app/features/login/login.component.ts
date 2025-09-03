@@ -15,6 +15,7 @@ export class LoginComponent {
   rememberMe: boolean = false;
   companyData: any;
   companyId: string = '';
+  returnUrl: string = '/dashboard';  // Default redirect
 
   constructor(
     private authService: ServiceAuthService,
@@ -29,6 +30,8 @@ export class LoginComponent {
     if (this.companyId) {
       this.loadcompanyData(this.companyId);
     }
+      // Query Params se returnUrl nikalna
+      this.returnUrl = this.activatedRoute.snapshot.queryParams['returnUrl'] || '/dashboard';
   }
 
   loadcompanyData(id: string): void {
@@ -48,39 +51,53 @@ export class LoginComponent {
     );
   }
 
-  login() {
-    this.authService.login(this.email, this.password, this.rememberMe , this.name)
-      .subscribe(response => {
-        // console.log(response);
-  
-        // Store company ID in local storage if it exists
-        if (response.companyId) {
-          localStorage.setItem('companyId', response.companyId);
+login() {
+  this.authService.login(this.email, this.password, this.rememberMe, this.name).subscribe({
+    next: (response: any) => {
+      // Clear old session data
+      localStorage.clear();
+      sessionStorage.clear();
+
+      if (response && response.token) {
+        // Store token
+        localStorage.setItem('token', response.token);
+
+        // Store user object (with id, name, role, email, companyId etc.)
+        if (response.user) {
+          localStorage.setItem('user', JSON.stringify(response.user));
         }
-  
-        if (response.role === 'superadmin' || this.email === 'superadmin@example.com') {
-          this.toastr.success('Super Admin Login successful!', 'Success');
-          this.router.navigate(['/dashboard']); // Redirect to dashboard for superadmin
-        } else if (response.role === 'admin' || response.role === 'superadminuser' || response.role === 'adminuser') {
-          this.toastr.success('Login successful!', 'Success');
-          
-          // Get the stored company ID from local storage
-          const storedCompanyId = localStorage.getItem('companyId');
-          
-          // Check if the company ID exists and navigate accordingly
-          if (storedCompanyId) {
-            this.router.navigate(['/company-profile', storedCompanyId]); // Navigate to company profile with ID
-          } else {
-            this.router.navigate(['/company-profile']); // Navigate to company profile without ID
-          }
+
+        // Store companyId separately for quick access if needed
+        if (response.user?.companyId) {
+          localStorage.setItem('companyId', response.user.companyId);
+        }
+      }
+
+      // Get role from user
+      const role = response.user?.role || response.role;
+
+      // Redirect based on role
+      if (role === 'superadmin') {
+        this.toastr.success('Super Admin Login successful!', 'Success');
+        this.router.navigateByUrl(this.returnUrl);
+      } else if (['admin', 'superadminuser', 'adminuser'].includes(role)) {
+        this.toastr.success('Login successful!', 'Success');
+
+        const storedCompanyId = response.user?.companyId || localStorage.getItem('companyId');
+        if (storedCompanyId) {
+          this.router.navigateByUrl(this.returnUrl);
         } else {
-          this.toastr.error('Unauthorized role', 'Error');
+          this.router.navigate(['/company-profile']);
         }
-  
-      }, error => {
-        console.error(error);
-        this.toastr.error('Login failed. Please try again.', 'Error');
-      });
-  }
-  
+      } else {
+        this.toastr.error('Unauthorized role', 'Error');
+      }
+    },
+    error: (err) => {
+      console.error(err);
+      this.toastr.error('Login failed. Please try again.', 'Error');
+    }
+  });
+}
+
 }

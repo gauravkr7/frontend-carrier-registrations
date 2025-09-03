@@ -1,0 +1,3093 @@
+<app-navbar (toggleSidebar)="toggleSidebar()"></app-navbar>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+
+
+
+<style>
+  .crm-table tr td {
+    text-align: left;
+  }
+
+  .crm-table tr th {
+    text-align: left;
+  }
+
+  .modal-backdrop {
+    opacity: 0.2 !important;
+  }
+</style>
+
+
+
+
+<main id="main" class="bg-gray main mt-0 p-0 " [ngClass]="{'full-width': isSidebarOpen, 'shift-left': !isSidebarOpen}">
+
+  <div class="p-4 pb-0" style="margin-left: 40px;">
+    <h2 class="font-18 font-weight-700 mb-4 text-capitalize" style="margin-left: 45px;">CRM</h2>
+
+    <div style="margin-left: 50px;" class="bg-white rounded-lg p-3">
+      <h2 class="h4 mb-3 ml-3 mt-3 ">CRM</h2>
+      <div class="d-flex justify-content-between align-items-center" style="background-color: white; padding: 20px;">
+
+
+
+        <div class="card mb-4 col-md-12  " style="margin-bottom: 80px!important; ">
+          <div class="card-body ">
+            <div class="row">
+              <div class="col-md-6 col-lg-3 mb-4">
+                <div class="card border-start border-grey border-2">
+                  <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                      <span class="text-muted small">Total Carriers</span>
+                      <div class="bg-primary text-white rounded p-2">
+                        <i class="fas fa-truck"></i>
+                      </div>
+                    </div>
+
+                    <!-- Total rows in table -->
+                    <h3 class="mb-2">{{ paginatedCompanies.length }}</h3>
+
+                    <div [ngClass]="carrierPercentageChange >= 0 ? 'text-success small' : 'text-danger small'">
+                      <i class="fas" [ngClass]="carrierPercentageChange >= 0 ? 'fa-arrow-up' : 'fa-arrow-down'"></i>
+                      {{ carrierPercentageChange | number: '1.0-0' }}% from last month
+                        
+                    </div>
+                  </div>
+
+
+                </div>
+              </div>
+
+              <div class="col-md-6 col-lg-3 mb-4">
+                <div class="card border-start border-grey border-2">
+                  <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                      <span class="text-muted small">Active Prospects</span>
+                      <div class="bg-primary text-white rounded p-2">
+                        <i class="fas fa-user-clock"></i>
+                      </div>
+                    </div>
+                    <h3 class="mb-2">{{ activeProspectsCount }}</h3>
+                    <div [ngClass]="percentageChange >= 0 ? 'text-success small' : 'text-danger small'">
+                      <i class="fas" [ngClass]="percentageChange >= 0 ? 'fa-arrow-up' : 'fa-arrow-down'"></i>
+                      {{ percentageChange | number: '1.0-0' }}% from last month
+                    </div>
+                  </div>
+
+
+                </div>
+              </div>
+
+              <div class="col-md-6 col-lg-3 mb-4">
+                <div class="card border-start border-grey border-2">
+                  <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                      <span class="text-muted small">Revenue</span>
+                      <div class="bg-primary text-white rounded p-2">
+                        <i class="fas fa-dollar-sign"></i>
+                      </div>
+                    </div>
+                    <h3 class="mb-2">$84,750</h3>
+                    <div class="text-success small">
+                      <i class="fas fa-arrow-up"></i> 8% from last month
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6 col-lg-3 mb-4">
+                <div class="card border-start border-grey border-2">
+                  <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                      <span class="text-muted small">Tasks Due</span>
+                      <div class="bg-primary text-white rounded p-2">
+                        <i class="fas fa-tasks"></i>
+                      </div>
+                    </div>
+                    <h3 class="mb-2">12</h3>
+                    <div class="text-success small">
+                      <i class="fas fa-arrow-down"></i> 25% from last week
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-lg-12 mb-4">
+                <div class="card">
+                  <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Carrier Prospects</h5>
+                    <div>
+                      <button class="btn btn-outline-secondary btn-sm me-2 rounded-pill">
+                        <i class="fas fa-filter"></i> Filter
+                      </button>
+
+                      <!-- <button class="btn btn-success btn-sm rounded-pill font-14 text-white " data-bs-toggle="offcanvas"
+                        data-bs-target="#carrier-profile" aria-controls="carrier-profile">
+                        <i class="fa fa-plus me-2"></i> Add Carrier
+                      </button> -->
+
+                      <!-- ✅ Add Profile Button -->
+                      <button class="btn btn-success btn-sm rounded-pill ml-2 " data-bs-toggle="offcanvas"
+                        data-bs-target="#profile-offcanvas" aria-controls="profile-offcanvas">
+                        <i class="fa fa-user-plus me-2"></i> Add Carrier
+                      </button>
+
+
+                      <!-- 
+                      <button class="btn btn-success btn-sm rounded-pill" type="button" data-bs-toggle="offcanvas"
+                        data-bs-target="#carrier-profile" aria-controls="carrier-profile">
+                        <i class="fa fa-plus me-2" aria-hidden="true"></i> Add Carrier
+                      </button>
+
+
+                      <button class="btn btn-success btn-sm rounded-pill" id="addCarrierBtn">
+                        <a href="javascript:;" class="text-white font-14" type="button" data-bs-toggle="offcanvas"
+                          data-bs-target="#carrier-profile" aria-controls="offcanvasRight"> <i class="fa fa-plus me-2"
+                            aria-hidden="true"></i>
+                          Add Profile</a>
+                      </button> -->
+                    </div>
+                  </div>
+                  <div class="table-responsive">
+                    <table class="table table-bordered align-middle text-nowrap">
+                      <thead class="table-dark">
+                        <tr>
+                          <th scope="col">Carrier Name</th>
+                          <th scope="col">Contact</th>
+                          <th scope="col">Status</th>
+                          <th scope="col">Services</th>
+                          <th scope="col">Last Contact</th>
+                          <th scope="col" width="30px">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let company of paginatedCompanies; let i = index">
+                          <td>
+                            <a class="text-primary" [routerLink]="['/company-profile', company._id]">
+                              {{ company.carrierName }}
+                            </a>
+                          </td>
+                          <td class="text-truncate" style="max-width: 150px;">
+                            {{ company.contact }}
+                          </td>
+                          <td>
+                            <span class="badge status-badge" [ngClass]="{
+                         'status-prospect': company.status === 'prospect',
+                         'status-client': company.status === 'client',
+                           'status-new': company.status === 'new'
+                            }">
+                              {{ company.status | titlecase }}
+                            </span>
+                          </td>
+
+                          <td>
+                            <span *ngFor="let service of company.services" class="badge service-badge me-1" [ngClass]="{
+                             'service-compliance': service === 'Compliance',
+                           'service-eld': service === 'ELD',
+                              'service-tms': service === 'TMS',
+                              'service-factoring': service === 'Factoring',
+                            'service-fuel': service === 'Fuel Cards'
+                           }">
+                              {{ service }}
+                            </span>
+                          </td>
+
+                          <td>{{ company.lastContact }}</td>
+                          <td>
+                            <div class="dropdown filter-dropdown">
+                              <span class="dropdown-toggle font-16 px-3" type="button" id="dropdownMenuButtonCompany"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa fa-ellipsis-v"></i>
+                              </span>
+                              <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonCompany">
+
+                                <!-- 👁 View -->
+                                <a href="javascript:;" class="dropdown-item font-13" type="button"
+                                  data-bs-toggle="offcanvas" data-bs-target="#addvendor" aria-controls="offcanvasRight"
+                                  (click)="viewCrmDetails(company)">
+                                  View
+                                </a>
+
+                                <!-- ✏ Edit -->
+                                <a href="javascript:;" class="dropdown-item font-13" type="button"
+                                  data-bs-toggle="offcanvas" data-bs-target="#edit-profile"
+                                  aria-controls="offcanvasRight" (click)="editCrm(company)">
+                                  Edit
+                                </a>
+
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                              
+                  </div>
+
+                </div>
+              </div>
+
+
+
+
+
+              <!-- Task Add in front Page -->
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+<footer id="footer" class="footer">
+  <div class="text-dark text-center">
+    <span class="text-muted fw-semibold me-1">2025© all rights reserved</span>
+    <a href="#" class="font-weight-700 text-hover-dark text-dark text-uppercase">3PL TEK INC.</a>
+  </div>
+</footer>
+
+
+
+<!-- Bootstrap Modal -->
+<div class="modal fade" id="taskModal2" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered custom-small-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ editingTask ? 'Edit Task' : 'Add Task' }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body ">
+        <!-- <form #taskForm="ngForm" (ngSubmit)="editingTask ? updateTask(taskForm) : submitTask(taskForm)"> -->
+        <form #taskForm="ngForm" (ngSubmit)="submitTask(taskForm)">
+
+          <div class="form-group ">
+            <label for="taskTitle">Task Title</label>
+            <input type="text" class=" form-input" id="taskTitle" name="title" [(ngModel)]="taskEntries.title"
+              placeholder="Enter task title" required />
+          </div>
+
+
+          <div class="form-group">
+            <label for="taskDescription">Description</label>
+            <textarea class="form-input" id="taskDescription" name="description" rows="4"
+              [(ngModel)]="taskEntries.description" placeholder="Enter task description"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="taskDueDate">Due Date</label>
+            <input type="date" class="form-input" id="taskDueDate" name="dueDate" [(ngModel)]="taskEntries.dueDate"
+              required />
+          </div>
+          <div class="form-group">
+            <label for="carrierContact">Carrier Contact</label>
+            <select class="form-input" id="carrierContact" name="carrierContact"
+              [(ngModel)]="taskEntries.carrierContact" required>
+              <option value="">Select carrier contact</option>
+              <option *ngFor="let contact of carrierContacts" [value]="contact.fullName"
+                [hidden]="contact.companyId !== (selectedCrm?.companyId || selectedCrm?._id)">
+                {{ contact.fullName }} ({{ contact.jobTitle }})
+              </option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="taskPriority">Priority</label>
+            <select class="form-input" id="taskPriority" name="priority" [(ngModel)]="taskEntries.priority" required>
+              <option value="low">Low</option>
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="taskAssignedTo">Assigned To</label>
+            <select class="form-input" id="taskAssignedTo" name="assignedTo" [(ngModel)]="taskEntries.assignedTo"
+              required>
+              <option value="">Select team member</option>
+              <option *ngFor="let user of filteredSuperAdminUsers" [value]="user._id">
+                {{ user.name }} ({{ user.role | titlecase }})
+              </option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="taskRelatedTo">Related To</label>
+            <select class="form-input" id="taskRelatedTo" name="relatedTo" [(ngModel)]="taskEntries.relatedTo">
+              <option value="">Select module</option>
+              <option value="carrier">Carrier Record</option>
+              <option value="compliance">Compliance</option>
+              <option value="factoring">Factoring</option>
+              <option value="eld">ELD</option>
+              <option value="tms">TMS</option>
+              <option value="billing">Billing</option>
+            </select>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+              <i class="fas fa-times me-2"></i>Cancel
+            </button>
+            <button type="submit" class="btn btn-primary">
+              <i class="fas fa-plus me-2"></i>{{ editingTask ? 'Update Task' : 'Add Task' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+      
+  </div>
+</div>
+
+<!-- Bootstrap Modal for Task Completion -->
+<div class="modal fade" id="taskModal1" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered custom-small-modal">
+    <form class="modal-content" #completeTaskForm="ngForm" (ngSubmit)="submitCompletedTask(completeTaskForm)">
+      <div class="modal-header">
+        <h5 class="modal-title">Completed Task</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" *ngIf="selectedTask">
+        <div class="mb-3">
+          <label class="form-label">Task</label>
+          <input type="text" class="form-input" [value]="selectedTask.title" readonly>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Completion Notes</label>
+          <textarea class="form-input" rows="3" placeholder="Enter details about task completion"
+            [(ngModel)]="selectedTask.completionNotes" name="completionNotes"></textarea>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Outcome</label>
+          <select class="form-select" [(ngModel)]="selectedTask.outcome" name="outcome" required>
+            <option value="">Select outcome</option>
+            <option value="positive">Positive - Deal progressed</option>
+            <option value="neutral">Neutral - No change</option>
+            <option value="negative">Negative - Setback</option>
+            <option value="scheduled">Follow-up scheduled</option>
+            <option value="lost">Opportunity lost</option>
+          </select>
+        </div>
+        <div class="row g-2 mb-3">
+          <div class="col">
+            <label class="form-label">Hours</label>
+            <select class="form-select" [(ngModel)]="selectedTask.hoursSpent" name="hoursSpent">
+              <option [ngValue]="0">0 hours</option>
+              <option [ngValue]="0.25">15 minutes</option>
+              <option [ngValue]="0.5">30 minutes</option>
+              <option [ngValue]="0.75">45 minutes</option>
+              <option [ngValue]="1">1 hour</option>
+              <option [ngValue]="1.5">1.5 hours</option>
+              <option [ngValue]="2">2 hours</option>
+              <option [ngValue]="3">3 hours</option>
+              <option [ngValue]="4">4 hours</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-check mb-3">
+          <input class="form-check-input" type="checkbox" id="createFollowup" [(ngModel)]="selectedTask.followupCreated"
+            name="followupCreated">
+          <label class="form-check-label" for="createFollowup">Create follow-up task</label>
+        </div>
+        <div id="followupFields" class="ps-3 border-start border-2 border-light" *ngIf="selectedTask.followupCreated">
+          <div class="mb-3">
+            <label class="form-label">Follow-up Task</label>
+            <input type="text" class="form-input" placeholder="Enter follow-up task description"
+              [(ngModel)]="selectedTask.followupTask" name="followupTask">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Due Date</label>
+            <input type="date" class="form-input" [(ngModel)]="selectedTask.followupDueDate" name="followupDueDate">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Priority</label>
+            <select class="form-select" [(ngModel)]="selectedTask.followupPriority" name="followupPriority">
+              <option value="normal">Normal</option>
+              <option value="high">High</option>
+              <option value="urgent">Urgent</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary rounded-pill" data-bs-dismiss="modal">Cancel</button>
+        <button type="submit" class="btn btn-success rounded-pill">
+          <i class="fas fa-check me-2"></i> Complete Task
+        </button>
+      </div>
+    </form>
+      
+  </div>
+</div>
+
+
+
+
+
+<div data-bs-backdrop="static" data-bs-keyboard="false" class="offcanvas offcanvas-end " tabindex="-1" id="addvendor"
+  aria-labelledby="offcanvasRightLabel" style="width: 80%;" aria-modal="true" role="dialog">
+  <div class="modal-header d-flex justify-content-between align-items-center"
+    style="padding: 15px; border-bottom: 1px solid #ccc;">
+    <h5 class="modal-title mb-0">Carrier Profile</h5>
+    <div class="d-flex align-items-center">
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+
+    </div>
+  </div>
+
+  <div class="offcanvas-body view-load position-relative">
+    <div class="modal-dialog ">
+      <div class="modal-content">
+
+        <div class="modal-body">
+          <div class="d-flex justify-content-between align-items-start mb-4">
+
+            <div *ngIf="selectedCrm" class="d-flex align-items-center mt-4">
+              <div class="bg-light rounded p-3 me-3">
+                <h3 class="mb-0">
+                  <span *ngIf="selectedCrm.companyId">
+                    <i class="fa fa-eye text-primary me-2" title="View Company ID"></i>
+                    {{ selectedCrm.companyId }}
+                  </span>
+                  {{ selectedCrm.carrierName.charAt(0) }}
+                  {{ selectedCrm.carrierName.split(' ')[1]?.charAt(0) || '' }}
+                </h3>
+              </div>
+              <div>
+                <h3 class="mb-1">{{ selectedCrm.carrierName }}
+                  <span *ngIf="selectedCrm.companyId" class="badge bg-info ms-2">Company ID: {{ selectedCrm.companyId
+                    }}</span>
+                </h3>
+                <div class="d-flex align-items-center mb-2">
+                
+                  <span class="text-muted small">MC# {{ selectedCrm.mc }}</span>
+                </div>
+                <div class="mb-1">
+                  <i class="fas fa-user me-2 text-muted"></i>
+                  {{ selectedCrm.legalName }} ({{ selectedCrm.title }})
+                </div>
+                <div class="mb-1">
+                  <i class="fas fa-phone me-2 text-muted"></i> {{ selectedCrm.phoneNumber }}
+                </div>
+                <div>
+                  <i class="fas fa-envelope me-2 text-muted"></i> {{ selectedCrm.companyEmail }}
+                </div>
+              </div>
+
+            </div>
+          <!-- Place this where you want to show/edit status, e.g. in the Edit Profile offcanvas, Company Info section -->
+<div class="col-md-6 mb-3 d-flex justify-content-end">
+ 
+  <div class="dropdown">
+    <span
+      class="badge px-3 py-2 dropdown-toggle"
+      role="button"
+      id="statusDropdown"
+      data-bs-toggle="dropdown"
+      aria-expanded="false"
+      [ngClass]="{
+        'bg-warning text-dark': selectedCrm?.status === 'prospect',
+        'bg-info': selectedCrm?.status === 'new',
+        'bg-success': selectedCrm?.status === 'client',
+        'bg-secondary': selectedCrm?.status === 'lost'
+      }"
+      style="cursor:pointer;"
+    >
+      {{ selectedCrm?.status | titlecase }}
+    </span>
+    <ul class="dropdown-menu" aria-labelledby="statusDropdown">
+      <li>
+        <a class="dropdown-item" href="javascript:;" (click)="updateCrmStatus('prospect')">Prospect</a>
+      </li>
+      <li>
+        <a class="dropdown-item" href="javascript:;" (click)="updateCrmStatus('new')">New</a>
+      </li>
+      <li>
+        <a class="dropdown-item" href="javascript:;" (click)="updateCrmStatus('client')">Client</a>
+      </li>
+      <li>
+        <a class="dropdown-item" href="javascript:;" (click)="updateCrmStatus('lost')">Lost</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+
+
+
+          </div>
+
+          <div class="mb-4" *ngIf="selectedCrm && selectedCrm.services?.length">
+            <span *ngFor="let service of selectedCrm.services"
+              class="badge bg-primary text-white fw-semibold me-2 px-3 py-2 rounded-pill">
+              {{ service }}
+            </span>
+
+          </div>
+
+
+          <ul class="nav nav-tabs mb-4" role="tablist">
+            <li class="nav-item" role="presentation">
+              <a class="nav-link active" data-bs-toggle="tab" href="#activity" aria-selected="true" role="tab"
+                (click)="setActiveTab('activity')">Activity
+                <span class="badge bg-secondary ms-1">({{ activityLogs.length }})</span>
+              </a>
+            </li>
+
+            <li class="nav-item" role="presentation">
+              <a class="nav-link" data-bs-toggle="tab" href="#tasks" aria-selected="false" role="tab"
+                (click)="setActiveTab('tasks')">Tasks
+                <span class="badge bg-secondary ms-1"> ({{ activeTasks.length }})</span>
+
+              </a>
+                         
+            </li>
+            <li class="nav-item" role="presentation">
+              <a class="nav-link" data-bs-toggle="tab" href="#services" (click)="setActiveTab('services')">Services</a>
+            </li>
+            <li class="nav-item" role="presentation">
+              <a class="nav-link" data-bs-toggle="tab" href="#notes" (click)="setActiveTab('notes')">Notes</a>
+            </li>
+            <li class="nav-item" role="presentation">
+              <a class="nav-link" data-bs-toggle="tab" href="#c-profile" (click)="setActiveTab('c-profile')">Carrier
+                Profile</a>
+            </li>
+
+            <li class="nav-item" role="presentation">
+              <a class="nav-link" data-bs-toggle="tab" href="#c-contact" (click)="setActiveTab('c-contact')">Carrier
+                Contacts</a>
+            </li>
+
+
+
+
+          </ul>
+
+
+
+
+          <!-- Bootstrap Modal for Carrier Contact -->
+          <!-- Bootstrap Modal for Carrier Contact -->
+          <div class="modal fade" id="contactModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered custom-small-modal">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">
+                    {{ editingContactId ? 'Edit Carrier Contact' : 'Add New Carrier Contact' }}
+                  </h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                  <form #contactForm="ngForm" (ngSubmit)="onContactFormSubmit(contactForm)">
+                    <div class="form-group mb-2">
+                      <label for="fullName">Full Name <span class="text-danger">*</span></label>
+                      <input type="text" class="form-input" id="fullName" [(ngModel)]="newContact.fullName"
+                        name="fullName" required />
+                    </div>
+
+                    <div class="form-group mb-2">
+                      <label for="phone">Phone</label>
+                      <input type="text" class="form-input" id="phone" [(ngModel)]="newContact.phone" name="phone" />
+                    </div>
+
+                    <div class="form-group mb-2">
+                      <label for="ext">Ext</label>
+                      <input type="text" class="form-input" id="ext" [(ngModel)]="newContact.ext" name="ext" />
+                    </div>
+
+                    <div class="form-group mb-2">
+                      <label for="mobile">Mobile</label>
+                      <input type="text" class="form-input" id="mobile" [(ngModel)]="newContact.mobile" name="mobile" />
+                    </div>
+
+                    <div class="form-group mb-2">
+                      <label for="email">Email</label>
+                      <input type="email" class="form-input" id="email" [(ngModel)]="newContact.email" name="email" />
+                    </div>
+
+                    <div class="form-group mb-3">
+                      <label for="jobTitle">Job Title</label>
+                      <input type="text" class="form-input" id="jobTitle" [(ngModel)]="newContact.jobTitle"
+                        name="jobTitle" />
+                    </div>
+
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                      <button type="submit" class="btn btn-primary">
+                        <i class="fas" [ngClass]="editingContactId ? 'fa-save' : 'fa-plus'"></i>
+                        {{ editingContactId ? 'Update Contact' : 'Add Contact' }}
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+
+
+
+
+
+
+
+          <div class="tab-content">
+            <!-- <li class="nav-item d-flex justify-content-end" role="presentation" *ngIf="showAddButton">
+              <div class="bg-white mb-2">
+                <h6 class="small ml-3">Add New {{ getButtonLabel() }}</h6>
+                <div class="input-group">
+                  <input type="text" class="mt-2 form-control rounded-end-0" [placeholder]="getInputPlaceholder()">
+                  <button style="height: 48px; margin-top: 8px; margin-left: -17px;" class="btn btn-success btn-sm"
+                    type="button" data-bs-toggle="modal" [attr.data-bs-target]="getModalTarget()">
+                    <i class="fas fa-plus"></i> Add
+                  </button>
+                </div>
+              </div>
+            </li> -->
+            <div class="bg-white mb-3 p-3 rounded d-flex justify-content-end" *ngIf="showAddButton">
+              <button type="button" class="btn btn-success btn-sm text-uppercase rounded-pill" data-bs-toggle="modal"
+                [attr.data-bs-target]="getModalTarget()">
+                <i class="fas fa-plus"></i> Add New {{ getButtonLabel() }}
+              </button>
+            </div>
+            <div class="tab-pane fade show active" id="activity" role="tabpanel">
+              <div class="card mb-4">
+                <div class="card-body">
+
+
+                  <h5 class="card-title">Log New Activity</h5>
+
+                  <ul class="nav" id="actionTabs" role="tablist">
+                    <li *ngFor="let type of activityTypes" class="nav-item" role="presentation">
+                      <button class="btn nav-link tab-button border me-2"
+                        [ngClass]="{'active': selectedActivityType === type.value}" type="button"
+                        (click)="onActivityTypeChange(type.value)">
+                        <i class="fas" [ngClass]="type.icon + ' me-2'"></i>{{ type.label }}
+                      </button>
+
+                    </li>
+                  </ul>
+
+                  <div *ngIf="selectedActivityType !== 'all'">
+                    <div class="mb-3">
+                      <label class="form-label">Details</label>
+                      <textarea class="form-select" rows="3" [(ngModel)]="activityForm.details" name="details"
+                        placeholder="Enter activity details"></textarea>
+                    </div>
+
+                    <!-- Show outcome only if not 'text' or 'note' -->
+                    <div class="mb-3" *ngIf="selectedActivityType !== 'text' && selectedActivityType !== 'note'">
+                      <label class="form-label">Outcome</label>
+                      <select class="form-select" [(ngModel)]="activityForm.outcome" name="outcome">
+                        <option value="">Select outcome</option>
+                        <option value="positive">Positive</option>
+                        <option value="neutral">Neutral</option>
+                        <option value="negative">Negative</option>
+                        <option value="followup">Requires Follow-up</option>
+                      </select>
+                        
+                    </div>
+                  </div>
+                  <!-- Buttons hide when 'all' is selected -->
+                  <div class="d-flex justify-content-end" *ngIf="selectedActivityType !== 'all'">
+                    <button class="btn btn-outline-secondary me-2 rounded-pill" type="button"
+                      (click)="activityForm.details='';activityForm.outcome=''">
+                      Cancel
+                    </button>
+                    <button class="btn btn-success rounded-pill" type="button" (click)="logActivity()"
+                      [disabled]="isLoadingActivity">
+                      Log Activity
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+
+
+              <h5 class="mb-3">Recent Activity</h5>
+              <div *ngIf="filteredActivityLogs.length === 0" class="text-muted">No activity yet.</div>
+
+              <!-- <div *ngFor="let log of filteredActivityLogs | slice:0:10; let i = index; trackBy: trackByLogId" -->
+              <div *ngFor="let log of filteredActivityLogs; let i = index; trackBy: trackByLogId" class="card mb-2">
+                <div class="card-body">
+                  <div class="d-flex">
+                    <div class="rounded-circle p-2 me-3" [ngClass]="{
+    'text-primary': log.type === 'call',
+    'text-danger': log.type === 'email',
+    'text-info': log.type === 'text' || log.type === 'meeting' || log.type === 'note'
+  }">
+                      <i class="fas" [ngClass]="{
+      'fa-phone': log.type === 'call',
+      'fa-envelope': log.type === 'email',
+      'fa-sms': log.type === 'text',
+      'fa-calendar-alt': log.type === 'meeting',
+      'fa-sticky-note': log.type === 'note'
+    }"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                      <div class="d-flex justify-content-between mb-2">
+                        <!-- ✅ Sirf Date dikhe -->
+                        <small class="text-muted">{{ log.createdAt | date:'medium' }}</small>
+                      </div>
+
+
+                      <p class="mb-2">{{ log.details }}</p>
+
+                      <!-- ✅ Carrier Name -->
+                      <div class="d-flex align-items-center">
+                        <small class="text-muted" *ngIf="selectedCrm?.carrierName">{{ selectedCrm.carrierName }}</small>
+                      </div>
+
+                      <!-- ✅ Created By -->
+                      <div class="small text-muted mt-1">
+                        <i class="fas fa-user me-1"></i>
+                        Created by {{ log.createdByName || 'Unknown User' }}
+                        <span *ngIf="log.createdAt">
+                          on {{ log.createdAt | date:'MMM d, y, h:mm a' }}
+                        </span>
+                      </div>
+
+                      <!-- Outcome Badge -->
+                      <!-- <span class="badge bg-secondary">{{ log.outcome }}</span> -->
+                      <!-- Outcome Badge -->
+                      <span class="badge bg-secondary" *ngIf="log.outcome">
+                        {{ log.outcome === 'followup' ? 'Requires Follow-up' : (log.outcome | titlecase) }}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+
+            <!-- ...existing code... -->
+            <div class="tab-pane fade" id="tasks" role="tabpanel">
+              <ul class="nav nav-tabs mb-3">
+                <li class="nav-item">
+                  <a class="nav-link" [class.active]="selectedTab === 'active'" (click)="selectedTab = 'active'">
+                    Active ({{ activeTasks.length }})
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" [class.active]="selectedTab === 'completed'" (click)="selectedTab = 'completed'">
+                    Completed ({{ completedTasks.length }})
+                  </a>
+                </li>
+              </ul>
+
+              <div class="tab-content">
+                <!-- ✅ Active Tasks -->
+                <div class="tab-pane fade show active" *ngIf="selectedTab === 'active'">
+                  <div *ngFor="let task of activeTasksSorted" class="card mb-3 shadow-sm border-0 rounded-3">
+                    <div class="card-body">
+
+                      <!-- Title + Complete Button -->
+                      <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h6 class="mb-0" [ngClass]="{ 'text-decoration-line-through': task.completed }"
+    (click)="openTaskDetails(task)" style="cursor:pointer;">
+  {{ task.title }}
+</h6>
+                        <button class="btn btn-sm btn-outline-success" (click)="openTaskModal(task)"
+                          [disabled]="task.completed">
+                          <i class="fas fa-check"></i>
+                        </button>
+                      </div>
+
+                      
+                      <div class="small text-muted border-top pt-2">
+                        <i class="fas fa-user me-1"></i>
+                        Created by {{ task.createdBy || 'Unknown' }}
+                        <span *ngIf="task.createdAt">
+                          on {{ task.createdAt | date:'MMM d, y, h:mm a' }}
+                        </span>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+
+                <!-- ✅ Completed Tasks -->
+                <div class="tab-pane fade show active" *ngIf="selectedTab === 'completed'">
+                  <div *ngIf="completedTasks.length === 0" class="text-center text-muted py-4">
+                    <i class="fas fa-check-circle fa-2x mb-2"></i>
+                    <div>No completed tasks.</div>
+                  </div>
+
+                  <div *ngFor="let task of completedTasksSorted" class="card mb-3 shadow-sm border-0 rounded-3">
+                    <div class="card-body">
+
+                      <!-- Title + Action -->
+                      <!-- <div class="d-flex justify-content-between align-items-center mb-2">
+          <h6 class="mb-0 text-muted text-decoration-line-through">{{ task.title }}</h6>
+          <button class="btn btn-sm btn-outline-secondary" (click)="openTaskModal(task)">
+            <i class="fas fa-ellipsis-v"></i>
+          </button>
+        </div> -->
+
+                      <!-- Description -->
+                      <p class="small text-muted mb-2" *ngIf="task.description">
+                        <i class="fas fa-align-left me-1"></i> {{ task.description }}
+                      </p>
+
+                      <!-- Meta Info -->
+                      <div class="row text-muted small mb-2 ps-1">
+                        <div class="col-md-4 mb-1">
+                          <i class="fas fa-clock me-1"></i> {{ getDueLabel(task.dueDate) }}
+                        </div>
+                        <div class="col-md-4 mb-1" *ngIf="task.carrierContact">
+                          <i class="fas fa-phone me-1"></i> {{ task.carrierContact }}
+                        </div>
+                        <div class="col-md-4 mb-1">
+                          <i class="fas fa-flag me-1"></i>
+                          <span class="badge bg-secondary">{{ task.priority | titlecase }}</span>
+                        </div>
+                        <div class="col-md-4 mb-1" *ngIf="task.assignedTo">
+                          <i class="fas fa-user-check me-1"></i> {{ task.assignedTo }}
+                        </div>
+                        <div class="col-md-4 mb-1" *ngIf="task.relatedTo">
+                          <i class="fas fa-link me-1"></i> {{ task.relatedTo | titlecase }}
+                        </div>
+                        <div class="col-md-4 mb-1" *ngIf="task.hoursSpent">
+                          <i class="fas fa-hourglass-half me-1"></i> {{ task.hoursSpent }} hrs
+                        </div>
+                        <div class="col-md-4 mb-1" *ngIf="task.outcome">
+                          <i class="fas fa-flag-checkered me-1"></i>
+                          <span class="badge bg-info">{{ task.outcome | titlecase }}</span>
+                        </div>
+                        <div class="col-md-4 mb-1" *ngIf="task.followupCreated">
+                          <i class="fas fa-redo me-1"></i> Follow-up Created
+                        </div>
+                      </div>
+
+                      <!-- Notes -->
+                      <p class="small text-muted mb-2" *ngIf="task.completionNotes">
+                        <i class="fas fa-sticky-note me-1"></i> {{ task.completionNotes }}
+                      </p>
+
+                      <!-- Footer: Completed By -->
+                      <div class="text-success small border-top pt-2">
+                        <i class="fas fa-check-circle me-1"></i>
+                        Completed by {{ task.completedBy || 'Unknown' }}
+                        <span *ngIf="task.completedAt">
+                          on {{ task.completedAt | date:'MMM d, y, h:mm a' }}
+                        </span>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+
+            <!-- ...existing code... -->
+            <div class="tab-pane fade" id="tasks" role="tabpanel">
+              <ul class="nav nav-tabs mb-3">
+                <li class="nav-item">
+                  <a class="nav-link" [class.active]="selectedTab === 'active'" (click)="selectedTab = 'active'">
+                    Active ({{ activeTasks.length }})
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" [class.active]="selectedTab === 'completed'" (click)="selectedTab = 'completed'">
+                    Completed ({{ completedTasks.length }})
+                  </a>
+                </li>
+              </ul>
+
+              <div class="tab-content">
+                <!-- ✅ Active Tasks -->
+                <div class="tab-pane fade show active" *ngIf="selectedTab === 'active'">
+                  <div *ngFor="let task of activeTasksSorted" class="card mb-3 shadow-sm border-0 rounded-3">
+                    <div class="card-body">
+
+                      <!-- Title + Complete Button -->
+                      <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h6 class="mb-0" [ngClass]="{ 'text-decoration-line-through': task.completed }"
+                          (click)="openTaskModal(task)" style="cursor:pointer;">
+                          {{ task.title }}
+                        </h6>
+                        <button class="btn btn-sm btn-outline-success" (click)="openTaskModal(task)"
+                          [disabled]="task.completed">
+                          <i class="fas fa-check"></i>
+                        </button>
+                      </div>
+
+                      <!-- Description -->
+                      <p class="small text-muted mb-2" *ngIf="task.description">
+                        <i class="fas fa-align-left me-1"></i> {{ task.description }}
+                      </p>
+
+                      <!-- Meta Info (grid style) -->
+                      <div class="row text-muted small mb-2 ps-1">
+                        <div class="col-md-4 mb-1">
+                          <i class="fas fa-clock me-1"></i> {{ getDueLabel(task.dueDate) }}
+                        </div>
+                        <div class="col-md-4 mb-1" *ngIf="task.carrierContact">
+                          <i class="fas fa-phone me-1"></i> {{ task.carrierContact }}
+                        </div>
+                        <div class="col-md-4 mb-1">
+                          <i class="fas fa-flag me-1"></i>
+                          <span class="badge bg-secondary">{{ task.priority | titlecase }}</span>
+                        </div>
+                        <div class="col-md-4 mb-1" *ngIf="task.assignedTo">
+                          <i class="fas fa-user-check me-1"></i> {{ task.assignedTo }}
+                        </div>
+                        <div class="col-md-4 mb-1" *ngIf="task.relatedTo">
+                          <i class="fas fa-link me-1"></i> {{ task.relatedTo | titlecase }}
+                        </div>
+                      </div>
+
+                      <!-- Footer: Created By -->
+                      <div class="small text-muted border-top pt-2">
+                        <i class="fas fa-user me-1"></i>
+                        Created by {{ task.createdBy || 'Unknown' }}
+                        <span *ngIf="task.createdAt">
+                          on {{ task.createdAt | date:'MMM d, y, h:mm a' }}
+                        </span>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+
+                <!-- ✅ Completed Tasks -->
+                <div class="tab-pane fade show active" *ngIf="selectedTab === 'completed'">
+                  <div *ngIf="completedTasks.length === 0" class="text-center text-muted py-4">
+                    <i class="fas fa-check-circle fa-2x mb-2"></i>
+                    <div>No completed tasks.</div>
+                  </div>
+
+                  <div *ngFor="let task of completedTasksSorted" class="card mb-3 shadow-sm border-0 rounded-3">
+                    <div class="card-body">
+
+
+
+                      <!-- Description -->
+                      <p class="small text-muted mb-2" *ngIf="task.description">
+                        <i class="fas fa-align-left me-1"></i> {{ task.description }}
+                      </p>
+
+                      <!-- Meta Info -->
+                      <div class="row text-muted small mb-2 ps-1">
+                        <div class="col-md-4 mb-1">
+                          <i class="fas fa-clock me-1"></i> {{ getDueLabel(task.dueDate) }}
+                        </div>
+                        <div class="col-md-4 mb-1" *ngIf="task.carrierContact">
+                          <i class="fas fa-phone me-1"></i> {{ task.carrierContact }}
+                        </div>
+                        <div class="col-md-4 mb-1">
+                          <i class="fas fa-flag me-1"></i>
+                          <span class="badge bg-secondary">{{ task.priority | titlecase }}</span>
+                        </div>
+                        <div class="col-md-4 mb-1" *ngIf="task.assignedTo">
+                          <i class="fas fa-user-check me-1"></i> {{ task.assignedTo }}
+                        </div>
+                        <div class="col-md-4 mb-1" *ngIf="task.relatedTo">
+                          <i class="fas fa-link me-1"></i> {{ task.relatedTo | titlecase }}
+                        </div>
+                        <div class="col-md-4 mb-1" *ngIf="task.hoursSpent">
+                          <i class="fas fa-hourglass-half me-1"></i> {{ task.hoursSpent }} hrs
+                        </div>
+                        <div class="col-md-4 mb-1" *ngIf="task.outcome">
+                          <i class="fas fa-flag-checkered me-1"></i>
+                          <span class="badge bg-info">{{ task.outcome | titlecase }}</span>
+                        </div>
+                        <div class="col-md-4 mb-1" *ngIf="task.followupCreated">
+                          <i class="fas fa-redo me-1"></i> Follow-up Created
+                        </div>
+                      </div>
+
+                      <!-- Notes -->
+                      <p class="small text-muted mb-2" *ngIf="task.completionNotes">
+                        <i class="fas fa-sticky-note me-1"></i> {{ task.completionNotes }}
+                      </p>
+
+                      <!-- Footer: Completed By -->
+                      <div class="text-success small border-top pt-2">
+                        <i class="fas fa-check-circle me-1"></i>
+                        Completed by {{ task.completedBy || 'Unknown' }}
+                        <span *ngIf="task.completedAt">
+                          on {{ task.completedAt | date:'MMM d, y, h:mm a' }}
+                        </span>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+                        
+            </div>
+
+
+
+
+            <div class="tab-pane fade" id="services" role="tabpanel">
+              <div class="row g-3">
+                <div class="col-md-4">
+                  <div class="card border-success h-100">
+                    <div class="card-body">
+                      <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div class="bg-success text-white rounded p-2">
+                          <i class="fas fa-clipboard-check"></i>
+                        </div>
+                        <span class="badge bg-success">Active</span>
+                      </div>
+                      <h5 class="card-title">Compliance Services</h5>
+                      <p class="card-text small text-muted">
+                        FMCSA compliance, safety audits, and DOT compliance management.
+                      </p>
+                      <div class="d-flex justify-content-between small text-muted">
+                        <span>Since: Jun 2023</span>
+                        <span>$1,250/mo</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div class="card h-100">
+                    <div class="card-body">
+                      <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div class="bg-primary text-white rounded p-2">
+                          <i class="fas fa-tachometer-alt"></i>
+                        </div>
+                        <span class="badge bg-danger">Not Sold</span>
+                      </div>
+                      <h5 class="card-title">ELD Solutions</h5>
+                      <p class="card-text small text-muted">
+                        Electronic logging devices with fleet management dashboard.
+                      </p>
+                      <div class="d-flex justify-content-between small text-muted">
+                        <span>Potential: $3,500/mo</span>
+                        <button class="btn btn-outline-primary btn-sm">
+                          Pitch Now
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div class="card h-100">
+                    <div class="card-body">
+                      <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div class="bg-warning text-white rounded p-2">
+                          <i class="fas fa-map-marked-alt"></i>
+                        </div>
+                        <span class="badge bg-danger">Not Sold</span>
+                      </div>
+                      <h5 class="card-title">TMS Platform</h5>
+                      <p class="card-text small text-muted">
+                        Transportation management system with dispatch tools.
+                      </p>
+                      <div class="d-flex justify-content-between small text-muted">
+                        <span>Potential: $2,800/mo</span>
+                        <button class="btn btn-outline-primary btn-sm">
+                          Pitch Now
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div class="card h-100">
+                    <div class="card-body">
+                      <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div class="bg-danger text-white rounded p-2">
+                          <i class="fas fa-money-bill-wave"></i>
+                        </div>
+                        <span class="badge bg-danger">Not Sold</span>
+                      </div>
+                      <h5 class="card-title">Factoring Services</h5>
+                      <p class="card-text small text-muted">
+                        Quick pay and invoice factoring with competitive rates.
+                      </p>
+                      <div class="d-flex justify-content-between small text-muted">
+                        <span>Potential: 2% of invoices</span>
+                        <button class="btn btn-outline-primary btn-sm">
+                          Pitch Now
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div class="card h-100">
+                    <div class="card-body">
+                      <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div class="bg-purple text-white rounded p-2">
+                          <i class="fas fa-gas-pump"></i>
+                        </div>
+                        <span class="badge bg-danger">Not Sold</span>
+                      </div>
+                      <h5 class="card-title">Fuel Cards</h5>
+                      <p class="card-text small text-muted">
+                        Discount fuel programs with nationwide coverage.
+                      </p>
+                      <div class="d-flex justify-content-between small text-muted">
+                        <span>Potential: $0.10/gal savings</span>
+                        <button class="btn btn-outline-primary btn-sm">
+                          Pitch Now
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+            <!-- new code of 21 aug -->
+            <div class="tab-pane fade" id="notes" role="tabpanel">
+              <div class="mb-3">
+                <label class="form-label">Carrier Notes</label>
+
+                <!-- Add / Update Note Form -->
+                <form style=" margin-left:-15px; " #noteForm="ngForm" (ngSubmit)="submitNote(noteForm)">
+                  <div class="mb-2 ">
+                    <textarea [(ngModel)]="newNote" name="note" class="form-control" rows="5"
+                      placeholder="Write a new note..." (input)="autoResize($event)" style="min-height: 150px;"
+                      required>
+                   </textarea>
+                  </div>
+
+                  <!-- Dynamic button: Add or Update -->
+                  <button type="submit" class="btn btn-success  mb-3 ml-3 " *ngIf="!editingNoteId">
+                    Add Note
+                  </button>
+                  <button type="button" class="btn btn-success mb-3 ml-3" (click)="updateNote(noteForm)"
+                    *ngIf="editingNoteId">
+                    Update Note
+                  </button>
+
+                </form>
+
+                <!-- Display Notes -->
+                <!-- <ul class="list-group" *ngIf="notes.length > 0">
+                  <li class="list-group-item" *ngFor="let note of notes"
+                    [hidden]="note.companyId !== (selectedCrm?.companyId || selectedCrm?._id)"> -->
+
+                <ul class="list-group" *ngIf="notes.length > 0">
+                  <li class="list-group-item" *ngFor="let note of notes.slice().reverse()"
+                    [hidden]="note.companyId !== (selectedCrm?.companyId || selectedCrm?._id)">
+
+
+
+                    <div class="d-flex justify-content-between align-items-start">
+
+                      <!-- Note Content -->
+                      <span style="white-space: pre-wrap;">{{ note.note }}</span>
+
+                      <!-- Action Buttons -->
+                      <div>
+                        <button class="btn btn-sm btn-outline-secondary me-2" (click)="editNote(note._id)">
+                          <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger" (click)="deleteNote(note._id)">
+                          <i class="fas fa-trash"></i>
+                        </button>
+                      </div>
+                    </div>
+
+                    <!-- Created By Info -->
+                    <div class="small text-muted mt-1">
+                      <i class="fas fa-user me-1"></i>
+                      Created by {{ note.createdByName || 'Unknown User' }}
+                      <span *ngIf="note.createdAt">
+                        on {{ note.createdAt | date:'MMM d, y, h:mm a' }}
+                      </span>
+                    </div>
+
+                  </li>
+                </ul>
+
+
+                <!-- No Notes Message -->
+                <p *ngIf="notes.length === 0" class="text-muted">No notes added yet.</p>
+              </div>
+            </div>
+
+
+            <!-- new code of 21 aug -->
+
+
+
+            <div class="tab-pane fade " id="c-profile" role="tabpanel">
+              <div *ngIf="selectedCrm" class="d-flex align-items-center mt-4">
+                <div class="bg-light rounded p-3 me-3">
+                  <h3 class="mb-0">
+                    {{ selectedCrm.carrierName.charAt(0) }}
+                    {{ selectedCrm.carrierName.split(' ')[1]?.charAt(0) || '' }}
+                  </h3>
+                </div>
+                <div>
+                  <h3 class="mb-1">{{ selectedCrm.carrierName }}</h3>
+                  <div class="d-flex align-items-center mb-2">
+                    <span class="badge bg-warning text-dark me-3">{{ selectedCrm.status }}</span>
+                    <span class="text-muted small">MC# {{ selectedCrm.mc }}</span>
+                  </div>
+                  <div class="mb-1">
+                    <i class="fas fa-user me-2 text-muted"></i>
+                    {{ selectedCrm.legalName }} ({{ selectedCrm.title }})
+                  </div>
+                  <div class="mb-1">
+                    <i class="fas fa-phone me-2 text-muted"></i> {{ selectedCrm.phoneNumber }}
+                  </div>
+                  <div>
+                    <i class="fas fa-envelope me-2 text-muted"></i> {{ selectedCrm.companyEmail }}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="tab-pane fade" id="c-contact" role="tabpanel">
+
+
+
+              <!-- Table -->
+              <div class="mb-3">
+                <div class="row">
+                  <div class="col-lg-12">
+                    <div class="table-responsive">
+                      <table class="table table-bordered">
+                        <thead>
+                          <tr>
+                            <th>Full Name</th>
+                            <th>Phone</th>
+                            <th>Ext</th>
+                            <th>Mobile</th>
+                            <th>Email</th>
+                            <th>Job Title</th>
+                            <th>Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let contact of carrierContacts"
+                            [hidden]="contact.companyId !== (selectedCrm?.companyId || selectedCrm?._id)">
+                            <td>{{ contact.fullName }}</td>
+                            <td>{{ contact.phone }}</td>
+                            <td>{{ contact.ext }}</td>
+                            <td>{{ contact.mobile }}</td>
+                            <td>{{ contact.email }}</td>
+                            <td>{{ contact.jobTitle }}</td>
+                            <td>
+                              <button class="btn  btn btn-sm btn-outline-secondary me-1"
+                                (click)="editContact(contact)"><i class="fas fa-edit"></i></button>
+                              <button class="btn btn-sm btn-danger" (click)="deleteCarrierContact(contact._id)"><i
+                                  class="fas fa-trash"></i></button>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+        <hr>
+        <div class="modal-footer mt-3 pb-3">
+          <button class="btn btn-outline-secondary me-2 rounded-pill">
+            <i class="fas fa-file-pdf me-2"></i> Export
+          </button>
+          <button class="btn btn-success rounded-pill">
+            <i class="fas fa-save me-2"></i> Save Changes
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- // Edit carrier prospects offcanvas -->
+
+
+
+
+
+<!-- Edit carrier profile offcanvas - NEW DESIGN -->
+<div data-bs-backdrop="static" data-bs-keyboard="false" class="offcanvas offcanvas-end" id="edit-profile" tabindex="-1"
+  aria-labelledby="profileLabel" style="width: 80%;">
+  <div class="offcanvas-header">
+    <h5 id="profileLabel">Edit Profile</h5>
+    <button type="button" class="btn-close text-reset" aria-label="Close" (click)="openConfirmModal()">
+    </button>
+    <div class="modal fade" id="confirmCloseModal" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered" style="max-width: 40%; margin: auto;">
+        <div class="modal-content shadow-lg rounded-3">
+          <div class="modal-header">
+            <h5 class="modal-title">Confirm Close</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cancel"></button>
+          </div>
+          <div class="modal-body">
+            <p class="mb-0">Are you sure you want to close? Your entered data will be lost.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary px-3" data-bs-dismiss="modal">
+              Cancel
+            </button>
+            <button type="button" class="btn btn-danger px-3" (click)="closeAndResetForm(f)">
+              Yes, Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="offcanvas-body view-load position-relative">
+    <form #f="ngForm" (ngSubmit)="updateCompanyProfile(f)">
+      <div class="sidebar_ac">
+        <h4 class="px-2 font-weight-600 mb-4">Company Form</h4>
+        <ul>
+          <li [ngClass]="{'active-option': activeSection === 'company-info'}">
+            <a href="#company-info" class="toggle-section"
+              (click)="goToSection('company-info' , $event); $event.preventDefault();">
+              Company Information
+            </a>
+          </li>
+          <li [ngClass]="{'active-option': activeSection === 'insurance-info'}">
+            <a href="#insurance-info" class="toggle-section"
+              (click)="goToSection('insurance-info'  , $event); $event.preventDefault();">
+              Insurance Information
+            </a>
+          </li>
+          <li [ngClass]="{'active-option': activeSection === 'compliance-info'}">
+            <a href="#compliance-info" class="toggle-section"
+              (click)="goToSection('compliance-info'  , $event); $event.preventDefault();">
+              Compliance Documentation
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Company Information Section -->
+      <div class="content_ac" *ngIf="activeSection === 'company-info'">
+        <h3 class="mb-4 " style="font-size: 32px;  color:rgb(53, 53, 53) ">Company Information</h3>
+        <div class="row">
+          <!-- DOT Number -->
+          <div class="col-md-6 position-relative">
+            <label class="mb-2 d-block" for="dotNumber">DOT Number</label>
+            <div class="input-group">
+              <input type="text" class="mt-2 form-control rounded-end-0" id="dot" placeholder="DOT"
+                [(ngModel)]="entries.dot" name="DOT" #dot="ngModel" required
+                [ngClass]="{'is-invalid': dot.invalid && (dot.dirty || dot.touched)}"
+                (ngModelChange)="onDotChange($event)">
+              <button type="button" style="height: 48px; margin-top: 8px; margin-left: -17px;"
+                class="btn btn-primary rounded-start-0" (click)="searchDot()" [disabled]="isLoading">
+                <span>Search</span>
+              </button>
+            </div>
+            <div *ngIf="isLoading" class="text-primary mt-1" style="font-size: 13px;">
+              <div class="spinner-border text-primary spinner-border-sm"></div> Loading data...
+            </div>
+            <div *ngIf="dot.invalid && (dot.dirty || dot.touched)" class="invalid-feedback">
+              DOT is required.
+            </div>
+          </div>
+          <!-- Company Name -->
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="mb-2 d-block" for="companyName">Company Name</label>
+              <input type="text" class="form-control" id="companyName" name="companyName"
+                [(ngModel)]="entries.companyName" #companyName="ngModel" required
+                [ngClass]="{'is-invalid': companyName.invalid && (companyName.dirty || companyName.touched)}">
+              <div *ngIf="companyName.invalid && (companyName.dirty || companyName.touched)" class="invalid-feedback">
+                Company Name is required.
+              </div>
+            </div>
+          </div>
+          <!-- EIN -->
+          <div class="col-md-6">
+            <h5 class="mt-2 font-14 d-block font-weight-700">Ein</h5>
+            <input type="text" class="form-control" id="ein" placeholder="EIN" [(ngModel)]="entries.ein" name="EIN"
+              #ein="ngModel" required [ngClass]="{'is-invalid': ein.invalid && (ein.dirty || ein.touched)}">
+            <div *ngIf="ein.invalid && (ein.dirty || ein.touched)" class="invalid-feedback">
+              EIN is required.
+            </div>
+          </div>
+          <!-- MC Number -->
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="mb-2 d-block" for="mc">MC Number</label>
+              <input type="text" class="form-control" id="mc" name="mc" [(ngModel)]="entries.mc" #mc="ngModel" required
+                [ngClass]="{'is-invalid': mc.invalid && (mc.dirty || mc.touched)}">
+              <div *ngIf="mc.invalid && (mc.dirty || mc.touched)" class="invalid-feedback">
+                MC Number is required.
+              </div>
+            </div>
+          </div>
+          <!-- Company Address (Street) -->
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="mb-2 d-block" for="phyStreet">Company Address (Street)</label>
+              <input type="text" class="form-control" id="phyStreet" name="phyStreet" [(ngModel)]="entries.phyStreet"
+                #phyStreet="ngModel" required
+                [ngClass]="{'is-invalid': phyStreet.invalid && (phyStreet.dirty || phyStreet.touched)}">
+              <div *ngIf="phyStreet.invalid && (phyStreet.dirty || phyStreet.touched)" class="invalid-feedback">
+                Street address is required.
+              </div>
+            </div>
+          </div>
+          <!-- Company Address (City) -->
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="mb-2 d-block" for="phyCity">Company Address (City)</label>
+              <input type="text" class="form-control" id="phyCity" name="phyCity" [(ngModel)]="entries.phyCity"
+                #phyCity="ngModel" required
+                [ngClass]="{'is-invalid': phyCity.invalid && (phyCity.dirty || phyCity.touched)}">
+              <div *ngIf="phyCity.invalid && (phyCity.dirty || phyCity.touched)" class="invalid-feedback">
+                City is required.
+              </div>
+            </div>
+          </div>
+          <!-- Company Address (Zip) -->
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="mb-2 d-block" for="phyZipcode">Company Address (Zip)</label>
+              <input type="text" class="form-control" id="phyZipcode" name="phyZipcode" [(ngModel)]="entries.phyZipcode"
+                #phyZipcode="ngModel" required pattern="^[0-9]{5}(-[0-9]{4})?$"
+                [ngClass]="{'is-invalid': phyZipcode.invalid && (phyZipcode.dirty || phyZipcode.touched)}">
+              <div *ngIf="phyZipcode.invalid && (phyZipcode.dirty || phyZipcode.touched)" class="invalid-feedback">
+                Enter a valid ZIP code.
+              </div>
+            </div>
+          </div>
+          <!-- Company Address (State) -->
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="mb-2 d-block" for="phyState">Company Address (State)</label>
+              <select class=" mt-2 form-control custom-select" id="phyState" name="phyState"
+                [(ngModel)]="entries.phyState" #phyState="ngModel" required
+                [ngClass]="{'is-invalid': phyState.invalid && (phyState.dirty || phyState.touched)}">
+                <option value="" hidden>Select State</option>
+                <option value="AL">Alabama</option>
+                <option value="AK">Alaska</option>
+                <option value="AZ">Arizona</option>
+                <option value="AR">Arkansas</option>
+                <option value="CA">California</option>
+                <option value="CO">Colorado</option>
+                <option value="CT">Connecticut</option>
+                <option value="DE">Delaware</option>
+                <option value="FL">Florida</option>
+                <option value="GA">Georgia</option>
+                <option value="HI">Hawaii</option>
+                <option value="ID">Idaho</option>
+                <option value="IL">Illinois</option>
+                <option value="IN">Indiana</option>
+                <option value="IA">Iowa</option>
+                <option value="KS">Kansas</option>
+                <option value="KY">Kentucky</option>
+                <option value="LA">Louisiana</option>
+                <option value="ME">Maine</option>
+                <option value="MD">Maryland</option>
+                <option value="MA">Massachusetts</option>
+                <option value="MI">Michigan</option>
+                <option value="MN">Minnesota</option>
+                <option value="MS">Mississippi</option>
+                <option value="MO">Missouri</option>
+                <option value="MT">Montana</option>
+                <option value="NE">Nebraska</option>
+                <option value="NV">Nevada</option>
+                <option value="NH">New Hampshire</option>
+                <option value="NJ">New Jersey</option>
+                <option value="NM">New Mexico</option>
+                <option value="NY">New York</option>
+                <option value="NC">North Carolina</option>
+                <option value="ND">North Dakota</option>
+                <option value="OH">Ohio</option>
+                <option value="OK">Oklahoma</option>
+                <option value="OR">Oregon</option>
+                <option value="PA">Pennsylvania</option>
+                <option value="RI">Rhode Island</option>
+                <option value="SC">South Carolina</option>
+                <option value="SD">South Dakota</option>
+                <option value="TN">Tennessee</option>
+                <option value="TX">Texas</option>
+                <option value="UT">Utah</option>
+                <option value="VT">Vermont</option>
+                <option value="VA">Virginia</option>
+                <option value="WA">Washington</option>
+                <option value="WV">West Virginia</option>
+                <option value="WI">Wisconsin</option>
+                <option value="WY">Wyoming</option>
+              </select>
+              <div *ngIf="phyState.invalid && (phyState.dirty || phyState.touched)" class="invalid-feedback">
+                State is required.
+              </div>
+            </div>
+          </div>
+          <!-- Carrier Name -->
+          <hr>
+          <div class="col-md-6">
+            <label class="mb-2 d-block" for="carrierName">Carrier Name</label>
+            <input type="text" class="form-control" id="carrierName" placeholder="CA Number"
+              [(ngModel)]="entries.carrierName" name="carrierName" #carrierName="ngModel" required
+              [ngClass]="{'is-invalid': carrierName.invalid && (carrierName.dirty || carrierName.touched)}">
+            <div *ngIf="carrierName.invalid && (carrierName.dirty || carrierName.touched)" class="invalid-feedback">
+              Carrier Name is required
+            </div>
+          </div>
+          <!-- Phone Number -->
+          <div class="col-md-6">
+            <h5 class="font-14 d-block font-weight-700">Phone Number</h5>
+            <input type="text" class="form-control" id="phoneNumber" placeholder="phoneNumber"
+              [(ngModel)]="entries.phoneNumber" name="phoneNumber" #phoneNumber="ngModel" required
+              [ngClass]="{'is-invalid': phoneNumber.invalid && (phoneNumber.dirty || phoneNumber.touched)}">
+            <div *ngIf="phoneNumber.invalid && (phoneNumber.dirty || phoneNumber.touched)" class="invalid-feedback">
+              Phone Number is required.
+            </div>
+          </div>
+          <!-- Company Email -->
+          <div class="col-md-6">
+            <h5 class="font-14 d-block font-weight-700">Company Email</h5>
+            <input type="text" class="form-control" id="companyEmail" placeholder="companyEmail"
+              [(ngModel)]="entries.companyEmail" name="companyEmail" #companyEmail="ngModel" required
+              [ngClass]="{'is-invalid': companyEmail.invalid && (companyEmail.dirty || companyEmail.touched)}">
+            <div *ngIf="companyEmail.invalid && (companyEmail.dirty || companyEmail.touched)" class="invalid-feedback">
+              Company Email is required.
+            </div>
+          </div>
+          <!-- Contact Name -->
+          <div class="col-md-6">
+            <label class="mb-2 d-block" for="contact">Contact Name</label>
+            <input type="text" class="form-control" id="contact" placeholder="Contact Name"
+              [(ngModel)]="entries.contact" name="contact" #contact="ngModel" required
+              [ngClass]="{'is-invalid': contact.invalid && (contact.dirty || contact.touched)}">
+            <div *ngIf="contact.invalid && (contact.dirty || contact.touched)" class="invalid-feedback">
+              Contact Name is required
+            </div>
+          </div>
+          <!-- Last Contact -->
+          <div class="col-md-6">
+            <label class="mb-2 d-block" for="lastContact">Last Contact</label>
+            <input type="text" class="form-control" id="lastContact" placeholder="Last Contact"
+              [(ngModel)]="entries.lastContact" name="lastContact" #lastContact="ngModel" required
+              [ngClass]="{'is-invalid': lastContact.invalid && (lastContact.dirty || lastContact.touched)}">
+            <div *ngIf="lastContact.invalid && (lastContact.dirty || lastContact.touched)" class="invalid-feedback">
+              Last Contact is required
+            </div>
+          </div>
+          <!-- Status -->
+          <div class="col-md-6">
+            <label class="mb-2 d-block" for="status">Status</label>
+            <select class="form-control" id="status" name="status" [(ngModel)]="entries.status" #status="ngModel"
+              required [ngClass]="{'is-invalid': status.invalid && (status.dirty || status.touched)}">
+              <option value="" disabled selected>Select Status</option>
+              <option value="prospect">Prospect</option>
+              <option value="new">New</option>
+              <option value="client">Client</option>
+              <option value="lost">Lost</option>
+            </select>
+            <div *ngIf="status.invalid && (status.dirty || status.touched)" class="invalid-feedback">
+              Status is required
+            </div>
+          </div>
+          <!-- Services -->
+          <div class="col-md-6">
+            <label class="mb-2 d-block" for="service">Services</label>
+            <div class="form-check form-check-inline" *ngFor="let service of serviceOptions">
+              <input class="form-check-input" type="checkbox" [id]="service.id" [value]="service.label"
+                [checked]="entries.services?.includes(service.label)" (change)="onServiceChange($event, service.label)">
+              <label class="form-check-label" [for]="service.id">
+                {{ service.label }}
+              </label>
+            </div>
+          </div>
+          <!-- CA Number -->
+          <hr>
+          <div class="col-md-6">
+            <label class="mb-2 d-block" for="caNumber">CA Number</label>
+            <input type="text" class="form-control" id="caNumber" placeholder="CA Number" [(ngModel)]="entries.caNumber"
+              name="CA Number" #caNumber="ngModel" required
+              [ngClass]="{'is-invalid': caNumber.invalid && (caNumber.dirty || caNumber.touched)}">
+            <div *ngIf="caNumber.invalid && (caNumber.dirty || caNumber.touched)" class="invalid-feedback">
+              CA Number is required
+            </div>
+          </div>
+          <!-- Company Name DBA -->
+          <div class="col-md-6">
+            <label class="mb-2 d-block" for="CompanyDBA">Company Name DBA</label>
+            <input type="text" class="form-control" id="CompanyDBA" placeholder="Company Name DBA"
+              [(ngModel)]="entries.CompanyDBA" name="CompanyDBA" #CompanyDBA="ngModel" required
+              [ngClass]="{'is-invalid': CompanyDBA.invalid && (CompanyDBA.dirty || CompanyDBA.touched)}">
+            <div *ngIf="CompanyDBA.invalid && (CompanyDBA.dirty || CompanyDBA.touched)" class="invalid-feedback">
+              Company Name is required.
+            </div>
+          </div>
+          <!-- Corporation -->
+          <div class="col-md-6">
+            <label class="mb-2 d-block" for="corporation">Corporation</label>
+            <input type="text" class="form-control" id="corporation" placeholder="Company Name DBA"
+              [(ngModel)]="entries.corporation" name="corporation" #corporation="ngModel" required
+              [ngClass]="{'is-invalid': corporation.invalid && (corporation.dirty || corporation.touched)}">
+            <div *ngIf="corporation.invalid && (corporation.dirty || corporation.touched)" class="invalid-feedback">
+              corporation is required.
+            </div>
+          </div>
+          <!-- Company Type -->
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="mb-2 d-block" for="companyType">Company Type</label>
+              <select id="companyType" class="form-select form-control" name="companyType"
+                [(ngModel)]="entries.companyType" #companyType="ngModel" required
+                [ngClass]="{'is-invalid': companyType.invalid && (companyType.dirty || companyType.touched)}">
+                <option value="" disabled selected>Select Company Type</option>
+                <option value="Carrier">Carrier</option>
+                <option value="Broker">Broker</option>
+                <option value="Freight Forwarder">Freight Forwarder</option>
+                <option value="Other">Other</option>
+              </select>
+              <div *ngIf="companyType.invalid && (companyType.dirty || companyType.touched)" class="invalid-feedback">
+                Company Type is required.
+              </div>
+            </div>
+          </div>
+          <!-- IFTA ACC -->
+          <hr>
+          <div class="col-md-6">
+            <h5 class="font-14 d-block font-weight-700">IFTA ACC</h5>
+            <input type="text" class="form-control" id="iftaAcc" placeholder="IRP ACC" [(ngModel)]="entries.iftaAcc"
+              name="IFTA ACC" #iftaAcc="ngModel" required
+              [ngClass]="{'is-invalid': iftaAcc.invalid && (iftaAcc.dirty || iftaAcc.touched)}">
+            <div *ngIf="iftaAcc.invalid && (iftaAcc.dirty || iftaAcc.touched)" class="invalid-feedback">
+              IFTA ACC is required.
+            </div>
+          </div>
+          <!-- prepass -->
+          <div class="col-md-6">
+            <h5 class="font-14 d-block font-weight-700">prepass</h5>
+            <input type="text" class="form-control" id="prepass" placeholder="prepass" [(ngModel)]="entries.prepass"
+              name="prepass" #prepass="ngModel" required
+              [ngClass]="{'is-invalid': prepass.invalid && (prepass.dirty || prepass.touched)}">
+            <div *ngIf="prepass.invalid && (prepass.dirty || prepass.touched)" class="invalid-feedback">
+              prepass is required.
+            </div>
+          </div>
+          <!-- IRP ACC -->
+          <div class="col-md-6">
+            <h5 class="font-14 d-block font-weight-700">IRP ACC</h5>
+            <input type="text" class="form-control" id="irpAcc" placeholder="IRP ACC" [(ngModel)]="entries.irpAcc"
+              name="IRP ACC" #irpAcc="ngModel" required
+              [ngClass]="{'is-invalid': irpAcc.invalid && (irpAcc.dirty || irpAcc.touched)}">
+            <div *ngIf="irpAcc.invalid && (irpAcc.dirty || irpAcc.touched)" class="invalid-feedback">
+              IRP ACC is required.
+            </div>
+          </div>
+          <!-- IRP Renewal Date -->
+          <div class="col-md-6">
+            <h5 class="font-14 d-block font-weight-700">IRP Renewal Date</h5>
+            <input type="date" class="form-control" id="irpRenewal" [(ngModel)]="entries.irpRenewalDate"
+              name="irpRenewalDate" #irpRenewalDate="ngModel" required
+              [ngClass]="{'is-invalid': irpRenewalDate.invalid && (irpRenewalDate.dirty || irpRenewalDate.touched)}">
+            <div *ngIf="irpRenewalDate.invalid && (irpRenewalDate.dirty || irpRenewalDate.touched)"
+              class="invalid-feedback">
+              IRP Renewal Date is required.
+            </div>
+          </div>
+          <!-- Operating Authority -->
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="mb-2 d-block" for="operatingAuthority">Operating Authority</label>
+              <select id="operatingAuthority" class="form-control form-select" name="operatingAuthority"
+                [(ngModel)]="entries.operatingAuthority" #operatingAuthority="ngModel" required
+                [ngClass]="{'is-invalid': operatingAuthority.invalid && (operatingAuthority.dirty || operatingAuthority.touched)}">
+                <option value="" disabled selected>Select Operating Authority</option>
+                <option value="Interstate">Interstate</option>
+                <option value="Intrastate">Intrastate</option>
+              </select>
+              <div *ngIf="operatingAuthority.invalid && (operatingAuthority.dirty || operatingAuthority.touched)"
+                class="invalid-feedback">
+                Operating Authority is required.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer justify-content-center"
+          style="border-top: 1px solid #ccc; padding-top: 15px; margin-top: 15px; ">
+          <button type="button" class="btn btn-outline-secondary btn-sm text-uppercase rounded-pill"
+            data-bs-dismiss="offcanvas" aria-label="Close"> Close</button>
+          <button type="submit" class="btn btn-success btn-sm text-uppercase rounded-pill"
+            data-bs-dismiss="offcanvas">Save Changes</button>
+          <button type="button" class="btn btn-success btn-sm text-uppercase rounded-pill"
+            (click)="goToSection('insurance-info'  , $event)">Next</button>
+        </div>
+      </div>
+
+      <!-- Insurance Information Section -->
+      <div class="content_ac" *ngIf="activeSection === 'insurance-info'">
+        <h3 class="mb-4 c-block" style="font-size: 32px;  color:rgb(53, 53, 53) ">Insurance Information</h3>
+        <div class="row">
+          <!-- Insurance Broker Name -->
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="mb-2 d-block" for="insuranceBrokerName">Insurance Broker Name</label>
+              <input type="text" class="form-control" id="insuranceBrokerName" name="insuranceBrokerName"
+                [(ngModel)]="entries.insuranceBrokerName" #insuranceBrokerName="ngModel" required
+                [ngClass]="{'is-invalid': insuranceBrokerName.invalid && (insuranceBrokerName.dirty || insuranceBrokerName.touched)}">
+              <div *ngIf="insuranceBrokerName.invalid && (insuranceBrokerName.dirty || insuranceBrokerName.touched)"
+                class="invalid-feedback">
+                insurance broker Name is required.
+              </div>
+            </div>
+          </div>
+          <!-- Company Physical Address -->
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="mb-2 d-block" for="companyPhysicalAddress">Company Physical Address</label>
+              <input type="text" class="form-control" id="companyPhysicalAddress" name="companyPhysicalAddress"
+                [(ngModel)]="entries.companyPhysicalAddress" #companyPhysicalAddress="ngModel" required
+                [ngClass]="{'is-invalid': companyPhysicalAddress.invalid && (companyPhysicalAddress.dirty || companyPhysicalAddress.touched)}">
+              <div
+                *ngIf="companyPhysicalAddress.invalid && (companyPhysicalAddress.dirty || companyPhysicalAddress.touched)"
+                class="invalid-feedback">
+                MC Number is required.
+              </div>
+            </div>
+          </div>
+          <!-- Company Mailing Address -->
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="mb-2 d-block" for="companyMailingAddress">Company Mailing Address</label>
+              <input type="text" class="form-control" id="companyMailingAddress" name="companyMailingAddress"
+                [(ngModel)]="entries.companyMailingAddress" #companyMailingAddress="ngModel" required
+                [ngClass]="{'is-invalid': companyMailingAddress.invalid && (companyMailingAddress.dirty || companyMailingAddress.touched)}">
+              <div
+                *ngIf="companyMailingAddress.invalid && (companyMailingAddress.dirty || companyMailingAddress.touched)"
+                class="invalid-feedback">
+                Company Mailing Address is required.
+              </div>
+            </div>
+          </div>
+          <!-- Company Email Address -->
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="mb-2 d-block" for="companyEmailAddress">Company Email Address</label>
+              <input type="text" class="form-control" id="companyEmailAddress" name="companyEmailAddress"
+                [(ngModel)]="entries.companyEmailAddress" #companyEmailAddress="ngModel" required
+                [ngClass]="{'is-invalid': companyEmailAddress.invalid && (companyEmailAddress.dirty || companyEmailAddress.touched)}">
+              <div *ngIf="companyEmailAddress.invalid && (companyEmailAddress.dirty || companyEmailAddress.touched)"
+                class="invalid-feedback">
+                company email address is required.
+              </div>
+            </div>
+          </div>
+          <!-- Contact Number -->
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="mb-2 d-block" for="Contact">Contact Number</label>
+              <input type="text" class="form-control" id="Contact" name="Contact" [(ngModel)]="entries.Contact"
+                #Contact="ngModel" required
+                [ngClass]="{'is-invalid': Contact.invalid && (Contact.dirty || Contact.touched)}">
+              <div *ngIf="Contact.invalid && (Contact.dirty || Contact.touched)" class="invalid-feedback">
+                contactnumber is required.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group">
+              <label class="mb-2 d-block" for="insuranceType">Insurance Type</label>
+              <select id="dropdowns" class="form-control form-select" [(ngModel)]="entries.insuranceType"
+                name="insuranceType" required>
+                <option value="" selected>Select an option</option>
+                <option value="Auto Liability Insurance">Auto Liability Insurance</option>
+                <option value="General Liability Insurance">General Liability Insurance</option>
+                <option value="Physical Damage Insurance">Physical Damage Insurance</option>
+                <option value="Cargo Insurance">Cargo Insurance</option>
+                <option value="Trailer Interchange Insurance">Trailer Interchange Insurance</option>
+                <option value="Workers’ Compensation Insurance">Workers’ Compensation Insurance</option>
+                <option value="Umbrella Insurance">Umbrella Insurance</option>
+              </select>
+            </div>
+            <div *ngIf="entries.insuranceType" class="border bg-light rounded">
+              <div class="modal-header border-bottom p-3">
+                <h5 class="modal-title">{{ entries.insuranceType }}</h5>
+                <div>
+                  <button type="button" class="btn btn-success rounded-pill font-14"
+                    (click)="addInsuranceEntryToEdit()">Add Form</button>
+                </div>
+              </div>
+              <div class="p-3">
+                <div class="bg-white p-3 rounded">
+                  <div class="table-responsive">
+                    <table id="formTable" class="table table-bordered align-middle text-nowrap">
+                      <thead class="table-dark">
+                        <tr>
+                          <th>Company Name:</th>
+                          <th>Policy Number:</th>
+                          <th>Policy Start Date:</th>
+                          <th>Policy Expiration Date:</th>
+                          <th>Upload Certificate:</th>
+                          <th>Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let entry of entries.insuranceEntries; let i = index">
+                          <td class="text-center align-middle">
+                            <input type="text" class="form-control form-control-sm mx-auto text-center"
+                              style="max-width: 90%;" [(ngModel)]="entry.companyInsuranceName"
+                              name="companyInsuranceName-{{i}}" required>
+                          </td>
+                          <td class="text-center align-middle">
+                            <input type="text" class="form-control form-control-sm mx-auto text-center"
+                              style="max-width: 90%;" [(ngModel)]="entry.policyNumber" name="policyNumber-{{i}}"
+                              required>
+                          </td>
+                          <td class="text-center align-middle">
+                            <input type="date" class="form-control form-control-sm mx-auto text-center"
+                              style="max-width: 90%;" [(ngModel)]="entry.policyStartDate" name="policyStartDate-{{i}}"
+                              required>
+                          </td>
+                          <td class="text-center align-middle">
+                            <input type="date" class="form-control form-control-sm mx-auto text-center"
+                              style="max-width: 90%;" [(ngModel)]="entry.policyExpirationDate"
+                              name="policyExpirationDate-{{i}}" required>
+                          </td>
+                          <td class="text-center align-middle">
+                            <input type="file" class="form-control form-control-sm mx-auto" style="max-width: 90%;"
+                              (change)="onFileChange($event, i, 'insurance')">
+                            <span *ngIf="insuranceFileNames[i]" class="d-block mt-1 small text-muted text-center">
+                              {{ insuranceFileNames[i] }}
+                            </span>
+                          </td>
+                          <td class="text-center align-middle">
+                            <button type="button" class="btn btn-danger btn-sm rounded-pill"
+                              (click)="removeInsuranceEntry(i)">
+                              Delete
+                            </button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer justify-content-center"
+          style="border-top: 1px solid #ccc; padding-top: 15px; margin-top: 15px; ">
+          <button type="button" class="btn btn-outline-secondary btn-sm text-uppercase rounded-pill"
+            data-bs-dismiss="offcanvas" aria-label="Close"> Close</button>
+          <button type="submit" class="btn btn-success btn-sm text-uppercase rounded-pill"
+            data-bs-dismiss="offcanvas">Save Changes</button>
+          <button type="button" class="btn btn-success btn-sm text-uppercase rounded-pill"
+            (click)="goToSection('compliance-info'  , $event)">Next</button>
+        </div>
+      </div>
+
+      <!-- Compliance Documentation Section -->
+      <div class="content_ac" *ngIf="activeSection === 'compliance-info'">
+        <h3 class="mb-4 c-block" style="font-size: 32px;  color:rgb(53, 53, 53) ">Compliance Documentation</h3>
+        <div class="row">
+          <!-- Us DOT Registration Upload Document -->
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="mb-2 d-block" for="usDOTRegistrationUploadDocument">
+                Us DOT Registration Upload Document
+              </label>
+              <input type="file" class="form-control" id="usDOTRegistrationUploadDocument"
+                (change)="onFileChange($event, 'usDOTRegistrationUploadDocument', 'compliance')">
+              <small *ngIf="complianceFilesNames['usDOTRegistrationUploadDocument']">
+                Selected: {{ complianceFilesNames['usDOTRegistrationUploadDocument'] }}
+              </small>
+            </div>
+          </div>
+          <!-- Mc Certificate Upload Document -->
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="mb-2 d-block" for="mcCertificateUploadDocument">
+                Mc Certificate Upload Document
+              </label>
+              <input type="file" class="form-control" id="mcCertificateUploadDocument"
+                (change)="onFileChange($event, 'mcCertificateUploadDocument', 'compliance')">
+              <small *ngIf="complianceFilesNames['mcCertificateUploadDocument']">
+                Selected: {{ complianceFilesNames['mcCertificateUploadDocument'] }}
+              </small>
+            </div>
+          </div>
+          <!-- Ifta Registration Upload Document -->
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="mb-2 d-block" for="iftaRegistrationUploadDocument">
+                Ifta Registration Document
+              </label>
+              <input type="file" class="form-control" id="iftaRegistrationUploadDocument"
+                (change)="onFileChange($event, 'iftaRegistrationUploadDocument', 'compliance')">
+              <small *ngIf="complianceFilesNames['iftaRegistrationUploadDocument']">
+                Selected: {{ complianceFilesNames['iftaRegistrationUploadDocument'] }}
+              </small>
+            </div>
+          </div>
+          <!-- Insurance Document -->
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="mb-2 d-block" for="insuranceDocument">Insurance Document</label>
+              <input type="file" class="form-control" id="insuranceDocument"
+                (change)="onFileChange($event, 'insuranceDocument')">
+              <small *ngIf="generalFileNames['insuranceDocument']">
+                Selected: {{ generalFileNames['insuranceDocument'] }}
+              </small>
+            </div>
+          </div>
+          <h3 class="mb-4 c-block" style="font-size: 32px;  color:rgb(53, 53, 53) "> Accounts & Permits</h3>
+          <!-- Prepass Account Number -->
+          <div class="col-md-6">
+            <label class="mb-2 d-block" for="prepassAccountNumber">Prepass Account Number</label>
+            <input type="text" class="form-control" id="prepassAccountNumber" placeholder="Prepass Account Number"
+              [(ngModel)]="entries.accountsPermits.prepassAccountNumber" name="prepassAccountNumber"
+              #prepassAccountNumber="ngModel" required
+              [ngClass]="{'is-invalid': prepassAccountNumber.invalid && (prepassAccountNumber.dirty || prepassAccountNumber.touched)}">
+            <div *ngIf="prepassAccountNumber.invalid && (prepassAccountNumber.dirty || prepassAccountNumber.touched)"
+              class="invalid-feedback">
+              Prepass Account Number is required
+            </div>
+          </div>
+          <!-- IFTA Account Number -->
+          <div class="col-md-6">
+            <label class="mb-2 d-block" for="iftaAccountNumber">IFTA Account Number</label>
+            <input type="text" class="form-control" id="iftaAccountNumber" placeholder="IFTA Account Number"
+              [(ngModel)]="entries.accountsPermits.iftaAccountNumber" name="iftaAccountNumber"
+              #iftaAccountNumber="ngModel" required
+              [ngClass]="{'is-invalid': iftaAccountNumber.invalid && (iftaAccountNumber.dirty || iftaAccountNumber.touched)}">
+            <div *ngIf="iftaAccountNumber.invalid && (iftaAccountNumber.dirty || iftaAccountNumber.touched)"
+              class="invalid-feedback">
+              IFTA Number is required
+            </div>
+          </div>
+          <!-- UCR Number -->
+          <div class="col-md-6">
+            <label class="mb-2 d-block" for="ucrNumber">UCR Number</label>
+            <input type="text" class="form-control" id="ucrNumber" placeholder="UCR Number"
+              [(ngModel)]="entries.accountsPermits.ucrNumber" name="ucrNumber" #ucrNumber="ngModel" required
+              [ngClass]="{'is-invalid': ucrNumber.invalid && (ucrNumber.dirty || ucrNumber.touched)}">
+            <div *ngIf="ucrNumber.invalid && (ucrNumber.dirty || ucrNumber.touched)" class="invalid-feedback">
+              UCR Number is required
+            </div>
+          </div>
+          <h3 class="mb-4 c-block" style="font-size: 32px;  color:rgb(53, 53, 53) "> Documentation</h3>
+          <!-- KYU -->
+          <div class="col-md-6">
+            <label class="mb-2 d-block">KYU</label>
+            <input type="text" class="form-control" id="kyu" placeholder="KYU" [(ngModel)]="entries.kyu" name="KYU"
+              #kyu="ngModel" required [ngClass]="{'is-invalid': kyu.invalid && (kyu.dirty || kyu.touched)}">
+            <div *ngIf="kyu.invalid && (kyu.dirty || kyu.touched)" class="invalid-feedback">
+              KYU is required.
+            </div>
+          </div>
+          <!-- KYU Upload Document -->
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="mb-2 d-block" for="kyuUploadDocument"> Kyu Upload Document</label>
+              <input type="file" class="form-control" id="kyuUploadDocument"
+                (change)="onFileChange($event, 'kyuUploadDocument')">
+              <small *ngIf="generalFileNames['kyuUploadDocument']">
+                Selected: {{ generalFileNames['kyuUploadDocument'] }}
+              </small>
+            </div>
+          </div>
+          <!-- KYU Expiration -->
+          <div class="col-md-6">
+            <h5 class="font-14 d-block font-weight-700">KYU Expiration</h5>
+            <input type="date" class="form-control" id="kyuExpiration" [(ngModel)]="entries.kyuExpiration"
+              name="kyuExpiration" #kyuExpiration="ngModel" required
+              [ngClass]="{'is-invalid': kyuExpiration.invalid && (kyuExpiration.dirty || kyuExpiration.touched)}">
+            <div *ngIf="kyuExpiration.invalid && (kyuExpiration.dirty || kyuExpiration.touched)"
+              class="invalid-feedback">
+              KYU Expiration is required.
+            </div>
+          </div>
+          <!-- NY -->
+          <div class="col-md-6">
+            <h5 class="font-14 d-block font-weight-700">NY</h5>
+            <input type="text" class="form-control" id="ny" placeholder="NY" [(ngModel)]="entries.ny" name="NY"
+              #ny="ngModel" required [ngClass]="{'is-invalid': ny.invalid && (ny.dirty || ny.touched)}">
+            <div *ngIf="ny.invalid && (ny.dirty || ny.touched)" class="invalid-feedback">
+              NY is required.
+            </div>
+          </div>
+          <!-- NY Upload Document -->
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="mb-2 d-block" for="nyUploadDocument"> NY Upload Document</label>
+              <input type="file" class="form-control" id="nyUploadDocument"
+                (change)="onFileChange($event, 'nyUploadDocument')">
+              <small *ngIf="generalFileNames['nyUploadDocument']">
+                Selected: {{ generalFileNames['nyUploadDocument'] }}
+              </small>
+            </div>
+          </div>
+          <!-- NY Expiration -->
+          <div class="col-md-6">
+            <h5 class="font-14 d-block font-weight-700">NY Expiration</h5>
+            <input type="date" class="form-control" id="nyExpiration" [(ngModel)]="entries.nyExpiration"
+              name="nyExpiration" #nyExpiration="ngModel" required
+              [ngClass]="{'is-invalid': nyExpiration.invalid && (nyExpiration.dirty || nyExpiration.touched)}">
+            <div *ngIf="nyExpiration.invalid && (nyExpiration.dirty || nyExpiration.touched)" class="invalid-feedback">
+              NY Expiration is required.
+            </div>
+          </div>
+          <!-- W9 Upload Document -->
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="mb-2 d-block" for="w9UploadDocument">Upload Document</label>
+              <input type="file" class="form-control" id="w9UploadDocument"
+                (change)="onFileChange($event, 'w9UploadDocument')">
+              <small *ngIf="generalFileNames['w9UploadDocument']">
+                Selected: {{ generalFileNames['w9UploadDocument'] }}
+              </small>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer justify-content-center"
+          style="border-top: 1px solid #ccc; padding-top: 15px; margin-top: 15px;">
+          <button type="button" class="btn btn-outline-secondary btn-sm text-uppercase rounded-pill"
+            data-bs-dismiss="offcanvas" aria-label="Close">Close</button>
+          <button type="submit" class="btn btn-success btn-sm text-uppercase rounded-pill"
+            data-bs-dismiss="offcanvas">SUBMIT FORM</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+
+<!-- 
+<div data-bs-backdrop="static" data-bs-keyboard="false" class="offcanvas offcanvas-end" id="profile-offcanvas"
+  tabindex="-1" aria-labelledby="profileLabel" style="width: 80%;">
+  <div class="offcanvas-header">
+    <h5 id="profileLabel">Add Profile</h5>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"
+      (click)="resetForm(f)">
+    </button>
+ -->
+
+
+
+
+<div data-bs-backdrop="static" data-bs-keyboard="false" class="offcanvas offcanvas-end" id="profile-offcanvas"
+  tabindex="-1" aria-labelledby="profileLabel" style="width: 80%;">
+  <div class="offcanvas-header">
+    <h5 id="profileLabel">Add Profile</h5>
+    <button type="button" class="btn-close text-reset" aria-label="Close" (click)="openConfirmModal()">
+    </button>
+    <div class="modal fade" id="confirmCloseModal" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered" style="max-width: 40%; margin: auto;">
+        <div class="modal-content shadow-lg rounded-3">
+          <div class="modal-header">
+            <h5 class="modal-title">Confirm Close</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cancel"></button>
+          </div>
+          <div class="modal-body">
+            <p class="mb-0">Are you sure you want to close? Your entered data will be lost.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary px-3" data-bs-dismiss="modal">
+              Cancel
+            </button>
+            <button type="button" class="btn btn-danger px-3" (click)="closeAndResetForm(f)">
+              Yes, Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+  </div>
+  <div class="offcanvas-body view-load position-relative">
+    <form class="row g-3" (ngSubmit)="submitForm(f)" #f="ngForm">
+      <div class="sidebar_ac">
+        <h4 class="px-2 font-weight-600 mb-4">Company Form</h4>
+
+        <ul>
+          <li [ngClass]="{'active-option': activeSection === 'company-info'}">
+            <a href="#company-info" class="toggle-section"
+              (click)="goToSection('company-info' , $event); $event.preventDefault();">
+              Company Information
+            </a>
+          </li>
+
+          <li [ngClass]="{'active-option': activeSection === 'insurance-info'}">
+            <a href="#insurance-info" class="toggle-section"
+              (click)="goToSection('insurance-info'  , $event); $event.preventDefault();">
+              Insurance Information
+            </a>
+          </li>
+          <li [ngClass]="{'active-option': activeSection === 'compliance-info'}">
+            <a href="#compliance-info" class="toggle-section"
+              (click)="goToSection('compliance-info'  , $event); $event.preventDefault();">
+              Compaliance Documentation
+            </a>
+          </li>
+
+
+        </ul>
+      </div>
+
+      <div class="content_ac" *ngIf="activeSection === 'company-info'">
+        <h3 class="mb-4 " style="font-size: 32px;  color:rgb(53, 53, 53) ">Company Information</h3>
+        <form class="row g-3" (ngSubmit)="submitForm(f)" #f="ngForm">
+          <div class="row">
+
+            <div class="col-md-6 position-relative">
+              <label class="mb-2 d-block" for="dotNumber">DOT Number</label>
+              <div class="input-group">
+                <input type="text" class="mt-2 form-control rounded-end-0" id="dot" placeholder="DOT"
+                  [(ngModel)]="newCompany.dot" name="DOT" #dot="ngModel" required
+                  [ngClass]="{'is-invalid': dot.invalid && (dot.dirty || dot.touched)}"
+                  (ngModelChange)="onDotChange($event)">
+                <button type="button" style="height: 48px; margin-top: 8px; margin-left: -17px;"
+                  class="btn btn-primary rounded-start-0" (click)="searchDot()" [disabled]="isLoading">
+                  <span>Search</span>
+
+                </button>
+              </div>
+              <div *ngIf="isLoading" class="text-primary mt-1" style="font-size: 13px;">
+                <div class="spinner-border text-primary spinner-border-sm"></div> Loading data...
+              </div>
+
+              <div *ngIf="dot.invalid && (dot.dirty || dot.touched)" class="invalid-feedback">
+                DOT is required.
+              </div>
+            </div>
+
+
+
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="mb-2 d-block" for="companyName">Company Name</label>
+                <input type="text" class="form-control" id="companyName" name="companyName"
+                  [(ngModel)]="newCompany.companyName" #companyName="ngModel" required
+                  [ngClass]="{'is-invalid': companyName.invalid && (companyName.dirty || companyName.touched)}">
+                <div *ngIf="companyName.invalid && (companyName.dirty || companyName.touched)" class="invalid-feedback">
+                  Company Name is required.
+                </div>
+              </div>
+            </div>
+
+
+            <div class="col-md-6">
+              <h5 class="mt-2 font-14 d-block font-weight-700">Ein</h5>
+              <input type="text" class="form-control" id="ein" placeholder="EIN" [(ngModel)]="newCompany.ein" name="EIN"
+                #ein="ngModel" required [ngClass]="{'is-invalid': ein.invalid && (ein.dirty || ein.touched)}">
+              <div *ngIf="ein.invalid && (ein.dirty || ein.touched)" class="invalid-feedback">
+                EIN is required.
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="mb-2 d-block" for="mc">MC Number</label>
+                <input type="text" class="form-control" id="mc" name="mc" [(ngModel)]="newCompany.mc" #mc="ngModel"
+                  required [ngClass]="{'is-invalid': mc.invalid && (mc.dirty || mc.touched)}">
+                <div *ngIf="mc.invalid && (mc.dirty || mc.touched)" class="invalid-feedback">
+                  MC Number is required.
+                </div>
+              </div>
+            </div>
+
+
+
+
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="mb-2 d-block" for="phyStreet">Company Address (Street)</label>
+                <input type="text" class="form-control" id="phyStreet" name="phyStreet"
+                  [(ngModel)]="newCompany.phyStreet" #phyStreet="ngModel" required
+                  [ngClass]="{'is-invalid': phyStreet.invalid && (phyStreet.dirty || phyStreet.touched)}">
+                <div *ngIf="phyStreet.invalid && (phyStreet.dirty || phyStreet.touched)" class="invalid-feedback">
+                  Street address is required.
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="mb-2 d-block" for="phyCity">Company Address (City)</label>
+                <input type="text" class="form-control" id="phyCity" name="phyCity" [(ngModel)]="newCompany.phyCity"
+                  #phyCity="ngModel" required
+                  [ngClass]="{'is-invalid': phyCity.invalid && (phyCity.dirty || phyCity.touched)}">
+                <div *ngIf="phyCity.invalid && (phyCity.dirty || phyCity.touched)" class="invalid-feedback">
+                  City is required.
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="mb-2 d-block" for="phyZipcode">Company Address (Zip)</label>
+                <input type="text" class="form-control" id="phyZipcode" name="phyZipcode"
+                  [(ngModel)]="newCompany.phyZipcode" #phyZipcode="ngModel" required pattern="^[0-9]{5}(-[0-9]{4})?$"
+                  [ngClass]="{'is-invalid': phyZipcode.invalid && (phyZipcode.dirty || phyZipcode.touched)}">
+                <div *ngIf="phyZipcode.invalid && (phyZipcode.dirty || phyZipcode.touched)" class="invalid-feedback">
+                  Enter a valid ZIP code.
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="mb-2 d-block" for="phyState">Company Address (State)</label>
+                <select class=" mt-2 form-control custom-select" id="phyState" name="phyState"
+                  [(ngModel)]="newCompany.phyState" #phyState="ngModel" required
+                  [ngClass]="{'is-invalid': phyState.invalid && (phyState.dirty || phyState.touched)}">
+                  <option value="" hidden>Select State</option>
+                  <option value="AL">Alabama</option>
+                  <option value="AK">Alaska</option>
+                  <option value="AZ">Arizona</option>
+                  <option value="AR">Arkansas</option>
+                  <option value="CA">California</option>
+                  <option value="CO">Colorado</option>
+                  <option value="CT">Connecticut</option>
+                  <option value="DE">Delaware</option>
+                  <option value="FL">Florida</option>
+                  <option value="GA">Georgia</option>
+                  <option value="HI">Hawaii</option>
+                  <option value="ID">Idaho</option>
+                  <option value="IL">Illinois</option>
+                  <option value="IN">Indiana</option>
+                  <option value="IA">Iowa</option>
+                  <option value="KS">Kansas</option>
+                  <option value="KY">Kentucky</option>
+                  <option value="LA">Louisiana</option>
+                  <option value="ME">Maine</option>
+                  <option value="MD">Maryland</option>
+                  <option value="MA">Massachusetts</option>
+                  <option value="MI">Michigan</option>
+                  <option value="MN">Minnesota</option>
+                  <option value="MS">Mississippi</option>
+                  <option value="MO">Missouri</option>
+                  <option value="MT">Montana</option>
+                  <option value="NE">Nebraska</option>
+                  <option value="NV">Nevada</option>
+                  <option value="NH">New Hampshire</option>
+                  <option value="NJ">New Jersey</option>
+                  <option value="NM">New Mexico</option>
+                  <option value="NY">New York</option>
+                  <option value="NC">North Carolina</option>
+                  <option value="ND">North Dakota</option>
+                  <option value="OH">Ohio</option>
+                  <option value="OK">Oklahoma</option>
+                  <option value="OR">Oregon</option>
+                  <option value="PA">Pennsylvania</option>
+                  <option value="RI">Rhode Island</option>
+                  <option value="SC">South Carolina</option>
+                  <option value="SD">South Dakota</option>
+                  <option value="TN">Tennessee</option>
+                  <option value="TX">Texas</option>
+                  <option value="UT">Utah</option>
+                  <option value="VT">Vermont</option>
+                  <option value="VA">Virginia</option>
+                  <option value="WA">Washington</option>
+                  <option value="WV">West Virginia</option>
+                  <option value="WI">Wisconsin</option>
+                  <option value="WY">Wyoming</option>
+                </select>
+                <div *ngIf="phyState.invalid && (phyState.dirty || phyState.touched)" class="invalid-feedback">
+                  State is required.
+                </div>
+              </div>
+            </div>
+
+
+            <hr>
+            <div class="col-md-6">
+              <label class="mb-2 d-block" for="carrierName">Carrier Name</label>
+              <input type="text" class="form-control" id="carrierName" placeholder="CA Number"
+                [(ngModel)]="newCompany.carrierName" name="carrierName" #carrierName="ngModel" required
+                [ngClass]="{'is-invalid': carrierName.invalid && (carrierName.dirty || carrierName.touched)}">
+              <div *ngIf="carrierName.invalid && (carrierName.dirty || carrierName.touched)" class="invalid-feedback">
+                Carrier Name is required
+              </div>
+            </div>
+            <div class="col-md-6">
+              <h5 class="font-14 d-block font-weight-700">Phone Number</h5>
+              <input type="text" class="form-control" id="phoneNumber" placeholder="phoneNumber"
+                [(ngModel)]="newCompany.phoneNumber" name="phoneNumber" #phoneNumber="ngModel" required
+                [ngClass]="{'is-invalid': phoneNumber.invalid && (phoneNumber.dirty || phoneNumber.touched)}">
+              <div *ngIf="phoneNumber.invalid && (phoneNumber.dirty || phoneNumber.touched)" class="invalid-feedback">
+                Phone Number is required.
+              </div>
+            </div>
+
+
+
+            <div class="col-md-6">
+              <h5 class="font-14 d-block font-weight-700">Company Email</h5>
+              <input type="text" class="form-control" id="companyEmail" placeholder="companyEmail"
+                [(ngModel)]="newCompany.companyEmail" name="companyEmail" #companyEmail="ngModel" required
+                [ngClass]="{'is-invalid': companyEmail.invalid && (companyEmail.dirty || companyEmail.touched)}">
+              <div *ngIf="companyEmail.invalid && (companyEmail.dirty || companyEmail.touched)"
+                class="invalid-feedback">
+                Company Email is required.
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <label class="mb-2 d-block" for="contact">Contact Name</label>
+              <input type="text" class="form-control" id="contact" placeholder="Contact Name"
+                [(ngModel)]="newCompany.contact" name="contact" #contact="ngModel" required
+                [ngClass]="{'is-invalid': contact.invalid && (contact.dirty || contact.touched)}">
+              <div *ngIf="contact.invalid && (contact.dirty || contact.touched)" class="invalid-feedback">
+                Contact Name is required
+              </div>
+            </div>
+
+
+            <div class="col-md-6">
+              <label class="mb-2 d-block" for="lastContact">Last Contact</label>
+              <input type="text" class="form-control" id="lastContact" placeholder="Last Contact"
+                [(ngModel)]="newCompany.lastContact" name="lastContact" #lastContact="ngModel" required
+                [ngClass]="{'is-invalid': lastContact.invalid && (lastContact.dirty || lastContact.touched)}">
+              <div *ngIf="lastContact.invalid && (lastContact.dirty || lastContact.touched)" class="invalid-feedback">
+                Last Contact is required
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="mb-2 d-block" for="status">Status</label>
+              <select class="form-control" id="status" name="status" [(ngModel)]="newCompany.status" #status="ngModel"
+                required [ngClass]="{'is-invalid': status.invalid && (status.dirty || status.touched)}">
+                <option value="" disabled selected>Select Status</option>
+                <option value="prospect">Prospect</option>
+                <option value="new">New</option>
+                <option value="client">Client</option>
+                <option value="lost">Lost</option>
+              </select>
+              <div *ngIf="status.invalid && (status.dirty || status.touched)" class="invalid-feedback">
+                Status is required
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="mb-2 d-block" for="service">Services</label>
+              <div class="form-check form-check-inline" *ngFor="let service of serviceOptions">
+                <input class="form-check-input" type="checkbox" [id]="service.id" [value]="service.label"
+                  [checked]="newCompany.services?.includes(service.label)"
+                  (change)="onServiceChange($event, service.label)">
+                <label class="form-check-label" [for]="service.id">
+                  {{ service.label }}
+                </label>
+              </div>
+            </div>
+
+            <hr>
+            <div class="col-md-6">
+              <label class="mb-2 d-block" for="caNumber">CA Number</label>
+              <input type="text" class="form-control" id="caNumber" placeholder="CA Number"
+                [(ngModel)]="newCompany.caNumber" name="CA Number" #caNumber="ngModel" required
+                [ngClass]="{'is-invalid': caNumber.invalid && (caNumber.dirty || caNumber.touched)}">
+              <div *ngIf="caNumber.invalid && (caNumber.dirty || caNumber.touched)" class="invalid-feedback">
+                CA Number is required
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="mb-2 d-block" for="CompanyDBA">Company Name DBA</label>
+              <input type="text" class="form-control" id="CompanyDBA" placeholder="Company Name DBA"
+                [(ngModel)]="newCompany.CompanyDBA" name="CompanyDBA" #CompanyDBA="ngModel" required
+                [ngClass]="{'is-invalid': CompanyDBA.invalid && (CompanyDBA.dirty || CompanyDBA.touched)}">
+              <div *ngIf="CompanyDBA.invalid && (CompanyDBA.dirty || CompanyDBA.touched)" class="invalid-feedback">
+                Company Name is required.
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <label class="mb-2 d-block" for="corporation">Corporation</label>
+              <input type="text" class="form-control" id="corporation" placeholder="Company Name DBA"
+                [(ngModel)]="newCompany.corporation" name="corporation" #corporation="ngModel" required
+                [ngClass]="{'is-invalid': corporation.invalid && (corporation.dirty || corporation.touched)}">
+              <div *ngIf="corporation.invalid && (corporation.dirty || corporation.touched)" class="invalid-feedback">
+                corporation is required.
+              </div>
+            </div>
+
+            <!-- <div class="col-md-6">
+              <h5 class="font-14 d-block font-weight-700">Ein:</h5>
+              <input type="text" class="form-control" id="ein" placeholder="EIN" [(ngModel)]="newCompany.ein" name="EIN"
+                #ein="ngModel" required [ngClass]="{'is-invalid': ein.invalid && (ein.dirty || ein.touched)}">
+              <div *ngIf="ein.invalid && (ein.dirty || ein.touched)" class="invalid-feedback">
+                EIN is required.
+              </div>
+            </div> -->
+
+            <!-- <div class="col-md-6">
+              <h5 class="font-14 d-block font-weight-700">w9</h5>
+              <input type="text" class="form-control" id="w9" placeholder="w9" [(ngModel)]="newCompany.w9" name="w9"
+                #w9="ngModel" required [ngClass]="{'is-invalid': w9.invalid && (w9.dirty || w9.touched)}">
+              <div *ngIf="w9.invalid && (w9.dirty || w9.touched)" class="invalid-feedback">
+                w9 is required.
+              </div>
+            </div> -->
+
+
+
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="mb-2 d-block" for="companyType">Company Type</label>
+                <select id="companyType" class="form-select form-control" name="companyType"
+                  [(ngModel)]="newCompany.companyType" #companyType="ngModel" required
+                  [ngClass]="{'is-invalid': companyType.invalid && (companyType.dirty || companyType.touched)}">
+                  <option value="" disabled selected>Select Company Type</option>
+                  <option value="Carrier">Carrier</option>
+                  <option value="Broker">Broker</option>
+                  <option value="Freight Forwarder">Freight Forwarder</option>
+                  <option value="Other">Other</option>
+                </select>
+                <div *ngIf="companyType.invalid && (companyType.dirty || companyType.touched)" class="invalid-feedback">
+                  Company Type is required.
+                </div>
+              </div>
+            </div>
+
+
+
+            <hr>
+            <div class="col-md-6">
+              <h5 class="font-14 d-block font-weight-700">IFTA ACC</h5>
+              <input type="text" class="form-control" id="iftaAcc" placeholder="IRP ACC"
+                [(ngModel)]="newCompany.iftaAcc" name=" IFTA ACC" #iftaAcc="ngModel" required
+                [ngClass]="{'is-invalid': iftaAcc.invalid && (iftaAcc.dirty || iftaAcc.touched)}">
+              <div *ngIf="iftaAcc.invalid && (iftaAcc.dirty || iftaAcc.touched)" class="invalid-feedback">
+                IFTA ACC is required.
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <h5 class="font-14 d-block font-weight-700">prepass</h5>
+              <input type="text" class="form-control" id="prepass" placeholder="prepass"
+                [(ngModel)]="newCompany.prepass" name="prepass" #prepass="ngModel" required
+                [ngClass]="{'is-invalid': prepass.invalid && (prepass.dirty || prepass.touched)}">
+              <div *ngIf="prepass.invalid && (prepass.dirty || prepass.touched)" class="invalid-feedback">
+                prepass is required.
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <h5 class="font-14 d-block font-weight-700">IRP ACC</h5>
+              <input type="text" class="form-control" id="irpAcc" placeholder="IRP ACC" [(ngModel)]="newCompany.irpAcc"
+                name="IRP ACC" #irpAcc="ngModel" required
+                [ngClass]="{'is-invalid': irpAcc.invalid && (irpAcc.dirty || irpAcc.touched)}">
+              <div *ngIf="irpAcc.invalid && (irpAcc.dirty || irpAcc.touched)" class="invalid-feedback">
+                IRP ACC is required.
+              </div>
+            </div>
+
+
+
+            <div class="col-md-6">
+              <h5 class="font-14 d-block font-weight-700">IRP Renewal Date</h5>
+              <input type="date" class="form-control" id="irpRenewal" [(ngModel)]="newCompany.irpRenewalDate"
+                name="irpRenewalDate" #irpRenewalDate="ngModel" required
+                [ngClass]="{'is-invalid': irpRenewalDate.invalid && (irpRenewalDate.dirty || irpRenewalDate.touched)}">
+              <div *ngIf="irpRenewalDate.invalid && (irpRenewalDate.dirty || irpRenewalDate.touched)"
+                class="invalid-feedback">
+                IRP Renewal Date is required.
+              </div>
+            </div>
+
+
+
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="mb-2 d-block" for="operatingAuthority">Operating Authority</label>
+                <select id="operatingAuthority" class="form-control form-select" name="operatingAuthority"
+                  [(ngModel)]="newCompany.operatingAuthority" #operatingAuthority="ngModel" required
+                  [ngClass]="{'is-invalid': operatingAuthority.invalid && (operatingAuthority.dirty || operatingAuthority.touched)}">
+                  <option value="" disabled selected>Select Operating Authority</option>
+                  <option value="Interstate">Interstate</option>
+                  <option value="Intrastate">Intrastate</option>
+                </select>
+                <div *ngIf="operatingAuthority.invalid && (operatingAuthority.dirty || operatingAuthority.touched)"
+                  class="invalid-feedback">
+                  Operating Authority is required.
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <hr>
+
+
+
+
+
+
+
+
+
+        </form>
+        <div class="modal-footer justify-content-center"
+          style="border-top: 1px solid #ccc; padding-top: 15px; margin-top: 15px; ">
+          <button type="button" class="btn btn-outline-secondary btn-sm text-uppercase rounded-pill"
+            data-bs-dismiss="offcanvas" aria-label="Close"> Close</button>
+          <button type="submit" class="btn btn-success btn-sm text-uppercase rounded-pill">Save changes</button>
+          <button type="button" class="btn btn-success btn-sm text-uppercase rounded-pill"
+            (click)="goToSection('insurance-info'  , $event)">Next</button>
+        </div>
+      </div>
+
+
+
+      <div class="content_ac" *ngIf="activeSection === 'insurance-info'">
+
+        <h3 class="mb-4 c-block" style="font-size: 32px;  color:rgb(53, 53, 53) ">Insurance Information</h3>
+
+        <form class="row g-3" (ngSubmit)="submitForm(f)" #f="ngForm">
+          <div class="row">
+
+
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="mb-2 d-block" for="insuranceBrokerName">Insurance Broker Name</label>
+                <input type="text" class="form-control" id="insuranceBrokerName" name="insuranceBrokerName"
+                  [(ngModel)]="newCompany.insuranceBrokerName" #insuranceBrokerName="ngModel" required
+                  [ngClass]="{'is-invalid': insuranceBrokerName.invalid && (insuranceBrokerName.dirty || insuranceBrokerName.touched)}">
+                <div *ngIf="insuranceBrokerName.invalid && (insuranceBrokerName.dirty || insuranceBrokerName.touched)"
+                  class="invalid-feedback">
+                  insurance broker Name is required.
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="mb-2 d-block" for="companyPhysicalAddress">Company Physical Address</label>
+                <input type="text" class="form-control" id="companyPhysicalAddress" name="companyPhysicalAddress"
+                  [(ngModel)]="newCompany.companyPhysicalAddress" #companyPhysicalAddress="ngModel" required
+                  [ngClass]="{'is-invalid': companyPhysicalAddress.invalid && (companyPhysicalAddress.dirty || companyPhysicalAddress.touched)}">
+                <div
+                  *ngIf="companyPhysicalAddress.invalid && (companyPhysicalAddress.dirty || companyPhysicalAddress.touched)"
+                  class="invalid-feedback">
+                  MC Number is required.
+                </div>
+              </div>
+            </div>
+
+
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="mb-2 d-block" for="companyMailingAddress">Company Mailing Address</label>
+                <input type="text" class="form-control" id="companyMailingAddress" name="companyMailingAddress"
+                  [(ngModel)]="newCompany.companyMailingAddress" #companyMailingAddress="ngModel" required
+                  [ngClass]="{'is-invalid': companyMailingAddress.invalid && (companyMailingAddress.dirty || companyMailingAddress.touched)}">
+                <div
+                  *ngIf="companyMailingAddress.invalid && (companyMailingAddress.dirty || companyMailingAddress.touched)"
+                  class="invalid-feedback">
+                  Company Mailing Address is required.
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="mb-2 d-block" for="companyEmailAddress">Company Email Address</label>
+                <input type="text" class="form-control" id="companyEmailAddress" name="companyEmailAddress"
+                  [(ngModel)]="newCompany.companyEmailAddress" #companyEmailAddress="ngModel" required
+                  [ngClass]="{'is-invalid': companyEmailAddress.invalid && (companyEmailAddress.dirty || companyEmailAddress.touched)}">
+                <div *ngIf="companyEmailAddress.invalid && (companyEmailAddress.dirty || companyEmailAddress.touched)"
+                  class="invalid-feedback">
+                  company email address is required.
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="mb-2 d-block" for="Contact">Contact Number</label>
+                <input type="text" class="form-control" id="Contact" name="Contact" [(ngModel)]="newCompany.Contact"
+                  #Contact="ngModel" required
+                  [ngClass]="{'is-invalid': Contact.invalid && (Contact.dirty || Contact.touched)}">
+                <div *ngIf="Contact.invalid && (Contact.dirty || Contact.touched)" class="invalid-feedback">
+                  contactnumber is required.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label class="mb-2 d-block" for="insuranceType">Insurance Type</label>
+                <select id="dropdowns" class="form-control form-select" [(ngModel)]="newCompany.insuranceType"
+                  name="insuranceType" required>
+                  <option value="" selected>Select an option</option>
+                  <option value="Auto Liability Insurance">Auto Liability Insurance</option>
+                  <option value="General Liability Insurance">General Liability Insurance</option>
+                  <option value="Physical Damage Insurance">Physical Damage Insurance</option>
+                  <option value="Cargo Insurance">Cargo Insurance</option>
+                  <option value="Trailer Interchange Insurance">Trailer Interchange Insurance</option>
+                  <option value="Workers’ Compensation Insurance">Workers’ Compensation Insurance</option>
+                  <option value="Umbrella Insurance">Umbrella Insurance</option>
+                </select>
+              </div>
+
+              <div *ngIf="newCompany.insuranceType" class="border bg-light rounded">
+                <div class="modal-header border-bottom p-3">
+                  <h5 class="modal-title">{{ newCompany.insuranceType }}</h5>
+                  <div>
+                    <!-- <a routerLink="/Drivers/View" class="font-14 text-uppercase font-weight-500 me-3">View</a> -->
+                    <button type="button" class="btn btn-success rounded-pill font-14" (click)="addInsuranceEntry()">Add
+                      Form</button>
+                  </div>
+                </div>
+
+                <form (ngSubmit)="submitForm(f)" #f="ngForm">
+                  <!-- <div class="p-3">
+                    <div class="row"  >
+                      <div class="col-md-6">
+                         
+                        <div class="form-group">
+                          <label class="mb-2 d-block" for="companyInsuranceName">Company Name:</label>
+                          <input type="text" class="form-control" id="companyInsuranceName"
+                                 [(ngModel)]="newCompany.companyInsuranceName"
+                                 name="companyInsuranceName" required>
+                        </div>
+                      </div>
+          
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="mb-2 d-block" for="policyNumber">Policy Number:</label>
+                          <input type="text" class="form-control" id="policyNumber"
+                                 [(ngModel)]="newCompany.policyNumber"
+                                 name="policyNumber" required>
+                        </div>
+                      </div>
+          
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="mb-2 d-block" for="policyStartDate">Policy Start Date:</label>
+                          <input type="date" class="form-control" id="policyStartDate"
+                                 [(ngModel)]="newCompany.policyStartDate"
+                                 name="policyStartDate" required>
+                        </div>
+                      </div>
+          
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="mb-2 d-block" for="policyExpirationDate">Policy Expiration Date:</label>
+                          <input type="date" class="form-control" id="policyExpirationDate"
+                                 [(ngModel)]="newCompany.policyExpirationDate"
+                                 name="policyExpirationDate" required>
+                        </div>
+                      </div>
+          
+                      <div *ngFor="let entry of newCompany.insuranceEntries; let i = index" class="col-md-6">
+                        <div class="form-group">
+                          <label class="mb-2 d-block" for="insuranceuploadDocument">Insurance Document</label>
+                          <input type="file" class="form-control" (change)="onFileChange($event, i, 'insurance')">
+                        </div>
+                      </div>
+                    </div>
+                  </div> -->
+
+                  <hr>
+
+                  <div class="p-3">
+                    <div class="bg-white p-3 rounded">
+                      <div class="table-responsive">
+                        <table id="formTable" class="table table-bordered align-middle text-nowrap">
+                          <thead class="table-dark">
+                            <tr>
+                              <th>Company Name:</th>
+                              <th>Policy Number:</th>
+                              <th>Policy Start Date:</th>
+                              <th>Policy Expiration Date:</th>
+                              <th>Upload Certificate:</th>
+                              <th>Actions</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let entry of newCompany.insuranceEntries; let i = index">
+                              <!-- Company Name -->
+                              <td class="text-center align-middle">
+                                <input type="text" class="form-control form-control-sm mx-auto text-center"
+                                  style="max-width: 90%;" [(ngModel)]="entry.companyInsuranceName"
+                                  name="companyInsuranceName-{{i}}" required>
+                              </td>
+
+                              <!-- Policy Number -->
+                              <td class="text-center align-middle">
+                                <input type="text" class="form-control form-control-sm mx-auto text-center"
+                                  style="max-width: 90%;" [(ngModel)]="entry.policyNumber" name="policyNumber-{{i}}"
+                                  required>
+                              </td>
+
+                              <!-- Policy Start Date -->
+                              <td class="text-center align-middle">
+                                <input type="date" class="form-control form-control-sm mx-auto text-center"
+                                  style="max-width: 90%;" [(ngModel)]="entry.policyStartDate"
+                                  name="policyStartDate-{{i}}" required>
+                              </td>
+
+                              <!-- Policy Expiration Date -->
+                              <td class="text-center align-middle">
+                                <input type="date" class="form-control form-control-sm mx-auto text-center"
+                                  style="max-width: 90%;" [(ngModel)]="entry.policyExpirationDate"
+                                  name="policyExpirationDate-{{i}}" required>
+                              </td>
+
+                              <!-- Upload Certificate -->
+                              <td class="text-center align-middle">
+                                <input type="file" class="form-control form-control-sm mx-auto" style="max-width: 90%;"
+                                  (change)="onFileChange($event, i, 'insurance')">
+                                <span *ngIf="insuranceFileNames[i]" class="d-block mt-1 small text-muted text-center">
+                                  {{ insuranceFileNames[i] }}
+                                </span>
+                              </td>
+
+                              <!-- Actions -->
+                              <td class="text-center align-middle">
+                                <button type="button" class="btn btn-danger btn-sm rounded-pill"
+                                  (click)="removeInsuranceEntry(i)">
+                                  Delete
+                                </button>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="modal-footer justify-content-center"
+            style="border-top: 1px solid #ccc; padding-top: 15px; margin-top: 15px; ">
+            <button type="button" class="btn btn-outline-secondary btn-sm text-uppercase rounded-pill"
+              data-bs-dismiss="offcanvas" aria-label="Close"> Close</button>
+            <button type="submit" class="btn btn-success btn-sm text-uppercase rounded-pill"
+              data-bs-dismiss="offcanvas">Save changes</button>
+            <button type="button" class="btn btn-success btn-sm text-uppercase rounded-pill"
+              (click)="goToSection('compliance-info'  , $event)">Next</button>
+          </div>
+        </form>
+      </div>
+
+
+
+
+
+
+      <div class="content_ac" *ngIf="activeSection === 'compliance-info'">
+        <h3 class="mb-4 c-block" style="font-size: 32px;  color:rgb(53, 53, 53) ">Compliance Documentation</h3>
+        <form class="row g-3" (ngSubmit)="submitForm(f)" #f="ngForm">
+          <div class="row">
+            <!-- Us DOT Registration Upload Document -->
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="mb-2 d-block" for="usDOTRegistrationUploadDocument">
+                  Us DOT Registration Upload Document
+                </label>
+                <input type="file" class="form-control" id="usDOTRegistrationUploadDocument"
+                  (change)="onFileChange($event, 'usDOTRegistrationUploadDocument', 'compliance')">
+                <small *ngIf="complianceFilesNames['usDOTRegistrationUploadDocument']">
+                  Selected: {{ complianceFilesNames['usDOTRegistrationUploadDocument'] }}
+                </small>
+              </div>
+            </div>
+
+            <!-- Mc Certificate Upload Document -->
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="mb-2 d-block" for="mcCertificateUploadDocument">
+                  Mc Certificate Upload Document
+                </label>
+                <input type="file" class="form-control" id="mcCertificateUploadDocument"
+                  (change)="onFileChange($event, 'mcCertificateUploadDocument', 'compliance')">
+                <small *ngIf="complianceFilesNames['mcCertificateUploadDocument']">
+                  Selected: {{ complianceFilesNames['mcCertificateUploadDocument'] }}
+                </small>
+              </div>
+            </div>
+
+            <!-- Ifta Registration Upload Document -->
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="mb-2 d-block" for="iftaRegistrationUploadDocument">
+                  Ifta Registration Document
+                </label>
+                <input type="file" class="form-control" id="iftaRegistrationUploadDocument"
+                  (change)="onFileChange($event, 'iftaRegistrationUploadDocument', 'compliance')">
+                <small *ngIf="complianceFilesNames['iftaRegistrationUploadDocument']">
+                  Selected: {{ complianceFilesNames['iftaRegistrationUploadDocument'] }}
+                </small>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="mb-2 d-block" for="insuranceDocument">Insurance Document</label>
+                <input type="file" class="form-control" id="insuranceDocument"
+                  (change)="onFileChange($event, 'insuranceDocument')">
+                <small *ngIf="generalFileNames['insuranceDocument']">
+                  Selected: {{ generalFileNames['insuranceDocument'] }}
+                </small>
+              </div>
+            </div>
+
+            <h3 class="mb-4 c-block" style="font-size: 32px;  color:rgb(53, 53, 53) "> Accounts & Permits</h3>
+
+
+            <div class="col-md-6">
+              <label class="mb-2 d-block" for="prepassAccountNumber">Prepass Account Number</label>
+              <input type="text" class="form-control" id="prepassAccountNumber" placeholder="Prepass Account Number"
+                [(ngModel)]="newCompany.accountsPermits.prepassAccountNumber" name="prepassAccountNumber"
+                #prepassAccountNumber="ngModel" required
+                [ngClass]="{'is-invalid': prepassAccountNumber.invalid && (prepassAccountNumber.dirty || prepassAccountNumber.touched)}">
+              <div *ngIf="prepassAccountNumber.invalid && (prepassAccountNumber.dirty || prepassAccountNumber.touched)"
+                class="invalid-feedback">
+                Prepass Account Number is required
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <label class="mb-2 d-block" for="iftaAccountNumber">IFTA Account Number</label>
+              <input type="text" class="form-control" id="iftaAccountNumber" placeholder="IFTA Account Number"
+                [(ngModel)]="newCompany.accountsPermits.iftaAccountNumber" name="iftaAccountNumber"
+                #iftaAccountNumber="ngModel" required
+                [ngClass]="{'is-invalid': iftaAccountNumber.invalid && (iftaAccountNumber.dirty || iftaAccountNumber.touched)}">
+              <div *ngIf="iftaAccountNumber.invalid && (iftaAccountNumber.dirty || iftaAccountNumber.touched)"
+                class="invalid-feedback">
+                IFTA Number is required
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <label class="mb-2 d-block" for="ucrNumber">UCR Number</label>
+              <input type="text" class="form-control" id="ucrNumber" placeholder="UCR Number"
+                [(ngModel)]="newCompany.accountsPermits.ucrNumber" name="ucrNumber" #ucrNumber="ngModel" required
+                [ngClass]="{'is-invalid': ucrNumber.invalid && (ucrNumber.dirty || ucrNumber.touched)}">
+              <div *ngIf="ucrNumber.invalid && (ucrNumber.dirty || ucrNumber.touched)" class="invalid-feedback">
+                UCR Number is required
+              </div>
+            </div>
+            <h3 class="mb-4 c-block" style="font-size: 32px;  color:rgb(53, 53, 53) "> Documentation</h3>
+
+            <div class="col-md-6">
+              <label class="mb-2 d-block">KYU</label>
+              <input type="text" class="form-control" id="kyu" placeholder="KYU" [(ngModel)]="newCompany.kyu" name="KYU"
+                #kyu="ngModel" required [ngClass]="{'is-invalid': kyu.invalid && (kyu.dirty || kyu.touched)}">
+              <div *ngIf="kyu.invalid && (kyu.dirty || kyu.touched)" class="invalid-feedback">
+                KYU is required.
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="mb-2 d-block" for="kyuUploadDocument"> Kyu Upload Document</label>
+                <input type="file" class="form-control" id="kyuUploadDocument"
+                  (change)="onFileChange($event, 'kyuUploadDocument')">
+                <small *ngIf="generalFileNames['kyuUploadDocument']">
+                  Selected: {{ generalFileNames['kyuUploadDocument'] }}
+                </small>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <h5 class="font-14 d-block font-weight-700">KYU Expiration</h5>
+              <input type="date" class="form-control" id="kyuExpiration" [(ngModel)]="newCompany.kyuExpiration"
+                name="kyuExpiration" #kyuExpiration="ngModel" required
+                [ngClass]="{'is-invalid': kyuExpiration.invalid && (kyuExpiration.dirty || kyuExpiration.touched)}">
+              <div *ngIf="kyuExpiration.invalid && (kyuExpiration.dirty || kyuExpiration.touched)"
+                class="invalid-feedback">
+                KYU Expiration is required.
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <h5 class="font-14 d-block font-weight-700">NY</h5>
+              <input type="text" class="form-control" id="ny" placeholder="NY" [(ngModel)]="newCompany.ny" name="NY"
+                #ny="ngModel" required [ngClass]="{'is-invalid': ny.invalid && (ny.dirty || ny.touched)}">
+              <div *ngIf="ny.invalid && (ny.dirty || ny.touched)" class="invalid-feedback">
+                NY is required.
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="mb-2 d-block" for="nyUploadDocument"> NY Upload Document</label>
+                <input type="file" class="form-control" id="nyUploadDocument"
+                  (change)="onFileChange($event, 'nyUploadDocument')">
+                <small *ngIf="generalFileNames['nyUploadDocument']">
+                  Selected: {{ generalFileNames['nyUploadDocument'] }}
+                </small>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <h5 class="font-14 d-block font-weight-700">NY Expiration</h5>
+              <input type="date" class="form-control" id="nyExpiration" [(ngModel)]="newCompany.nyExpiration"
+                name="nyExpiration" #nyExpiration="ngModel" required
+                [ngClass]="{'is-invalid': nyExpiration.invalid && (nyExpiration.dirty || nyExpiration.touched)}">
+              <div *ngIf="nyExpiration.invalid && (nyExpiration.dirty || nyExpiration.touched)"
+                class="invalid-feedback">
+                NY Expiration is required.
+              </div>
+            </div>
+
+
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="mb-2 d-block" for="w9UploadDocument">Upload Document</label>
+                <input type="file" class="form-control" id="w9UploadDocument"
+                  (change)="onFileChange($event, 'w9UploadDocument')">
+                <small *ngIf="generalFileNames['w9UploadDocument']">
+                  Selected: {{ generalFileNames['w9UploadDocument'] }}
+                </small>
+
+              </div>
+            </div>
+
+
+            <div class="modal-footer justify-content-center"
+              style="border-top: 1px solid #ccc; padding-top: 15px; margin-top: 15px;">
+              <button type="button" class="btn btn-outline-secondary btn-sm text-uppercase rounded-pill"
+                data-bs-dismiss="offcanvas" aria-label="Close">Close</button>
+              <button type="submit" class="btn btn-success btn-sm text-uppercase rounded-pill"
+                data-bs-dismiss="offcanvas">SUBMIT FORM</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </form>   
+  </div>
+</div>
+
+
+<footer id="footer" class="footer text-center"
+  style="position: fixed; bottom: 0; width: 100%; background-color:rgb(187, 187, 187);"
+  [ngClass]="{'full-widths': isSidebarOpen, 'shift-rights': !isSidebarOpen}">
+  <div class="text-dark">
+    <span class="text-muted fw-semibold me-1">2025© all rights reserved</span>
+    <a class="font-weight-700 text-hover-dark text-dark text-uppercase">3PL TEK INC.</a>
+  </div>
+</footer>
+
+
+
+<div class="modal fade" id="taskDetailsModal" tabindex="-1" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered mx-auto" style="max-width:800px;" (click)="$event.stopPropagation()">
+    <div class="modal-content shadow rounded-3">
+      <div class="modal-header bg-light border-bottom">
+        <h5 class="modal-title">
+          <i class="fas fa-tasks text-success me-2"></i> Task Details
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" *ngIf="selectedTask">
+        <div class="mb-3">
+          <h4 class="mb-1 text-primary">
+            <i class="fas fa-clipboard-list me-2"></i> {{ selectedTask.title }}
+          </h4>
+          <span class="badge bg-secondary ms-2">{{ selectedTask.priority | titlecase }}</span>
+          <span class="badge  ms-2" [ngClass]="{
+            'bg-success': selectedTask.completed,
+            'bg-warning text-dark': !selectedTask.completed
+          }">
+            {{ selectedTask.completed ? 'Completed' : 'Active' }}
+          </span>
+        </div>
+        <hr>
+        <div class="row mb-2">
+          <div class="col-12 mb-2">
+            <i class="fas fa-align-left me-2 text-muted"></i>
+            <strong>Description:</strong>
+            <span class="text-muted">{{ selectedTask.description || 'No description' }}</span>
+          </div>
+          <div class="col-6 mb-2">
+            <i class="fas fa-calendar-alt me-2 text-muted"></i>
+            <strong>Due Date:</strong>
+            <span class="text-muted">{{ selectedTask.dueDate | date:'MMM d, y' }}</span>
+          </div>
+          <div class="col-6 mb-2" *ngIf="selectedTask.carrierContact">
+            <i class="fas fa-phone me-2 text-muted"></i>
+            <strong>Carrier Contact:</strong>
+            <span class="text-muted">{{ selectedTask.carrierContact }}</span>
+          </div>
+          <div class="col-6 mb-2" *ngIf="selectedTask.assignedTo">
+            <i class="fas fa-user-check me-2 text-muted"></i>
+            <strong>Assigned To:</strong>
+            <span class="text-muted">{{ selectedTask.assignedTo }}</span>
+          </div>
+          <div class="col-6 mb-2" *ngIf="selectedTask.relatedTo">
+            <i class="fas fa-link me-2 text-muted"></i>
+            <strong>Related To:</strong>
+            <span class="text-muted">{{ selectedTask.relatedTo | titlecase }}</span>
+          </div>
+        </div>
+        <hr>
+        <div class="row mb-2">
+          <div class="col-6 mb-2">
+            <i class="fas fa-user me-2 text-muted"></i>
+            <strong>Created By:</strong>
+            <span class="text-muted">{{ selectedTask.createdBy }}</span>
+          </div>
+          <div class="col-6 mb-2">
+            <i class="fas fa-clock me-2 text-muted"></i>
+            <strong>Created At:</strong>
+            <span class="text-muted">{{ selectedTask.createdAt | date:'MMM d, y, h:mm a' }}</span>
+          </div>
+          <div class="col-6 mb-2" *ngIf="selectedTask.completed">
+            <i class="fas fa-user-check me-2 text-success"></i>
+            <strong>Completed By:</strong>
+            <span class="text-muted">{{ selectedTask.completedBy }}</span>
+          </div>
+          <div class="col-6 mb-2" *ngIf="selectedTask.completed">
+            <i class="fas fa-check-circle me-2 text-success"></i>
+            <strong>Completed At:</strong>
+            <span class="text-muted">{{ selectedTask.completedAt | date:'MMM d, y, h:mm a' }}</span>
+          </div>
+        </div>
+        <div class="mb-2" *ngIf="selectedTask.outcome">
+          <i class="fas fa-flag-checkered me-2 text-info"></i>
+          <strong>Outcome:</strong>
+          <span class="badge bg-info">{{ selectedTask.outcome | titlecase }}</span>
+        </div>
+        <div class="mb-2" *ngIf="selectedTask.hoursSpent">
+          <i class="fas fa-hourglass-half me-2 text-muted"></i>
+          <strong>Hours Spent:</strong>
+          <span class="text-muted">{{ selectedTask.hoursSpent }} hrs</span>
+        </div>
+        <div class="mb-2" *ngIf="selectedTask.completionNotes">
+          <i class="fas fa-sticky-note me-2 text-warning"></i>
+          <strong>Completion Notes:</strong>
+          <span class="text-muted">{{ selectedTask.completionNotes }}</span>
+        </div>
+        <div class="mb-2" *ngIf="selectedTask.followupCreated">
+          <i class="fas fa-redo me-2 text-primary"></i>
+          <strong>Follow-up Created:</strong>
+          <span class="text-muted">{{ selectedTask.followupTask }}</span>
+          <span *ngIf="selectedTask.followupDueDate"> | Due: {{ selectedTask.followupDueDate | date:'MMM d, y' }}</span>
+          <span *ngIf="selectedTask.followupPriority"> | Priority: <span class="badge bg-secondary">{{ selectedTask.followupPriority | titlecase }}</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
