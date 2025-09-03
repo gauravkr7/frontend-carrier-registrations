@@ -1,4 +1,4 @@
-<app-navbar></app-navbar>
+<app-navbar (toggleSidebar)="toggleSidebar()"></app-navbar>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -6,9 +6,9 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
 
 
-<main id="main" class="main mt-0 p-0">
-  <div id="kt_app_content" class="app-content flex-column-fluid">
-    <div class="container-fluid px-5">
+<main id="main" class=" bg-gray main mt-0 p-0" [ngClass]="{'full-width': isSidebarOpen, 'shift-right': !isSidebarOpen}">
+  <div id="kt_app_content" class="app-content flex-column-fluid" style="margin-left: 90px;">
+    <div   class="container-fluid px-5">
       <div class="row bg-white px-3 py-4 mt-3 rounded">
         <div class="col-md-12">
 
@@ -128,7 +128,7 @@
 
                 <!-- Users table -->
                 <div class="table-responsive my-4">
-                  <table class="table table-bordered">
+                  <table class=" table table-bordered">
                     <thead>
                       <tr>
                         <th scope="col">Name</th>
@@ -148,7 +148,7 @@
                         <td>{{ user.role }}</td>
                         <td>Update Permission</td>
                         <td>Active</td>
-                        <td class="text-capitalize text-center">
+                        <td class="text-capitalize ">
                           <div class="dropdown filter-dropdown" style="position: fixed;">
                             <span class="dropdown-toggle font-16 px-3" type="button" id="dropdownMenuButton23"
                               data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></span>
@@ -232,6 +232,14 @@
     </div>
   </div>
 </main>
+
+<footer id="footer" class="footer text-center"
+[ngClass]="{'full-widths': isSidebarOpen, 'shift-rights': !isSidebarOpen}" >
+<div class="text-dark">
+  <span class="text-muted fw-semibold me-1">2025© all rights reserved</span>
+  <a class="font-weight-700 text-hover-dark text-dark text-uppercase">3PL TEK INC.</a>
+</div>
+</footer>
 
 <div class="offcanvas offcanvas-end" id="addpg" aria-labelledby="offcanvasRightLabel" style="width: 80%;">
   <div class="modal-header" style="padding: 15px; border-bottom: 1px solid #ccc;">

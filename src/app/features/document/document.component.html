@@ -1,4 +1,4 @@
-<app-navbar></app-navbar>
+<app-navbar (toggleSidebar)="toggleSidebar()"></app-navbar>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
@@ -7,48 +7,215 @@
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
 
-<main id="main" class="main mt-0 p-0">
-    <div id="kt_app_content" class="app-content  flex-column-fluid">
-        <div class="container-fluid px-5">
-            
-          <div class="row bg-white p-3 mt-3 rounded">
-            <div class="col-md-12">
-              <div class="d-flex justify-content-between">
-                <div>
-                  <button class="btn btn-success rounded-pill font-14 active me-2">
-                  Document
-                  </button>
-                  <a href="company-profile" class="btn btn-outline-secondary rounded-pill font-14">
-                    Back to Home
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-          
 
-          <div class="row bg-white px-3 py-4 mt-3 rounded">
-              <div class="col-md-12">
-                  <nav aria-label="Page navigation example ms-auto me-auto">
-                    <ul class="pagination justify-content-center gap-2 mb-0">
-                      <li class="page-item">
-                        <a class="page-link font-22" href="javascript:;" aria-label="Previous"><i class="fa fa-angle-left font-weight-300"></i></a>
-                      </li>
-                      <li class="page-item active"><a class="page-link font-14" href="javascript:;">1</a></li>
-                      <li class="page-item"><a class="page-link font-14" href="javascript:;">2</a></li>
-                      <li class="page-item"><a class="page-link font-14" href="javascript:;">3</a></li>
-                      <li class="page-item"><a class="page-link font-14" href="javascript:;">4</a></li>
-                      <li class="page-item"><a class="page-link font-14" href="javascript:;">5</a></li>
-                      <li class="page-item"><a class="page-link font-22" href="javascript:;" aria-label="Next"><i class="fa fa-angle-right font-weight-300"></i></a></li>
-                    </ul>
-                  </nav>
-              </div>
+<main id="main" class="main mt-0 p-0 bg-gray " [ngClass]="{'full-width': isSidebarOpen, 'shift-right': !isSidebarOpen}" >
+  <div class="p-4 pb-0" style="margin-left: 90px; " >
+    <div class="bg-white rounded-lg p-3">
+      <div class="col-md-12">
+        <div class="d-flex justify-content-between">
+          <div>
+            <button class="btn btn-success rounded-pill font-14 active me-2">
+              Document
+            </button>
+            <button (click)="navigateToCompanyProfile()" class="btn btn-outline-secondary rounded-pill font-14">
+              Back to Home
+            </button>
           </div>
-
         </div>
+      </div>
     </div>
-  </main>
-  <!-- End #main -->
+ 
+    <div class="bg-white rounded-lg p-3 mt-3">
+      <div class="col-md-12">
+        <div *ngIf="isLoading" class="text-center p-3">
+          Loading...
+        </div>
+        <div *ngIf="errorMessage" class="text-center p-3 text-danger">
+          {{ errorMessage }}
+        </div>
+        <div *ngIf="!isLoading && !errorMessage">
+ 
+          <div class="table-responsive text-center">
+            <table class="table table-bordered table-striped">
+              <thead >
+                <tr>
+                  <th>DOT Number</th>
+                  <th>Company Name</th>
+                  <th>Expiration Date</th>
+                  <th>Document Name</th>
+                  <th>Company Type</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Compliance Documents -->
+                <tr *ngIf="kyuUploadDocument">
+                  <td>{{ dot }}</td>
+                  <td>{{ companyName }}</td>
+                  <td>{{ kyuExpiration | date:'MM-dd-yyyy' }}</td>
+                  <td>KYU Document</td>
+                  <td>{{ companyType }}</td>
+                  <td>
+                    <div class="dropdown">
+                      <span class="status status-warning dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span class="text">Actions</span>
+                        <i class="fa fa-angle-down font-12"></i>
+                      </span>
+                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
+                        <a class="dropdown-item pending font-13" href="javascript:;" (click)="viewDocument(kyuUploadDocument)">View</a>
+                        <!-- <a class="dropdown-item dispatch font-13" href="javascript:;" (click)="editDocument(kyuUploadDocument)">Edit</a>
+                        <a class="dropdown-item assiened font-13" href="javascript:;" (click)="deleteDoc('compliance', 'kyu', kyuUploadDocument)">Delete</a> -->
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr *ngIf="nyUploadDocument">
+                  <td>{{ dot }}</td>
+                  <td>{{ companyName }}</td>
+                  <td>{{ nyExpiration | date:'MM-dd-yyyy'  }}</td>
+                  <td>NY Document</td>
+                  <td>{{ companyType }}</td>
+                  <td>
+                    <div class="dropdown">
+                      <span class="status status-warning dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span class="text">Actions</span>
+                        <i class="fa fa-angle-down font-12"></i>
+                      </span>
+                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
+                        <a class="dropdown-item pending font-13" href="javascript:;" (click)="viewDocument(nyUploadDocument)">View</a>
+                        <!-- <a class="dropdown-item dispatch font-13" href="javascript:;" (click)="editDocument(nyUploadDocument)">Edit</a>
+                        <a class="dropdown-item assiened font-13" href="javascript:;" (click)="deleteDoc('compliance', 'ny', nyUploadDocument)">Delete</a> -->
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr *ngIf="w9UploadDocument">
+                  <td>{{ dot }}</td>
+                  <td>{{ companyName }}</td>
+                  <td>-</td>
+                  <td>W9 Document</td>
+                  <td>{{ companyType }}</td>
+                  <td>
+                    <div class="dropdown">
+                      <span class="status status-warning dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span class="text">Actions</span>
+                        <i class="fa fa-angle-down font-12"></i>
+                      </span>
+                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
+                        <a class="dropdown-item pending font-13" href="javascript:;" (click)="viewDocument(w9UploadDocument)">View</a>
+                        <!-- <a class="dropdown-item dispatch font-13" href="javascript:;" (click)="editDocument(w9UploadDocument)">Edit</a>
+                        <a class="dropdown-item assiened font-13" href="javascript:;" (click)="deleteDoc('compliance', 'w9', w9UploadDocument)">Delete</a> -->
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <ng-container *ngFor="let comp of complianceDocs; let i = index">
+                  <tr *ngIf="comp.usDOTRegistrationUploadDocument">
+                    <td>{{ dot }}</td>
+                    <td>{{ companyName }}</td>
+                    <td>-</td>
+                    <td>US DOT Registration</td>
+                    <td>{{ companyType }}</td>
+                    <td>
+                      <div class="dropdown">
+                        <span class="status status-warning dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
+                          <span class="text">Actions</span>
+                          <i class="fa fa-angle-down font-12"></i>
+                        </span>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
+                          <a class="dropdown-item pending font-13" href="javascript:;" (click)="viewDocument(comp.usDOTRegistrationUploadDocument)">View</a>
+                          <!-- <a class="dropdown-item dispatch font-13" href="javascript:;" (click)="editDocument(comp.usDOTRegistrationUploadDocument)">Edit</a>
+                          <a class="dropdown-item assiened font-13" href="javascript:;" (click)="deleteDoc('compliance', 'usDOT', comp)">Delete</a> -->
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr *ngIf="comp.mcCertificateUploadDocument">
+                    <td>{{ dot }}</td>
+                    <td>{{ companyName }}</td>
+                    <td>-</td>
+                    <td>MC Certificate</td>
+                    <td>{{ companyType }}</td>
+                    <td>
+                      <div class="dropdown">
+                        <span class="status status-warning dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
+                          <span class="text">Actions</span>
+                          <i class="fa fa-angle-down font-12"></i>
+                        </span>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
+                          <a class="dropdown-item pending font-13" href="javascript:;" (click)="viewDocument(comp.mcCertificateUploadDocument)">View</a>
+                          <!-- <a class="dropdown-item dispatch font-13" href="javascript:;" (click)="editDocument(comp.mcCertificateUploadDocument)">Edit</a>
+                          <a class="dropdown-item assiened font-13" href="javascript:;" (click)="deleteDoc('compliance', 'mc', comp)">Delete</a> -->
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr *ngIf="comp.iftaRegistrationUploadDocument">
+                    <td>{{ dot }}</td>
+                    <td>{{ companyName }}</td>
+                    <td>-</td>
+                    <td>IFTA Registration</td>
+                    <td>{{ companyType }}</td>
+                    <td>
+                      <div class="dropdown">
+                        <span class="status status-warning dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
+                          <span class="text">Actions</span>
+                          <i class="fa fa-angle-down font-12"></i>
+                        </span>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
+                          <a class="dropdown-item pending font-13" href="javascript:;" (click)="viewDocument(comp.iftaRegistrationUploadDocument)">View</a>
+                          <!-- <a class="dropdown-item dispatch font-13" href="javascript:;" (click)="editDocument(comp.iftaRegistrationUploadDocument)">Edit</a>
+                          <a class="dropdown-item assiened font-13" href="javascript:;" (click)="deleteDoc('compliance', 'ifta', comp)">Delete</a> -->
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                </ng-container>
+           
+                <!-- Insurance Documents -->
+                <tr *ngFor="let ins of insuranceDocs; let i = index">
+                  <td>{{ dot }}</td>
+                  <td>{{ ins.companyInsuranceName }}</td>
+                  <td>{{ ins.policyExpirationDate | date:'MM-dd-yyyy' }}</td>
+                  <td>{{ getDocumentName(ins.insuranceuploadDocument || '') }}</td>
+                  <td>{{ companyType }}</td>
+                  <td>
+                    <div class="dropdown">
+                      <span class="status status-warning dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span class="text">Actions</span>
+                        <i class="fa fa-angle-down font-12"></i>
+                      </span>
+                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
+                        <a class="dropdown-item pending font-13" href="javascript:;" (click)="viewDocument(ins.insuranceuploadDocument)">View</a>
+                        <!-- <a class="dropdown-item dispatch font-13" href="javascript:;" (click)="editDocument(ins.insuranceuploadDocument)">Edit</a>
+                        <a class="dropdown-item assiened font-13" href="javascript:;" (click)="deleteDoc('insurance', '', ins)">Delete</a> -->
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+ 
+    <div class="bg-white rounded-lg p-3">
+      <div class="col-md-12">
+        <nav aria-label="Page navigation example ms-auto me-auto">
+          <ul class="pagination justify-content-center gap-2 mb-0">
+            <li class="page-item">
+              <a class="page-link font-22" href="javascript:;" aria-label="Previous"><i class="fa fa-angle-left font-weight-300"></i></a>
+            </li>
+            <li class="page-item active"><a class="page-link font-14" href="javascript:;">1</a></li>
+         
+           
+            <li class="page-item"><a class="page-link font-22" href="javascript:;" aria-label="Next"><i class="fa fa-angle-right font-weight-300"></i></a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</main>
 
-
-  

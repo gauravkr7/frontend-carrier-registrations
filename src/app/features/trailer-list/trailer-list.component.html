@@ -1,4 +1,6 @@
-<app-navbar></app-navbar>
+<app-navbar (toggleSidebar)="toggleSidebar()"></app-navbar>
+
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" />
@@ -7,41 +9,164 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
 
 
-<main id="main" class="main mt-0 p-0">
-  <div id="kt_app_content" class="app-content  flex-column-fluid">
-    <div class="container-fluid px-5">
-      <div class="row bg-white px-3 py-4 mt-3 rounded">
-        <div class="col-md-12">
+
+<style>
+  .sidebar_ac {
+    width: 250px;
+    background-color: #eeeeee;
+    padding: 20px;
+    height: 100vh;
+    position: fixed;
+  }
+
+  .sidebar_ac h2 {
+    color: white;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .sidebar_ac ul {
+    list-style-type: none;
+    padding-left: 0px !important;
+
+  }
+
+  .sidebar_ac ul li {
+    margin: 15px 0;
+  }
+
+  .sidebar_ac ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.1em;
+    display: block;
+    padding: 10px;
+    transition: background-color 0.3s ease;
+  }
+
+  .sidebar_ac ul li a:active,
+
+  .sidebar_ac ul li a:focus {
+
+    background-color: #304ccb !important;
+
+  }
+
+  .content_ac {
+    margin-left: 270px;
+    width: calc(100% - 270px);
+  }
+
+  h1 {
+    color: #333;
+    margin-bottom: 20px;
+  }
+
+  form {
+    background-color: white;
+    border-radius: 10px;
+  }
+
+  form label {
+    font-weight: bold;
+  }
+
+  form input[type="text"],
+  form input[type="email"],
+  form input[type="tel"],
+  form input[type="number"],
+  form input[type="date"],
+  form select,
+  form textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+
+  form input[type="submit"] {
+    background-color: #304ccb;
+    color: white;
+    padding: 15px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  form input[type="submit"]:hover {
+    background-color: #3062e1;
+  }
+</style>
+
+<style>
+  .table td,
+  .table th {
+    text-align: left !important;
+  }
+</style>
 
 
 
+<main id="main" class=" bg-gray  main mt-0 p-0"
+  [ngClass]="{'full-width': isSidebarOpen, 'shift-right': !isSidebarOpen}">
+  <div class="p-4 pb-0">
+    <h2 style="margin-left: 85px;" class="font-18 font-weight-700 mb-4 text-capitalize">Trailer List</h2>
+    <div style="margin-left: 90px;" class="    bg-white rounded-lg p-3">
+      <div class=" bg-styles  row bg-white px-3 mt-3 rounded">
+        <div class="    col-md-12">
+
+
+
+
+
+          <!-- Default Tabs -->
           <ul class="nav nav-pills gap-2 border-bottom pb-4" id="myTab" role="tablist">
-            <li class="nav-item" role="presentation">
+            <li class="nav-item d-flex align-items-center gap-2" role="presentation">
               <button class="nav-link rounded-pill active bg-nav-info" id="home-tab" data-bs-toggle="tab"
                 data-bs-target="#customer" type="button" role="tab" aria-controls="home" aria-selected="true"
-                (click)="filterTrailers('all')">Trailer List</button>
+                (click)="filterTrailers('all')">
+                Trailer List
+                <span class="ms-1" [ngStyle]="{'color': activeFilter === 'all' ? '#ffffff' : '#3253dd'}">
+                  ({{ totalTrailers }})
+                </span>
+              </button>
             </li>
 
-            <li class="nav-item" role="presentation">
+            <li class="nav-item d-flex align-items-center gap-2" role="presentation">
               <button class="nav-link rounded-pill bg-nav-success" id="home-tab" data-bs-toggle="tab"
                 data-bs-target="#customer" type="button" role="tab" aria-controls="home" aria-selected="true"
-                (click)="filterTrailers('nonCompliant')">Compliant Trailer</button>
-            </li>
-            <li class="nav-item" role="presentation">
-              <button class="nav-link rounded-pill bg-nav-warning" (click)="filterTrailers('compliant')" id="home-tab"
-                data-bs-toggle="tab" data-bs-target="#customer" type="button" role="tab" aria-controls="home"
-                aria-selected="true">Non-Compliant Trailer</button>
+                (click)="filterTrailers('compliant')">
+                Compliant Trailers
+                <span class="ms-1" [ngStyle]="{'color': activeFilter === 'compliant' ? '#ffffff' : '#28c76f'}">
+                  ({{ compliantTrailers }})
+                </span>
+              </button>
             </li>
 
+            <li class="nav-item d-flex align-items-center gap-2" role="presentation">
+              <button class="nav-link rounded-pill bg-nav-warning" id="home-tab" data-bs-toggle="tab"
+                data-bs-target="#customer" type="button" role="tab" aria-controls="home" aria-selected="true"
+                (click)="filterTrailers('nonCompliant')">
+                Non-Compliant Trailers
+                <span class="ms-1" [ngStyle]="{'color': activeFilter === 'nonCompliant' ? '#ffffff' : '#ff9f43'}">
+                  ({{ nonCompliantTrailers }})
+                </span>
+              </button>
+            </li>
 
-            <li class="nav-item" role="presentation">
+            <li class="nav-item d-flex align-items-center gap-2" role="presentation">
               <button class="nav-link rounded-pill bg-nav-danger" id="home-tab" data-bs-toggle="tab"
                 data-bs-target="#customer" type="button" role="tab" aria-controls="home" aria-selected="true"
-                (click)="filterTrailers('expiring')">Expiring Trailer</button>
+                (click)="filterTrailers('expiring')">
+                Expiring Trailers
+                <span class="ms-1" [ngStyle]="{'color': activeFilter === 'expiring' ? '#ffffff' : '#ea5455'}">
+                  ({{ expiringTrailers }})
+                </span>
+              </button>
             </li>
           </ul>
-
-
 
 
           <div class="tab-content" id="myTabContent">
@@ -51,16 +176,18 @@
                   <div class="row">
                     <div class="col-md-12">
                       <div class="d-flex justify-content-between">
-                        <div class="form-group has-search mb-0">
+                        <div class="form-group has-search mb-0 d-flex ">
                           <span class="fa fa-search form-control-feedback"></span>
-                          <input style="height: 36px !important;" type="text" name="Search" class="form-control"
-                            placeholder="Search...">
+                          <input style="height: 40px !important; padding-left: 30px; margin-right: 10px;" type="text" name="Search"
+                            class="form-control" placeholder="Search..." [(ngModel)]="searchTerm">
+                          <button class="btn btn-success rounded-pill font-14 search-btn" (click)="searchTrailers()">
+                            <i class="bi bi-search"></i> Search
+                          </button>
                         </div>
                         <div>
-                          <button type="button" class="btn btn-success rounded-pill font-14" data-bs-toggle="offcanvas"
-                            data-bs-target="#addLocation">
-                            <i class="fa fa-plus me-2" aria-hidden="true"></i>Add Trailer
-                          </button>
+                          <a href="javascript:;" class="btn btn-success rounded-pill font-14" type="button"
+                            data-bs-toggle="offcanvas" data-bs-target="#addLocation" aria-controls="offcanvasRight"> <i
+                              class="fa fa-plus me-2" aria-hidden="true"></i> Add Trailer</a>
                         </div>
                       </div>
                     </div>
@@ -69,7 +196,15 @@
                 <div class="row">
                   <div class="col-lg-12">
                     <div class="table-responsive">
-                      <table class="table table-bordered">
+                      <!-- Add this summary above the table -->
+                      <!-- <div class="mb-2 text-end font-weight-bold" style="font-size: 15px;">
+                        Showing
+                        {{ min((currentPage - 1) * itemsPerPage + 1, filteredTrailers.length) }}
+                        -
+                        {{ min(currentPage * itemsPerPage, filteredTrailers.length) }}
+                        of {{ filteredTrailers.length }}
+                      </div> -->
+                      <table class="table table-bordered" style="text-align: left;">
                         <thead>
                           <tr>
                             <th scope="col">Unit Number</th>
@@ -82,28 +217,44 @@
                           </tr>
                         </thead>
                         <tbody>
-
-
-
-                          <tr *ngFor="let trailer of filteredTrailers">
+                          <tr *ngFor="let trailer of paginatedTrailers; let i = index">
+                            <!-- <tr *ngFor="let trailer of filteredTrailers, let driver of paginatedDrivers; let i = index"> -->
                             <td><a class="text-primary" [routerLink]="['/trailer-list-view',trailer._id]">{{
-                              trailer.unitNumber }}</a></td>
-                              <td>{{findCompanyName(trailer.companyId)}}</td>
+                                trailer.unitNumber }}</a></td>
+                            <td>{{ findCompanyName(trailer.companyId) }}</td>
                             <td>{{ trailer.vinNumber }}</td>
-                            <td>{{ trailer.purchaseDate }}</td>
+                            <!-- <td>{{ trailer.purchaseDate }}</td> -->
+                            <td>{{ trailer.purchaseDate | date:'MM-dd-yyyy' }}</td>
                             <td>{{ trailer.monthlyPayment }}</td>
                             <td>
-                              <span class="badge font-13 font-weight-700 text-uppercase" [ngClass]="{
+                              <span class="badge font-13 font-weight-500 text-uppercase" [ngClass]="{
                                 'bg-label-success': trailer.status === 'APPROVED',
                                 'bg-label-warning': trailer.status === 'PENDING',
-                                'bg-label-danger': trailer.status === 'EXPIRING'}">{{ trailer.status }}</span>
+                                'bg-label-danger': trailer.status === 'EXPIRING'}">{{ trailer.status }}</span>
                             </td>
-                            <td class="text-capitalize text-center">
-                              <div class="dropdown filter-dropdown" style="position: fixed;">
+                            <!-- <td class="text-capitalize text-center" width="12%">
+                              <a href="javascript:;" class="btn-action text-capitalize  me-1"
+                                (click)="editTrailer(trailer)" type="button" data-bs-toggle="offcanvas"
+                                data-bs-target="#ExtralargeModalEdit" aria-controls="offcanvasRight"> <i
+                                  class="fa fa-pencil" aria-hidden="true"></i></a>
+                              <a href="javascript:;"
+                                class="btn-action btn-action-red text-capitalize text-danger me-1"><i
+                                  class="fa fa-upload" aria-hidden="true"></i></a>
+                              <a href="javascript:;"
+                                class="btn-action btn-action-red text-capitalize text-danger me-1"><i
+                                  class="fa fa-download" aria-hidden="true"></i></a>
+                              <a class="btn-action btn-action-red text-capitalize text-danger me-1" href="javascript:;"
+                                data-bs-toggle="modal" data-bs-target="#ExtralargeModalDelete"
+                                (click)="setTrailerToDelete(trailer._id)"><i class="fa fa-comment"
+                                  aria-hidden="true"></i></a>
+                            </td> -->
+
+                            <td class="text-capitalize">
+                              <div class="dropdown filter-dropdown">
                                 <span class="dropdown-toggle font-16 px-3" type="button" id="dropdownMenuButton23"
-                                  data-bs-toggle="dropdown" aria-expanded="false"><i
-                                    class="fa fa-ellipsis-v"></i></span>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton2" style="">
+                                  data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i>
+                                </span>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
                                   <a href="javascript:;" class="dropdown-item assigned font-13"
                                     (click)="editTrailer(trailer)" type="button" data-bs-toggle="offcanvas"
                                     data-bs-target="#ExtralargeModalEdit" aria-controls="offcanvasRight">Edit</a>
@@ -116,30 +267,63 @@
                           </tr>
                         </tbody>
                       </table>
+
+
+                      <div class="bg-white my-3 rounded pb-3 " style="margin-right: 90px;">
+                        <div class="row">
+                          <div class="col-md-12">
+                                <!-- End pagination summary badge style -->
+                            <nav aria-label="Page navigation example ms-auto me-auto">
+                              <ul class="pagination justify-content-center gap-2 mb-0">
+                                <li class="page-item" [class.disabled]="currentPage === 1">
+                                  <a class="page-link font-22 d-flex align-items-center justify-content-center"
+                                    href="javascript:;" aria-label="Previous" (click)="changePage(currentPage - 1)"><i
+                                      class="fa fa-angle-left font-weight-300"></i></a>
+                                </li>
+                                <li class="page-item" *ngFor="let page of getPageNumbers()"
+                                  [class.active]="currentPage === page">
+                                  <a class="page-link font-14 d-flex align-items-center justify-content-center"
+                                    href="javascript:;" (click)="changePage(page)">{{ page }}</a>
+                                </li>
+                                <li class="page-item" [class.disabled]="currentPage === getTotalPages()">
+                                  <a class="page-link font-22 d-flex align-items-center justify-content-center"
+                                    href="javascript:;" aria-label="Next" (click)="changePage(currentPage + 1)"><i
+                                      class="fa fa-angle-right font-weight-300"></i></a>
+                                </li>
+                              </ul>
+                            </nav>
+                            <!-- Pagination summary badge style (matches truck list) -->
+                            <div class="text-center mt-2">
+                              <ng-container *ngIf="paginatedTrailers.length > 0">
+                                <span class="badge bg-light text-dark px-3 py-2" style="font-size: 14px; font-weight: normal;">
+                                  Showing
+                                  {{
+                                    ((currentPage - 1) * itemsPerPage) + 1
+                                  }}
+                                  to
+                                  {{
+                                    ((currentPage - 1) * itemsPerPage) + paginatedTrailers.length
+                                  }}
+                                  of
+                                  {{
+                                    filteredTrailers.length
+                                  }}
+                                  entries (Page {{ currentPage }} of {{ getTotalPages() }})
+                                </span>
+                              </ng-container>
+                              <ng-container *ngIf="paginatedTrailers.length === 0">
+                                <span class="badge bg-light text-danger px-3 py-2" style="font-size: 14px;">
+                                  No records to display.
+                                </span>
+                              </ng-container>
+                            </div>
+                        
+                          </div>
+                        </div>
+                      </div>
+
+
                     </div>
-                  </div>
-                </div>
-
-
-
-
-                <div class="row bg-white px-3 py-4 mt-3 rounded">
-                  <div class="col-md-12">
-                    <!-- <nav aria-label="Page navigation example ms-auto me-auto">
-                      <ul class="pagination justify-content-center gap-2 mb-0">
-                        <li class="page-item">
-                          <a class="page-link font-22" href="javascript:;" aria-label="Previous"><i
-                              class="fa fa-angle-left font-weight-300"></i></a>
-                        </li>
-                        <li class="page-item active"><a class="page-link font-14" href="javascript:;">1</a></li>
-                        <li class="page-item"><a class="page-link font-14" href="javascript:;">2</a></li>
-                        <li class="page-item"><a class="page-link font-14" href="javascript:;">3</a></li>
-                        <li class="page-item"><a class="page-link font-14" href="javascript:;">4</a></li>
-                        <li class="page-item"><a class="page-link font-14" href="javascript:;">5</a></li>
-                        <li class="page-item"><a class="page-link font-22" href="javascript:;" aria-label="Next"><i
-                              class="fa fa-angle-right font-weight-300"></i></a></li>
-                      </ul>
-                    </nav> -->
                   </div>
                 </div>
               </div>
@@ -151,24 +335,12 @@
   </div>
 </main>
 
-<!-- ======= Footer ======= -->
-<footer id="footer" class="footer">
-  <div class="text-dark text-center">
-    <span class="text-muted fw-semibold me-1">2023© all rights reserved</span>
-    <a class="text-muted fw-semibold text-hover-primary">trailering</a> <!-- href="#" -->
-  </div>
-
-</footer>
-<!-- End Footer -->
 
 
 
+<!-- // special line add for edit -->
 
-
-
-
-
-<div class="modal fade" id="ExtralargeModalDelete" style="display: none;" aria-hidden="true">
+<div class="modal fade" id="ExtralargeModalDelete" tabindex="-1" style="display: none;" aria-hidden="true">
   <div class="modal-dialog modal-md modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-body">
@@ -187,126 +359,558 @@
 </div>
 
 
-<div class="offcanvas offcanvas-end" tabindex="-1" id="ExtralargeModalEdit" aria-labelledby="offcanvasRightLabel"
-  style="width: 80%;" data-bs-backdrop="static" data-bs-keyboard="false">
+
+<!-- Add the off-canvas for editing -->
+<div class="offcanvas offcanvas-end" id="ExtralargeModalEdit" aria-labelledby="offcanvasRightLabel" style="width: 80%;"
+  data-bs-backdrop="static">
   <div class="modal-header" style="padding: 15px; border-bottom: 1px solid #ccc;">
-    <h5 class="modal-title">Edit trailer</h5>
-    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    <h5 class="modal-title">Edit Trailer</h5>
+    <div>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
   </div>
+
   <div class="offcanvas-body view-load position-relative">
     <form class="row g-3" (ngSubmit)="updateTrailer()">
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Unit Number</h2>
-        <input type="text" class="form-control" [(ngModel)]="trailerToEdit.unitNumber" name="unitNumber" required>
-      </div>
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">VIN Number</h2>
-        <input type="text" class="form-control" [(ngModel)]="trailerToEdit.vinNumber" name="vinNumber" required>
-      </div>
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Plate Number</h2>
-        <input type="text" class="form-control" [(ngModel)]="trailerToEdit.plateNumber" name="plateNumber" required>
-      </div>
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Expiration Date</h2>
-        <input type="text" class="form-control" [(ngModel)]="trailerToEdit.expirationDate" name="expirationDate"
-          required>
-      </div>
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Cab Card</h2>
-        <input type="text" class="form-control" [(ngModel)]="trailerToEdit.cabCard" name="cabCard" required>
-      </div>
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Upload Documents</h2>
-        <input type="file" class="form-control" (change)="trailerEditFile($event, 'uploadDocument')"
-          name="uploadDocuments"  accept=".jpg, .jpeg, .png, .pdf" required>
+      <div class="sidebar_ac">
+        <h3 class="text-black text-center">Company Form</h3>
+
+        <ul>
+          <li [ngClass]="{'active-option': activeSection === 'company-info'}">
+            <a href="#" class="toggle-section text-black"
+              (click)="showSection('company-info'); $event.preventDefault();">
+
+              Trailer Information
+            </a>
+          </li>
+          <!-- <li [ngClass]="{'active-option': activeSection === 'h-info'}">
+            <a href="#" class="toggle-section text-black" (click)="showSection('h-info'); $event.preventDefault();">
+
+              Purchase & Financing Information
+            </a>
+          </li> -->
+          <li [ngClass]="{'active-option': activeSection === 'g-info'}">
+            <a href="#" class="toggle-section text-black" (click)="showSection('g-info'); $event.preventDefault();">
+
+              Documents
+            </a>
+          </li>
+          <!-- <li [ngClass]="{'active-option': activeSection === 'k-info'}">
+            <a href="#" class="toggle-section text-black" (click)="showSection('k-info'); $event.preventDefault();">
+
+              Annual Inspection Documents
+            </a>
+          </li>
+          <li [ngClass]="{'active-option': activeSection === 'l-info'}">
+            <a href="#" class="toggle-section text-black" (click)="showSection('l-info'); $event.preventDefault();">
+
+              Maintenance Documents
+            </a>
+          </li> -->
+        </ul>
+
+
       </div>
 
-      <hr class="hr">
+      <div class="content_ac" *ngIf="activeSection === 'company-info'">
+        <h3 class="mb-4">Trailer Information</h3>
+        <div>
+          <div class="row">
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Company</h2>
+              <select class="form-control custom-select" id="companyId" [(ngModel)]="trailerToEdit.companyId"
+                name="companyId" required
+                [class.gray-bg]="!trailerToEdit.companyId" [class.white-bg]="trailerToEdit.companyId">
+                <option *ngFor="let company of companies" [value]="company._id">{{ company.companyName }}</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Trailer Number (Unit Number)</h2>
+              <input type="text" class="form-control" id="unitNumber" placeholder="Enter unit number"
+                [(ngModel)]="trailerToEdit.unitNumber" name="unitNumber" required
+                [class.gray-bg]="!trailerToEdit.unitNumber" [class.white-bg]="trailerToEdit.unitNumber">
+            </div>
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">VIN (Vehicle Identification Number)</h2>
+              <input type="text" class="form-control" id="vinNumber" placeholder="VIN Number"
+                [(ngModel)]="trailerToEdit.vinNumber" name="vinNumber" required
+                [class.gray-bg]="!trailerToEdit.vinNumber" [class.white-bg]="trailerToEdit.vinNumber">
+            </div>
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">License Plate Number</h2>
+              <input type="text" class="form-control" id="plateNumber" placeholder="Plate Number"
+                [(ngModel)]="trailerToEdit.plateNumber" name="plateNumber" required
+                [class.gray-bg]="!trailerToEdit.plateNumber" [class.white-bg]="trailerToEdit.plateNumber">
+            </div>
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">License Plate State</h2>
+              <select class="form-control custom-select" id="licensePlateState"
+                [(ngModel)]="trailerToEdit.licensePlateState" name="licensePlateState" required
+                [class.gray-bg]="!trailerToEdit.licensePlateState" [class.white-bg]="trailerToEdit.licensePlateState">
+                <option value="" hidden>Select State</option>
+                <option value="AL">Alabama</option>
+                <option value="AK">Alaska</option>
+                <option value="AZ">Arizona</option>
+                <option value="AR">Arkansas</option>
+                <option value="CA">California</option>
+                <option value="CO">Colorado</option>
+                <option value="CT">Connecticut</option>
+                <option value="DE">Delaware</option>
+                <option value="FL">Florida</option>
+                <option value="GA">Georgia</option>
+                <option value="HI">Hawaii</option>
+                <option value="ID">Idaho</option>
+                <option value="IL">Illinois</option>
+                <option value="IN">Indiana</option>
+                <option value="IA">Iowa</option>
+                <option value="KS">Kansas</option>
+                <option value="KY">Kentucky</option>
+                <option value="LA">Louisiana</option>
+                <option value="ME">Maine</option>
+                <option value="MD">Maryland</option>
+                <option value="MA">Massachusetts</option>
+                <option value="MI">Michigan</option>
+                <option value="MN">Minnesota</option>
+                <option value="MS">Mississippi</option>
+                <option value="MO">Missouri</option>
+                <option value="MT">Montana</option>
+                <option value="NE">Nebraska</option>
+                <option value="NV">Nevada</option>
+                <option value="NH">New Hampshire</option>
+                <option value="NJ">New Jersey</option>
+                <option value="NM">New Mexico</option>
+                <option value="NY">New York</option>
+                <option value="NC">North Carolina</option>
+                <option value="ND">North Dakota</option>
+                <option value="OH">Ohio</option>
+                <option value="OK">Oklahoma</option>
+                <option value="OR">Oregon</option>
+                <option value="PA">Pennsylvania</option>
+                <option value="RI">Rhode Island</option>
+                <option value="SC">South Carolina</option>
+                <option value="SD">South Dakota</option>
+                <option value="TN">Tennessee</option>
+                <option value="TX">Texas</option>
+                <option value="UT">Utah</option>
+                <option value="VT">Vermont</option>
+                <option value="VA">Virginia</option>
+                <option value="WA">Washington</option>
+                <option value="WV">West Virginia</option>
+                <option value="WI">Wisconsin</option>
+                <option value="WY">Wyoming</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Expiration Date</h2>
+              <input type="date" class="form-control" id="expirationDate" placeholder="Expiration Date"
+                [(ngModel)]="trailerToEdit.expirationDate" name="expirationDate" required
+                [class.gray-bg]="!trailerToEdit.expirationDate" [class.white-bg]="trailerToEdit.expirationDate">
+            </div>
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Trailer Year</h2>
+              <input type="text" class="form-control border-radius-6" id="trailerYear" placeholder="Enter Trailer year"
+                [(ngModel)]="trailerToEdit.trailerYear" name="trailerYear" required
+                [class.gray-bg]="!trailerToEdit.trailerYear" [class.white-bg]="trailerToEdit.trailerYear">
+            </div>
 
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Annual DOT Insp</h2>
-        <input type="text" class="form-control" [(ngModel)]="trailerToEdit.annualDotInspDocument" name="annualDOTInsp"
-          required>
-      </div>
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Upload Document</h2>
-        <input type="file" class="form-control" (change)="trailerEditFile($event, 'uploadDocument1')"
-          name="uploadDocument" accept=".jpg, .jpeg, .png, .pdf" required>
-      </div>
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Renewal Date</h2>
-        <input type="text" class="form-control" [(ngModel)]="trailerToEdit.renewalDate" name="renewalDate" required>
-      </div>
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Purchase Date</h2>
-        <input type="text" class="form-control" [(ngModel)]="trailerToEdit.purchaseDate" name="purchaseDate" required>
-      </div>
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Purchase Price</h2>
-        <input type="text" class="form-control" [(ngModel)]="trailerToEdit.purchasePrice" name="purchasePrice" required>
-      </div>
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Upload Documents</h2>
-        <input type="file" class="form-control" (change)="trailerEditFile($event, 'uploadDocument2')"
-          name="uploadDocuments" accept=".jpg, .jpeg, .png, .pdf" required>
-      </div>
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Loan Bank Name</h2>
-        <input type="text" class="form-control" [(ngModel)]="trailerToEdit.loanBankName" name="loanBankName" required>
-      </div>
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Loan ACC Number</h2>
-        <input type="text" class="form-control" [(ngModel)]="trailerToEdit.loanAccNumber" name="loanACCNumber" required>
-      </div>
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Upload Documents</h2>
-        <input type="file" class="form-control" (change)="trailerEditFile($event, 'uploadDocument3')"
-          name="uploadDocuments" accept=".jpg, .jpeg, .png, .pdf" required>
-      </div>
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Bank Contact</h2>
-        <input type="text" class="form-control" [(ngModel)]="trailerToEdit.bankContact" name="bankContact" required>
-      </div>
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Interest Rate</h2>
-        <input type="text" class="form-control" [(ngModel)]="trailerToEdit.interestRate" name="interestRate" required>
-      </div>
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Monthly Payment</h2>
-        <input type="text" class="form-control" [(ngModel)]="trailerToEdit.monthlyPayment" name="monthlyPayment"
-          required>
-      </div>
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Payoff Date</h2>
-        <input type="text" class="form-control" [(ngModel)]="trailerToEdit.payoffDate" name="payoffDate" required>
-      </div>
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Prepass Transponder Number</h2>
-        <input type="text" class="form-control" [(ngModel)]="trailerToEdit.prepassTransponderNumber"
-          name="prepassTransponderNumber" required>
-      </div>
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Fuel Card Number</h2>
-        <input type="text" class="form-control" [(ngModel)]="trailerToEdit.fuelCardNumber" name="fuelCardNumber"
-          required>
-      </div>
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Status</h2>
-        <select class="form-control" [(ngModel)]="trailerToEdit.status" name="status" required>
-          <option value="APPROVED">APPROVED</option>
-          <option value="PENDING">PENDING</option>
-          <option value="EXPIRING">EXPIRING</option>
-        </select>
+
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Trailer Type</h2>
+              <select class="form-control custom-select" id="trailerType" [(ngModel)]="trailerToEdit.trailerType"
+                name="trailerType" required
+                [class.gray-bg]="!trailerToEdit.trailerType" [class.white-bg]="trailerToEdit.trailerType">
+                <option value="" hidden>Select Trailer Type</option>
+                <option value="Dry Van">Dry Van</option>
+
+                <option value="Refrigerated (Reefer)">Refrigerated (Reefer)</option>
+                <option value="Flatbed">Flatbed</option>
+                <option value="Step Deck (Drop Deck)">Step Deck (Drop Deck)</option>
+                <option value="Removable Gooseneck (RGN)">Removable Gooseneck (RGN)</option>
+                <option value="Lowboy">Lowboy</option>
+                <option value="Extendable Flatbed">Extendable Flatbed</option>
+                <option value="Conestoga (Sliding Tarp)">Conestoga (Sliding Tarp)</option>
+                <option value="Curtainside">Curtainside</option>
+                <option value="Hot Shot">Hot Shot</option>
+                <option value="Intermodal/Container Chassis">Intermodal/Container Chassis</option>
+
+              </select>
+            </div>
+
+
+
+
+
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Trailer Make</h2>
+              <select class="form-control custom-select" id="trailerMake" [(ngModel)]="trailerToEdit.trailerMake"
+                name="trailerMake" required
+                [class.gray-bg]="!trailerToEdit.trailerMake" [class.white-bg]="trailerToEdit.trailerMake">
+                <option value="" hidden>Select Make</option>
+                <!-- Dry Van -->
+                <option *ngIf="trailerToEdit.trailerType === 'Dry Van'" value="Great Dane">Great Dane</option>
+                <option *ngIf="trailerToEdit.trailerType === 'Dry Van'" value="Utility Trailer">Utility Trailer</option>
+                <option *ngIf="trailerToEdit.trailerType === 'Dry Van'" value="Wabash National">Wabash National</option>
+                <option *ngIf="trailerToEdit.trailerType === 'Dry Van'" value="Stoughton Trailers">Stoughton Trailers
+                </option>
+                <option *ngIf="trailerToEdit.trailerType === 'Dry Van'" value="Hyundai Translead">Hyundai Translead
+                </option>
+                <!-- Refrigerated (Reefer) -->
+                <option *ngIf="trailerToEdit.trailerType === 'Refrigerated (Reefer)'" value="Utility Trailer">Utility
+                  Trailer</option>
+                <option *ngIf="trailerToEdit.trailerType === 'Refrigerated (Reefer)'" value="Great Dane">Great Dane
+                </option>
+                <option *ngIf="trailerToEdit.trailerType === 'Refrigerated (Reeefer)'" value="Wabash National">Wabash
+                  National</option>
+                <option *ngIf="trailerToEdit.trailerType === 'Refrigerated (Reefer)'" value="Vanguard National">Vanguard
+                  National</option>
+                <option *ngIf="trailerToEdit.trailerType === 'Refrigerated (Reefer)'" value="Hyundai Translead">Hyundai
+                  Translead</option>
+                <!-- Flatbed -->
+                <option *ngIf="trailerToEdit.trailerType === 'Flatbed'" value="Fontaine Trailer">Fontaine Trailer
+                </option>
+                <option *ngIf="trailerToEdit.trailerType === 'Flatbed'" value="Transcraft (Wabash)">Transcraft (Wabash)
+                </option>
+                <option *ngIf="trailerToEdit.trailerType === 'Flatbed'" value="Great Dane">Great Dane</option>
+                <option *ngIf="trailerToEdit.trailerType === 'Flatbed'" value="Utility Trailer">Utility Trailer</option>
+                <!-- Step Deck (Drop Deck) -->
+                <option *ngIf="trailerToEdit.trailerType === 'Step Deck (Drop Deck)'" value="Fontaine Trailer">Fontaine
+                  Trailer</option>
+                <option *ngIf="trailerToEdit.trailerType === 'Step Deck (Drop Deck)'" value="Transcraft">Transcraft
+                </option>
+                <!-- Removable Gooseneck (RGN) -->
+                <option *ngIf="trailerToEdit.trailerType === 'Removable Gooseneck (RGN)'" value="Trail King Industries">
+                  Trail King Industries</option>
+                <option *ngIf="trailerToEdit.trailerType === 'Removable Gooseneck (RGN)'" value="Fontaine Trailer">
+                  Fontaine Trailer</option>
+                <option *ngIf="trailerToEdit.trailerType === 'Removable Gooseneck (RGN)'"
+                  value="XL Specialized Trailers">XL Specialized Trailers</option>
+                <!-- Lowboy -->
+                <option *ngIf="trailerToEdit.trailerType === 'Lowboy'" value="Trail King Industries">Trail King
+                  Industries</option>
+                <option *ngIf="trailerToEdit.trailerType === 'Lowboy'" value="Fontaine Heavy-Haul">Fontaine Heavy-Haul
+                </option>
+                <!-- Extendable Flatbed -->
+                <option *ngIf="trailerToEdit.trailerType === 'Extendable Flatbed'" value="Fontaine Trailer">Fontaine
+                  Trailer</option>
+                <option *ngIf="trailerToEdit.trailerType === 'Extendable Flatbed'" value="XL Specialized">XL Specialized
+                </option>
+                <!-- Conestoga (Sliding Tarp) -->
+                <option *ngIf="trailerToEdit.trailerType === 'Conestoga (Sliding Tarp)'" value="Reitnouer Trailers">
+                  Reitnouer Trailers</option>
+                <option *ngIf="trailerToEdit.trailerType === 'Conestoga (Sliding Tarp)'" value="Fontaine Trailer">Fontaine
+                  Trailer</option>
+                <!-- Curtainside -->
+                <option *ngIf="trailerToEdit.trailerType === 'Curtainside'" value="MAC Trailer">MAC Trailer</option>
+                <option *ngIf="trailerToEdit.trailerType === 'Curtainside'" value="Manac">Manac</option>
+                <!-- Hot Shot -->
+                <option *ngIf="trailerToEdit.trailerType === 'Hot Shot'" value="Big Tex Trailers">Big Tex Trailers
+                </option>
+                <option *ngIf="trailerToEdit.trailerType === 'Hot Shot'" value="PJ Trailers">PJ Trailers</option>
+                <option *ngIf="trailerToEdit.trailerType === 'Hot Shot'" value="Load Trail">Load Trail</option>
+                <!-- Intermodal/Container Chassis -->
+                <option *ngIf="trailerToEdit.trailerType === 'Intermodal/Container Chassis'" value="Hyundai Translead">
+                  Hyundai Translead</option>
+                <option *ngIf="trailerToEdit.trailerType === 'Intermodal/Container Chassis'" value="Cheetah Chassis">
+                  Cheetah Chassis</option>
+              </select>
+            </div>
+
+
+
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Trailer Model</h2>
+              <select class="form-control custom-select" id="trailerModel" [(ngModel)]="trailerToEdit.trailerModel"
+                name="trailerModel" #trailerModel="ngModel" required
+                [ngClass]="{'is-invalid': trailerModel.invalid && (trailerModel.dirty || trailerModel.touched)}"
+                [class.gray-bg]="!trailerToEdit.trailerModel" [class.white-bg]="trailerToEdit.trailerModel">
+                <option value="" hidden>Select Trailer Model</option>
+                <!-- Dry Van -->
+                <option *ngIf="trailerToEdit.trailerType === 'Dry Van'" value="Champion Series">Champion Series</option>
+                <option *ngIf="trailerToEdit.trailerType === 'Dry Van'" value="4000D-X Composite">4000D-X Composite
+                </option>
+                <option *ngIf="trailerToEdit.trailerType === 'Dry Van'" value="DuraPlate HD">DuraPlate HD</option>
+                <option *ngIf="trailerToEdit.trailerType === 'Dry Van'" value="Z-Plate">Z-Plate</option>
+                <option *ngIf="trailerToEdit.trailerType === 'Dry Van'" value="HT Composite">HT Composite</option>
+
+                <!-- Refrigerated (Reefer) -->
+                <option *ngIf="trailerToEdit.trailerType === 'Refrigerated (Reefer)'" value="3000R">3000R</option>
+                <option *ngIf="trailerToEdit.trailerType === 'Refrigerated (Reefer)'" value="Everest Series">Everest
+                  Series</option>
+                <option *ngIf="trailerToEdit.trailerType === 'Refrigerated (Reefer)'" value="ArcticLite">ArcticLite
+                </option>
+                <option *ngIf="trailerToEdit.trailerType === 'Refrigerated (Reefer)'" value="VCP Reefer">VCP Reefer
+                </option>
+                <option *ngIf="trailerToEdit.trailerType === 'Refrigerated (Reefer)'" value="HT ThermoTech">HT
+                  ThermoTech</option>
+                <!-- Flatbed -->
+                <option *ngIf="trailerToEdit.trailerType === 'Flatbed'" value="Infinity Series">Infinity Series</option>
+                <option *ngIf="trailerToEdit.trailerType === 'Flatbed'" value="Eagle II, Benson">Eagle II, Benson
+                </option>
+                <option *ngIf="trailerToEdit.trailerType === 'Flatbed'" value="Freedom SE">Freedom SE</option>
+                <option *ngIf="trailerToEdit.trailerType === 'Flatbed'" value="4000AE">4000AE</option>
+                <!-- Step Deck (Drop Deck) -->
+                <option *ngIf="trailerToEdit.trailerType === 'Step Deck (Drop Deck)'" value="Revolution Dropdeck">
+                  Revolution Dropdeck</option>
+                <option *ngIf="trailerToEdit.trailerType === 'Step Deck (Drop Deck)'" value="Benson Step Deck">Benson
+                  Step Deck</option>
+                <!-- Removable Gooseneck (RGN) -->
+                <option *ngIf="trailerToEdit.trailerType === 'Removable Gooseneck (RGN)'"
+                  value="HDG (Hydraulic Detachable Gooseneck)">HDG (Hydraulic Detachable Gooseneck)</option>
+                <option *ngIf="trailerToEdit.trailerType === 'Removable Gooseneck (RGN)'" value="Magnitude Series">
+                  Magnitude Series</option>
+                <option *ngIf="trailerToEdit.trailerType === 'Removable Gooseneck (RGN)'" value="XL 110 HDG">XL 110 HDG
+                </option>
+                <!-- Lowboy -->
+                <option *ngIf="trailerToEdit.trailerType === 'Lowboy'" value="Advantage Plus, Lowboy HDG">Advantage
+                  Plus, Lowboy HDG</option>
+                <option *ngIf="trailerToEdit.trailerType === 'Lowboy'" value="Magnitude 55L">Magnitude 55L</option>
+                <!-- Extendable Flatbed -->
+                <option *ngIf="trailerToEdit.trailerType === 'Extendable Flatbed'" value="Extendable Infinity">
+                  Extendable Infinity</option>
+                <option *ngIf="trailerToEdit.trailerType === 'Extendable Flatbed'" value="XL Extend-A-Trac">XL
+                  Extend-A-Trac</option>
+                <!-- Conestoga (Sliding Tarp) -->
+                <option *ngIf="trailerToEdit.trailerType === 'Conestoga (Sliding Tarp)'" value="MaxMiser with Conestoga kit">MaxMiser with Conestoga kit</option>
+                <option *ngIf="trailerToEdit.trailerType === 'Conestoga (Sliding Tarp)'" value="Velocity with Conestoga">Velocity with Conestoga</option>
+                <!-- Curtainside -->
+                <option *ngIf="trailerToEdit.trailerType === 'Curtainside'" value="MAC Curtainside">MAC Curtainside
+                </option>
+                <option *ngIf="trailerToEdit.trailerType === 'Curtainside'" value="Curtainside Trailer">Curtainside Trailer
+                </option>
+                <!-- Hot Shot -->
+                <option *ngIf="trailerToEdit.trailerType === 'Hot Shot'" value="25GN Heavy Duty Tandem Dual Gooseneck">25GN
+                  Heavy Duty Tandem Dual Gooseneck</option>
+                <option *ngIf="trailerToEdit.trailerType === 'Hot Shot'" value="FD Low-Pro Flatdeck">FD Low-Pro Flatdeck
+                </option>
+                <option *ngIf="trailerToEdit.trailerType === 'Hot Shot'" value="CH Heavy Duty Car Hauler">CH Heavy Duty Car
+                  Hauler</option>
+                <!-- Intermodal/Container Chassis -->
+                <option *ngIf="trailerToEdit.trailerType === 'Intermodal/Container Chassis'" value="HT Chassis Series">HT
+                  Chassis Series</option>
+                <option *ngIf="trailerToEdit.trailerType === 'Intermodal/Container Chassis'"
+                  value="Extendable, Tank, Combo Chassis">Extendable, Tank, Combo Chassis</option>
+
+              </select>
+            </div>
+
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Provider</h2>
+              <select class="form-control custom-select" [(ngModel)]="trailerToEdit.provider" name="provider"
+                [class.gray-bg]="!trailerToEdit.provider" [class.white-bg]="trailerToEdit.provider">
+                <option value="" hidden>Select Provider</option>
+                <option value="Thermo King">Thermo King</option>
+                <option value="Carrier Transicold">Carrier Transicold</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Model List</h2>
+              <select class="form-control custom-select" [(ngModel)]="trailerToEdit.modelList" name="modelList"
+                [class.gray-bg]="!trailerToEdit.modelList" [class.white-bg]="trailerToEdit.modelList">
+                <option value="" hidden>Select Model List</option>
+                <!-- Thermo King -->
+                <option *ngIf="trailerToEdit.provider === 'Thermo King'" value="T-Series">T-Series</option>
+                <option *ngIf="trailerToEdit.provider === 'Thermo King'" value="V-Series">V-Series</option>
+                <option *ngIf="trailerToEdit.provider === 'Thermo King'" value="B-Series">B-Series</option>
+                <option *ngIf="trailerToEdit.provider === 'Thermo King'" value="Precedent Series">Precedent Series</option>
+                <option *ngIf="trailerToEdit.provider === 'Thermo King'" value="C-Series">C-Series</option>
+                <!-- Carrier Transicold -->
+                <option *ngIf="trailerToEdit.provider === 'Carrier Transicold'" value="X4 Series">X4 Series</option>
+                <option *ngIf="trailerToEdit.provider === 'Carrier Transicold'" value="Supra Series">Supra Series</option>
+                <option *ngIf="trailerToEdit.provider === 'Carrier Transicold'" value="Supra e11">Supra e11</option>
+                <option *ngIf="trailerToEdit.provider === 'Carrier Transicold'" value="ThinLINE">ThinLINE</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Model Type</h2>
+              <select class="form-control custom-select" [(ngModel)]="trailerToEdit.modelType" name="modelType"
+                [class.gray-bg]="!trailerToEdit.modelType" [class.white-bg]="trailerToEdit.modelType">
+                <option value="" hidden>Select Model Type</option>
+                <!-- Thermo King: T-Series -->
+                <option *ngIf="trailerToEdit.modelList === 'T-Series'" value="T-590">T-590</option>
+                <option *ngIf="trailerToEdit.modelList === 'T-Series'" value="T-690">T-690</option>
+                <option *ngIf="trailerToEdit.modelList === 'T-Series'" value="T-890">T-890</option>
+                <option *ngIf="trailerToEdit.modelList === 'T-Series'" value="T-1090">T-1090</option>
+                <!-- Thermo King: V-Series -->
+                <option *ngIf="trailerToEdit.modelList === 'V-Series'" value="V-520 RT">V-520 RT</option>
+                <!-- Thermo King: B-Series -->
+                <option *ngIf="trailerToEdit.modelList === 'B-Series'" value="B-100">B-100</option>
+                <option *ngIf="trailerToEdit.modelList === 'B-Series'" value="B-200">B-200</option>
+                <option *ngIf="trailerToEdit.modelList === 'B-Series'" value="B-300">B-300</option>
+                <!-- Thermo King: Precedent Series -->
+                <option *ngIf="trailerToEdit.modelList === 'Precedent Series'" value="S-600">S-600</option>
+                <option *ngIf="trailerToEdit.modelList === 'Precedent Series'" value="S-700">S-700</option>
+                <!-- Thermo King: C-Series -->
+                <option *ngIf="trailerToEdit.modelList === 'C-Series'" value="C-600M">C-600M</option>
+                <!-- Carrier Transicold: X4 Series -->
+                <option *ngIf="trailerToEdit.modelList === 'X4 Series'" value="7500">7500</option>
+                <option *ngIf="trailerToEdit.modelList === 'X4 Series'" value="7700">7700</option>
+                <!-- Carrier Transicold: Supra Series -->
+                <option *ngIf="trailerToEdit.modelList === 'Supra Series'" value="S6">S6</option>
+                <option *ngIf="trailerToEdit.modelList === 'Supra Series'" value="S8">S8</option>
+                <option *ngIf="trailerToEdit.modelList === 'Supra Series'" value="S10">S10</option>
+                <!-- Carrier Transicold: Supra e11 -->
+                <option *ngIf="trailerToEdit.modelList === 'Supra e11'" value="Supra e11">Supra e11</option>
+                <!-- Carrier Transicold: ThinLINE -->
+                <option *ngIf="trailerToEdit.modelList === 'ThinLINE'" value="69NT40 series">69NT40 series</option>
+              </select>
+            </div>
+
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Gross Vehicle Weight Rating (GVWR):</h2>
+              <input type="text" class="form-control border-radius-6" id="grossVehicleWeightRating"
+                placeholder="Enter GVWR" [(ngModel)]="trailerToEdit.grossVehicleWeightRating"
+                name="grossVehicleWeightRating" required
+                [class.gray-bg]="!trailerToEdit.grossVehicleWeightRating" [class.white-bg]="trailerToEdit.grossVehicleWeightRating">
+            </div>
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Upload CabCard</h2>
+              <input type="file" class="form-control" id="uploadDocument"
+                (change)="onFileChange($event, 'uploadDocument')" name="uploadDocument" accept=".jpg, .jpeg, .png, .pdf"
+                required
+                [class.gray-bg]="!selectedFiles['uploadDocument']" [class.white-bg]="selectedFiles['uploadDocument']">
+              <small *ngIf="selectedFiles['uploadDocument']">
+                Selected: {{ selectedFiles['uploadDocument'].name }}
+              </small>
+              <p class="text-danger" *ngIf="fileError">{{ fileError }}</p>
+            </div>
+
+            <div class="col-md-4 d-blocks">
+              <h2 class="font-14 font-weight-700 mb-0">Status</h2>
+              <select class="form-control custom-select mt-1" [(ngModel)]="trailerToEdit.status" name="status" required
+                [class.gray-bg]="!trailerToEdit.status" [class.white-bg]="trailerToEdit.status">
+                <option value="APPROVED">APPROVED</option>
+                <option value="PENDING">PENDING</option>
+                <option value="EXPIRING">EXPIRING</option>
+              </select>
+            </div>
+
+
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Purchase Date</h2>
+              <input type="date" class="form-control border-radius-6" id="purchaseDate"
+                placeholder="Enter purchase date" [(ngModel)]="trailerToEdit.purchaseDate" name="purchaseDate" required
+                [class.gray-bg]="!trailerToEdit.purchaseDate" [class.white-bg]="trailerToEdit.purchaseDate">
+            </div>
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Purchase Price ($)</h2>
+              <input type="text" class="form-control border-radius-6" id="purchasePrice"
+                placeholder="Enter purchase price" [(ngModel)]="trailerToEdit.purchasePrice" name="purchasePrice"
+                required
+                [class.gray-bg]="!trailerToEdit.purchasePrice" [class.white-bg]="trailerToEdit.purchasePrice">
+            </div>
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Monthly Payment ($)</h2>
+              <input type="text" class="form-control border-radius-6" id="monthlyPayment"
+                placeholder="Enter monthly payment" [(ngModel)]="trailerToEdit.monthlyPayment" name="monthlyPayment"
+                required
+                [class.gray-bg]="!trailerToEdit.monthlyPayment" [class.white-bg]="trailerToEdit.monthlyPayment">
+            </div>
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Interest Rate (%)</h2>
+              <input type="text" class="form-control border-radius-6" id="interestRate"
+                placeholder="Enter interest rate" [(ngModel)]="trailerToEdit.interestRate" name="interestRate" required
+                [class.gray-bg]="!trailerToEdit.interestRate" [class.white-bg]="trailerToEdit.interestRate">
+            </div>
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Loan Ending Date</h2>
+              <input type="date" class="form-control border-radius-6" id="loanEndingDate"
+                placeholder="Enter loan ending date" [(ngModel)]="trailerToEdit.loanEndingDate" name="loanEndingDate"
+                required
+                [class.gray-bg]="!trailerToEdit.loanEndingDate" [class.white-bg]="trailerToEdit.loanEndingDate">
+            </div>
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Financing Bank</h2>
+              <input type="text" class="form-control" id="financingBank" placeholder="Enter financing bank"
+                [(ngModel)]="trailerToEdit.financingBank" name="financingBank" required
+                [class.gray-bg]="!trailerToEdit.financingBank" [class.white-bg]="trailerToEdit.financingBank">
+            </div>
+
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Contact Number</h2>
+              <input type="text" class="form-control" id="contractNumber" placeholder="Enter contract number"
+                [(ngModel)]="trailerToEdit.contractNumber" name="contractNumber" required
+                [class.gray-bg]="!trailerToEdit.contractNumber" [class.white-bg]="trailerToEdit.contractNumber">
+            </div>
+
+
+
+            <div class="modal-footer justify-content-center"
+              style="border-top: 1px solid #ccc; padding-top: 15px; margin-top: 15px;">
+              <button type="button" class="btn btn-outline-secondary btn-sm text-uppercase rounded-pill"
+                data-bs-dismiss="offcanvas" aria-label="Close">Close</button>
+              <button type="submit" class="btn btn-success btn-sm text-uppercase rounded-pill"
+                data-bs-dismiss="offcanvas">Save Changes</button>
+              <button type="button" class="btn btn-success btn-sm text-uppercase rounded-pill"
+                (click)="goToSection('g-info', $event)">Next</button>
+            </div>
+
+
+
+          </div>
+        </div>
+
+
+
       </div>
 
-      <div class="modal-footer justify-content-center"
-        style="border-top: 1px solid #ccc; padding-top: 15px; margin-top: 15px;">
-        <button type="button" class="btn btn-outline-secondary btn-sm text-uppercase rounded-pill"
-          data-bs-dismiss="offcanvas" style="margin: 10px;">Close</button>
-        <button type="submit" class="btn btn-success btn-sm text-uppercase rounded-pill"
-          data-bs-dismiss="offcanvas">Save changes</button>
+
+      <div class="content_ac" *ngIf="activeSection === 'g-info'">
+        <h3 class="mb-4">Documents</h3>
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="table-responsive">
+              <table class="table table-bordered">
+
+                <tbody>
+                  <tr *ngFor="let file of trailerToEdit.ninetyDaysDocument">
+                    <td>{{ file.name }}</td>
+                    <td class="text-capitalize whitespace-nowrap" width="15%">
+                      <a href="javascript:;" class="btn-action text-danger me-1"
+                        (click)="removeFile(file, 'ninetyDaysDocument', true)">
+                        <i class="fa fa-trash" aria-hidden="true"></i>
+                      </a>
+                    </td>
+                  </tr>
+                  <tr *ngIf="!trailerToEdit.ninetyDaysDocument?.length">
+                    <td colspan="2" class="text-center">No documents selected</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="col-md-4" style="margin-top: 15px; margin-left: -15px!important;">
+          <h2 style="margin-bottom: 5px;" class="font-14 font-weight-700">Upload Documents </h2>
+          <input type="file" class="form-control" id="editNinetyDaysDocument"
+            (change)="onFileChange($event, 'ninetyDaysDocument', true, true)" name="editNinetyDaysDocument"
+            accept=".jpg, .jpeg, .png, .pdf" multiple />
+        </div>
+
+
+        <div class="modal-footer justify-content-center"
+          style="border-top: 1px solid #ccc; padding-top: 15px; margin-top: 15px;">
+
+
+
+
+          <button type="button" class="btn btn-outline-secondary btn-sm text-uppercase rounded-pill"
+            data-bs-dismiss="offcanvas" aria-label="Close" (click)="onClose()"> Close</button>
+          <button type="submit" class="btn btn-success btn-sm text-uppercase rounded-pill"
+            data-bs-dismiss="offcanvas">Submit Form</button>
+
+
+
+
+        </div>
+
+
       </div>
+
+
+
+
     </form>
   </div>
 </div>
@@ -317,274 +921,678 @@
 
 
 
-<!-- form models -->
+
+<!-- // special line add for edit -->
+
+
+
+
+
+<footer id="footer" class="footer text-center"
+  [ngClass]="{'full-widths': isSidebarOpen, 'shift-rights': !isSidebarOpen}">
+  <div class="text-dark">
+    <span class="text-muted fw-semibold me-1">2025© all rights reserved</span>
+    <a class="font-weight-700 text-hover-dark text-dark text-uppercase">3PL TEK INC.</a>
+  </div>
+</footer>
+
+
 
 <a href="#" class="back-to-top d-flex align-items-center justify-content-center btn-success">
   <i class="bi bi-arrow-up-short"></i>
 </a>
 
 <div class="offcanvas offcanvas-end" id="addLocation" aria-labelledby="offcanvasRightLabel" style="width: 80%;"
-  data-bs-backdrop="static" data-bs-keyboard="false">
+  data-bs-backdrop="static">
   <div class="modal-header" style="padding: 15px; border-bottom: 1px solid #ccc;">
     <h5 class="modal-title">Add Trailer</h5>
-
-    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-
+    <div>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
   </div>
-
-
-  <!-- Your form inputs -->
 
   <div class="offcanvas-body view-load position-relative">
     <form class="row g-3" (ngSubmit)="submitForm(f)" #f="ngForm">
+      <div class="sidebar_ac">
+        <h3 class="text-black text-center">Company Form</h3>
 
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Unit Number</h2>
+        <ul>
+          <li [ngClass]="{'active-option': activeSection === 'company-info'}">
+            <a href="#" class="toggle-section text-black"
+              (click)="showSection('company-info'); $event.preventDefault();">
 
-        <input type="text" class="form-control" id="unitNumber" placeholder="Enter unit number"
-          [(ngModel)]="newTrailer.unitNumber" name="unitNumber" #unitNumber="ngModel" required
-          [ngClass]="{'is-invalid': unitNumber.invalid && (unitNumber.dirty || unitNumber.touched)}">
-        <div *ngIf="unitNumber.invalid && (unitNumber.dirty || unitNumber.touched)" class="invalid-feedback">
-          Unit number is required.
+              Trailer Information
+            </a>
+          </li>
+          <!-- <li [ngClass]="{'active-option': activeSection === 'h-info'}">
+            <a href="#" class="toggle-section text-black" (click)="showSection('h-info'); $event.preventDefault();">
+
+              Purchase & Financing Information
+            </a>
+          </li> -->
+          <li [ngClass]="{'active-option': activeSection === 'g-info'}">
+            <a href="#" class="toggle-section text-black" (click)="showSection('g-info'); $event.preventDefault();">
+
+              Documents
+            </a>
+          </li>
+          <!-- <li [ngClass]="{'active-option': activeSection === 'k-info'}">
+            <a href="#" class="toggle-section text-black" (click)="showSection('k-info'); $event.preventDefault();">
+
+              Annual Inspection Documents
+            </a>
+          </li>
+          <li [ngClass]="{'active-option': activeSection === 'l-info'}">
+            <a href="#" class="toggle-section text-black" (click)="showSection('l-info'); $event.preventDefault();">
+
+              Maintenance Documents
+            </a>
+          </li> -->
+        </ul>
+
+
+
+
+      </div>
+
+
+
+
+
+      <div class="content_ac" *ngIf="activeSection === 'company-info'">
+        <h3 class="mb-4">Trailer Information</h3>
+        <div>
+
+          <div class="row">
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Company</h2>
+              <select class="form-control custom-select" id="companyId" [(ngModel)]="newTrailer.companyId"
+                name="companyId" #companyId="ngModel" required
+                [ngClass]="{'is-invalid': companyId.invalid && (companyId.dirty || companyId.touched)}"
+                [class.gray-bg]="!newTrailer.companyId" [class.white-bg]="newTrailer.companyId">
+                <option *ngFor="let company of companies" [value]="company._id">
+                  {{ company.companyName }}
+                </option>
+              </select>
+              <div *ngIf="companyId.invalid && (companyId.dirty || companyId.touched)" class="invalid-feedback">
+                Company is required.
+              </div>
+            </div>
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Trailer Number (Unit Number)</h2>
+
+              <input type="text" class="form-control" id="unitNumber" placeholder="Enter unit number"
+                [(ngModel)]="newTrailer.unitNumber" name="unitNumber" #unitNumber="ngModel" required
+                [ngClass]="{'is-invalid': unitNumber.invalid && (unitNumber.dirty || unitNumber.touched)}"
+                [class.gray-bg]="!newTrailer.unitNumber" [class.white-bg]="newTrailer.unitNumber">
+              <div *ngIf="unitNumber.invalid && (unitNumber.dirty || unitNumber.touched)" class="invalid-feedback">
+                Unit number is required.
+              </div>
+            </div>
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">VIN (Vehicle Identification Number)</h2>
+              <input type="text" class="form-control" id="vinNumber" placeholder="VIN Number"
+                [(ngModel)]="newTrailer.vinNumber" name="vinNumber" #vinNumber="ngModel" required
+                [ngClass]="{'is-invalid': vinNumber.invalid && (vinNumber.dirty || vinNumber.touched)}"
+                [class.gray-bg]="!newTrailer.vinNumber" [class.white-bg]="newTrailer.vinNumber">
+              <div *ngIf="vinNumber.invalid && (vinNumber.dirty || vinNumber.touched)" class="invalid-feedback">
+                VIN number is required.
+              </div>
+            </div>
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">License Plate Number</h2>
+              <input type="text" class="form-control" id="plateNumber" placeholder="Plate Number"
+                [(ngModel)]="newTrailer.plateNumber" name="plateNumber" #plateNumber="ngModel" required
+                [ngClass]="{'is-invalid': plateNumber.invalid && (plateNumber.dirty || plateNumber.touched)}"
+                [class.gray-bg]="!newTrailer.plateNumber" [class.white-bg]="newTrailer.plateNumber">
+              <div *ngIf="plateNumber.invalid && (plateNumber.dirty || plateNumber.touched)" class="invalid-feedback">
+                Plate Number is required.
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">License Plate State</h2>
+              <select class="form-control custom-select" id="licensePlateState"
+                [(ngModel)]="newTrailer.licensePlateState" name="licensePlateState" #licensePlateState="ngModel"
+                [ngClass]="{'is-invalid': licensePlateState.invalid && (licensePlateState.dirty || licensePlateState.touched)}"
+                required
+                [class.gray-bg]="!newTrailer.licensePlateState" [class.white-bg]="newTrailer.licensePlateState">
+                <option value="" hidden>Select State</option>
+                <option value="AL">Alabama</option>
+                <option value="AK">Alaska</option>
+                <option value="AZ">Arizona</option>
+                <option value="AR">Arkansas</option>
+                <option value="CA">California</option>
+                <option value="CO">Colorado</option>
+                <option value="CT">Connecticut</option>
+                <option value="DE">Delaware</option>
+                <option value="FL">Florida</option>
+                <option value="GA">Georgia</option>
+                <option value="HI">Hawaii</option>
+                <option value="ID">Idaho</option>
+                <option value="IL">Illinois</option>
+                <option value="IN">Indiana</option>
+                <option value="IA">Iowa</option>
+                <option value="KS">Kansas</option>
+                <option value="KY">Kentucky</option>
+                <option value="LA">Louisiana</option>
+                <option value="ME">Maine</option>
+                <option value="MD">Maryland</option>
+                <option value="MA">Massachusetts</option>
+                <option value="MI">Michigan</option>
+                <option value="MN">Minnesota</option>
+                <option value="MS">Mississippi</option>
+                <option value="MO">Missouri</option>
+                <option value="MT">Montana</option>
+                <option value="NE">Nebraska</option>
+                <option value="NV">Nevada</option>
+                <option value="NH">New Hampshire</option>
+                <option value="NJ">New Jersey</option>
+                <option value="NM">New Mexico</option>
+                <option value="NY">New York</option>
+                <option value="NC">North Carolina</option>
+                <option value="ND">North Dakota</option>
+                <option value="OH">Ohio</option>
+                <option value="OK">Oklahoma</option>
+                <option value="OR">Oregon</option>
+                <option value="PA">Pennsylvania</option>
+                <option value="RI">Rhode Island</option>
+                <option value="SC">South Carolina</option>
+                <option value="SD">South Dakota</option>
+                <option value="TN">Tennessee</option>
+                <option value="TX">Texas</option>
+                <option value="UT">Utah</option>
+                <option value="VT">Vermont</option>
+                <option value="VA">Virginia</option>
+                <option value="WA">Washington</option>
+                <option value="WV">West Virginia</option>
+                <option value="WI">Wisconsin</option>
+                <option value="WY">Wyoming</option>
+              </select>
+              <div *ngIf="licensePlateState.invalid && (licensePlateState.dirty || licensePlateState.touched)"
+                class="invalid-feedback">
+                License Plate State is required.
+              </div>
+            </div>
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Expiration Date</h2>
+              <input type="date" class="form-control" id="expirationDate" placeholder="Expiration Date"
+                [(ngModel)]="newTrailer.expirationDate" name="expirationDate" #expirationDate="ngModel" required
+                [ngClass]="{'is-invalid':expirationDate.invalid && (expirationDate.dirty ||expirationDate.touched)}"
+                [class.gray-bg]="!newTrailer.expirationDate" [class.white-bg]="newTrailer.expirationDate">
+              <div *ngIf="expirationDate.invalid && (expirationDate.dirty || expirationDate.touched)"
+                class="invalid-feedback">
+                Plate Number is required.
+              </div>
+            </div>
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Trailer Year</h2>
+              <input type="text" class="form-control border-radius-6" id="trailerYear" placeholder="Enter Trailer year"
+                [(ngModel)]="newTrailer.trailerYear" name="trailerYear" #trailerYear="ngModel" required
+                [ngClass]="{'is-invalid': trailerYear.invalid && (trailerYear.dirty || trailerYear.touched)}"
+                [class.gray-bg]="!newTrailer.trailerYear" [class.white-bg]="newTrailer.trailerYear">
+              <div *ngIf="trailerYear.invalid && (trailerYear.dirty || trailerYear.touched)" class="invalid-feedback">
+                Trailer year is required.
+              </div>
+            </div>
+
+
+
+
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Trailer Type</h2>
+              <select class="form-control custom-select" id="trailerType" [(ngModel)]="newTrailer.trailerType"
+                name="trailerType" #trailerType="ngModel" required
+                [ngClass]="{'is-invalid': trailerType.invalid && (trailerType.dirty || trailerType.touched)}"
+                [class.gray-bg]="!newTrailer.trailerType" [class.white-bg]="newTrailer.trailerType">
+                <option value="" hidden>Select Trailer Type</option>
+                <option value="Dry Van">Dry Van</option>
+                <option value="Refrigerated (Reefer)">Refrigerated (Reefer)</option>
+                <option value="Flatbed">Flatbed</option>
+                <option value="Step Deck (Drop Deck)">Step Deck (Drop Deck)</option>
+                <option value="Removable Gooseneck (RGN)">Removable Gooseneck (RGN)</option>
+                <option value="Lowboy">Lowboy</option>
+                <option value="Extendable Flatbed">Extendable Flatbed</option>
+                <option value="Conestoga (Sliding Tarp)">Conestoga (Sliding Tarp)</option>
+                <option value="Curtainside">Curtainside</option>
+                <option value="Hot Shot">Hot Shot</option>
+                <option value="Intermodal/Container Chassis">Intermodal/Container Chassis</option>
+
+              </select>
+              <div *ngIf="trailerType.invalid && (trailerType.dirty || trailerType.touched)" class="invalid-feedback">
+                Trailer Type is required.
+              </div>
+            </div>
+
+
+
+
+
+
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Trailer Make</h2>
+              <select class="form-control custom-select" id="trailerMake" [(ngModel)]="newTrailer.trailerMake"
+                name="trailerMake" #trailerMake="ngModel" required
+                [ngClass]="{'is-invalid': trailerMake.invalid && (trailerMake.dirty || trailerMake.touched)}"
+                [class.gray-bg]="!newTrailer.trailerMake" [class.white-bg]="newTrailer.trailerMake">
+                <option value="" hidden>Select Make</option>
+                <!-- Dry Van -->
+                <option *ngIf="newTrailer.trailerType === 'Dry Van'" value="Great Dane">Great Dane</option>
+                <option *ngIf="newTrailer.trailerType === 'Dry Van'" value="Utility Trailer">Utility Trailer</option>
+                <option *ngIf="newTrailer.trailerType === 'Dry Van'" value="Wabash National">Wabash National</option>
+                <option *ngIf="newTrailer.trailerType === 'Dry Van'" value="Stoughton Trailers">Stoughton Trailers
+                </option>
+                <option *ngIf="newTrailer.trailerType === 'Dry Van'" value="Hyundai Translead">Hyundai Translead
+                </option>
+                <!-- Refrigerated (Reefer) -->
+                <option *ngIf="newTrailer.trailerType === 'Refrigerated (Reefer)'" value="Utility Trailer">Utility
+                  Trailer</option>
+                <option *ngIf="newTrailer.trailerType === 'Refrigerated (Reefer)'" value="Great Dane">Great Dane
+                </option>
+                <option *ngIf="newTrailer.trailerType === 'Refrigerated (Reefer)'" value="Wabash National">Wabash
+                  National</option>
+                <option *ngIf="newTrailer.trailerType === 'Refrigerated (Reefer)'" value="Vanguard National">Vanguard
+                  National</option>
+                <option *ngIf="newTrailer.trailerType === 'Refrigerated (Reefer)'" value="Hyundai Translead">Hyundai
+                  Translead</option>
+                <!-- Flatbed -->
+                <option *ngIf="newTrailer.trailerType === 'Flatbed'" value="Fontaine Trailer">Fontaine Trailer
+                </option>
+                <option *ngIf="newTrailer.trailerType === 'Flatbed'" value="Transcraft (Wabash)">Transcraft (Wabash)
+                </option>
+                <option *ngIf="newTrailer.trailerType === 'Flatbed'" value="Great Dane">Great Dane</option>
+                <option *ngIf="newTrailer.trailerType === 'Flatbed'" value="Utility Trailer">Utility Trailer</option>
+                <!-- Step Deck (Drop Deck) -->
+                <option *ngIf="newTrailer.trailerType === 'Step Deck (Drop Deck)'" value="Fontaine Trailer">Fontaine
+                  Trailer</option>
+                <option *ngIf="newTrailer.trailerType === 'Step Deck (Drop Deck)'" value="Transcraft">Transcraft
+                </option>
+                <!-- Removable Gooseneck (RGN) -->
+                <option *ngIf="newTrailer.trailerType === 'Removable Gooseneck (RGN)'" value="Trail King Industries">
+                  Trail King Industries</option>
+                <option *ngIf="newTrailer.trailerType === 'Removable Gooseneck (RGN)'" value="Fontaine Trailer">Fontaine
+                  Trailer</option>
+                <option *ngIf="newTrailer.trailerType === 'Removable Gooseneck (RGN)'" value="XL Specialized Trailers">
+                  XL Specialized Trailers</option>
+                <!-- Lowboy -->
+                <option *ngIf="newTrailer.trailerType === 'Lowboy'" value="Trail King Industries">Trail King Industries
+                </option>
+                <option *ngIf="newTrailer.trailerType === 'Lowboy'" value="Fontaine Heavy-Haul">Fontaine Heavy-Haul
+                </option>
+                <!-- Extendable Flatbed -->
+                <option *ngIf="newTrailer.trailerType === 'Extendable Flatbed'" value="Fontaine Trailer">Fontaine
+                  Trailer</option>
+                <option *ngIf="newTrailer.trailerType === 'Extendable Flatbed'" value="XL Specialized">XL Specialized
+                </option>
+                <!-- Conestoga (Sliding Tarp) -->
+                <option *ngIf="newTrailer.trailerType === 'Conestoga (Sliding Tarp)'" value="Reitnouer Trailers">
+                  Reitnouer Trailers</option>
+                <option *ngIf="newTrailer.trailerType === 'Conestoga (Sliding Tarp)'" value="Fontaine Trailer">Fontaine
+                  Trailer</option>
+                <!-- Curtainside -->
+                <option *ngIf="newTrailer.trailerType === 'Curtainside'" value="MAC Curtainside">MAC Curtainside
+                </option>
+                <option *ngIf="newTrailer.trailerType === 'Curtainside'" value="Curtainside Trailer">Curtainside Trailer
+                </option>
+                <!-- Hot Shot -->
+                <option *ngIf="newTrailer.trailerType === 'Hot Shot'" value="25GN Heavy Duty Tandem Dual Gooseneck">25GN
+                  Heavy Duty Tandem Dual Gooseneck</option>
+                <option *ngIf="newTrailer.trailerType === 'Hot Shot'" value="FD Low-Pro Flatdeck">FD Low-Pro Flatdeck
+                </option>
+                <option *ngIf="newTrailer.trailerType === 'Hot Shot'" value="CH Heavy Duty Car Hauler">CH Heavy Duty Car
+                  Hauler</option>
+                <!-- Intermodal/Container Chassis -->
+                <option *ngIf="newTrailer.trailerType === 'Intermodal/Container Chassis'" value="HT Chassis Series">HT
+                  Chassis Series</option>
+                <option *ngIf="newTrailer.trailerType === 'Intermodal/Container Chassis'"
+                  value="Extendable, Tank, Combo Chassis">Extendable, Tank, Combo Chassis</option>
+
+              </select>
+              <div *ngIf="trailerMake.invalid && (trailerMake.dirty || trailerMake.touched)" class="invalid-feedback">
+                Manufacturer is required.
+              </div>
+            </div>
+
+
+
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Trailer Model</h2>
+              <select class="form-control custom-select" id="trailerModel" [(ngModel)]="newTrailer.trailerModel"
+                name="trailerModel" #trailerModel="ngModel" required
+                [ngClass]="{'is-invalid': trailerModel.invalid && (trailerModel.dirty || trailerModel.touched)}"
+                [class.gray-bg]="!newTrailer.trailerModel" [class.white-bg]="newTrailer.trailerModel">
+                <option value="" hidden>Select Trailer Model</option>
+                <!-- Dry Van -->
+                <option *ngIf="newTrailer.trailerType === 'Dry Van'" value="Champion Series">Champion Series</option>
+                <option *ngIf="newTrailer.trailerType === 'Dry Van'" value="4000D-X Composite">4000D-X Composite
+                </option>
+                <option *ngIf="newTrailer.trailerType === 'Dry Van'" value="DuraPlate HD">DuraPlate HD</option>
+                <option *ngIf="newTrailer.trailerType === 'Dry Van'" value="Z-Plate">Z-Plate</option>
+                <option *ngIf="newTrailer.trailerType === 'Dry Van'" value="HT Composite">HT Composite</option>
+                <!-- Refrigerated (Reefer) -->
+                <option *ngIf="newTrailer.trailerType === 'Refrigerated (Reefer)'" value="3000R">3000R</option>
+                <option *ngIf="newTrailer.trailerType === 'Refrigerated (Reefer)'" value="Everest Series">Everest Series
+                </option>
+                <option *ngIf="newTrailer.trailerType === 'Refrigerated (Reefer)'" value="ArcticLite">ArcticLite
+                </option>
+                <option *ngIf="newTrailer.trailerType === 'Refrigerated (Reefer)'" value="VCP Reefer">VCP Reefer
+                </option>
+                <option *ngIf="newTrailer.trailerType === 'Refrigerated (Reefer)'" value="HT ThermoTech">HT ThermoTech
+                </option>
+                <!-- Flatbed -->
+                <option *ngIf="newTrailer.trailerType === 'Flatbed'" value="Infinity Series">Infinity Series</option>
+                <option *ngIf="newTrailer.trailerType === 'Flatbed'" value="Eagle II, Benson">Eagle II, Benson</option>
+                <option *ngIf="newTrailer.trailerType === 'Flatbed'" value="Freedom SE">Freedom SE</option>
+                <option *ngIf="newTrailer.trailerType === 'Flatbed'" value="4000AE">4000AE</option>
+                <!-- Step Deck (Drop Deck) -->
+                <option *ngIf="newTrailer.trailerType === 'Step Deck (Drop Deck)'" value="Revolution Dropdeck">
+                  Revolution Dropdeck</option>
+                <option *ngIf="newTrailer.trailerType === 'Step Deck (Drop Deck)'" value="Benson Step Deck">Benson Step
+                  Deck</option>
+                <!-- Removable Gooseneck (RGN) -->
+                <option *ngIf="newTrailer.trailerType === 'Removable Gooseneck (RGN)'"
+                  value="HDG (Hydraulic Detachable Gooseneck)">HDG (Hydraulic Detachable Gooseneck)</option>
+                <option *ngIf="newTrailer.trailerType === 'Removable Gooseneck (RGN)'" value="Magnitude Series">
+                  Magnitude Series</option>
+                <option *ngIf="newTrailer.trailerType === 'Removable Gooseneck (RGN)'" value="XL 110 HDG">XL 110 HDG
+                </option>
+                <!-- Lowboy -->
+                <option *ngIf="newTrailer.trailerType === 'Lowboy'" value="Advantage Plus, Lowboy HDG">Advantage Plus,
+                  Lowboy HDG</option>
+                <option *ngIf="newTrailer.trailerType === 'Lowboy'" value="Magnitude 55L">Magnitude 55L</option>
+                <!-- Extendable Flatbed -->
+                <option *ngIf="newTrailer.trailerType === 'Extendable Flatbed'" value="Extendable Infinity">Extendable
+                  Infinity</option>
+                <option *ngIf="newTrailer.trailerType === 'Extendable Flatbed'" value="XL Extend-A-Trac">XL
+                  Extend-A-Trac</option>
+                <!-- Conestoga (Sliding Tarp) -->
+                <option *ngIf="newTrailer.trailerType === 'Conestoga (Sliding Tarp)'"
+                  value="MaxMiser with Conestoga kit">MaxMiser with Conestoga kit</option>
+                <option *ngIf="newTrailer.trailerType === 'Conestoga (Sliding Tarp)'" value="Velocity with Conestoga">
+                  Velocity with Conestoga</option>
+                <!-- Curtainside -->
+                <option *ngIf="newTrailer.trailerType === 'Curtainside'" value="MAC Curtainside">MAC Curtainside
+                </option>
+                <option *ngIf="newTrailer.trailerType === 'Curtainside'" value="Curtainside Trailer">Curtainside Trailer
+                </option>
+                <!-- Hot Shot -->
+                <option *ngIf="newTrailer.trailerType === 'Hot Shot'" value="25GN Heavy Duty Tandem Dual Gooseneck">25GN
+                  Heavy Duty Tandem Dual Gooseneck</option>
+                <option *ngIf="newTrailer.trailerType === 'Hot Shot'" value="FD Low-Pro Flatdeck">FD Low-Pro Flatdeck
+                </option>
+                <option *ngIf="newTrailer.trailerType === 'Hot Shot'" value="CH Heavy Duty Car Hauler">CH Heavy Duty Car
+                  Hauler</option>
+                <!-- Intermodal/Container Chassis -->
+                <option *ngIf="newTrailer.trailerType === 'Intermodal/Container Chassis'" value="HT Chassis Series">HT
+                  Chassis Series</option>
+                <option *ngIf="newTrailer.trailerType === 'Intermodal/Container Chassis'"
+                  value="Extendable, Tank, Combo Chassis">Extendable, Tank, Combo Chassis</option>
+
+              </select>
+            </div>
+
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Provider</h2>
+              <select class="form-control custom-select" [(ngModel)]="newTrailer.provider" name="provider">
+                <option value="" hidden>Select Provider</option>
+                <option value="Thermo King">Thermo King</option>
+                <option value="Carrier Transicold">Carrier Transicold</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Model List</h2>
+              <select class="form-control custom-select" [(ngModel)]="newTrailer.modelList" name="modelList">
+                <option value="" hidden>Select Model List</option>
+                <!-- Thermo King -->
+                <option *ngIf="newTrailer.provider === 'Thermo King'" value="T-Series">T-Series</option>
+                <option *ngIf="newTrailer.provider === 'Thermo King'" value="V-Series">V-Series</option>
+                <option *ngIf="newTrailer.provider === 'Thermo King'" value="B-Series">B-Series</option>
+                <option *ngIf="newTrailer.provider === 'Thermo King'" value="Precedent Series">Precedent Series</option>
+                <option *ngIf="newTrailer.provider === 'Thermo King'" value="C-Series">C-Series</option>
+                <!-- Carrier Transicold -->
+                <option *ngIf="newTrailer.provider === 'Carrier Transicold'" value="X4 Series">X4 Series</option>
+                <option *ngIf="newTrailer.provider === 'Carrier Transicold'" value="Supra Series">Supra Series</option>
+                <option *ngIf="newTrailer.provider === 'Carrier Transicold'" value="Supra e11">Supra e11</option>
+                <option *ngIf="newTrailer.provider === 'Carrier Transicold'" value="ThinLINE">ThinLINE</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Model Type</h2>
+              <select class="form-control custom-select" [(ngModel)]="newTrailer.modelType" name="modelType">
+                <option value="" hidden>Select Model Type</option>
+                <!-- Thermo King: T-Series -->
+                <option *ngIf="newTrailer.modelList === 'T-Series'" value="T-590">T-590</option>
+                <option *ngIf="newTrailer.modelList === 'T-Series'" value="T-690">T-690</option>
+                <option *ngIf="newTrailer.modelList === 'T-Series'" value="T-890">T-890</option>
+                <option *ngIf="newTrailer.modelList === 'T-Series'" value="T-1090">T-1090</option>
+                <!-- Thermo King: V-Series -->
+                <option *ngIf="newTrailer.modelList === 'V-Series'" value="V-520 RT">V-520 RT</option>
+                <!-- Thermo King: B-Series -->
+                <option *ngIf="newTrailer.modelList === 'B-Series'" value="B-100">B-100</option>
+                <option *ngIf="newTrailer.modelList === 'B-Series'" value="B-200">B-200</option>
+                <option *ngIf="newTrailer.modelList === 'B-Series'" value="B-300">B-300</option>
+                <!-- Thermo King: Precedent Series -->
+                <option *ngIf="newTrailer.modelList === 'Precedent Series'" value="S-600">S-600</option>
+                <option *ngIf="newTrailer.modelList === 'Precedent Series'" value="S-700">S-700</option>
+                <!-- Thermo King: C-Series -->
+                <option *ngIf="newTrailer.modelList === 'C-Series'" value="C-600M">C-600M</option>
+                <!-- Carrier Transicold: X4 Series -->
+                <option *ngIf="newTrailer.modelList === 'X4 Series'" value="7500">7500</option>
+                <option *ngIf="newTrailer.modelList === 'X4 Series'" value="7700">7700</option>
+                <!-- Carrier Transicold: Supra Series -->
+                <option *ngIf="newTrailer.modelList === 'Supra Series'" value="S6">S6</option>
+                <option *ngIf="newTrailer.modelList === 'Supra Series'" value="S8">S8</option>
+                <option *ngIf="newTrailer.modelList === 'Supra Series'" value="S10">S10</option>
+                <!-- Carrier Transicold: Supra e11 -->
+                <option *ngIf="newTrailer.modelList === 'Supra e11'" value="Supra e11">Supra e11</option>
+                <!-- Carrier Transicold: ThinLINE -->
+                <option *ngIf="newTrailer.modelList === 'ThinLINE'" value="69NT40 series">69NT40 series</option>
+              </select>
+            </div>
+
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Gross Vehicle Weight Rating (GVWR)</h2>
+              <input type="text" class="form-control border-radius-6" id="grossVehicleWeightRating"
+                placeholder="Enter GVWR" [(ngModel)]="newTrailer.grossVehicleWeightRating"
+                name="grossVehicleWeightRating" #grossVehicleWeightRating="ngModel" required
+                [ngClass]="{'is-invalid': grossVehicleWeightRating.invalid && (grossVehicleWeightRating.dirty || grossVehicleWeightRating.touched)}"
+                [class.gray-bg]="!newTrailer.grossVehicleWeightRating" [class.white-bg]="newTrailer.grossVehicleWeightRating">
+            </div>
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Upload CabCard</h2>
+              <input style="margin-top: 10px;" type="file" class="form-control" id="uploadDocument"
+                (change)="onFileChange($event, 'uploadDocument')" name="uploadDocument" accept=".jpg, .jpeg, .png, .pdf"
+                required
+                [class.gray-bg]="!selectedFiles['uploadDocument']" [class.white-bg]="selectedFiles['uploadDocument']">
+              <small *ngIf="selectedFiles['uploadDocument']">
+                Selected: {{ selectedFiles['uploadDocument'].name }}
+              </small>
+              <p class="text-danger" *ngIf="fileError">{{ fileError }}</p>
+            </div>
+
+            <div class="col-md-4 d-blocks">
+              <h2 class="font-14 font-weight-700 mb-0">Status</h2>
+              <select style="margin-top: 10px!important;" class="form-control custom-select mt-1"
+                [(ngModel)]="newTrailer.status" name="status" #status="ngModel" required
+                [ngClass]="{'is-invalid': status.invalid && (status.dirty || status.touched)}"
+                [class.gray-bg]="!newTrailer.status" [class.white-bg]="newTrailer.status">
+                <option value="APPROVED">APPROVED</option>
+                <option value="PENDING">PENDING</option>
+                <option value="EXPIRING">EXPIRING</option>
+              </select>
+              <div *ngIf="status.invalid && (status.dirty || status.touched)" class="invalid-feedback">
+                <i class="fa fa-exclamation-circle"></i> Status is required.
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Purchase Date</h2>
+              <input type="date" class="form-control border-radius-6" id="purchaseDate"
+                placeholder="Enter purchase date" [(ngModel)]="newTrailer.purchaseDate" name="purchaseDate"
+                #purchaseDate="ngModel" required
+                [ngClass]="{'is-invalid': purchaseDate.invalid && (purchaseDate.dirty || purchaseDate.touched)}"
+                [class.gray-bg]="!newTrailer.purchaseDate" [class.white-bg]="newTrailer.purchaseDate">
+              <div *ngIf="purchaseDate.invalid && (purchaseDate.dirty || purchaseDate.touched)" class="invalid-feedback">
+                Purchase date is required.
+              </div>
+            </div>
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Purchase Price ($)</h2>
+              <input type="text" class="form-control border-radius-6" id="purchasePrice"
+                placeholder="Enter purchase price" [(ngModel)]="newTrailer.purchasePrice" name="purchasePrice"
+                #purchasePrice="ngModel" required
+                [ngClass]="{'is-invalid': purchasePrice.invalid && (purchasePrice.dirty || purchasePrice.touched)}"
+                [class.gray-bg]="!newTrailer.purchasePrice" [class.white-bg]="newTrailer.purchasePrice">
+              <div *ngIf="purchasePrice.invalid && (purchasePrice.dirty || purchasePrice.touched)" class="invalid-feedback">
+                Purchase price is required.
+              </div>
+            </div>
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Monthly Payment ($)</h2>
+              <input type="text" class="form-control border-radius-6" id="monthlyPayment"
+                placeholder="Enter monthly payment" [(ngModel)]="newTrailer.monthlyPayment" name="monthlyPayment"
+                #monthlyPayment="ngModel" required
+                [ngClass]="{'is-invalid': monthlyPayment.invalid && (monthlyPayment.dirty || monthlyPayment.touched)}"
+                [class.gray-bg]="!newTrailer.monthlyPayment" [class.white-bg]="newTrailer.monthlyPayment">
+              <div *ngIf="monthlyPayment.invalid && (monthlyPayment.dirty || monthlyPayment.touched)" class="invalid-feedback">
+                Monthly payment is required.
+              </div>
+            </div>
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Interest Rate (%)</h2>
+              <input type="text" class="form-control border-radius-6" id="interestRate"
+                placeholder="Enter interest rate" [(ngModel)]="newTrailer.interestRate" name="interestRate" required
+                #interestRate="ngModel"
+                [ngClass]="{'is-invalid': interestRate.invalid && (interestRate.dirty || interestRate.touched)}"
+                [class.gray-bg]="!newTrailer.interestRate" [class.white-bg]="newTrailer.interestRate">
+              <div *ngIf="interestRate.invalid && (interestRate.dirty || interestRate.touched)" class="invalid-feedback">
+                Interest rate is required.
+              </div>
+            </div>
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Loan Ending Date</h2>
+              <input type="date" class="form-control border-radius-6" id="loanEndingDate"
+                placeholder="Enter loan ending date" [(ngModel)]="newTrailer.loanEndingDate" name="loanEndingDate"
+                #loanEndingDate="ngModel" required
+                [ngClass]="{'is-invalid': loanEndingDate.invalid && (loanEndingDate.dirty || loanEndingDate.touched)}"
+                [class.gray-bg]="!newTrailer.loanEndingDate" [class.white-bg]="newTrailer.loanEndingDate">
+              <div *ngIf="loanEndingDate.invalid && (loanEndingDate.dirty || loanEndingDate.touched)" class="invalid-feedback">
+                Loan ending date is required.
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Financing Bank</h2>
+              <input type="text" class="form-control" id="financingBank" placeholder="Enter financing bank"
+                [(ngModel)]="newTrailer.financingBank" name="financingBank" #financingBank="ngModel" required
+                [ngClass]="{'is-invalid': financingBank.invalid && (financingBank.dirty || financingBank.touched)}"
+                [class.gray-bg]="!newTrailer.financingBank" [class.white-bg]="newTrailer.financingBank">
+              <div *ngIf="financingBank.invalid && (financingBank.dirty || financingBank.touched)" class="invalid-feedback">
+                Financing bank is required.
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <h2 class="font-14 font-weight-700">Contact Number</h2>
+              <input type="text" class="form-control" id="contractNumber" placeholder="Enter contract number"
+                [(ngModel)]="newTrailer.contractNumber" name="contractNumber" #contractNumber="ngModel" required
+                [ngClass]="{'is-invalid': contractNumber.invalid && (contractNumber.dirty || contractNumber.touched)}"
+                [class.gray-bg]="!newTrailer.contractNumber" [class.white-bg]="newTrailer.contractNumber">
+              <div *ngIf="contractNumber.invalid && (contractNumber.dirty || contractNumber.touched)" class="invalid-feedback">
+                Contract number is required.
+              </div>
+            </div>
+
+
+
+
+            <div class="modal-footer justify-content-center"
+              style="border-top: 1px solid #ccc; padding-top: 15px; margin-top: 15px;">
+
+              <button type="button" class="btn btn-outline-secondary btn-sm text-uppercase rounded-pill"
+                data-bs-dismiss="offcanvas" aria-label="Close" (click)="onClose()"> Close</button>
+              <!-- <button type="button" class="btn btn-outline-secondary btn-sm text-uppercase rounded-pill"  (click)="onClose()">Close</button> -->
+
+
+              <button type="button" class="btn btn-success btn-sm text-uppercase rounded-pill"
+                (click)="goToSection('g-info', $event)">Next</button>
+
+            </div>
+
+
+
+
+          </div>
         </div>
+
+
+
       </div>
 
-      <!-- VIN Number -->
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">VIN Number</h2>
-        <input type="text" class="form-control" id="vinNumber" placeholder="VIN Number"
-          [(ngModel)]="newTrailer.vinNumber" name="vinNumber" #vinNumber="ngModel" required
-          [ngClass]="{'is-invalid': vinNumber.invalid && (vinNumber.dirty || vinNumber.touched)}">
-        <div *ngIf="vinNumber.invalid && (vinNumber.dirty || vinNumber.touched)" class="invalid-feedback">
-          VIN number is required.
+
+
+
+
+
+
+      <div class="content_ac" *ngIf="activeSection === 'g-info'">
+        <h3 class="mb-4">Documents</h3>
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="table-responsive">
+              <table class="table table-bordered">
+
+                <tbody>
+                  <tr *ngFor="let file of newTrailer.ninetyDaysDocument">
+                    <td>{{ file.name }}</td>
+                    <td class="text-capitalize whitespace-nowrap" width="15%">
+                      <a href="javascript:;" class="btn-action text-danger me-1"
+                        (click)="removeFile(file, 'ninetyDaysDocument')">
+                        <i class="fa fa-trash" aria-hidden="true"></i>
+                      </a>
+                    </td>
+                  </tr>
+                  <tr *ngIf="!newTrailer.ninetyDaysDocument?.length">
+                    <td colspan="2" class="text-center">No documents selected</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="col-md-4" style="margin-top: 15px; margin-left: 1px;">
+            <h2 style="margin-bottom: 5px;" class="font-14 font-weight-700">Upload Documents </h2>
+            <input type="file" class="form-control" id="ninetyDaysDocument"
+              (change)="onFileChange($event, 'ninetyDaysDocument', true)" name="ninetyDaysDocument"
+              accept=".jpg, .jpeg, .png, .pdf" multiple />
+          </div>
         </div>
-      </div>
 
-      <!-- Plate Number -->
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Plate Number</h2>
-        <input type="text" class="form-control" id="plateNumber" placeholder="Plate Number"
-          [(ngModel)]="newTrailer.plateNumber" name="plateNumber" #plateNumber="ngModel" required
-          [ngClass]="{'is-invalid': plateNumber.invalid && (plateNumber.dirty || plateNumber.touched)}">
-        <div *ngIf="plateNumber.invalid && (plateNumber.dirty || plateNumber.touched)" class="invalid-feedback">
-          Plate Number is required.
+
+        <div class="modal-footer justify-content-center"
+          style="border-top: 1px solid #ccc; padding-top: 15px; margin-top: 15px;">
+
+          <button type="button" class="btn btn-outline-secondary btn-sm text-uppercase rounded-pill"
+            data-bs-dismiss="offcanvas" aria-label="Close" (click)="onClose()"> Close</button>
+          <!-- <button type="button" class="btn btn-outline-secondary btn-sm text-uppercase rounded-pill"  (click)="onClose()">Close</button> -->
+
+          <button type="submit" class="btn btn-success btn-sm text-uppercase rounded-pill"
+            data-bs-dismiss="offcanvas">Submit Form</button>
+
+
+
+
         </div>
-      </div>
 
-      <!-- Expiration Date -->
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Expiration Date</h2>
-        <input type="date" class="form-control" id="expirationDate" placeholder="Expiration Date"
-          [(ngModel)]="newTrailer.expirationDate" name="expirationDate" #expirationDate="ngModel" required
-          [ngClass]="{'is-invalid':expirationDate.invalid && (expirationDate.dirty ||expirationDate.touched)}">
-        <div *ngIf="expirationDate.invalid && (expirationDate.dirty || expirationDate.touched)"
-          class="invalid-feedback">
-          Plate Number is required.
-        </div>
-      </div>
-
-      <!-- Cab Card -->
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Cab Card</h2>
-        <input type="text" class="form-control" id="cabCard" placeholder="Cab Card" [(ngModel)]="newTrailer.cabCard"
-          name="cabCard" #cabCard="ngModel" required
-          [ngClass]="{'is-invalid':cabCard.invalid && (cabCard.dirty ||cabCard.touched)}">
-        <div *ngIf="cabCard.invalid && (cabCard.dirty || cabCard.touched)" class="invalid-feedback">
-          Cab Card is required.
-        </div>
-      </div>
-
-      <!-- Upload Documents -->
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Upload Documents</h2>
-        <input type="file" class="form-control" id="uploadDocument" (change)="onFileChange($event, 'uploadDocument')"
-          name="uploadDocument"  accept=".jpg, .jpeg, .png, .pdf" required>
-      </div>
-
-      <hr class="hr" />
-
-      <!-- Annual DOT Insp -->
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Annual DOT Insp</h2>
-        <input type="text" class="form-control" id="annualDotInspDocument" placeholder="Annual DOT Insp"
-          [(ngModel)]="newTrailer.annualDotInspDocument" name="annualDotInspDocument" #annualDotInspDocument="ngModel"
-          required
-          [ngClass]="{'is-invalid':annualDotInspDocument.invalid && (annualDotInspDocument.dirty ||annualDotInspDocument.touched)}">
-        <div *ngIf="annualDotInspDocument.invalid && (annualDotInspDocument.dirty || annualDotInspDocument.touched)"
-          class="invalid-feedback">
-          Annual DOT Insp is required.
-        </div>
-      </div>
-
-      <!-- Upload Document -->
-
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Upload Document</h2>
-        <input type="file" class="form-control" id="uploadDocument1" placeholder="Document.pdf"
-          (change)="onFileChange($event, 'uploadDocument1')" name="uploadDocument1"  accept=".jpg, .jpeg, .png, .pdf" required>
-      </div>
-      <!-- Renewal Date -->
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Renewal Date</h2>
-        <input type="date" class="form-control" id="renewalDate" placeholder="Renewal Date"
-          [(ngModel)]="newTrailer.renewalDate" name="renewalDate" #renewalDate="ngModel" required
-          [ngClass]="{'is-invalid': renewalDate.invalid && (renewalDate.dirty || renewalDate.touched)}">
-        <div *ngIf="renewalDate.invalid && (renewalDate.dirty || renewalDate.touched)" class="invalid-feedback">
-          <i class="fa fa-info-circle"></i> Renewal Date is required.
-        </div>
-      </div>
-
-      <!-- Purchase Date -->
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Purchase Date</h2>
-        <input type="date" class="form-control" id="purchaseDate" placeholder="Purchase Date"
-          [(ngModel)]="newTrailer.purchaseDate" name="purchaseDate" #purchaseDate="ngModel" required
-          [ngClass]="{'is-invalid': purchaseDate.invalid && (purchaseDate.dirty || purchaseDate.touched)}">
-        <div *ngIf="purchaseDate.invalid && (purchaseDate.dirty || purchaseDate.touched)" class="invalid-feedback">
-          <i class="fa fa-info-circle"></i> Purchase Date is required.
-        </div>
-      </div>
-
-      <!-- Purchase Price -->
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Purchase Price</h2>
-        <input type="number" class="form-control" id="purchasePrice" placeholder="Purchase Price"
-          [(ngModel)]="newTrailer.purchasePrice" name="purchasePrice" #purchasePrice="ngModel" required
-          [ngClass]="{'is-invalid': purchasePrice.invalid && (purchasePrice.dirty || purchasePrice.touched)}">
-        <div *ngIf="purchasePrice.invalid && (purchasePrice.dirty || purchasePrice.touched)" class="invalid-feedback">
-          <i class="fa fa-info-circle"></i> Purchase Price is required.
-        </div>
-      </div>
-
-      <!-- Upload Documents -->
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Upload Documents</h2>
-        <input type="file" class="form-control" id="uploadDocument2" placeholder="Document.pdf"
-          (change)="onFileChange($event, 'uploadDocument2')" name="uploadDocument2" accept=".jpg, .jpeg, .png, .pdf" required>
-      </div>
-
-      <!-- Loan Bank Name -->
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Loan Bank Name</h2>
-        <input type="text" class="form-control" id="loanBankName" placeholder="Loan Bank Name"
-          [(ngModel)]="newTrailer.loanBankName" name="loanBankName" #loanBankName="ngModel" required
-          [ngClass]="{'is-invalid': loanBankName.invalid && (loanBankName.dirty || loanBankName.touched)}">
-        <div *ngIf="loanBankName.invalid && (loanBankName.dirty || loanBankName.touched)" class="invalid-feedback">
-          <i class="fa fa-info-circle"></i> Loan Bank Name is required.
-        </div>
-      </div>
-
-      <!-- Loan ACC Number -->
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Loan ACC Number</h2>
-        <input type="text" class="form-control" id="loanAccNumber" placeholder="Loan ACC Number"
-          [(ngModel)]="newTrailer.loanAccNumber" name="loanAccNumber" #loanAccNumber="ngModel" required
-          [ngClass]="{'is-invalid': loanAccNumber.invalid && (loanAccNumber.dirty || loanAccNumber.touched)}">
-        <div *ngIf="loanAccNumber.invalid && (loanAccNumber.dirty || loanAccNumber.touched)" class="invalid-feedback">
-          <i class="fa fa-info-circle"></i> Loan ACC Number is required.
-        </div>
-      </div>
-
-      <!-- Upload Documents -->
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Upload Documents</h2>
-        <input type="file" class="form-control" id="uploadDocument3" placeholder="Document.pdf"
-          (change)="onFileChange($event, 'uploadDocument3')" name="uploadDocument3" accept=".jpg, .jpeg, .png, .pdf" required>
-      </div>
-
-      <!-- Bank Contact -->
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Bank Contact</h2>
-        <input type="text" class="form-control" id="bankContact" placeholder="Bank Contact"
-          [(ngModel)]="newTrailer.bankContact" name="bankContact" #bankContact="ngModel" required
-          [ngClass]="{'is-invalid': bankContact.invalid && (bankContact.dirty || bankContact.touched)}">
-        <div *ngIf="bankContact.invalid && (bankContact.dirty || bankContact.touched)" class="invalid-feedback">
-          <i class="fa fa-info-circle"></i> Bank Contact is required.
-        </div>
-      </div>
-
-      <!-- Interest Rate -->
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Interest Rate</h2>
-        <input type="number" class="form-control" id="interestRate" placeholder="Interest Rate"
-          [(ngModel)]="newTrailer.interestRate" name="interestRate" #interestRate="ngModel" required
-          [ngClass]="{'is-invalid': interestRate.invalid && (interestRate.dirty || interestRate.touched)}">
-        <div *ngIf="interestRate.invalid && (interestRate.dirty || interestRate.touched)" class="invalid-feedback">
-          <i class="fa fa-info-circle"></i> Interest Rate is required.
-        </div>
-      </div>
-
-      <!-- Monthly Payment -->
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Monthly Payment</h2>
-        <input type="number" class="form-control" id="monthlyPayment" placeholder="Monthly Payment"
-          [(ngModel)]="newTrailer.monthlyPayment" name="monthlyPayment" #monthlyPayment="ngModel" required
-          [ngClass]="{'is-invalid': monthlyPayment.invalid && (monthlyPayment.dirty || monthlyPayment.touched)}">
-        <div *ngIf="monthlyPayment.invalid && (monthlyPayment.dirty || monthlyPayment.touched)"
-          class="invalid-feedback">
-          <i class="fa fa-info-circle"></i> Monthly Payment is required.
-        </div>
-      </div>
-
-      <!-- Payoff Date -->
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Payoff Date</h2>
-        <input type="date" class="form-control" id="payoffDate" placeholder="Payoff Date"
-          [(ngModel)]="newTrailer.payoffDate" name="payoffDate" #payoffDate="ngModel" required
-          [ngClass]="{'is-invalid': payoffDate.invalid && (payoffDate.dirty || payoffDate.touched)}">
-        <div *ngIf="payoffDate.invalid && (payoffDate.dirty || payoffDate.touched)" class="invalid-feedback">
-          <i class="fa fa-info-circle"></i> Payoff Date is required.
-        </div>
-      </div>
-
-      <!-- Prepass Transponder Number -->
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Prepass Transponder Number</h2>
-        <input type="text" class="form-control" id="prepassTransponderNumber" placeholder="Prepass Transponder Number"
-          [(ngModel)]="newTrailer.prepassTransponderNumber" name="prepassTransponderNumber"
-          #prepassTransponderNumber="ngModel" required
-          [ngClass]="{'is-invalid': prepassTransponderNumber.invalid && (prepassTransponderNumber.dirty || prepassTransponderNumber.touched)}">
-        <div
-          *ngIf="prepassTransponderNumber.invalid && (prepassTransponderNumber.dirty || prepassTransponderNumber.touched)"
-          class="invalid-feedback">
-          <i class="fa fa-info-circle"></i> Prepass Transponder Number is required.
-        </div>
-      </div>
-
-      <!-- Fuel Card Number -->
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Fuel Card Number</h2>
-        <input type="text" class="form-control" id="fuelCardNumber" placeholder="Fuel Card Number"
-          [(ngModel)]="newTrailer.fuelCardNumber" name="fuelCardNumber" #fuelCardNumber="ngModel" required
-          [ngClass]="{'is-invalid': fuelCardNumber.invalid && (fuelCardNumber.dirty || fuelCardNumber.touched)}">
-        <div *ngIf="fuelCardNumber.invalid && (fuelCardNumber.dirty || fuelCardNumber.touched)"
-          class="invalid-feedback">
-          <i class="fa fa-info-circle"></i> Fuel Card Number is required.
-        </div>
-      </div>
-
-      <!-- Status -->
-      <div class="col-md-4">
-        <h2 class="font-14 font-weight-700">Status</h2>
-        <select class="form-control" [(ngModel)]="newTrailer.status" name="status" #status="ngModel" required
-          [ngClass]="{'is-invalid': status.invalid && (status.dirty || status.touched)}">
-          <option value="APPROVED">APPROVED</option>
-          <option value="PENDING">PENDING</option>
-          <option value="EXPIRING">EXPIRING</option>
-        </select>
-        <div *ngIf="status.invalid && (status.dirty || status.touched)" class="invalid-feedback">
-          <i class="fa fa-info-circle"></i> Status is required.
-        </div>
       </div>
 
 
-      <div class="modal-footer justify-content-center"
-        style="border-top: 1px solid #ccc; padding-top: 15px; margin-top: 15px;">
-        <button type="button" class="btn btn-outline-secondary btn-sm text-uppercase rounded-pill"
-          data-bs-dismiss="offcanvas" style="margin: 10px;">Close</button>
-        <button type="submit" class="btn btn-success btn-sm text-uppercase rounded-pill"
-          data-bs-dismiss="offcanvas">Save changes</button>
-      </div>
+
+
+
+
+
+
     </form>
+      
   </div>
 </div>

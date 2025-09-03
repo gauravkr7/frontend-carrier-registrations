@@ -1,23 +1,88 @@
-<app-navbar></app-navbar>
+<app-navbar (toggleSidebar)="toggleSidebar()"></app-navbar>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
-
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
 
-<main id="main" class="main mt-0 p-0">
-  <div id="kt_app_content" class="app-content flex-column-fluid">
+<main id="main" class=" bg-gray main mt-0 p-0" [ngClass]="{'full-width': isSidebarOpen, 'shift-right': !isSidebarOpen}">
+  <h2 style="margin-left: 125px; margin-top: 25px;" class="font-18 font-weight-700 mb-4 text-capitalize">Driver
+    Application</h2>
+
+  <div id="kt_app_content" class="app-content  flex-column-fluid" style="margin-left: 90px;">
     <div class="container-fluid px-5">
-      <div class="row bg-white p-3 mt-3 rounded">
+      <div class="row bg-white px-3 py-4 mt-3 rounded">
         <div class="col-md-12">
           <div class="d-flex justify-content-between">
-            <div>
+            <!-- <div>
               <button class="btn btn-success rounded-pill font-14 active me-2">
                 Driver Application
               </button>
-            </div>
+            </div> -->
             <div class="d-flex gap-2">
+              <!-- Filter Buttons Start -->
+              <ul class="nav nav-pills gap-2 border-bottom pb-4" id="driverStatusTab" role="tablist">
+                <li class="nav-item d-flex align-items-center gap-2" role="presentation">
+                  <button class="nav-link rounded-pill" [class.active]="activeFilter === 'all'" id="all-tab"
+                    data-bs-toggle="tab" type="button" role="tab" aria-controls="all" (click)="filterDrivers('all')"
+                    [ngStyle]="{'background-color': activeFilter === 'all' ? '#304ccb' : 'transparent','color': activeFilter === 'all' ? '#fff' : '#304ccb','border': '1px solid #304ccb'
+    }">
+                    Driver Application
+                    <span class="ms-1" [ngStyle]="{'color': activeFilter === 'all' ? '#ffffff' : '#304ccb'}">
+                      ({{ driverApplicationsForm.length }})
+                    </span>
+                  </button>
+                </li>
+                <li class="nav-item d-flex align-items-center gap-2" role="presentation">
+                  <button class="nav-link rounded-pill" [class.active]="activeFilter === 'pending'" id="pending-tab"
+                    data-bs-toggle="tab" type="button" role="tab" aria-controls="pending"
+                    (click)="filterDrivers('pending')" [ngStyle]="{
+                  'background-color': activeFilter === 'pending' ? '#ff9f43' : 'transparent',
+                  'color': activeFilter === 'pending' ? '#fff' : '#ff9f43',
+                  'border': '1px solid #ff9f43'
+                }">
+                    Pending
+                    <span class="ms-1" [ngStyle]="{'color': activeFilter === 'pending' ? '#ffffff' : '#ff9f43'}">
+                      ({{ pendingDriversCount }})
+                    </span>
+                  </button>
+                </li>
+                <li class="nav-item d-flex align-items-center gap-2" role="presentation">
+                  <button class="nav-link rounded-pill" [class.active]="activeFilter === 'approved'" id="approved-tab"
+                    data-bs-toggle="tab" type="button" role="tab" aria-controls="approved"
+                    (click)="filterDrivers('approved')" [ngStyle]="{
+                  'background-color': activeFilter === 'approved' ? '#28c76f' : 'transparent',
+                  'color': activeFilter === 'approved' ? '#fff' : '#28c76f',
+                  'border': '1px solid #28c76f'
+                }">
+                    Approved
+                    <span class="ms-1" [ngStyle]="{'color': activeFilter === 'approved' ? '#ffffff' : '#28c76f'}">
+                      ({{ approvedDriversCount }})
+                    </span>
+                  </button>
+                </li>
+                <li class="nav-item d-flex align-items-center gap-2" role="presentation">
+                  <button class="nav-link rounded-pill" [class.active]="activeFilter === 'rejected'" id="rejected-tab"
+                    data-bs-toggle="tab" type="button" role="tab" aria-controls="rejected"
+                    (click)="filterDrivers('rejected')" [ngStyle]="{
+                  'background-color': activeFilter === 'rejected' ? '#dc3545' : 'transparent',
+                  'color': activeFilter === 'rejected' ? '#fff' : '#dc3545',
+                  'border': '1px solid #dc3545'
+                }">
+                    Rejected
+                    <span class="ms-1" [ngStyle]="{'color': activeFilter === 'rejected' ? '#ffffff' : '#dc3545'}">
+                      ({{ rejectedDriversCount }})
+                    </span>
+                  </button>
+                </li>
+              </ul>
+              <!-- Filter Buttons End -->
+            </div>
+            <!-- Filter Buttons End -->
+            <div class="d-flex gap-2">
+              <div>
+                <!-- View Form Button with RouterLink -->
+                <!-- <a routerLink="/driver-application-view" class="btn btn-success rounded-pill font-14" type="button">
+                  <i class="me-2"></i> View Form
+                </a> -->
+              </div>
               <div>
                 <div class="btn-group" role="group" aria-label="Basic example">
                   <!-- Add Profile Button -->
@@ -29,46 +94,142 @@
               </div>
               <div>
                 <!-- Add Form Button with RouterLink -->
-                <a [routerLink]="'/driver-applicationForm'" class="btn btn-success rounded-pill font-14">
+                <!-- <a routerLink="/driver-application-form" class="btn btn-success rounded-pill font-14">
                   <i class="fa fa-plus me-2"></i>Add Form
-                </a>
+                </a> -->
               </div>
             </div>
           </div>
-        </div>
-      </div>
-      
 
-      <div class="row bg-white px-3 py-4 mt-3 rounded">
-        <div class="col-md-12">
-          <div class="table-responsive">
-            <table class="table table-bordered">
-              <thead>
-                <tr>
-                  <th scope="col">Driver Name</th>
-                  <th scope="col">Address</th>
-                  <th scope="col">Phone</th>
-                  <th scope="col">Email</th>
-                  <th scope="col" width="30px">Actions</th>
-                </tr>
-              </thead>
-              <tbody></tbody>
-            </table>
+
+          <!-- New Table for Driver Applications -->
+          <div class="row mt-4">
+            <div class="col-md-12">
+
+
+              <div class="table-responsive">
+                <table class="table table-bordered" style="text-align: left;">
+                  <thead>
+                    <tr style="background: #f8f9fa;">
+                      <th>Driver Name</th>
+                      <th>Email</th>
+                      <th>Social Security Number</th>
+                      <th>Phone Number</th>
+                      <th>Status</th>
+
+                      <th width="30px">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let driver of paginatedDriverApplicationsForm">
+                      <td><a class="text-primary"
+                          [routerLink]="['/driver-application-view', driver.id || driver._id]">{{driver.firstName}}
+                          {{driver.middleName}} {{driver.lastName}}</a></td>
+                      <td>{{driver.email}}</td>
+                      <td>{{driver.ssn || driver.ssnNumber || driver.socialSecurityNumber || '-'}}</td>
+                      <td>{{driver.phone}}</td>
+                      <td>
+                        <span class="badge font-13 font-weight-500 text-uppercase" [ngClass]="{
+      'bg-label-success': (driver.status || '').toString().trim().toUpperCase() === 'APPROVED',
+      'bg-label-danger': (driver.status || '').toString().trim().toUpperCase() === 'REJECTED',
+      'bg-label-warning': (driver.status || '').toString().trim().toUpperCase() !== 'APPROVED' && (driver.status || '').toString().trim().toUpperCase() !== 'REJECTED'
+    }">
+                          {{
+                          (driver.status || '').toString().trim().toUpperCase() === 'APPROVED' ? 'APPROVED' :
+                          (driver.status || '').toString().trim().toUpperCase() === 'REJECTED' ? 'REJECTED' :
+                          'PENDING'
+                          }}
+                        </span>
+                      </td>
+
+                      <td class="text-capitalize">
+                        <div class="dropdown filter-dropdown">
+                          <span class="dropdown-toggle font-16 px-3" type="button" id="dropdownMenuButton23"
+                            data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i>
+                          </span>
+                          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
+                            
+                           <a href="javascript:;" class="dropdown-item assiened font-13"
+   (click)="deleteDriverForm(driver)">Delete</a>
+                            <a href="javascript:;" class="dropdown-item assiened font-13"
+                              (click)="resendLink(driver)">Resend</a>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr *ngIf="filteredDriverApplicationsForm.length === 0">
+                      <td colspan="7" class="text-center">No driver applications found.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <!-- Pagination controls start -->
+              <div class="bg-white my-3 rounded pb-3" style="margin-right: 90px;">
+                <div class="row">
+                  <div class="col-md-12">
+                    <nav aria-label="Page navigation example ms-auto me-auto">
+                      <ul class="pagination justify-content-center gap-2 mb-0">
+                        <li class="page-item" [class.disabled]="currentPage === 1">
+                          <a class="page-link font-22 d-flex align-items-center justify-content-center"
+                            href="javascript:;" aria-label="Previous" (click)="changePage(currentPage - 1)">
+                            <i class="fa fa-angle-left font-weight-300"></i>
+                          </a>
+                        </li>
+                        <li class="page-item" *ngFor="let page of getPageNumbers()"
+                          [class.active]="currentPage === page">
+                          <a class="page-link font-14 d-flex align-items-center justify-content-center"
+                            href="javascript:;" (click)="changePage(page)">{{ page }}</a>
+                        </li>
+                        <li class="page-item" [class.disabled]="currentPage === getTotalPages()">
+                          <a class="page-link font-22 d-flex align-items-center justify-content-center"
+                            href="javascript:;" aria-label="Next" (click)="changePage(currentPage + 1)">
+                            <i class="fa fa-angle-right font-weight-300"></i>
+                          </a>
+                        </li>
+                      </ul>
+                    </nav>
+
+                    <!-- Showing entries info below pagination -->
+                    <div class="text-center  mb-2">
+                      <ng-container *ngIf="paginatedDriverApplicationsForm.length > 0">
+                        <span class="badge bg-light text-dark px-3 py-2" style="font-size: 14px; font-weight: normal;">
+                          Showing
+                          {{ ((currentPage - 1) * itemsPerPage) + 1 }}
+                          to
+                          {{ ((currentPage - 1) * itemsPerPage) + paginatedDriverApplicationsForm.length }}
+                          of
+                          {{ filteredDriverApplicationsForm.length }}
+                          entries (Page {{ currentPage }} of {{ getTotalPages() }})
+                        </span>
+                      </ng-container>
+                      <ng-container *ngIf="paginatedDriverApplicationsForm.length === 0">
+                        <span class="badge bg-light text-danger px-3 py-2" style="font-size: 14px;">
+                          No records to display.
+                        </span>
+                      </ng-container>
+                    </div>
+                    <!-- End added block -->
+                  </div>
+                </div>
+              </div>
+              <!-- Pagination controls end -->
+
+            </div>
           </div>
+          <!-- End New Table -->
+
         </div>
-      </div>
-      <div class="row bg-white px-3 py-4 mt-3 rounded">
-        <div class="col-md-12"></div>
       </div>
     </div>
   </div>
 </main>
 <!-- End #main -->
 
-<footer id="footer" class="footer">
-  <div class="text-dark text-center">
-    <span class="text-muted fw-semibold me-1">2023© all rights reserved</span>
-    <a href="#" class="font-weight-700 text-hover-dark text-dark text-uppercase">3PL TEK INC.</a>
+<footer id="footer" class="footer text-center"
+  [ngClass]="{'full-widths': isSidebarOpen, 'shift-rights': !isSidebarOpen}">
+  <div class="text-dark">
+    <span class="text-muted fw-semibold me-1">2025© all rights reserved</span>
+    <a class="font-weight-700 text-hover-dark text-dark text-uppercase">3PL TEK INC.</a>
   </div>
 </footer>
 <!-- End Footer -->
@@ -76,7 +237,7 @@
 <a href="#" class="back-to-top d-flex align-items-center justify-content-center btn-success"><i
     class="bi bi-arrow-up-short"></i></a>
 
-<div class="offcanvas offcanvas-end" id="addLocation" aria-labelledby="offcanvasRightLabel" style="width: 90%;"
+<div class="offcanvas offcanvas-end" id="addLocation" aria-labelledby="offcanvasRightLabel" style="width: 80%;"
   data-bs-backdrop="static" data-bs-keyboard="false">
   <div class="modal-header" style="padding: 15px; border-bottom: 1px solid #ccc;">
     <h5 class="modal-title">Driver Data</h5>
@@ -85,46 +246,116 @@
   </div>
 
   <div class="offcanvas-body view-load position-relative">
-    <form class="row g-3" (ngSubmit)="submitForm()" #f="ngForm">
+    <form class="row g-3" (ngSubmit)="driverApplicationToEdit ? saveEditDriverApplication() : submitForm()" #f="ngForm">
+      <div class="col-md-4">
+        <h2 class="font-14 font-weight-700">First Name</h2>
+        <input type="text" class="form-control" placeholder="First Name" [(ngModel)]="newDriverapplication.firstName"
+          name="firstName">
+      </div>
+      <div class="col-md-4">
+        <h2 class="font-14 font-weight-700">Middle Name</h2>
+        <input type="text" class="form-control" placeholder="Middle Name" [(ngModel)]="newDriverapplication.middleName"
+          name="middleName">
+      </div>
+      <div class="col-md-4">
+        <h2 class="font-14 font-weight-700">Last Name</h2>
+        <input type="text" class="form-control" placeholder="Last Name" [(ngModel)]="newDriverapplication.lastName"
+          name="lastName">
+      </div>
+      <div class="col-md-4">
+        <h2 class="font-14 font-weight-700">Email</h2>
+        <input type="email" class="form-control" placeholder="Email" [(ngModel)]="newDriverapplication.email"
+          name="email">
+      </div>
+      <div class="col-md-4">
+        <h2 class="font-14 font-weight-700">Phone</h2>
+        <input type="text" class="form-control" placeholder="Phone" [(ngModel)]="newDriverapplication.phone"
+          name="phone">
+      </div>
+      <div class="col-md-4">
+        <h2 class="font-14 font-weight-700">Driving Licence</h2>
+        <input type="text" class="form-control" placeholder="Driving Licence"
+          [(ngModel)]="newDriverapplication.previousLicence" name="previousLicence">
+      </div>
+
+      <div class="col-lg-12">
+        <div class="mb-4">
+          <button *ngIf="!driverApplicationToEdit" class="btn btn-success rounded-pill px-4 text-center font-14"
+            type="submit" [disabled]="f.invalid">
+            Save & Send
+          </button>
+          <button *ngIf="driverApplicationToEdit" class="btn btn-primary rounded-pill px-4 text-center font-14"
+            type="submit" [disabled]="f.invalid">
+            Update
+          </button>
+          <button *ngIf="driverApplicationToEdit" class="btn btn-secondary rounded-pill px-4 text-center font-14 ms-2"
+            type="button"
+            (click)="driverApplicationToEdit = null; newDriverapplication = { firstName: '', middleName: '', lastName: '', email: '', phone: '', previousLicence: '', Address: '', status: 'Pending' }">
+            Cancel
+          </button>
+        </div>
+      </div>
+
+      <hr class="mt-1 mb-4">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="table-responsive">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Driver Name</th>
+                  <th>Phone</th>
+                  <th>Email</th>
+                  <th>Link Hash</th>
+                  <th>Sent At</th>
+                  <th>Expired On</th>
+                  <th class="text-center">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let driver of driverApplications">
+                  <td>
+                    <a [routerLink]="['/driver-application-form', driver.id || driver._id]"
+                      class="text-main font-weight-700">
+                      {{driver.firstName}} {{driver.middleName}} {{driver.lastName}}
+                    </a>
+                  </td>
+                  <td>{{driver.phone}}</td>
+                  <td>{{driver.email}}</td>
+                  <td>
+                    <a href="https://compliance-dev.3pltek.com/driver-application-form" style="color: blue;">Open
+                      Link</a>
+                  </td>
 
 
 
-    <form class="row g-3" (ngSubmit)="submitForm()" #f="ngForm">
-  <div class="col-md-4">
-    <h2 class="font-14 font-weight-700">First Name</h2>
-    <input type="text" class="form-control" placeholder="First Name"
-      [(ngModel)]="newDriverapplication.FirstName" name="FirstName" required>
-  </div>
-  <div class="col-md-4">
-    <h2 class="font-14 font-weight-700">Middle Name</h2>
-    <input type="text" class="form-control" placeholder="Middle Name"
-      [(ngModel)]="newDriverapplication.MiddleName" name="MiddleName" required>
-  </div>
-  <div class="col-md-4">
-    <h2 class="font-14 font-weight-700">Last Name</h2>
-    <input type="text" class="form-control" placeholder="Last Name"
-      [(ngModel)]="newDriverapplication.LastName" name="LastName" required>
-  </div>
-  <div class="col-md-4">
-    <h2 class="font-14 font-weight-700">Email</h2>
-    <input type="email" class="form-control" placeholder="Email"
-      [(ngModel)]="newDriverapplication.email" name="email" required>
-  </div>
-  <div class="col-md-4">
-    <h2 class="font-14 font-weight-700">Phone</h2>
-    <input type="text" class="form-control" placeholder="Phone"
-      [(ngModel)]="newDriverapplication.CellularTelephone" name="CellularTelephone" required>
-  </div>
-  <div class="col-md-4">
-    <h2 class="font-14 font-weight-700">Driving Licence</h2>
-    <input type="text" class="form-control" placeholder="Driving Licence"
-      [(ngModel)]="newDriverapplication.DrivingLicence" name="DrivingLicence" required>
-  </div>
-  
+                  <td>{{ getFormattedWhenSent(driver) }}</td>
+                  <td>{{ getExpiryDate(driver) }}</td>
+                  <td class="text-capitalize text-center ">
+                    <div class="dropdown filter-dropdown">
+                      <span class="dropdown-toggle font-16 px-3" type="button" id="dropdownMenuButton23"
+                        data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i>
+                      </span>
+                      <div class="dropdown-menu " aria-labelledby="dropdownMenuButton2">
+                        <a href="javascript:;" class="dropdown-item dispatch font-13"
+                          (click)="editDriver(driver)">Edit</a>
+                        <a href="javascript:;" class="dropdown-item assiened font-13"
+                          (click)="deleteDriver(driver)">Delete</a>
+                        <a href="javascript:;" class="dropdown-item assiened font-13"
+                          (click)="resendLink(driver)">Resend</a>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr *ngIf="driverApplications.length === 0">
+                  <td colspan="7" class="text-center">No driver applications found.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
 
-<div class="modal-footer justify-content-center" style="border-top: 1px solid #ccc; padding-top: 15px; margin-top: 15px;">
-  <button type="button" class="btn btn-outline-secondary btn-sm text-uppercase rounded-pill" data-bs-dismiss="offcanvas" style="margin: 10px;">Close</button>
-  <button type="submit" class="btn btn-success btn-sm text-uppercase rounded-pill" data-bs-dismiss="offcanvas">Save changes</button>
+    </form>
+  </div>
 </div>
-</form>
-     

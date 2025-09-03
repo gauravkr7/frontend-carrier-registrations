@@ -1,0 +1,19 @@
+.bg-gray {
+    background-color: rgb(187, 187, 187);
+    min-height: 100vh; /* Ensure it covers the full viewport height */
+    width: 100%; /* Extend to full width */
+    padding: 10px; /* Ensure some spacing */
+}
+
+.full-width {
+    width: calc(100% - 0px); /* Keep both left and right margins at 10px */
+  
+    transition: all 0.3s ease !important;
+}
+
+.shift-right {
+    width: calc(100% - 210px); /* Account for sidebar width + margins */
+    margin-left: 210px; /* Sidebar (300px) + Left Margin (10px) */
+   
+    transition: all 0.3s ease !important;
+}

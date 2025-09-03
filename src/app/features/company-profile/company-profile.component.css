@@ -1,35 +1,156 @@
 .custom-margin {
   margin-top: 160px; /* Adjust this value for desired spacing */
 }
-
+ 
 .table {
   background-color: rgba(255, 255, 255, 0.9); /* Slightly less transparent */
   border-radius: 8px; /* Rounded corners */
   overflow: hidden; /* Prevent overflow if content is larger */
   width: 100%; /* Full width */
 }
-
+ 
+ 
 .table th, .table td {
   text-align: center; /* Center align text */
 }
-
+ 
 .table th {
   background-color: whitesmoke; /* Background for header */
   color: black; /* Text color for header */
   padding: 0.5rem; /* Reduced padding */
 }
-
+ 
 .table td {
   background-color: transparent; /* Transparent background for table cells */
   color: #333; /* Darker text color for better contrast */
   padding: 0.5rem; /* Reduced padding */
 }
-
+ 
 .table-bordered {
   border: 1px solid rgba(0, 0, 0, 0.2); /* Lighter border color for a softer look */
 }
-
+ 
 .table-bordered th,
 .table-bordered td {
   border: 1px solid rgba(0, 0, 0, 0.2); /* Lighter border for table cells */
 }
+ 
+ 
+.full-width {
+  width: calc(100% - 10px); /* Ensure right margin remains 30px */
+  margin-left: 20px; /* Add space between navbar and content */
+  transition: all 0.3s ease;
+}
+ 
+.shift-right {
+  width: calc(100% - 220px ); /* Sidebar width = 220px, plus 30px right space */
+  margin-left: 220px; /* Push content to the right */
+  transition: all 0.3s ease;
+}
+ 
+ 
+ 
+ 
+.custom-header {
+  height: 75px;
+  background-color: white;
+  margin-right: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 7px;
+}
+ 
+ 
+.active-option a {
+  background-color: #304ccb !important;
+  color: white !important;
+  border-radius: 5px;
+  padding: 5px 10px;
+  display: inline-block;
+  }
+  
+.form-control {
+  height: 48px !important;
+  background-color: rgb(231, 232, 236)!important;
+  margin: 15px;
+  }
+  
+  .d-block{
+  margin-left: 12px;
+  }
+ 
+
+  .custom-header {
+    height: 75px;
+    background-color: white;
+    margin-right: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 7px;
+  }
+   
+   
+   .cccc{
+    margin-top: 0% !important;
+   }
+   
+   .semi-dark {
+    color: #464545;
+    font-weight: 550;
+    font-size: 12px;
+}
+ 
+  
+.custom-border {
+  border: 2.5px solid #dadada;
+  border-top: none;
+  border-right: none;
+  border-left: none;
+  border-radius: 1px;
+  padding: 1px;
+ 
+}
+ 
+
+ 
+
+.table thead th {
+  background-color: #4a4e69; /* dark purple-gray */
+  color: #fff;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.table td, .table th {
+  vertical-align: middle;
+  text-align: left;
+}
+
+.table td .btn {
+  border-radius: 4px;
+}
+
+
+
+.align-fix {
+  margin-left: 4px; /* ya jitna niche wale ke equal lage */
+}
+
+.custom-line {
+  border: none;
+  height: 3px;      
+  background-color: #cfcfcf;
+  margin-top: 15px;  
+  margin-bottom: 40px; 
+  margin-right: 45px;
+  margin-left: 18px;
+  width: calc(100% - 60px); /* left+right margin adjust */
+}
+
+
+
+
+
+

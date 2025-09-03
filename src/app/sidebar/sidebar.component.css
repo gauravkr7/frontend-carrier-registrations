@@ -1,0 +1,31 @@
+.sidebar-custom {
+    background-color:  #4154f1; /* Green color */
+  }
+   
+   
+   
+   
+  #sidebar {
+    margin-top: 70px;
+   
+  }
+   
+   
+  #sidebar {
+    position: fixed;  /* Fixed position for the navbar */
+    top: 0;           /* Position the navbar at the top */
+    left: 0;          /* Keep the navbar to the left */
+    width: 250px;     /* Set the width of the navbar */
+    height: 100%;     /* Make the navbar take the full height of the viewport */
+   
+   
+  }
+   
+  #sidebar .components li a:hover {
+    background-color: #00478f; /* Dark background on hover */
+    color: #fff; /* Keep the text color white on hover */
+    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+  }
+   
+   
+   

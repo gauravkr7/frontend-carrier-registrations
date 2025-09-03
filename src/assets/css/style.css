@@ -1,14 +1,4 @@
-/**
-* Template Name: NiceAdmin
-* Updated: Mar 09 2023 with Bootstrap v5.2.3
-* Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
-* Author: BootstrapMade.com
-* License: https://bootstrapmade.com/license/
-*/
 
-/*--------------------------------------------------------------
-# General
---------------------------------------------------------------*/
 
 :root {
   scroll-behavior: smooth;
@@ -243,9 +233,7 @@ h6 {
   opacity: 1;
 }
 
-/*--------------------------------------------------------------
-# Override some default Bootstrap stylings
---------------------------------------------------------------*/
+
 /* Dropdown menus */
 .dropdown-menu {
   border-radius: 4px;
@@ -1706,4 +1694,7 @@ hr {
   font-size: 20px !important;
   background: transparent !important;
 }
+
+
+
 

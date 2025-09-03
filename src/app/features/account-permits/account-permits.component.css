@@ -1,0 +1,230 @@
+ 
+  .full-width {
+    width: calc(100% - 0px);  /* Full width minus 10px */
+    margin-left: 0;  /* Default position */
+    transition: all 0.3s ease;
+  }
+ 
+  .shift-right {
+    width: calc(100% - 200px);  /* Sidebar width = 250px, page adjusts only from left */
+    margin-left: 200px; /* Push content to the right */
+    transition: all 0.3s ease;
+  }
+ 
+  .bg-gray {
+    background-color: rgb(187, 187, 187);
+ 
+  }
+ 
+  .shift-rights {
+    margin-left: calc(100px + 0px); /* Adjust as needed */
+  }
+   
+ 
+ 
+  #footer {
+    background-color:rgb(187, 187, 187) !important;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+}
+ 
+:host {
+  background-color: rgb(187, 187, 187) !important;
+  width: 100%;
+  height: 100vh; /* Ensures full height */
+  display: block;
+}
+ 
+ 
+ 
+.min-h-screen {
+  min-height: 80vh;
+}
+ 
+ 
+.card-header {
+    font-weight: 600;
+}
+.required-field::after {
+    content: " *";
+    color: red;
+}
+.summary-card {
+    transition: all 0.3s ease;
+}
+.summary-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+.badge-overdue {
+    background-color: #dc3545;
+}
+.badge-due {
+    background-color: #fd7e14;
+}
+.badge-pending {
+    background-color: #ffc107;
+}
+.badge-paid {
+    background-color: #28a745;
+}
+ 
+.margin{
+  margin-right: 3px;
+}
+ 
+ 
+.full-width {
+  width: calc(100% - 0px);  /* Full width minus 10px */
+  margin-left: 0;  /* Default position */
+  transition: all 0.3s ease;
+}
+
+.shift-right {
+  width: calc(100% - 200px);  /* Sidebar width = 250px, page adjusts only from left */
+  margin-left: 200px; /* Push content to the right */
+  transition: all 0.3s ease;
+}
+
+.bg-gray {
+  background-color: rgb(187, 187, 187);
+
+}
+
+.shift-rights {
+  margin-left: calc(100px + 0px); /* Adjust as needed */
+}
+ 
+
+
+#footer {
+  background-color:rgb(187, 187, 187) !important;
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+}
+
+:host {
+background-color: rgb(187, 187, 187) !important;
+width: 100%;
+height: 100vh; /* Ensures full height */
+display: block;
+}
+
+
+
+.min-h-screen {
+min-height: 80vh;
+}
+
+
+.card-header {
+  font-weight: 600;
+}
+.required-field::after {
+  content: " *";
+  color: red;
+}
+.summary-card {
+  transition: all 0.3s ease;
+}
+.summary-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+.badge-overdue {
+  background-color: #dc3545;
+}
+.badge-due {
+  background-color: #fd7e14;
+}
+/* .badge-pending {
+  background-color: #ffc107;
+} */
+.badge-paid {
+  background-color: #28a745;
+}
+
+.margin{
+margin-right: 3px;
+}
+
+
+
+.radial-arrow-container {
+position: relative;
+width: 24px;
+height: 24px;
+}
+
+.radial-arrow {
+position: absolute;
+width: 24px;
+height: 24px;
+background: #3f51b5;
+color: white;
+border-radius: 50%;
+display: flex;
+justify-content: center;
+align-items: center;
+font-size: 14px;
+cursor: pointer;
+transition: all 0.3s ease;
+z-index: 10;
+box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.radial-arrow:hover {
+background: #303f9f;
+transform: scale(1.1);
+}
+
+.radial-arrow.active {
+transform: rotate(90deg);
+background: #f44336;
+}
+
+
+
+
+.radial-arrow {
+
+  transition: transform 0.3s ease;
+&.active {
+
+    transform: rotate(90deg);
+
+  }
+
+}
+
+
+.arrow-icon {
+  transition: transform 0.3s ease;
+  margin-left: 10px;
+}
+ 
+.rotate-arrow {
+  transform: rotate(180deg);
+}
+ 
+ 
+.logo {
+  max-height: 80px;
+  object-fit: contain;
+}
+
+@media print {
+  #bill-container {
+    display: block !important;
+  }
+  .btn, nav, footer {
+    display: none !important;
+  }
+  body {
+    background: white;
+  }
+}

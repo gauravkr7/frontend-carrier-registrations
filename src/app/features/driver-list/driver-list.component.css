@@ -1,0 +1,93 @@
+
+   
+  .full-width {
+    width: calc(100% - 10px);  /* Full width minus 10px */
+    margin-left: 0;  /* Default position */
+    transition: all 0.3s ease;
+  }
+ 
+  .shift-right {
+    width: calc(100% - 200px);  /* Sidebar width = 250px, page adjusts only from left */
+    margin-left: 200px; /* Push content to the right */
+    transition: all 0.3s ease;
+  }
+ 
+  .bg-gray {
+    background-color: rgb(187, 187, 187);
+ 
+  }
+ 
+  #footer {
+    background-color:rgb(187, 187, 187) !important;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+}
+
+:host {
+  background-color: rgb(187, 187, 187) !important;
+  width: 100%;
+  height: 100vh; /* Ensures full height */
+  display: block;
+}
+
+.extra-bold {
+  font-weight: 600 !important; /* Maximum boldness */
+  font-size: 1.2rem; /* Slightly larger for visibility */
+  color: rgb(31, 29, 29) !important; /* Ensures clarity */
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); /* Subtle shadow for better readability */
+}
+
+
+
+.active-option a {
+color: #ffffff !important;
+font-weight: bold;
+background-color: #304ccb ;
+color: #fff;
+
+}
+
+.serial-number {
+  text-align: center;
+
+}
+
+/* 
+.active-option a {
+
+  background-color:  #304ccb !important;
+
+  color: white !important;
+
+  border-radius: 5px;
+
+  padding: 5px 10px;
+
+  display: inline-block;
+
+} */
+
+ .gap{
+  text-align: center;
+ }
+
+
+ .shift-rights {
+  margin-left: calc(100px + 0px); /* Adjust as needed */
+}
+ 
+
+/* Make native select show only 5 options with scroll */
+.custom-select-scroll {
+  height: auto;
+  overflow-y: auto;
+  size: 5;
+}
+
+.no-wrap {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

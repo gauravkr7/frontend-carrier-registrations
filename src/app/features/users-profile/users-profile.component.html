@@ -1,4 +1,4 @@
-<app-navbar></app-navbar>
+<app-navbar (toggleSidebar)="toggleSidebar()"></app-navbar>
 
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -8,12 +8,12 @@
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
  
-<section class="bg-color pb-5">
-    <div class="container-fluid px-5">
-      <div class="row">
-        <div class="col-xl-12">
-          <div class="my-4 ms-3" >
-            <a routerLink="/company-profile" class="btn btn-success rounded-pill font-14 active me-2">
+<section class="  bg-color pb-5"  [ngClass]="{'full-width': isSidebarOpen, 'shift-right': !isSidebarOpen}" >
+    <div class="container-fluid px-5 " style="margin-left: 90px;">
+      <div class="row" >
+        <div class="col-xl-12 " >
+          <div class="my-4 ms-3 " >
+            <a routerLink="/company-profile" class="btn btn-success rounded-pill font-14 active me-2" >
                 Back to Dashboard
               </a>
           </div>
@@ -146,8 +146,8 @@
 
 
 
-<main id="main" class="main mt-0 p-0">
-    <div id="kt_app_content" class="app-content  flex-column-fluid">
+<main id="main" class="main mt-0 p-0" [ngClass]="{'full-width': isSidebarOpen, 'shift-right': !isSidebarOpen}" >
+    <div style="margin-left: 90px;" id="kt_app_content" class="app-content  flex-column-fluid">
         <div class="container-fluid px-5">
             
           <div class="row bg-white p-3 mt-3 rounded">
@@ -163,7 +163,7 @@
               </div>
               <div>                
                 <div class="btn-group" role="group" aria-label="Basic example">
-                  <a href="javascript:;" class="btn btn-success rounded-pill font-14" type="button" data-bs-toggle="offcanvas" data-bs-target="#addLocation" aria-controls="offcanvasRight"><i class="fa fa-pencil me-1" aria-hidden="true"></i> Edit</a>
+                  <!-- <a href="javascript:;" class="btn btn-success rounded-pill font-14" type="button" data-bs-toggle="offcanvas" data-bs-target="#addLocation" aria-controls="offcanvasRight"><i class="fa fa-pencil me-1" aria-hidden="true"></i> Edit</a> -->
                 </div>
               </div>
               </div>
@@ -459,13 +459,15 @@
   </main><!-- End #main -->
 
   <!-- ======= Footer ======= -->
-  <footer id="footer" class="footer">
-    <div class="text-dark text-center">
-      <span class="text-muted fw-semibold me-1">2023© all rights reserved</span>
-      <a href="#" class="font-weight-700 text-hover-dark text-dark text-uppercase">3PL TEK INC.</a>
-    </div>
+  <footer id="footer" class="footer text-center"
+  [ngClass]="{'full-widths': isSidebarOpen, 'shift-rights': !isSidebarOpen}">
+  <div class="text-dark">
+    <span class="text-muted fw-semibold me-1">2025© all rights reserved</span>
+    <a class="font-weight-700 text-hover-dark text-dark text-uppercase">3PL TEK INC.</a>
+  </div>
+</footer>
 
-  </footer><!-- End Footer -->
+
 
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center btn-success"><i
       class="bi bi-arrow-up-short"></i></a>

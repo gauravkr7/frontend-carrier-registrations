@@ -1,0 +1,278 @@
+<app-navbar (toggleSidebar)="toggleSidebar()"></app-navbar>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+
+<main id="main" class="  bg-gray main mt-0 p-0"
+  [ngClass]="{'full-width': isSidebarOpen, 'shift-right': !isSidebarOpen}">
+  <div class="p-4 pb-0">
+    <h2 style="margin-left: 90px;" class="font-18 font-weight-700 mb-4 text-capitalize">Services</h2>
+    <div class="bg-white rounded-lg p-3" style="margin-left: 90px;">
+      <div class="col-md-12">
+
+        <div class="main-container">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <!-- Search box -->
+            <div class="form-group has-search mb-0 d-flex ">
+              <span class="fa fa-search form-control-feedback"></span>
+              <input style="height: 40px !important; padding-left: 30px; margin-right: 10px;" type="text" name="Search"
+                class="form-control" placeholder="Search..." [(ngModel)]="searchTerm">
+              <button class="btn btn-success rounded-pill font-14 search-btn" (click)="searchServices()">
+                <i class="bi bi-search"></i> Search
+              </button>
+            </div>
+
+            <!-- Add button -->
+            <a href="javascript:;" data-bs-toggle="offcanvas" data-bs-target="#addvendor"
+              class="btn btn-success rounded-pill font-14" type="button">
+              <i class="fa fa-plus me-2" aria-hidden="true"></i> Add Services
+            </a>
+          </div>
+          <table class="table table-bordered ">
+            <thead>
+              <tr>
+                <th>Service Name</th>
+                <th>Category</th>
+                <th>Unit Type</th>
+                <th>Account Type</th>
+                <th>Price</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="serviceList">
+              <tr *ngFor="let service of   filteredServices">
+                <td>{{ service.serviceName }}</td>
+                <td>{{ service.category }}</td>
+                <td>{{ service.unitType }}</td>
+                <td>{{ getAccountDetails(service.accountType) }}</td>
+                <td>{{ service.price }}</td>
+
+
+                <td class="text-capitalize ">
+                  <div class="dropdown filter-dropdown">
+                    <span class="dropdown-toggle font-16 px-3" type="button" id="dropdownMenuButton23"
+                      data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i>
+                    </span>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
+                      <!-- <a href="javascript:;" class="dropdown-item assigned font-13"
+                         type="button" data-bs-toggle="offcanvas"
+                        data-bs-target="#ExtralargeModalEdit" aria-controls="offcanvasRight"  (click)="editService(service)">Edit</a> -->
+
+                      <a href="javascript:;" class="dropdown-item assigned font-13" (click)="editService(service)"
+                        type="button" data-bs-toggle="offcanvas" data-bs-target="#ExtralargeModalEdit"
+                        aria-controls="offcanvasRight">Edit</a>
+                      <a class="dropdown-item assigned font-13" href="javascript:;" data-bs-toggle="modal"
+                        data-bs-target="#ExtralargeModalDelete" (click)="deleteService(service._id)">Delete</a>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+
+
+
+            </tbody>
+          </table>
+
+        </div>
+
+      </div>
+      <div class="bg-white my-3 rounded" style="margin-right: 90px;">
+        <div class="row">
+          <div class="col-md-12">
+            <nav aria-label="Page navigation example ms-auto me-auto">
+              <ul class="pagination justify-content-center gap-2 mb-0" style="margin-top: 20px ;">
+                <li class="page-item">
+                  <a class="page-link font-22 d-flex align-items-center justify-content-center" href="javascript:;"
+                    aria-label="Previous"><i class="fa fa-angle-left font-weight-300"></i></a>
+                </li>
+                <li class="page-item active"><a
+                    class="page-link font-14 d-flex align-items-center justify-content-center" href="javascript:;">1</a>
+                </li>
+                <!-- <li class="page-item"><a class="page-link font-14" href="javascript:;">2</a></li>
+                <li class="page-item"><a class="page-link font-14" href="javascript:;">3</a></li>
+                <li class="page-item"><a class="page-link font-14" href="javascript:;">4</a></li>
+                <li class="page-item"><a class="page-link font-14" href="javascript:;">5</a></li> -->
+                <li class="page-item"><a class="page-link font-22 d-flex align-items-center justify-content-center"
+                    href="javascript:;" aria-label="Next"><i class="fa fa-angle-right font-weight-300"></i></a>
+                </li>
+              </ul>
+            </nav>
+            <!-- Added: Showing entries info below pagination -->
+            <div class="text-center mt-2">
+              <ng-container *ngIf="services.length > 0">
+                <span class="badge bg-light text-dark px-3 py-2" style="font-size: 14px; font-weight: normal;">
+                  Showing
+                  {{ 1 }}
+                  to
+                  {{ services.length }}
+                  of
+                  {{ services.length }}
+                  entries (Page 1 of 1)
+                </span>
+              </ng-container>
+              <ng-container *ngIf="services.length === 0">
+                <span class="badge bg-light text-danger px-3 py-2" style="font-size: 14px;">
+                  No records to display.
+                </span>
+              </ng-container>
+            </div>
+            <!-- End added block -->
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<!-- Add Service Offcanvas -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="addvendor" aria-labelledby="offcanvasRightLabel"
+  style="width: 80%;" data-bs-backdrop="static">
+  <div class="modal-header" style="padding: 15px; border-bottom: 1px solid #ccc;">
+    <h5 class="modal-title">Add Service</h5>
+    <div>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+  </div>
+  <div class="offcanvas-body view-load position-relative">
+    <form [formGroup]="serviceForm" (ngSubmit)="addService()" class="row g-3">
+      <!-- Add Service Form Fields -->
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="mb-2 d-block font-weight-700">Service Name:</label>
+            <input type="text" class="form-control" formControlName="serviceName" required>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="mb-2 d-block font-weight-700">Category</label>
+            <select class="form-control" formControlName="category" required>
+              <option value="Tax Filing">Tax Filing</option>
+              <option value="Compliance">Compliance</option>
+              <option value="Licensing">Licensing</option>
+              <option value="Drug Testing">Drug Testing</option>
+              <option value="Consulting">Consulting</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="mb-2 d-block font-weight-700">Unit Type:</label>
+            <select class="form-control" formControlName="unitType" required>
+              <option value="One Time">One Time</option>
+              <option value="Monthly">Monthly</option>
+              <option value="Quarterly">Quarterly</option>
+              <option value="Per Driver">Per Driver</option>
+              <option value="Per Truck">Per Truck</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="mb-2 d-block font-weight-700">Price ($):</label>
+            <input type="number" class="form-control" formControlName="price" required>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="mb-2 d-block font-weight-700">Account Type:</label>
+            <select class="form-control" formControlName="accountType" required>
+              <option *ngFor="let account of filteredAccountingData" [value]="account.accountId">
+                {{ account.accountName }} ({{ account.accountId }})
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="mb-2 d-block font-weight-700">Description:</label>
+            <textarea class="form-control" formControlName="description" rows="1"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer justify-content-center"
+          style="border-top: 1px solid #ccc; padding-top: 15px; margin-top: 15px;">
+          <button type="button" class="btn btn-outline-secondary btn-sm text-uppercase rounded-pill"
+            data-bs-dismiss="offcanvas" style="margin: 10px;">Close</button>
+          <button type="submit" class="btn btn-success btn-sm text-uppercase rounded-pill"
+            data-bs-dismiss="offcanvas">Save Changes</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Edit Service Offcanvas -->
+<div #editServiceOffcanvas class="offcanvas offcanvas-end" tabindex="-1" style="width: 80%;" data-bs-backdrop="static">
+  <div class="modal-header" style="padding: 15px; border-bottom: 1px solid #ccc;">
+    <h5 class="modal-title">Edit Service</h5>
+  </div>
+  <div class="offcanvas-body view-load position-relative">
+    <form [formGroup]="serviceForm" (ngSubmit)="updateService()" class="row g-3">
+      <!-- Edit Service Form Fields -->
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="mb-2 d-block font-weight-700">Service Name:</label>
+            <input type="text" class="form-control" formControlName="serviceName" required>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="mb-2 d-block font-weight-700">Category</label>
+            <select class="form-control" formControlName="category" required>
+              <option value="Tax Filing">Tax Filing</option>
+              <option value="Compliance">Compliance</option>
+              <option value="Licensing">Licensing</option>
+              <option value="Drug Testing">Drug Testing</option>
+              <option value="Consulting">Consulting</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="mb-2 d-block font-weight-700">Unit Type:</label>
+            <select class="form-control" formControlName="unitType" required>
+              <option value="One Time">One Time</option>
+              <option value="Monthly">Monthly</option>
+              <option value="Quarterly">Quarterly</option>
+              <option value="Per Driver">Per Driver</option>
+              <option value="Per Truck">Per Truck</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="mb-2 d-block font-weight-700">Price ($):</label>
+            <input type="number" class="form-control" formControlName="price" required>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="mb-2 d-block font-weight-700">Account Type:</label>
+            <select class="form-control" formControlName="accountType" required>
+              <option value="Income">Income</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="mb-2 d-block font-weight-700">Description:</label>
+            <textarea class="form-control" formControlName="description" rows="1"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer justify-content-center"
+          style="border-top: 1px solid #ccc; padding-top: 15px; margin-top: 15px;">
+          <button type="button" class="btn btn-outline-secondary btn-sm text-uppercase rounded-pill"
+            style="margin: 10px;" data-bs-dismiss="offcanvas">Close</button>
+          <button type="submit" class="btn btn-success btn-sm text-uppercase rounded-pill"
+            data-bs-dismiss="offcanvas">Update Changes</button>
+        </div>
+      </div>
+    </form>
+      
+  </div>
+</div>
